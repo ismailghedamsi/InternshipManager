@@ -1,14 +1,48 @@
 package com.power222.tuimspfcauppbj;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@SpringBootTest
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplicationTests {
 
-	@Test
-	void contextLoads() {
-		System.out.println("Hello, world!");
-	}
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void contextLoads() {
+        assertThat(restTemplate, is(notNullValue()));
+    }
+
+    @Test
+    void helloWorldTest() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/hello", String.class);
+		assertThat(response, is(notNullValue()));
+		assertThat(response.getStatusCode(), is (equalTo(HttpStatus.OK)));
+		assertThat(response.getBody(), is(equalTo("Hello, world!")));
+    }
+
+    @Test
+    void unauthenticatedPrivateHelloWorldTest() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/hello/private", String.class);
+		assertThat(response, is(notNullValue()));
+		assertThat(response.getStatusCode(), is (equalTo(HttpStatus.UNAUTHORIZED)));
+    }
+
+    @Test
+    void authenticatedPrivateHelloWorldTest() {
+		ResponseEntity<String> response = restTemplate.withBasicAuth("test", "password")
+				.getForEntity("/hello/private", String.class);
+		assertThat(response, is(notNullValue()));
+		assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
+		assertThat(response.getBody(), is(equalTo("Hello, private world!")));
+    }
 
 }
