@@ -4,3 +4,4 @@
 420-565-AL Projet intégré en développement, Équipe 3: Les maitres du power 222
 
 LE RUSSE ÉTAIT ICI.
+LE RUSSE ÉTAIT ICI UNE DEUXIÈME FOIS.
