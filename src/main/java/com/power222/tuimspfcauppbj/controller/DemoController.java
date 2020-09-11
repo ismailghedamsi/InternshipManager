@@ -1,10 +1,10 @@
-package com.power222.tuimspfcauppbj;
+package com.power222.tuimspfcauppbj.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+public class DemoController {
 
     @GetMapping("/hello")
     public String hello() {

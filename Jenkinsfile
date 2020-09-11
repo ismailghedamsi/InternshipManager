@@ -16,8 +16,8 @@ pipeline {
                     jacoco(
                           execPattern: 'target/*.exec',
                           classPattern: 'target/classes',
-                          sourcePattern: 'src/main/java',
-                          exclusionPattern: 'src/test*,com/power222/tuimspfcauppbj/TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication.class'
+                          sourcePattern: 'src/main/java, com.power222.controller, com.power222.service, com.power222.util',
+                          exclusionPattern: 'src/test*'
                     )
                     script {
                         def commit = sh(returnStdout: true, script: 'git log -1 --pretty=%B | cat')
