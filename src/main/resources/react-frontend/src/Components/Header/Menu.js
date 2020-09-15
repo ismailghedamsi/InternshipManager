@@ -1,17 +1,17 @@
 export const Menu = [
     {
         title: 'Accueil',
-        url:'#',
+        url:'/',
         cn:'nav-links'
     },
     {
-        title: 'Infomations',
-        url:'#',
+        title: 'Register',
+        url:'/register',
         cn:'nav-links'
     },
     {
-        title: 'Contact',
-        url:'#',
+        title: 'Login',
+        url:'/login',
         cn:'nav-links'
     }
 ]

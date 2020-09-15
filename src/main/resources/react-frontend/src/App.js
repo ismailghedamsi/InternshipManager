@@ -6,22 +6,24 @@ import Login from './Components/Login';
 
 import Navbar from './Components/Header/Navbar';
 import Footer from './Components/Footer/Footer';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-
       <div className="page-container">
         <div className="page-nav">
-          <Navbar />
-      <header className="App-header">
-        <Register />
-        <Login />
-      </header>
+          <Router>
+            <Navbar />
+            <Switch>
+              <Route exact path="/" component={Register}></Route>
+              <Route path="/register" component={Register}></Route>
+              <Route path="/login" component={Login}></Route>
+            </Switch>
+          </Router>
         </div>
         <Footer />
       </div>
-
     </div>
   );
 }

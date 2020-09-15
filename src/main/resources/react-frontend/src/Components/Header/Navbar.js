@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Menu } from "./Menu"
 import './Navbar.css'
 
+import {Link} from "react-router-dom";
+
 class Navbar extends Component {
 
     showIcon = () => {
@@ -21,9 +23,9 @@ class Navbar extends Component {
                     {Menu.map((item, i) => {
                         return (
                             <li key={i}>
-                                <a className={item.cn} href={item.url}>
+                                <Link className={item.cn} to={item.url}>
                                     {item.title}
-                                </a>
+                                </Link>
                             </li>
                         )
                     })}
