@@ -13,13 +13,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
+
 public class AuthenticationServiceTests {
 
     @Autowired
     private AuthenticationService authSvc;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Test
     @WithMockUser("fk_etudiant")
