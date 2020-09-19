@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplicationTests {
 
@@ -27,6 +28,7 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
 		assertThat(response, is(notNullValue()));
 		assertThat(response.getStatusCode(), is (equalTo(HttpStatus.OK)));
 		assertThat(response.getBody(), is(equalTo("Hello, world!")));
+
     }
 
     @Test

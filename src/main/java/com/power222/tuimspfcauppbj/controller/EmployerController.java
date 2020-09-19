@@ -4,8 +4,8 @@ import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -19,20 +19,29 @@ public class EmployerController {
     @Autowired
     private EmployerRepository repository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping
     public List<Employer> getAllEmployers() {
         return repository.findAll();
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Employer createEmployer(@RequestBody Employer newEmployer) {
-        return repository.saveAndFlush(newEmployer);
+    public ResponseEntity<Employer> createEmployer(@RequestBody Employer newEmployer) {
+        newEmployer.setRole("employer");
+        newEmployer.setEnabled(true);
+        newEmployer.setPassword(passwordEncoder.encode(newEmployer.getPassword()));
+        return repository.findByUsername(newEmployer.getUsername())
+                .map(employer -> ResponseEntity.status(HttpStatus.CONFLICT).<Employer>build())
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(repository.saveAndFlush(newEmployer)));
     }
 
     @GetMapping("/{id}")
-    public Employer getEmployerById(@PathVariable long id) {
-        return repository.findById(id).get();
+    public ResponseEntity<Employer> getEmployerById(@PathVariable long id) {
+        return repository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
