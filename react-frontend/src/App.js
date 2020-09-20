@@ -12,8 +12,8 @@ function App() {
         <div className="page-nav">
           <Router>
             <Switch>
-              <Route exact path="/" component={RegisteringManager} />
-              <Route path="/register" component={RegisteringManager} />
+              <Route exact path="/" component={Login}/>
+              <Route path="/register" component={RegisteringManager}/>
               <Route path="/login" component={Login}/>
               <Route path="/welcome" component={Welcome}/>
             </Switch>

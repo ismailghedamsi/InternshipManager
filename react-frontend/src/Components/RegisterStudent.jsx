@@ -62,12 +62,22 @@ export default function RegisterStudent(props) {
                 </DialogActions>
             </Dialog>
             <Formik
-                onSubmit={async (values) => {
+                onSubmit={async (values, {setFieldError}) => {
                     delete values.passwordConfirm;
                     return axios.post(`http://localhost:8080/students`, values)
+                        .then(() => {
+                            props.history.push("/login")
+                        })
                         .catch((error) => {
-                            setOpen(true)
                             console.error(error)
+                            if (error.response) {
+                                if (error.response.status === 409) {
+                                    setFieldError("username", "Le nom d'utilisateur n'est pas disponible")
+                                } else
+                                    setOpen(true)
+                            } else {
+                                setOpen(true)
+                            }
                         })
                 }}
 

@@ -56,7 +56,7 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-export default function RegisteringManager() {
+export default function RegisteringManager(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -82,10 +82,10 @@ export default function RegisteringManager() {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} className={classes.tabPanel}>
-                <RegisterStudent classes={useStyles()}/>
+                <RegisterStudent classes={useStyles()} {...props} />
             </TabPanel>
             <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <RegisterEmployer classes={useStyles()}/>
+                <RegisterEmployer classes={useStyles()} {...props} />
             </TabPanel>
             <Grid container justify="flex-end" className={classes.link}>
                 <Grid item>
