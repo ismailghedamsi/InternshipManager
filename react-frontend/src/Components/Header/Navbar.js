@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Menu } from "./Menu"
+import React, {Component} from 'react'
+import {Menu} from "./Menu"
 import './Navbar.css'
 
 import {Link} from "react-router-dom";
@@ -32,7 +32,7 @@ class Navbar extends Component {
                     {/* <button className="myButton">Sign Up</button> */}
                 </ul>
                 <div className="menu-icon" onClick={this.showIcon}>
-                    <i className="fa fa-bars"></i>
+                    <i className="fa fa-bars"/>
                 </div>
             </nav>
         )

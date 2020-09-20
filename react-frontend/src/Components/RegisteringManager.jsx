@@ -1,8 +1,6 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -12,6 +10,9 @@ import Tab from "@material-ui/core/Tab";
 import * as PropTypes from "prop-types";
 import RegisterStudent from "./RegisterStudent";
 import RegisterEmployer from "./RegisterEmployer";
+import Grid from "@material-ui/core/Grid";
+import {Link as RouterLink} from "react-router-dom";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -20,16 +21,18 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+    link: {
+        padding: theme.spacing(1, 0, 2)
     },
-    tabBar: {
-        backgroundColor: '#ffffff'
+    logo: {
+        margin: theme.spacing(6)
     },
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(2),
+    },
+    submit: {
+        margin: theme.spacing(1, 0, 1),
     },
 }));
 
@@ -37,27 +40,14 @@ function TabPanel(props) {
     const {children, value, index, ...other} = props;
 
     return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
+        <div hidden={value !== index} id={`simple-tabpanel-${index}`} {...other}>
             {value === index && (
-                <Box p={3}>
-                    <Typography>{children}</Typography>
+                <Box p={0}>
+                    {children}
                 </Box>
             )}
         </div>
     );
-}
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
 }
 
 TabPanel.propTypes = {
@@ -78,25 +68,32 @@ export default function RegisteringManager() {
         <Container component="main" maxWidth="sm">
             <CssBaseline/>
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
+                <Typography component="h1" variant="h1" className={classes.logo}>
+                    Logo
+                </Typography>
                 <Typography component="h1" variant="h5">
                     S'enregistrer
                 </Typography>
             </div>
-            <AppBar classes={classes.tabBar} position={"relative"}>
+            <AppBar position={"relative"}>
                 <Tabs value={value} onChange={handleChange} centered aria-label="simple tabs example">
-                    <Tab label="Étudiant" {...a11yProps(0)} />
-                    <Tab label="Employeur" {...a11yProps(1)} />
+                    <Tab label="Étudiant" id={`simple-tab-0`}/>
+                    <Tab label="Employeur" id={`simple-tab-1`}/>
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0}>
-                <RegisterStudent />
+            <TabPanel value={value} index={0} className={classes.tabPanel}>
+                <RegisterStudent classes={useStyles()}/>
             </TabPanel>
-            <TabPanel value={value} index={1}>
-                <RegisterEmployer />
+            <TabPanel value={value} index={1} className={classes.tabPanel}>
+                <RegisterEmployer classes={useStyles()}/>
             </TabPanel>
+            <Grid container justify="flex-end" className={classes.link}>
+                <Grid item>
+                    <Link component={RouterLink} to={'/login'} variant="body2">
+                        Vous avez déja un compte? Se connecter
+                    </Link>
+                </Grid>
+            </Grid>
         </Container>
     );
 }

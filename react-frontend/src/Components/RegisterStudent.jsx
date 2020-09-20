@@ -1,36 +1,23 @@
-import {Field, Formik} from 'formik';
-import React, {useState} from 'react';
-import * as yup from 'yup';
-import axios from 'axios'
 import Grid from "@material-ui/core/Grid";
-import {TextField} from "formik-material-ui";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
-import {makeStyles} from "@material-ui/core/styles";
+import React, {useState} from "react";
+import {Field, Formik} from "formik";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import * as yup from "yup";
+import {TextField} from "formik-material-ui";
+import axios from 'axios'
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(1, 0, 2),
-    },
-}));
-
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir au plus " + value.max + " caractères";
 const requiredFieldMsg = "Ce champs est requis";
 
-export default function RegisterStudent() {
+export default function RegisterStudent(props) {
     const [open, setOpen] = useState(false);
-    const classes = useStyles();
     const validationSchema = yup.object()
         .shape({
             firstName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
@@ -55,20 +42,14 @@ export default function RegisterStudent() {
         phoneNumber: "",
         address: "",
     }
-
     const handleClose = () => {
         setOpen(false);
     };
 
     return (
         <div>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle id="alert-dialog-title">Erreur réseau</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Erreur réseau: impossible de communiquer avec le serveur
@@ -97,7 +78,7 @@ export default function RegisterStudent() {
                 initialValues={initialValues}
             >
                 {({submitForm, isSubmitting}) => (
-                    <form className={classes.form}>
+                    <form className={props.classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <Field
@@ -206,23 +187,17 @@ export default function RegisterStudent() {
                         <br/>
                         {isSubmitting && <LinearProgress/>}
                         <Button
+                            type={"submit"}
                             fullWidth
                             variant="contained"
                             color="primary"
                             size={"large"}
-                            className={classes.submit}
+                            className={props.classes.submit}
                             disabled={isSubmitting}
                             onClick={submitForm}
                         >
                             S'enregistrer
                         </Button>
-                        <Grid container justify="flex-end">
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    Vous avez déja un compte? Se connecter
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </form>
                 )}
             </Formik>

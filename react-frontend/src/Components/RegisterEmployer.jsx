@@ -1,8 +1,6 @@
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
 import React, {useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
 import {Field, Formik} from "formik";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
@@ -14,23 +12,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(1, 0, 2),
-    },
-}));
-
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir au plus " + value.max + " caractères";
 const requiredFieldMsg = "Ce champs est requis";
 
-export default function RegisterEmployer() {
+export default function RegisterEmployer(props) {
     const [open, setOpen] = useState(false);
-    const classes = useStyles();
     const validationSchema = yup.object()
         .shape({
             companyName: yup.string().trim().min(5, tooShortError).required(requiredFieldMsg),
@@ -52,22 +39,15 @@ export default function RegisterEmployer() {
         username: '',
         password: '',
         passwordConfirm: '',
-
     }
-
     const handleClose = () => {
         setOpen(false);
     };
 
     return (
         <div>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle id="alert-dialog-title">Erreur réseau</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Erreur réseau: impossible de communiquer avec le serveur
@@ -96,7 +76,7 @@ export default function RegisterEmployer() {
                 initialValues={initialValues}
             >
                 {({submitForm, isSubmitting}) => (
-                    <form className={classes.form}>
+                    <form className={props.classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Field
@@ -194,23 +174,17 @@ export default function RegisterEmployer() {
                         <br/>
                         {isSubmitting && <LinearProgress/>}
                         <Button
+                            type={"submit"}
                             fullWidth
                             variant="contained"
                             color="primary"
                             size={"large"}
-                            className={classes.submit}
+                            className={props.classes.submit}
                             disabled={isSubmitting}
                             onClick={submitForm}
                         >
                             S'enregistrer
                         </Button>
-                        <Grid container justify="flex-end">
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    Vous avez déja un compte? Se connecter
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </form>
                 )}
             </Formik>

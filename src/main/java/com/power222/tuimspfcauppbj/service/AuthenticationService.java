@@ -24,6 +24,7 @@ public class AuthenticationService {
     }
 
     public User getCurrentUser() {
+        System.out.println(getPrincipal().getUsername());
         return userRepo.findByUsername(getPrincipal().getUsername()).orElse(new User());
     }
 
