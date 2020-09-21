@@ -25,7 +25,12 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1, 0, 2)
     },
     logo: {
-        margin: theme.spacing(6)
+        margin: theme.spacing(6, 0, 0.5),
+        fontSize: 60,
+    },
+    subtitle: {
+        fontSize: 12,
+        margin: theme.spacing(0, 0, 6)
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -34,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(1, 0, 1),
     },
+    container: {
+        backgroundColor: "#fff",
+        borderRadius: theme.spacing(2),
+    }
 }));
 
 function TabPanel(props) {
@@ -65,35 +74,50 @@ export default function RegisteringManager(props) {
     };
 
     return (
-        <Container component="main" maxWidth="sm">
-            <CssBaseline/>
-            <div className={classes.paper}>
-                <Typography component="h1" variant="h1" className={classes.logo}>
-                    Logo
-                </Typography>
-                <Typography component="h1" variant="h5">
-                    S'enregistrer
-                </Typography>
-            </div>
-            <AppBar position={"relative"}>
-                <Tabs value={value} onChange={handleChange} centered aria-label="simple tabs example">
-                    <Tab label="Étudiant" id={`simple-tab-0`}/>
-                    <Tab label="Employeur" id={`simple-tab-1`}/>
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0} className={classes.tabPanel}>
-                <RegisterStudent classes={useStyles()} {...props} />
-            </TabPanel>
-            <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <RegisterEmployer classes={useStyles()} {...props} />
-            </TabPanel>
-            <Grid container justify="flex-end" className={classes.link}>
-                <Grid item>
-                    <Link component={RouterLink} to={'/login'} variant="body2">
-                        Vous avez déja un compte? Se connecter
-                    </Link>
-                </Grid>
+        <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{minHeight: '100vh'}}
+        >
+            <Grid item xs={3}>
+                <Container component="main" maxWidth="sm" className={classes.container}>
+                    <CssBaseline/>
+                    <div className={classes.paper}>
+                        <Typography variant="h1" className={classes.logo}>
+                            TUIMSPFCAUPPBJ
+                        </Typography>
+                        <Typography variant="h2" className={classes.subtitle}>
+                            The Ultimate Internship Manager Software Platform For College And University Plus Powered By
+                            Java
+                        </Typography>
+                        <Typography component="h1" variant="h5">
+                            S'enregistrer
+                        </Typography>
+                    </div>
+                    <AppBar position={"relative"}>
+                        <Tabs value={value} onChange={handleChange} centered aria-label="simple tabs example">
+                            <Tab label="Étudiant" id={`simple-tab-0`}/>
+                            <Tab label="Employeur" id={`simple-tab-1`}/>
+                        </Tabs>
+                    </AppBar>
+                    <TabPanel value={value} index={0} className={classes.tabPanel}>
+                        <RegisterStudent classes={useStyles()} {...props} />
+                    </TabPanel>
+                    <TabPanel value={value} index={1} className={classes.tabPanel}>
+                        <RegisterEmployer classes={useStyles()} {...props} />
+                    </TabPanel>
+                    <Grid container justify="flex-end" className={classes.link}>
+                        <Grid item>
+                            <Link component={RouterLink} to={'/login'} variant="body2">
+                                Vous avez déja un compte? Se connecter
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </Container>
             </Grid>
-        </Container>
+        </Grid>
     );
 }
