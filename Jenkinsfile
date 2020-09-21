@@ -19,9 +19,16 @@ pipeline {
                           sourcePattern: 'src/main/java',
                           exclusionPattern: 'src/test*,com/power222/tuimspfcauppbj/config/*,com/power222/tuimspfcauppbj/dao/*,com/power222/tuimspfcauppbj/model/*,com/power222/tuimspfcauppbj/TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication.class'
                     )
-                    script {
-                        def commit = sh(returnStdout: true, script: 'git log -1 --pretty=%B | cat')
-                        def comment = [ body: "Build [$BUILD_TAG|$BUILD_URL] status is ${currentBuild.currentResult}" ]
+                }
+            }
+        }
+        stage('Report to JIRA') {
+            steps {
+                script {
+                    def commit = sh(returnStdout: true, script: 'git log -1 --pretty=%B | cat')
+                    def comment = [ body: "Build [$BUILD_TAG|$BUILD_URL] status is ${currentBuild.currentResult}" ]
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE')
+                    {
                         jiraAddComment idOrKey: getCommit(commit), input: comment, auditLog: false
                     }
                 }
