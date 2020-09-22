@@ -5,7 +5,6 @@ import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,7 +12,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
-
 public class AuthenticationServiceTests {
 
     @Autowired

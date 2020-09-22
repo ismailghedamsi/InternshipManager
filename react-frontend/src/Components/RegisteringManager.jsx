@@ -26,10 +26,11 @@ const useStyles = makeStyles((theme) => ({
     },
     logo: {
         margin: theme.spacing(6, 0, 0.5),
-        fontSize: 60,
+        fontSize: "3em",
     },
     subtitle: {
-        fontSize: 12,
+        fontSize: "1em",
+        textAlign: "center",
         margin: theme.spacing(0, 0, 6)
     },
     form: {
@@ -82,7 +83,7 @@ export default function RegisteringManager(props) {
             justify="center"
             style={{minHeight: '100vh'}}
         >
-            <Grid item xs={3}>
+            <Grid item xs={4}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <CssBaseline/>
                     <div className={classes.paper}>
