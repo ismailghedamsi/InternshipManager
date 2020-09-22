@@ -30,9 +30,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
         @Override
         public void run(String... args) {
-            if (userRepo.count() != 0)
-                return;
-
             userRepo.saveAndFlush(User.builder()
                     .enabled(true)
                     .username("admin")

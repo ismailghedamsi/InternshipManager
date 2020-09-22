@@ -30,10 +30,11 @@ const useStyles = makeStyles((theme) => ({
     },
     logo: {
         margin: theme.spacing(6, 0, 0.5),
-        fontSize: 60,
+        fontSize: "3em",
     },
     subtitle: {
-        fontSize: 12,
+        fontSize: "1em",
+        textAlign: "center",
         margin: theme.spacing(0, 0, 6)
     },
     paper: {
@@ -117,7 +118,7 @@ export default function Login(props) {
                             AuthenticationRegistrationService.setupAxiosInterceptors(values.username, values.password)
                             return axios({
                                 method: "GET",
-                                url: "http://localhost:8080/auth/user",
+                                url: "http://localhost/auth/user",
                                 headers: {
                                     authorization: "Basic " + window.btoa(values.username + ":" + values.password)
                                 }

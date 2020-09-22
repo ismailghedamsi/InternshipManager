@@ -62,7 +62,7 @@ export default function RegisterEmployer(props) {
             <Formik
                 onSubmit={async (values, {setFieldError}) => {
                     delete values.passwordConfirm;
-                    return axios.post(`http://localhost:8080/employers`, values)
+                    return axios.post(`http://localhost/employers`, values)
                         .then(() => {
                             props.history.push("/login")
                         })

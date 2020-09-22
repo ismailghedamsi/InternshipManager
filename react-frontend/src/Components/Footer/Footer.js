@@ -1,14 +1,23 @@
-import React, { Component } from 'react'
-import './Footer.css'
+import React from 'react'
+import {makeStyles} from "@material-ui/core/styles";
 
-class Footer extends Component {
-    render() {
-        return (
-            <div className="myFooter">
-                <i className="fa fa-copyright">{new Date().getFullYear()} Cégep André-Laurendeau</i>
-            </div>
-        )
+const useStyles = makeStyles((theme) => ({
+    footer: {
+        position: "relative",
+        bottom: 0,
+        width: "100%",
+        textAlign: "center",
+        paddingBottom: theme.spacing(1),
+        backgroundColor: theme.palette.primary.main,
     }
-}
+}));
 
-export default Footer
+export default function Footer() {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.footer}>
+            <i className="fa fa-copyright"/>{new Date().getFullYear()} Cégep André-Laurendeau
+        </div>
+    )
+}
