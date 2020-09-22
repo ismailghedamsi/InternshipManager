@@ -4,7 +4,6 @@ a{
 
 .NavbarItem{
     overflow: hidden;
-    background-color: #4CAF50;
     display: flex;
     justify-content: center;
     align-items: center;

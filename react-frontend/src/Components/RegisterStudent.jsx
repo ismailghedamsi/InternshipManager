@@ -64,7 +64,7 @@ export default function RegisterStudent(props) {
             <Formik
                 onSubmit={async (values, {setFieldError}) => {
                     delete values.passwordConfirm;
-                    return axios.post(`http://localhost:8080/students`, values)
+                    return axios.post(`http://localhost/students`, values)
                         .then(() => {
                             props.history.push("/login")
                         })
