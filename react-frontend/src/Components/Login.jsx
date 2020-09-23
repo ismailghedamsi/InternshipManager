@@ -125,7 +125,6 @@ export default function Login(props) {
                             }).then((response) => {
                                 let user = response.data
                                 AuthenticationRegistrationService.saveValueToSession("authenticatedUser", JSON.stringify(user))
-                                console.log(props)
                                 props.history.push("/welcome")
                             }).catch((error) => {
                                 if (error.response) {
