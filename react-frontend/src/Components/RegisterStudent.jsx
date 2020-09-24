@@ -65,7 +65,7 @@ export default function RegisterStudent(props) {
                 onSubmit={async (values, {setFieldError}) => {
                     let dto = {...values};
                     delete dto.passwordConfirm;
-                    return axios.post(`http://localhost/students`, dto)
+                    return axios.post(`http://localhost:8080/students`, dto)
                         .then(() => {
                             props.history.push("/login")
                         })
