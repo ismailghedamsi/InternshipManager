@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import React, {useState} from "react";
-import {Field, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
 import {TextField} from "formik-material-ui";
@@ -61,8 +61,9 @@ export default function RegisterEmployer(props) {
             </Dialog>
             <Formik
                 onSubmit={async (values, {setFieldError}) => {
-                    delete values.passwordConfirm;
-                    return axios.post(`http://localhost/employers`, values)
+                    let dto = {...values};
+                    delete dto.passwordConfirm;
+                    return axios.post(`http://localhost/employers`, dto)
                         .then(() => {
                             props.history.push("/login")
                         })
@@ -86,7 +87,7 @@ export default function RegisterEmployer(props) {
                 initialValues={initialValues}
             >
                 {({submitForm, isSubmitting}) => (
-                    <form className={props.classes.form}>
+                    <Form className={props.classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Field
@@ -195,7 +196,7 @@ export default function RegisterEmployer(props) {
                         >
                             S'enregistrer
                         </Button>
-                    </form>
+                    </Form>
                 )}
             </Formik>
         </div>
