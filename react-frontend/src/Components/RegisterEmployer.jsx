@@ -63,7 +63,7 @@ export default function RegisterEmployer(props) {
                 onSubmit={async (values, {setFieldError}) => {
                     let dto = {...values};
                     delete dto.passwordConfirm;
-                    return axios.post(`http://localhost/employers`, dto)
+                    return axios.post(`http://localhost:8080/employers`, dto)
                         .then(() => {
                             props.history.push("/login")
                         })
