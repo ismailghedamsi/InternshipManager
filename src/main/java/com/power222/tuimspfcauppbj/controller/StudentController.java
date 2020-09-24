@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
+import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,17 @@ import java.util.Optional;
 public class StudentController {
 
     @Autowired
-    private StudentRepository repository;
+    private StudentRepository studentRepo;
+
+    @Autowired
+    private UserRepository userRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<Student> getAllStudents() {
-        return repository.findAll();
+        return studentRepo.findAll();
     }
 
     @PostMapping
@@ -32,23 +36,23 @@ public class StudentController {
         newStudent.setRole("student");
         newStudent.setEnabled(true);
         newStudent.setPassword(passwordEncoder.encode(newStudent.getPassword()));
-        return repository.findByUsername(newStudent.getUsername())
+        return userRepo.findByUsername(newStudent.getUsername())
                 .map(student -> ResponseEntity.status(HttpStatus.CONFLICT).<Student>build())
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(repository.saveAndFlush(newStudent)));
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(studentRepo.saveAndFlush(newStudent)));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable long id) {
-        return repository.findById(id)
+        return studentRepo.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(@RequestBody Student newStudent, @PathVariable long id) {
-        Optional<Student> optStudent = repository.findById(id).map(oldStudent -> {
+        Optional<Student> optStudent = studentRepo.findById(id).map(oldStudent -> {
             newStudent.setId(oldStudent.getId());
-            return repository.saveAndFlush(newStudent);
+            return studentRepo.saveAndFlush(newStudent);
         });
         return ResponseEntity.of(optStudent);
     }
@@ -56,7 +60,7 @@ public class StudentController {
     @DeleteMapping("/{id}")
     @Transactional
     public void deleteStudent(@PathVariable long id) {
-        repository.deleteById(id);
+        studentRepo.deleteById(id);
     }
 
 

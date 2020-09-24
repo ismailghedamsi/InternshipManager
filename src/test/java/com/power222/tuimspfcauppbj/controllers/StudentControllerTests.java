@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.StudentController;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
+import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,6 +41,9 @@ public class StudentControllerTests {
 
     @MockBean
     private StudentRepository studentRepository;
+
+    @MockBean
+    private UserRepository userRepository;
 
     private Student expected;
 
@@ -72,6 +77,7 @@ public class StudentControllerTests {
 
     @Test
     void createStudentTest() throws Exception {
+        when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
         when(studentRepository.saveAndFlush(any())).thenReturn(expected);
 
         MvcResult result = mvc.perform(post("/students")
