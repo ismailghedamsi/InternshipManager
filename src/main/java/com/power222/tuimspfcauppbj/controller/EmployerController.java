@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.dao.EmployerRepository;
+import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,17 @@ import java.util.Optional;
 public class EmployerController {
 
     @Autowired
-    private EmployerRepository repository;
+    private EmployerRepository employerRepo;
+
+    @Autowired
+    private UserRepository userRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<Employer> getAllEmployers() {
-        return repository.findAll();
+        return employerRepo.findAll();
     }
 
     @PostMapping
@@ -32,23 +36,23 @@ public class EmployerController {
         newEmployer.setRole("employer");
         newEmployer.setEnabled(true);
         newEmployer.setPassword(passwordEncoder.encode(newEmployer.getPassword()));
-        return repository.findByUsername(newEmployer.getUsername())
+        return userRepo.findByUsername(newEmployer.getUsername())
                 .map(employer -> ResponseEntity.status(HttpStatus.CONFLICT).<Employer>build())
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(repository.saveAndFlush(newEmployer)));
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(employerRepo.saveAndFlush(newEmployer)));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employer> getEmployerById(@PathVariable long id) {
-        return repository.findById(id)
+        return employerRepo.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Employer> updateEmployer(@RequestBody Employer newEmployer, @PathVariable long id) {
-        Optional<Employer> optEmployer = repository.findById(id).map(oldEmployer -> {
+        Optional<Employer> optEmployer = employerRepo.findById(id).map(oldEmployer -> {
             newEmployer.setId(oldEmployer.getId());
-            return repository.saveAndFlush(newEmployer);
+            return employerRepo.saveAndFlush(newEmployer);
         });
         return ResponseEntity.of(optEmployer);
     }
@@ -56,6 +60,6 @@ public class EmployerController {
     @DeleteMapping("/{id}")
     @Transactional
     public void deleteEmployer(@PathVariable long id) {
-        repository.deleteById(id);
+        employerRepo.deleteById(id);
     }
 }

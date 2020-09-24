@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.EmployerController;
 import com.power222.tuimspfcauppbj.dao.EmployerRepository;
+import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,9 @@ public class EmployerControllerTests {
     @MockBean
     private EmployerRepository empRepo;
 
+    @MockBean
+    private UserRepository userRepository;
+
     private Employer expected;
 
     @BeforeEach
@@ -74,6 +78,7 @@ public class EmployerControllerTests {
 
     @Test
     void createEmployerTest() throws Exception {
+        when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
         when(empRepo.saveAndFlush(any())).thenReturn(expected);
 
         MvcResult result = mvc.perform(post("/employers")
