@@ -13,5 +13,10 @@ export const Menu = [
         title: 'Login',
         url:'/login',
         cn:'nav-links'
+    },
+    {
+        title: 'Offre de Stage',
+        url:'/OffreStage',
+        cn:'nav-links'
     }
 ]
