@@ -6,10 +6,10 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.Entity;
 
 @Data
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Student extends User {
