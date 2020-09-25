@@ -26,7 +26,7 @@ public class Student extends User {
     @OneToMany
     private List<PDFFile> resumes;
 
-    public static void main(String[] args) {
-
+    public void main(String[] args) {
+        this.getId();
     }
 }
