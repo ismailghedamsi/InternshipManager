@@ -33,19 +33,14 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student newStudent) {
-        var status = svc.persistNewStudent(newStudent) ? HttpStatus.CREATED : HttpStatus.CONFLICT;
-        return ResponseEntity.status(status).build();
+        return svc.persistNewStudent(newStudent)
+                .map(student -> ResponseEntity.status(HttpStatus.CREATED).body(student))
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
     @PutMapping("/{id}")
     public Student updateStudent(@RequestBody Student student, @PathVariable long id) {
         return svc.updateStudent(id, student);
-
-        /*Optional<Student> optStudent = studentRepo.findById(id).map(oldStudent -> {
-            newStudent.setId(oldStudent.getId());
-            return studentRepo.saveAndFlush(newStudent);
-        });
-        return ResponseEntity.of(optStudent);*/
     }
 
     @DeleteMapping("/{id}")

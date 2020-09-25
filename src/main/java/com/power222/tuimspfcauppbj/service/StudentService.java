@@ -23,22 +23,33 @@ public class StudentService {
     }
 
     public List<Student> getAllStudents() {
-        return null;
+        return studentRepo.findAll();
     }
 
     public Optional<Student> getStudentById(long id) {
-        return null;
+        return studentRepo.findById(id);
     }
 
-    public boolean persistNewStudent(Student student) {
-        return false;
+    public Optional<Student> persistNewStudent(Student student) {
+        if (userRepo.existsByUsername(student.getUsername()))
+            return Optional.empty();
+
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
+        student.setRole("student");
+        student.setEnabled(true);
+        return Optional.of(studentRepo.saveAndFlush(student));
     }
 
     public Student updateStudent(long id, Student student) {
-        return null;
+        return studentRepo.findById(id)
+                .map(oldStudent -> {
+                    student.setId(oldStudent.getId());
+                    return studentRepo.saveAndFlush(student);
+                })
+                .orElse(student);
     }
 
     public void deleteStudentById(long id) {
-
+        studentRepo.deleteById(id);
     }
 }
