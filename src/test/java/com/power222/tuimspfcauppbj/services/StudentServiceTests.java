@@ -10,13 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +27,9 @@ public class StudentServiceTests {
 
     @Mock
     private UserRepository userRepo;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private StudentService svc;
@@ -91,30 +94,27 @@ public class StudentServiceTests {
 
     @Test
     void createStudent() {
-        when(userRepo.findByUsername(any())).thenReturn(Optional.empty());
+        expectedStudent.setPassword("encodedPassword");
+        var dto = expectedStudent.toBuilder().role(null).enabled(false).password("password").build();
         when(studentRepo.saveAndFlush(expectedStudent)).thenReturn(expectedStudent);
-        var dto = expectedStudent.toBuilder().role(null).enabled(false).build();
+        when(passwordEncoder.encode(dto.getPassword())).thenReturn("encodedPassword");
 
         var actual = svc.persistNewStudent(dto);
 
-        assertThat(actual).isTrue();
-        //Verify that service set 'role' and 'enabled' before persisting
-        verify(studentRepo, times(1)).saveAndFlush(expectedStudent);
+        assertThat(actual).contains(expectedStudent);
     }
 
     @Test
     void createStudentWithExistingUsername() {
-        when(userRepo.findByUsername(expectedStudent.getUsername())).thenReturn(Optional.of(expectedStudent));
+        when(userRepo.existsByUsername(expectedStudent.getUsername())).thenReturn(true);
 
         var actual = svc.persistNewStudent(expectedStudent);
 
-        assertThat(actual).isFalse();
+        assertThat(actual).isEmpty();
     }
 
     @Test
     void updateStudent() {
-        when(studentRepo.saveAndFlush(expectedStudent)).thenReturn(expectedStudent);
-
         var actual = svc.updateStudent(expectedStudent.getId(), expectedStudent);
 
         assertThat(actual).isEqualTo(expectedStudent);
@@ -125,6 +125,7 @@ public class StudentServiceTests {
         var initialId = expectedStudent.getId();
         var alteredId = 5L;
         var alteredIdStudent = expectedStudent.toBuilder().id(alteredId).build();
+        when(studentRepo.findById(initialId)).thenReturn(Optional.of(expectedStudent));
         when(studentRepo.saveAndFlush(expectedStudent)).thenReturn(expectedStudent);
 
         var actual = svc.updateStudent(initialId, alteredIdStudent);
