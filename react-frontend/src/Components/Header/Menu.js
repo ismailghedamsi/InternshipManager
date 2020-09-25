@@ -15,6 +15,7 @@ export const Menu = [
         cn:'nav-links'
     },
     {
+        
         title: 'Offre de Stage',
         url:'/OffreStage',
         cn:'nav-links'
