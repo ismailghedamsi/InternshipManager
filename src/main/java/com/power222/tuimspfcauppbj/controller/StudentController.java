@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -44,7 +43,6 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     public void deleteStudent(@PathVariable long id) {
         svc.deleteStudentById(id);
     }

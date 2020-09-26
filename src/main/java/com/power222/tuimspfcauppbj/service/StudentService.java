@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.model.Student;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,7 @@ public class StudentService {
                 .orElse(student);
     }
 
+    @Transactional
     public void deleteStudentById(long id) {
         studentRepo.deleteById(id);
     }
