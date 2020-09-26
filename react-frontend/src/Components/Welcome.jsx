@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthenticationRegistrationService from '../js/AuthenticationRegistrationService';
+import AuthenticationService from '../js/AuthenticationService';
 import Navbar from "./Header/Navbar";
 import Footer from "./Footer/Footer";
 import {makeStyles} from "@material-ui/core/styles";
@@ -22,7 +22,7 @@ export default function Welcome() {
         <div className={classes.pageContainer}>
             <div className={classes.pageContent}>
                 <Navbar/>
-                <h1>Welcome, {JSON.parse(AuthenticationRegistrationService.getValueFromSession("authenticatedUser")).username}!</h1>
+                <h1>Welcome, {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}!</h1>
             </div>
             <Footer/>
         </div>
