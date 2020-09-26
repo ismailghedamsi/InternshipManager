@@ -1,8 +1,7 @@
 import React from 'react'
 import {Menu} from "./Menu"
 import './Navbar.css'
-
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import AuthenticationService from "../../js/AuthenticationService";
 
@@ -19,8 +18,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Navbar(props) {
+export default function Navbar() {
     const classes = useStyles();
+    const history = useHistory();
     const showIcon = () => {
         const x = document.getElementById("myNav");
         if (x.className === "nav-menu") {
@@ -35,24 +35,24 @@ export default function Navbar(props) {
             <nav className={["NavbarItem", classes.navbarColor].join(' ')}>
                 <h1 className="Navbar-logo">Logo</h1>
                 <ul className="nav-menu" id="myNav">
-                    {Menu.map((item, i) => {
-                        return (
+                    {Menu.filter(item => item.role === AuthenticationService.getCurrentUserRole() || item.role === undefined)
+                        .map((item, i) => (
                             <li key={i}>
-                                <Link className={item.cn} to={item.url}>
+                                <Link className={"nav-links"} to={item.url}>
                                     {item.title}
                                 </Link>
                             </li>
-                        )
-                    })}
+                        ))
+                    }
                     <li>
                         <button
                             type={"button"}
                             className={["nav-links", classes.linkButton].join(' ')}
                             onClick={() => {
                                 AuthenticationService.logout()
-                                props.history.push("/")
+                                history.push("/")
                             }}>
-                            Logout
+                            Logout {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}
                         </button>
                     </li>
                 </ul>

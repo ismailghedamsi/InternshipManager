@@ -67,9 +67,8 @@ export default function Login(props) {
         setOpen(false);
     };
 
-    console.log(AuthenticationService.isUserLoggedIn())
     if (AuthenticationService.isUserLoggedIn())
-        return <Redirect to="/dashboard"/>
+        return <Redirect to="/dashboard/"/>
     else
         return (
             <Grid

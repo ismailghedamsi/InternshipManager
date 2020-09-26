@@ -1,8 +1,10 @@
 import React from 'react';
-import AuthenticationService from '../js/AuthenticationService';
 import Navbar from "./Header/Navbar";
 import Footer from "./Footer/Footer";
 import {makeStyles} from "@material-ui/core/styles";
+import {RoleProtectedRoute} from "./Routes";
+import ResumeApprobation from "./ResumeApprobation";
+import {Switch} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     pageContainer: {
@@ -22,7 +24,12 @@ export default function Dashboard(props) {
         <div className={classes.pageContainer}>
             <div className={classes.pageContent}>
                 <Navbar {...props}/>
-                <h1>Welcome, {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}!</h1>
+                <Switch>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/approbation/cv"
+                                        component={ResumeApprobation}
+                                        role={"admin"}/>
+                </Switch>
             </div>
             <Footer/>
         </div>
