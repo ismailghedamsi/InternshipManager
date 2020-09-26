@@ -17,29 +17,30 @@ public class InternshipOfferService {
 
     private InternshipOfferRepository internshipOfferRepository;
     private EmployerRepository employerRepository;
+    private AuthenticationService authenticationService;
 
-    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository) {
+    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, EmployerRepository employerRepository, AuthenticationService authenticationService) {
         this.internshipOfferRepository = internshipOfferRepository;
+        this.employerRepository = employerRepository;
+        this.authenticationService = authenticationService;
     }
 
-    public Optional<InternshipOffer> uploadPdf(InternshipOffer offer,String pdfContent,String username){
-        Optional<Employer> optionalEmployer = employerRepository.findByUsername(username);
-        Employer employer;
-        Optional<InternshipOffer> nullableOffer = Optional.empty();
-        if(optionalEmployer.isPresent()){
-            employer = optionalEmployer.get();
-            employer.getOffers().add(offer);
-            offer.setJoinedFile(pdfContent);
-            employerRepository.save(employer);
-            nullableOffer = Optional.of(offer);
+    public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer, String pdfContent){
+        Employer employer = null;
+        if(authenticationService.getCurrentUser() instanceof Employer){
+            employer =(Employer) authenticationService.getCurrentUser();
         }
 
-        return nullableOffer;
+        if(employer == null){
+            return  Optional.empty();
+        }
+        employer.getOffers().add(offer);
+            offer.setEmployer(employer);
+            offer.setJoinedFile(pdfContent);
+        return Optional.of(internshipOfferRepository.saveAndFlush(offer));
 
     }
 
-    public InternshipOffer downloadPdf(){
-        return null;
-    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -15,11 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "internship_offer_id")
+    @EqualsAndHashCode.Exclude
     private long internshipOfferId;
     private String title;
     private String description;
@@ -35,6 +38,7 @@ public class InternshipOffer {
     private Date creationDate;
     private Date limitDateToApply;
     @ManyToMany
+    @JsonIgnore
     private List<Student> allowedStudents;
     @Lob
     private String joinedFile;
