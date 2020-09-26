@@ -2,14 +2,12 @@ package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
-import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,10 +24,7 @@ public class InternshipOfferService {
     }
 
     public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer, String pdfContent){
-        Employer employer = null;
-        if(authenticationService.getCurrentUser() instanceof Employer){
-            employer =(Employer) authenticationService.getCurrentUser();
-        }
+        Employer employer = OfferUploader();
 
         if(employer == null){
             return  Optional.empty();
@@ -40,6 +35,20 @@ public class InternshipOfferService {
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
 
     }
+
+    private Employer OfferUploader() {
+        Employer employer = new Employer();
+        if(authenticationService.getCurrentUser() instanceof Employer){
+            employer =(Employer) authenticationService.getCurrentUser();
+        }
+        return employer;
+    }
+
+    public List<InternshipOffer> downloadInternshipOffers(InternshipOffer offer, String pdfContent){
+        Employer employer = OfferUploader();
+        List<InternshipOffer> offers = new ArrayList<>();
+        return null;
+    };
 
 
 
