@@ -8,10 +8,10 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 @Data
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Student extends User {

@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Employer extends User {

@@ -29,7 +29,7 @@ public class FullContextStudentControllerTests {
     private Student student;
 
     @BeforeEach
-    private void beforeEach() {
+    void beforeEach() {
         student = Student.builder()
                 .username("etudiant2")
                 .password("password")
@@ -43,7 +43,7 @@ public class FullContextStudentControllerTests {
     }
 
     @AfterEach
-    private void afterEach() {
+    void afterEach() {
         repository.deleteAll();
     }
 
