@@ -15,13 +15,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Welcome() {
+export default function Dashboard(props) {
     const classes = useStyles();
 
     return (
         <div className={classes.pageContainer}>
             <div className={classes.pageContent}>
-                <Navbar/>
+                <Navbar {...props}/>
                 <h1>Welcome, {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}!</h1>
             </div>
             <Footer/>

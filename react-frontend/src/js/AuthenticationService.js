@@ -4,9 +4,8 @@ class AuthenticationService {
     interceptorId = 0;
     baseUrl = "http://localhost:8080";
 
-    async authenticate(values, setFieldError, setModalOpen, history) {
+    async authenticate(values, setFieldError, setModalOpen) {
         this.logout()
-        this.setupAxiosInterceptors(values.username, values.password)
         return axios({
             method: "GET",
             url: this.baseUrl + "/auth/user",
@@ -15,8 +14,8 @@ class AuthenticationService {
             }
         }).then((response) => {
             let user = response.data
+            this.setupAxiosInterceptors(values.username, values.password)
             this.saveValueToSession("authenticatedUser", JSON.stringify(user))
-            history.push("/welcome")
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status === 401) {
@@ -63,6 +62,10 @@ class AuthenticationService {
 
     isUserLoggedIn() {
         return sessionStorage.getItem("authenticatedUser") != null
+    }
+
+    getCurrentUserRole() {
+        return JSON.parse(sessionStorage.getItem("authenticatedUser")).role;
     }
 
     getValueFromSession(key) {

@@ -1,8 +1,27 @@
 import React from "react";
 import Login from './Components/Login';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 import RegisteringManager from "./Components/RegisteringManager";
-import Welcome from "./Components/Welcome";
+import Dashboard from "./Components/Dashboard";
+import AuthenticationService from "./js/AuthenticationService";
+
+function ConditionalRoute(props) {
+    if (props.condition)
+        return <props.component/>
+    else
+        return <Redirect to={"/"}/>
+}
+
+function BasicProtectedRoute(props) {
+    return <ConditionalRoute component={props.component} condition={AuthenticationService.isUserLoggedIn()}/>
+}
+
+/*function RoleProtectedRoute(props) {
+    return <ConditionalRoute
+        component={props.component}
+        condition={AuthenticationService.getCurrentUserRole() === props.requiredRole}
+    />
+}*/
 
 function App() {
     return (
@@ -11,8 +30,7 @@ function App() {
                 <Switch>
                     <Route exact path="/" component={Login}/>
                     <Route path="/register" component={RegisteringManager}/>
-                    <Route path="/login" component={Login}/>
-                    <Route path="/welcome" component={Welcome}/>
+                    <BasicProtectedRoute path="/dashboard" component={Dashboard}/>
                 </Switch>
             </Router>
         </div>
