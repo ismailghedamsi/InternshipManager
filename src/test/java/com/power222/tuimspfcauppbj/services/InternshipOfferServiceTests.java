@@ -4,6 +4,7 @@ import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,17 +36,24 @@ class InternshipOfferServiceTests {
 
 
     private InternshipOffer expectedOffer;
+    private Employer expectedEmployer;
     private String pdfContent;
 
     @BeforeEach
     void setUp() {
 
         pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
-        expectedOffer = InternshipOffer.builder().allowedStudents(new ArrayList<>())
+        expectedOffer = InternshipOffer.builder().internshipOfferId(1).allowedStudents(new ArrayList<>())
                 .beginHour(8).endHour(16).companyLocation("Montreal").companyName("Dacima").creationDate(new Date(2020,8,8))
                 .description("description").employer(new Employer()).joinedFile(pdfContent).limitDateToApply(new Date(2020,11,10))
                 .nbOfWeeks(8).salary(20).title("Title").build();
 
+        expectedEmployer = Employer.builder()
+                .enabled(true)
+                .username("employeur")
+                .role("employer")
+                .offers(new ArrayList<>())
+                .build();
 
         }
 
