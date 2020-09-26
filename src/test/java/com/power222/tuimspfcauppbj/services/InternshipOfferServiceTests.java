@@ -6,22 +6,19 @@ import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InternshipOfferServiceTests {
@@ -54,9 +51,12 @@ class InternshipOfferServiceTests {
 
     @Test
     void uploadInternshipOffer() {
-        when(service.uploadInternshipOffer(expectedOffer,pdfContent).get()).thenReturn(expectedOffer);
-        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer,pdfContent);
-        assertThat(createdOffer).isEqualTo(expectedOffer);
+        when(authenticationService.getCurrentUser()).thenReturn(expectedEmployer);
+        when(offerRepository.saveAndFlush(expectedOffer)).thenReturn(expectedOffer);
+
+        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer, pdfContent);
+
+        assertThat(createdOffer).contains(expectedOffer);
     }
 
 
