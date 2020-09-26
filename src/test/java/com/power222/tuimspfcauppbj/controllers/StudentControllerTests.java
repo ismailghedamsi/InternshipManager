@@ -3,8 +3,6 @@ package com.power222.tuimspfcauppbj.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.StudentController;
-import com.power222.tuimspfcauppbj.dao.StudentRepository;
-import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,12 +36,6 @@ public class StudentControllerTests {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private StudentRepository studentRepository;
-
-    @MockBean
-    private UserRepository userRepository;
 
     @MockBean
     private StudentService studentService;
@@ -103,6 +95,9 @@ public class StudentControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
+        var actual = objectMapper.readValue(result.getResponse().getContentAsString(), Student.class);
+
         assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
+        assertEquals(expected, actual);
     }
 }
