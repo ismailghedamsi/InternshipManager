@@ -1,11 +1,12 @@
 package com.power222.tuimspfcauppbj.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.File;
 import java.sql.Blob;
+import java.sql.Clob;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +36,22 @@ public class InternshipOffer {
     private Date limitDateToApply;
     @ManyToMany
     private List<Student> allowedStudents;
-    private Blob pdfByteRepresentation;
+    @Lob
+    private String joinedFile;
+
+    public InternshipOffer(String title, String description, Employer employer, String companyName, int nbOfWeeks, double salary, int beginHour, int endHour, String companyLocation, Date creationDate, Date limitDateToApply, List<Student> allowedStudents, String joinedFile) {
+        this.title = title;
+        this.description = description;
+        this.employer = employer;
+        this.companyName = companyName;
+        this.nbOfWeeks = nbOfWeeks;
+        this.salary = salary;
+        this.beginHour = beginHour;
+        this.endHour = endHour;
+        this.companyLocation = companyLocation;
+        this.creationDate = creationDate;
+        this.limitDateToApply = limitDateToApply;
+        this.allowedStudents = allowedStudents;
+        this.joinedFile = joinedFile;
+    }
 }
