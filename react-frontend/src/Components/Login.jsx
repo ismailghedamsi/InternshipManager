@@ -1,7 +1,6 @@
 import {Field, Formik} from 'formik';
 import React, {useState} from 'react';
-import AuthenticationRegistrationService from '../js/AuthenticationRegistrationService';
-import axios from 'axios';
+import AuthenticationService from '../js/AuthenticationService';
 import Grid from "@material-ui/core/Grid";
 import {TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -113,31 +112,9 @@ export default function Login(props) {
                         </DialogActions>
                     </Dialog>
                     <Formik
-                        onSubmit={async (values, {setFieldError}) => {
-                            AuthenticationRegistrationService.logout()
-                            AuthenticationRegistrationService.setupAxiosInterceptors(values.username, values.password)
-                            return axios({
-                                method: "GET",
-                                url: "http://localhost:8080/auth/user",
-                                headers: {
-                                    authorization: "Basic " + window.btoa(values.username + ":" + values.password)
-                                }
-                            }).then((response) => {
-                                let user = response.data
-                                AuthenticationRegistrationService.saveValueToSession("authenticatedUser", JSON.stringify(user))
-                                props.history.push("/welcome")
-                            }).catch((error) => {
-                                if (error.response) {
-                                    if (error.response.status === 401) {
-                                        setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
-                                        setFieldError("password", "   ")
-                                    } else
-                                        setOpen(true)
-                                } else {
-                                    setOpen(true)
-                                }
-                            })
-                        }}
+                        onSubmit={async (values, {setFieldError}) =>
+                            AuthenticationService.authenticate(values, setFieldError, setOpen, props.history)
+                        }
 
                         validationSchema={yup.object()
                             .shape({
