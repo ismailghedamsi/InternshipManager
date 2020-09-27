@@ -4,7 +4,8 @@ import Footer from "./Footer/Footer";
 import {makeStyles} from "@material-ui/core/styles";
 import {RoleProtectedRoute} from "./Routes";
 import ResumeApprobation from "./ResumeApprobation";
-import {Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
+import UploadCV from "./Upload/UploadCV";
 
 const useStyles = makeStyles((theme) => ({
     pageContainer: {
@@ -29,6 +30,7 @@ export default function Dashboard(props) {
                                         path="/dashboard/approbation/cv"
                                         component={ResumeApprobation}
                                         role={"admin"}/>
+                    <Route exact={true} path="/dashboard/upload" component={UploadCV}/>
                 </Switch>
             </div>
             <Footer/>

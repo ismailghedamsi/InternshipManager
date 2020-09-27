@@ -112,7 +112,7 @@ export default function RegisteringManager(props) {
                     </TabPanel>
                     <Grid container justify="flex-end" className={classes.link}>
                         <Grid item>
-                            <Link component={RouterLink} to={'/login'} variant="body2">
+                            <Link component={RouterLink} to={'/'} variant="body2">
                                 Vous avez déja un compte? Se connecter
                             </Link>
                         </Grid>

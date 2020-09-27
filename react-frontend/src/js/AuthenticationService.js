@@ -4,7 +4,7 @@ class AuthenticationService {
     interceptorId = 0;
     baseUrl = "http://localhost:8080";
 
-    async authenticate(values, setFieldError, setModalOpen) {
+    async authenticate(values) {
         this.logout()
         return axios({
             method: "GET",
@@ -16,16 +16,6 @@ class AuthenticationService {
             let user = response.data
             this.setupAxiosInterceptors(values.username, values.password)
             this.saveValueToSession("authenticatedUser", JSON.stringify(user))
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status === 401) {
-                    setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
-                    setFieldError("password", "   ")
-                } else
-                    setModalOpen(true)
-            } else {
-                setModalOpen(true)
-            }
         })
     }
 

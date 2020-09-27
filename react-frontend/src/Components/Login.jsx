@@ -63,9 +63,21 @@ export default function Login(props) {
         username: "",
         password: ""
     }
-    const handleClose = () => {
+    const closeModal = () => {
         setOpen(false);
     };
+    const handleHttpError = (error, setFieldError) => {
+        if (error.response) {
+            if (error.response.status === 401) {
+                setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
+                setFieldError("password", "   ")
+            } else
+                setOpen(true);
+        } else
+            setOpen(true);
+
+    };
+
 
     if (AuthenticationService.isUserLoggedIn())
         return <Redirect to="/dashboard/"/>
@@ -97,7 +109,7 @@ export default function Login(props) {
                         <Divider className={classes.divider}/>
                         <Dialog
                             open={open}
-                            onClose={handleClose}
+                            onClose={closeModal}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
@@ -108,15 +120,16 @@ export default function Login(props) {
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleClose} color="primary">
+                                <Button onClick={closeModal} color="primary">
                                     J'ai compris
                                 </Button>
                             </DialogActions>
                         </Dialog>
                         <Formik
                             onSubmit={async (values, {setFieldError}) =>
-                                AuthenticationService.authenticate(values, setFieldError, setOpen)
+                                AuthenticationService.authenticate(values)
                                     .then(() => props.history.push("/dashboard"))
+                                    .catch((error) => handleHttpError(error, setFieldError))
                             }
 
                             validationSchema={yup.object()
