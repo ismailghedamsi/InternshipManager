@@ -1,65 +1,51 @@
 package com.power222.tuimspfcauppbj.controller;
 
-import com.power222.tuimspfcauppbj.dao.EmployerRepository;
-import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.power222.tuimspfcauppbj.service.EmployerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/employers")
 public class EmployerController {
 
-    @Autowired
-    private EmployerRepository employerRepo;
+    private final EmployerService svc;
 
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public EmployerController(EmployerService svc) {
+        this.svc = svc;
+    }
 
     @GetMapping
     public List<Employer> getAllEmployers() {
-        return employerRepo.findAll();
-    }
-
-    @PostMapping
-    public ResponseEntity<Employer> createEmployer(@RequestBody Employer newEmployer) {
-        newEmployer.setRole("employer");
-        newEmployer.setEnabled(true);
-        newEmployer.setPassword(passwordEncoder.encode(newEmployer.getPassword()));
-        return userRepo.findByUsername(newEmployer.getUsername())
-                .map(employer -> ResponseEntity.status(HttpStatus.CONFLICT).<Employer>build())
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(employerRepo.saveAndFlush(newEmployer)));
+        return svc.getAllEmployers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employer> getEmployerById(@PathVariable long id) {
-        return employerRepo.findById(id)
+        return svc.getEmployerById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    public ResponseEntity<Employer> createEmployer(@RequestBody Employer newEmployer) {
+        return svc.persistNewEmployer(newEmployer)
+                .map(employer -> ResponseEntity.status(HttpStatus.CREATED).body(employer))
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Employer> updateEmployer(@RequestBody Employer newEmployer, @PathVariable long id) {
-        Optional<Employer> optEmployer = employerRepo.findById(id).map(oldEmployer -> {
-            newEmployer.setId(oldEmployer.getId());
-            return employerRepo.saveAndFlush(newEmployer);
-        });
-        return ResponseEntity.of(optEmployer);
+    public Employer updateEmployer(@RequestBody Employer employer, @PathVariable long id) {
+        return svc.updateEmployer(id, employer);
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public void deleteEmployer(@PathVariable long id) {
-        employerRepo.deleteById(id);
+        svc.deleteEmployerById(id);
     }
 }

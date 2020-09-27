@@ -1,9 +1,8 @@
 import React from 'react';
-import AuthenticationRegistrationService from '../js/AuthenticationRegistrationService';
+import AuthenticationService from '../js/AuthenticationService';
 import Navbar from "./Header/Navbar";
 import Footer from "./Footer/Footer";
-import UploadCV from "./Upload/UploadCV";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     pageContainer: {
@@ -22,11 +21,10 @@ export default function Welcome() {
     return (
         <div className={classes.pageContainer}>
             <div className={classes.pageContent}>
-                <Navbar />
-                <h1>Welcome, {JSON.parse(AuthenticationRegistrationService.getValueFromSession("authenticatedUser")).username}!</h1>
-                <UploadCV />
+                <Navbar/>
+                <h1>Welcome, {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}!</h1>
             </div>
-            <Footer />
+            <Footer/>
         </div>
     );
 }

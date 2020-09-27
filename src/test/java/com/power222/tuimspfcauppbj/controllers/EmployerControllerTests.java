@@ -4,9 +4,8 @@ package com.power222.tuimspfcauppbj.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.EmployerController;
-import com.power222.tuimspfcauppbj.dao.EmployerRepository;
-import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.service.EmployerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,15 +39,12 @@ public class EmployerControllerTests {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private EmployerRepository empRepo;
-
-    @MockBean
-    private UserRepository userRepository;
+    private EmployerService employerService;
 
     private Employer expected;
 
     @BeforeEach
-    private void beforeEach() {
+    void beforeEach() {
         expected = Employer.builder()
                 .enabled(true)
                 .id(1L)
@@ -66,28 +61,13 @@ public class EmployerControllerTests {
 
     @Test
     void getEmployerTest() throws Exception {
-        when(empRepo.findById(1L)).thenReturn(Optional.ofNullable(expected));
+        when(employerService.getEmployerById(1L)).thenReturn(Optional.ofNullable(expected));
 
         MvcResult result = mvc.perform(get("/employers/1").contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Employer actual = objectMapper.readValue(result.getResponse().getContentAsString(), Employer.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void createEmployerTest() throws Exception {
-        when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
-        when(empRepo.saveAndFlush(any())).thenReturn(expected);
-
-        MvcResult result = mvc.perform(post("/employers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expected))).andReturn();
-
-        Employer actual = objectMapper.readValue(result.getResponse().getContentAsString(), Employer.class);
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
         assertEquals(expected, actual);
     }
 
@@ -99,12 +79,26 @@ public class EmployerControllerTests {
         for (int i = 0; i < nbEmployer; i++)
             employerList.add(new Employer());
 
-        when(empRepo.findAll()).thenReturn(employerList);
+        when(employerService.getAllEmployers()).thenReturn(employerList);
 
         MvcResult result = mvc.perform(get("/employers")).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         assertEquals(actuals.size(), nbEmployer);
+    }
+
+    @Test
+    void createEmployerTest() throws Exception {
+        when(employerService.persistNewEmployer(expected)).thenReturn(Optional.of(expected));
+
+        MvcResult result = mvc.perform(post("/employers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+        var actual = objectMapper.readValue(result.getResponse().getContentAsString(), Employer.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
+        assertEquals(expected, actual);
     }
 }
