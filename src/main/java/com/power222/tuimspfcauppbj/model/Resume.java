@@ -13,7 +13,7 @@ import java.io.File;
 @SuperBuilder
 @EqualsAndHashCode
 @Entity
-public class PDFFile {
+public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

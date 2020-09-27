@@ -24,5 +24,5 @@ public class Student extends User {
     private String address;
 
     @OneToMany
-    private Set<PDFFile> resumes;
+    private Set<Resume> resumes;
 }
