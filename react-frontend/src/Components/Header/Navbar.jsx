@@ -1,9 +1,9 @@
 import React from 'react'
-import { Menu } from "./Menu"
+import {Menu} from "./Menu"
 import './Navbar.css'
 
-import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import {Link} from "react-router-dom";
+import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     navbarColor: {

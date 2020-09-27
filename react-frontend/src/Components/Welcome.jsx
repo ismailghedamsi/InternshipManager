@@ -3,6 +3,7 @@ import AuthenticationService from '../js/AuthenticationService';
 import Navbar from "./Header/Navbar";
 import Footer from "./Footer/Footer";
 import {makeStyles} from "@material-ui/core/styles";
+import UploadCV from "./Upload/UploadCV";
 
 const useStyles = makeStyles((theme) => ({
     pageContainer: {
@@ -23,6 +24,7 @@ export default function Welcome() {
             <div className={classes.pageContent}>
                 <Navbar/>
                 <h1>Welcome, {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}!</h1>
+                <UploadCV/>
             </div>
             <Footer/>
         </div>
