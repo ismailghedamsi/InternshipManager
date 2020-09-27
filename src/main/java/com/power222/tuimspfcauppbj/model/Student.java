@@ -5,7 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -24,9 +24,5 @@ public class Student extends User {
     private String address;
 
     @OneToMany
-    private List<PDFFile> resumes;
-
-    public void main(String[] args) {
-        this.getId();
-    }
+    private Set<PDFFile> resumes;
 }

@@ -3,8 +3,7 @@ package com.power222.tuimspfcauppbj.model;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.File;
 
 @Data
@@ -16,7 +15,11 @@ import java.io.File;
 @Entity
 public class PDFFile {
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private File file;
+
+    @ManyToOne
+    private Student owner;
 }
