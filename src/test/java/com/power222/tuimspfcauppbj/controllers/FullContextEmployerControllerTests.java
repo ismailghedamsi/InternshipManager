@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -38,6 +40,7 @@ public class FullContextEmployerControllerTests {
                 .phoneNumber("0123456789")
                 .address("123claurendeau")
                 .email("123@claurendeau.qc.ca")
+                .offers(new ArrayList<>())
                 .build();
     }
 
