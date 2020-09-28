@@ -22,7 +22,7 @@ public class InternshipOfferService {
         this.authenticationService = authenticationService;
     }
 
-    public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer, String pdfContent){
+    public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer){
         Employer employer = OfferUploader();
 
         if(employer == null){
@@ -30,7 +30,6 @@ public class InternshipOfferService {
         }
         employer.getOffers().add(offer);
             offer.setEmployer(employer);
-            offer.setJoinedFile(pdfContent);
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
 
     }
@@ -67,7 +66,7 @@ public class InternshipOfferService {
 
 
 
-    public void deleteResumeById(long id) {
+    public void deleteOfferById(long id) {
         internshipOfferRepository.deleteById(id);
     }
 

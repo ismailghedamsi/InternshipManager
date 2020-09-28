@@ -4,7 +4,6 @@ import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
-import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,7 +80,7 @@ class InternshipOfferServiceTests {
         when(authenticationService.getCurrentUser()).thenReturn(expectedEmployer);
         when(offerRepository.saveAndFlush(expectedOffer)).thenReturn(expectedOffer);
 
-        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer, pdfContent);
+        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer);
 
         assertThat(createdOffer).contains(expectedOffer);
     }
@@ -90,7 +89,7 @@ class InternshipOfferServiceTests {
     void tryToUploadOfferForUnexistantUser() {
         when(authenticationService.getCurrentUser()).thenReturn(null);
 
-        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer, pdfContent);
+        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer);
 
         assertThat(createdOffer).isEmpty();
     }
@@ -126,7 +125,7 @@ class InternshipOfferServiceTests {
     void deleteResumeById() {
         var idToDelete = expectedOffer.getInternshipOfferId();
 
-        service.deleteResumeById(idToDelete);
+        service.deleteOfferById(idToDelete);
 
         verify(offerRepository, times(1)).deleteById(idToDelete);
     }
