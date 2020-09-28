@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj;
 
+import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
@@ -9,8 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -24,10 +23,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
     public static class BootstrapConfig implements CommandLineRunner {
 
         private final UserRepository userRepo;
+        private final StudentRepository studentRepo;
         private final PasswordEncoder passwordEncoder;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder) {
+        public BootstrapConfig(UserRepository userRepo, StudentRepository studentRepo, PasswordEncoder passwordEncoder) {
             this.userRepo = userRepo;
+            this.studentRepo = studentRepo;
             this.passwordEncoder = passwordEncoder;
         }
 
@@ -49,7 +50,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .email("simon@cal.qc.ca")
                     .phoneNumber("5144816959")
                     .address("6600 St-Jacques Ouest")
-                    .resumes(Collections.emptySet())
                     .build());
 
             userRepo.saveAndFlush(User.builder()
