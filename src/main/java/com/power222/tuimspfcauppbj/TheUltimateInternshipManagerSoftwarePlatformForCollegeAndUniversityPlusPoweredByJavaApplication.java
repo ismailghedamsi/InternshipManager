@@ -40,10 +40,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            userRepo.saveAndFlush(Student.builder()
-                    .enabled(true)
+            studentRepo.saveAndFlush(Student.builder()
                     .username("student")
-                    .role("student")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Simon")
                     .lastName("Longpré")

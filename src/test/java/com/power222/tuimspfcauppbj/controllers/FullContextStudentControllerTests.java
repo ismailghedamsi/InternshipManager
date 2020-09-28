@@ -41,7 +41,7 @@ public class FullContextStudentControllerTests {
                 .email("power@gmail.ca")
                 .phoneNumber("911")
                 .address("9310 Lasalle")
-                .resumes(Collections.emptySet())
+                .resumes(Collections.emptyList())
                 .build();
     }
 

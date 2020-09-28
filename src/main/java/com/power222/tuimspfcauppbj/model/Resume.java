@@ -1,7 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Builder(toBuilder = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +24,6 @@ public class Resume {
     private String name;
 
     @ManyToOne
+    @JsonIgnoreProperties("resumes")
     private Student owner;
 }
