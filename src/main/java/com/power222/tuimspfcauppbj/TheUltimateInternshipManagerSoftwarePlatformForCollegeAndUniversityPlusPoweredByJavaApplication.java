@@ -1,6 +1,8 @@
 package com.power222.tuimspfcauppbj;
 
+import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -22,14 +26,16 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
         private final UserRepository userRepo;
         private final PasswordEncoder passwordEncoder;
+        private final ResumeRepository resumeRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
+            this.resumeRepo = resumeRepo;
         }
 
         @Override
-        public void run(String... args) {
+        public void run(String... args) throws IOException {
             userRepo.saveAndFlush(User.builder()
                     .enabled(true)
                     .username("admin")
@@ -49,6 +55,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .phoneNumber("5144816959")
                     .address("6600 St-Jacques Ouest")
                     .build());
+
+            /*resumeRepo.saveAndFlush(Resume.builder()
+                    .name("testResumeFileName")
+                    .file(new String(Base64.encodeBase64(new FileInputStream(new File("designpatternscard.pdf")).readAllBytes())))
+                    .owner(u)
+                    .build());*/
 
             userRepo.saveAndFlush(User.builder()
                     .enabled(true)

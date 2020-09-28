@@ -24,7 +24,7 @@ class AuthenticationService {
         delete dto.passwordConfirm;
         return axios.post(this.baseUrl + endpoint, dto)
             .then(() => {
-                history.push("/login")
+                history.push("/")
             })
             .catch((error) => {
                 console.error(error)

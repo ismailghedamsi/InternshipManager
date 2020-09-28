@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from "./Header/Navbar";
-import Footer from "./Footer/Footer";
+import Footer from "./Footer";
 import {makeStyles} from "@material-ui/core/styles";
 import {RoleProtectedRoute} from "./Routes";
 import ResumeApprobation from "./ResumeApprobation";
