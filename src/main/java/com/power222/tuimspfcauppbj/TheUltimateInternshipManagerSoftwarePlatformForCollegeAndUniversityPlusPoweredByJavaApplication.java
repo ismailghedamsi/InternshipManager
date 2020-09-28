@@ -37,11 +37,17 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            userRepo.saveAndFlush(User.builder()
-                    .enabled(true)
-                    .username("etudiant")
-                    .role("student")
+            var u = userRepo.saveAndFlush(Student.builder()
+                    .username("student")
                     .password(passwordEncoder.encode("password"))
+                    .role("student")
+                    .enabled(true)
+                    .firstName("Simon")
+                    .lastName("Longpré")
+                    .studentId("1386195")
+                    .email("simon@cal.qc.ca")
+                    .phoneNumber("5144816959")
+                    .address("6600 St-Jacques Ouest")
                     .build());
 
             userRepo.saveAndFlush(User.builder()
