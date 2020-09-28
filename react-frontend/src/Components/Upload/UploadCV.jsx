@@ -46,7 +46,7 @@ class UploadCV extends Component {
             >
                 <Grid item xs={12}>
                     <Container component="main" maxWidth="sm" className={classes.container}>
-                        <Typography variant="h5" id="titre">
+                        <Typography variant="h5" id="title">
                             Télécharger un nouveau CV
                         </Typography>
                         <Formik
@@ -94,8 +94,10 @@ class UploadCV extends Component {
                                         }}
                                     />
                                     <ErrorMessage name={"file"}>
-                                        {msg => <span style={{color: "red"}}>{msg}</span>}
+                                        {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
+                                        </p>}
                                     </ErrorMessage>
+                                    <br/>
                                     {isSubmitting && <LinearProgress/>}
                                     <Button
                                         id="buttonSubmit"
