@@ -15,6 +15,13 @@ const useStyles = makeStyles((theme) => ({
         border: "none",
         cursor: "pointer",
         margin: 0,
+        borderRadius: 0,
+        '&:hover': {
+            backgroundColor: "#00000099",
+        },
+        '&:focus': {
+            outline: "none"
+        }
     },
     container: {
         backgroundColor: "#fff",
@@ -27,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ResumeApprobation() {
     const classes = useStyles();
-    const [resumes, setResumes] = useState([{name: "Loading..."}]);
+    const [currentDoc, setCurrentDoc] = useState('');
+    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -39,7 +47,7 @@ export default function ResumeApprobation() {
         const getData = async () => {
             const result = await axios.get("http://localhost:8080/resumes")
             console.log(result)
-            //setResumes(JSON.parse(result.data))
+            setResumes(result.data)
         }
         getData()
     }, [])
@@ -54,17 +62,29 @@ export default function ResumeApprobation() {
             >
                 <Grid item xs={4}>
                     <Typography>Fichiers</Typography>
-                    {/*
+                    {
                         resumes.map((item, i) => (
-                            <Typography key={i}>{item.name}</Typography>
-                        ))*/
+                            <button
+                                key={i}
+                                type={"button"}
+                                className={["nav-links", classes.linkButton].join(' ')}
+                                onClick={() => setCurrentDoc(item.file)}
+                            >
+                                <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                    {item.name + " "}
+                                </Typography>
+                                <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                                    {item.owner.firstName} {item.owner.lastName}
+                                </Typography>
+                            </button>
+                        ))
                     }
                 </Grid>
                 <Grid item xs={8}>
                     <Typography>Fichier sélectionné</Typography>
                     <Document
                         onLoadSuccess={onDocumentLoadSuccess}
-                        file={""}
+                        file={"data:application/pdf;base64," + currentDoc}
                     >
                         <Page pageNumber={pageNumber}/>
                     </Document>
