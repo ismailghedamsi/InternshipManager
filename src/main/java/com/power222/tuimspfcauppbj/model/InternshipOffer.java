@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,19 +16,19 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "internship_offer_id")
-    @EqualsAndHashCode.Exclude
     private long internshipOfferId;
     private String title;
     private String description;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "employer_id", nullable = false)
+    @JsonIgnoreProperties("offers")
     private Employer employer;
     private String companyName;
     private int nbOfWeeks;
@@ -42,20 +43,4 @@ public class InternshipOffer {
     private List<Student> allowedStudents;
     @Lob
     private String joinedFile;
-
-    public InternshipOffer(String title, String description, Employer employer, String companyName, int nbOfWeeks, double salary, int beginHour, int endHour, String companyLocation, Date creationDate, Date limitDateToApply, List<Student> allowedStudents, String joinedFile) {
-        this.title = title;
-        this.description = description;
-        this.employer = employer;
-        this.companyName = companyName;
-        this.nbOfWeeks = nbOfWeeks;
-        this.salary = salary;
-        this.beginHour = beginHour;
-        this.endHour = endHour;
-        this.companyLocation = companyLocation;
-        this.creationDate = creationDate;
-        this.limitDateToApply = limitDateToApply;
-        this.allowedStudents = allowedStudents;
-        this.joinedFile = joinedFile;
-    }
 }
