@@ -5,6 +5,7 @@ import RegisteringManager from "./Components/RegisteringManager";
 import Welcome from "./Components/Welcome";
 import OffreStage from "./Components/OffreStage/OffreStage";
 import CreateStage from "./Components/OffreStage/CreateStage";
+import CreateStuff from "./Components/OffreStage/CreateStuff";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/welcome" component={Welcome}/>
                     <Route path="/OffreStage" component={OffreStage}/>
                     <Route path="/CreateStage" component={CreateStage}/>
+                    <Route path="/CreateStuff" component={CreateStuff}/>
                 </Switch>
             </Router>
         </div>

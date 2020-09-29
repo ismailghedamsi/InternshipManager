@@ -1,7 +1,3 @@
-import React from 'react';
-import { render } from 'react-dom';
-import Navbar from '../Header/Navbar';
-
 function CreateStage() {
     return (<div> Helloworld
         <form>
