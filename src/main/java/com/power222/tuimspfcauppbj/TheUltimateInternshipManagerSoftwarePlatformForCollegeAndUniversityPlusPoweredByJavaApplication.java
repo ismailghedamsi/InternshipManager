@@ -64,6 +64,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 resumeRepo.saveAndFlush(Resume.builder()
                         .name("testResumeFileName " + i)
                         .file(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .reviewed(i == 4)
                         .owner(u)
                         .build());
             }
