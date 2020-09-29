@@ -97,7 +97,6 @@ class UploadCV extends Component {
                                         {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
                                         </p>}
                                     </ErrorMessage>
-                                    <br/>
                                     {isSubmitting && <LinearProgress/>}
                                     <Button
                                         id="buttonSubmit"
