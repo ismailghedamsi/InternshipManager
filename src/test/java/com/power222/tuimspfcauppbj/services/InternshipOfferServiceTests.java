@@ -31,19 +31,14 @@ class InternshipOfferServiceTests {
     private EmployerRepository employerRepository;
     @Mock
     private AuthenticationService authenticationService;
-
     @InjectMocks
     private InternshipOfferService service;
-
-
-
     private InternshipOffer expectedOffer;
     private InternshipOffer expectedOffer2;
     private List<InternshipOffer> expectedOffers;
     private List<InternshipOffer> expectedOffersOfEmployer;
     private Employer expectedEmployer;
     private String pdfContent;
-
 
     @BeforeEach
     void setUp() {
@@ -72,16 +67,14 @@ class InternshipOfferServiceTests {
                 .role("employer")
                 .offers(new ArrayList<>())
                 .build();
-
         }
 
     @Test
     void succesfulInternshipOfferUpload() {
         when(authenticationService.getCurrentUser()).thenReturn(expectedEmployer);
         when(offerRepository.saveAndFlush(expectedOffer)).thenReturn(expectedOffer);
-
+        expectedOffer.setEmployer(null);
         Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer);
-
         assertThat(createdOffer).contains(expectedOffer);
     }
 
@@ -109,7 +102,7 @@ class InternshipOfferServiceTests {
     void OfferFoundById() {
         when(offerRepository.findById(1L)).thenReturn(Optional.of(expectedOffer));
         var actual = service.getInternshipOfferById(1L);
-        assertThat(actual).isNotEmpty();
+        assertThat(actual).contains(expectedOffer);
 
     }
 
@@ -152,12 +145,10 @@ class InternshipOfferServiceTests {
     }
 
     @Test
-    void updateResumeWithNonexistentId() {
+    void updateOfferWithNonexistentId() {
         var actual = service.updateInternshipOffer(expectedOffer.getId(), expectedOffer);
 
         assertThat(actual).isEqualTo(expectedOffer);
     }
-
-
 
 }

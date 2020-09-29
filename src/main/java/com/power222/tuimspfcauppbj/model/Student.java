@@ -3,7 +3,6 @@ package com.power222.tuimspfcauppbj.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -27,7 +26,6 @@ public class Student extends User {
             name = "student_internship_offer_applications",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "internshipOfferId"))
-   // @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties({"joinedFile", "employer"})
     private List<InternshipOffer> appliedoffers;
 

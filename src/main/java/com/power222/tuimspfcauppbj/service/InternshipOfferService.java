@@ -5,7 +5,6 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +23,11 @@ public class InternshipOfferService {
 
     public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer){
         Employer employer = OfferUploader();
-
-        if(employer == null){
+        if(employer == null)
             return  Optional.empty();
-        }
         employer.getOffers().add(offer);
-            offer.setEmployer(employer);
+        offer.setEmployer(employer);
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
-
     }
 
     private Employer OfferUploader() {
@@ -51,8 +47,7 @@ public class InternshipOfferService {
     }
 
     public List<InternshipOffer> getInternshipOffersOfEmployer(String username){
-
-            return internshipOfferRepository.findByEmployerEmail(username);
+        return internshipOfferRepository.findByEmployerEmail(username);
     }
 
     public InternshipOffer updateInternshipOffer(long id, InternshipOffer offer) {
@@ -63,8 +58,6 @@ public class InternshipOfferService {
                 })
                 .orElse(offer);
     }
-
-
 
     public void deleteOfferById(long id) {
         internshipOfferRepository.deleteById(id);
