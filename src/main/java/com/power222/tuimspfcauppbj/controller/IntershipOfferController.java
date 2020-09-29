@@ -29,19 +29,19 @@ public class IntershipOfferController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<InternshipOffer> createOffer(@RequestBody InternshipOffer newOffer) {
         return offerService.uploadInternshipOffer(newOffer)
                 .map(offer -> ResponseEntity.status(HttpStatus.ACCEPTED.CREATED).body(offer))
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public InternshipOffer updateOffer(@RequestBody InternshipOffer offer, @PathVariable long id) {
         return offerService.updateInternshipOffer(id, offer);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteOffer(@PathVariable long id) {
         offerService.deleteOfferById(id);
     }
