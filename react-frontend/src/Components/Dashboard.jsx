@@ -8,24 +8,29 @@ import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
 
 const useStyles = makeStyles((theme) => ({
-    pageContainer: {
+    root: {
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
     },
-    pageContent: {
-        flex: 1,
+    container: {
+        backgroundColor: "#fff",
+        flex: 1
     }
+
 }));
 
 export default function Dashboard(props) {
     const classes = useStyles();
 
     return (
-        <div className={classes.pageContainer}>
-            <div className={classes.pageContent}>
-                <Navbar {...props}/>
+        <div className={classes.root}>
+            <Navbar {...props}/>
+            <div className={classes.container}>
                 <Switch>
+                    <Route exact={true} path={"/dashboard"}>
+                        <h1>Welcome</h1>
+                    </Route>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/approbation/cv"
                                         component={ResumeApprobation}

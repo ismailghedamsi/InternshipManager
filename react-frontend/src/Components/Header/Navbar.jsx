@@ -15,6 +15,12 @@ const useStyles = makeStyles((theme) => ({
         border: "none",
         cursor: "pointer",
         margin: 0,
+        '&:hover': {
+            color: "#000"
+        },
+        '&:focus': {
+            outline: "none",
+        }
     }
 }));
 
@@ -31,35 +37,33 @@ export default function Navbar() {
     }
 
     return (
-        <div>
-            <nav className={["NavbarItem", classes.navbarColor].join(' ')}>
-                <h1 className="Navbar-logo">Logo</h1>
-                <ul className="nav-menu" id="myNav">
-                    {Menu.filter(item => item.role === AuthenticationService.getCurrentUserRole() || item.role === undefined)
-                        .map((item, i) => (
-                            <li key={i}>
-                                <Link className={"nav-links"} to={item.url}>
-                                    {item.title}
-                                </Link>
-                            </li>
-                        ))
-                    }
-                    <li>
-                        <button
-                            type={"button"}
-                            className={["nav-links", classes.linkButton].join(' ')}
-                            onClick={() => {
-                                AuthenticationService.logout()
-                                history.push("/")
-                            }}>
-                            Logout {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}
-                        </button>
-                    </li>
-                </ul>
-                <div className="menu-icon" onClick={showIcon}>
-                    <i className="fa fa-bars"/>
-                </div>
-            </nav>
-        </div>
+        <nav className={["NavbarItem", classes.navbarColor].join(' ')}>
+            <h1 className="Navbar-logo">Logo</h1>
+            <ul className="nav-menu" id="myNav">
+                {Menu.filter(item => item.role === AuthenticationService.getCurrentUserRole() || item.role === undefined)
+                    .map((item, i) => (
+                        <li key={i}>
+                            <Link className={"nav-links"} to={item.url}>
+                                {item.title}
+                            </Link>
+                        </li>
+                    ))
+                }
+                <li>
+                    <button
+                        type={"button"}
+                        className={["nav-links", classes.linkButton].join(' ')}
+                        onClick={() => {
+                            AuthenticationService.logout()
+                            history.push("/")
+                        }}>
+                        Logout {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}
+                    </button>
+                </li>
+            </ul>
+            <div className="menu-icon" onClick={showIcon}>
+                <i className="fa fa-bars"/>
+            </div>
+        </nav>
     )
 }

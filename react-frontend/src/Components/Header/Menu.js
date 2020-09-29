@@ -1,7 +1,7 @@
 export const Menu = [
     {
         title: 'Accueil',
-        url: '/dashboard/'
+        url: '/dashboard'
     },
     {
         title: 'Approbation CV',

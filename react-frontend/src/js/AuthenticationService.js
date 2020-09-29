@@ -4,6 +4,17 @@ class AuthenticationService {
     interceptorId = 0;
     baseUrl = "http://localhost:8080";
 
+    constructor() {
+        console.info("Called AuthService constructor")
+        if (this.isUserLoggedIn()) {
+            console.info("Setting up...")
+            const user = this.getCurrentUser().username;
+            const pass = this.getCurrentUser().password;
+            this.setupAxiosInterceptors(user, pass);
+        }
+    }
+
+
     async authenticate(values) {
         this.logout()
         return axios({
@@ -54,8 +65,13 @@ class AuthenticationService {
         return sessionStorage.getItem("authenticatedUser") != null
     }
 
+    getCurrentUser() {
+        return JSON.parse(sessionStorage.getItem("authenticatedUser"));
+    }
+
+
     getCurrentUserRole() {
-        return JSON.parse(sessionStorage.getItem("authenticatedUser")).role;
+        return this.getCurrentUser().role;
     }
 
     getValueFromSession(key) {
