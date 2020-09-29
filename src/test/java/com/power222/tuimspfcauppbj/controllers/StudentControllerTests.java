@@ -47,7 +47,6 @@ public class StudentControllerTests {
         expected = Student.builder().enabled(true)
                 .username("etudiant")
                 .role("student")
-                .password("password")
                 .firstName("Bob")
                 .lastName("Brutus")
                 .id(4L)

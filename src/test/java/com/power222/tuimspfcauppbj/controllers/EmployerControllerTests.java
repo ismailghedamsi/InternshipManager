@@ -49,7 +49,6 @@ public class EmployerControllerTests {
                 .enabled(true)
                 .id(1L)
                 .username("employer")
-                .password("password")
                 .role("employer")
                 .companyName("AL")
                 .contactName("emp1")
