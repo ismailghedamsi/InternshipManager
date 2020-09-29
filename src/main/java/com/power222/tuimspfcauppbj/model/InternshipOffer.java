@@ -21,9 +21,7 @@ import java.util.List;
 public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    @Column(name = "internship_offer_id")
-    private long internshipOfferId;
+    private long id;
     private String title;
     private String description;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
