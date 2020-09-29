@@ -49,12 +49,12 @@ class InternshipOfferServiceTests {
     void setUp() {
         Employer employer = Employer.builder().username("mark").email("a@gmail.com").build();
         pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
-        expectedOffer = InternshipOffer.builder().internshipOfferId(1L).allowedStudents(new ArrayList<>())
+        expectedOffer = InternshipOffer.builder().id(1L).allowedStudents(new ArrayList<>())
                 .beginHour(8).endHour(16).companyLocation("Montreal").companyName("Dacima").creationDate(new Date(2020,8,8))
                 .description("description").employer(employer).joinedFile(pdfContent).limitDateToApply(new Date(2020,11,10))
                 .nbOfWeeks(8).salary(20).title("Title").build();
 
-        expectedOffer2 = InternshipOffer.builder().internshipOfferId(2).allowedStudents(new ArrayList<>())
+        expectedOffer2 = InternshipOffer.builder().id(2).allowedStudents(new ArrayList<>())
                 .beginHour(8).endHour(16).companyLocation("Japon").companyName("SquareEnix").creationDate(new Date(2020,8,8))
                 .description("description").employer(new Employer()).joinedFile(pdfContent).limitDateToApply(new Date(2020,11,10))
                 .nbOfWeeks(8).salary(20).title("Title").build();
@@ -123,7 +123,7 @@ class InternshipOfferServiceTests {
 
     @Test
     void deleteResumeById() {
-        var idToDelete = expectedOffer.getInternshipOfferId();
+        var idToDelete = expectedOffer.getId();
 
         service.deleteOfferById(idToDelete);
 
@@ -140,9 +140,9 @@ class InternshipOfferServiceTests {
 
     @Test
     void updateOffer() {
-        var initialId = expectedOffer.getInternshipOfferId();
+        var initialId = expectedOffer.getId();
         var alteredId = 100L;
-        var alteredResume = expectedOffer.toBuilder().internshipOfferId(alteredId).build();
+        var alteredResume = expectedOffer.toBuilder().id(alteredId).build();
         when(offerRepository.findById(initialId)).thenReturn(Optional.ofNullable(expectedOffer));
         when(offerRepository.saveAndFlush(expectedOffer)).thenReturn(expectedOffer);
 
@@ -153,7 +153,7 @@ class InternshipOfferServiceTests {
 
     @Test
     void updateResumeWithNonexistentId() {
-        var actual = service.updateInternshipOffer(expectedOffer.getInternshipOfferId(), expectedOffer);
+        var actual = service.updateInternshipOffer(expectedOffer.getId(), expectedOffer);
 
         assertThat(actual).isEqualTo(expectedOffer);
     }

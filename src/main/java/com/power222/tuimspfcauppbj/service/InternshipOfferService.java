@@ -58,7 +58,7 @@ public class InternshipOfferService {
     public InternshipOffer updateInternshipOffer(long id, InternshipOffer offer) {
         return internshipOfferRepository.findById(id)
                 .map(oldOffer -> {
-                    offer.setInternshipOfferId(oldOffer.getInternshipOfferId());
+                    offer.setId(oldOffer.getId());
                     return internshipOfferRepository.saveAndFlush(offer);
                 })
                 .orElse(offer);
