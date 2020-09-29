@@ -29,7 +29,7 @@ public class IntershipOfferController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<InternshipOffer> createOffer(@RequestBody InternshipOffer newOffer) {
         return offerService.uploadInternshipOffer(newOffer)
                 .map(offer -> ResponseEntity.status(HttpStatus.ACCEPTED.CREATED).body(offer))
