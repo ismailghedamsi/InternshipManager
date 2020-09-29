@@ -22,6 +22,7 @@ public class Resume {
     private String file;
 
     private String name;
+    private boolean reviewed;
     private boolean approuved;
 
     @ManyToOne

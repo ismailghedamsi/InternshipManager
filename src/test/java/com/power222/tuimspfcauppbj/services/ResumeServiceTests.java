@@ -72,6 +72,18 @@ class ResumeServiceTests {
     }
 
     @Test
+    void getResumesWithPendingApprouval() {
+        var r1 = Resume.builder().id(1L).build();
+        var r2 = Resume.builder().id(2L).build();
+
+        when(resumeRepo.findByReviewedFalse()).thenReturn(Arrays.asList(r1, r2));
+
+        var actual = resumeSvc.getResumeWithPendingApprouval();
+
+        assertThat(actual).hasSize(2);
+    }
+
+    @Test
     void getResumeById() {
         when(resumeRepo.findById(1L)).thenReturn(Optional.of(expectedResume));
 

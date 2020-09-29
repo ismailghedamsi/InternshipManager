@@ -22,6 +22,11 @@ public class ResumeController {
         return svc.getAllResumes();
     }
 
+    @GetMapping("/pending")
+    public List<Resume> getResumesWithPendingApprouval() {
+        return svc.getResumeWithPendingApprouval();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Resume> getResume(@PathVariable long id) {
         return svc.getResumeById(id)
