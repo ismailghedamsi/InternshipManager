@@ -32,7 +32,7 @@ public class IntershipOfferController {
     @PostMapping
     public ResponseEntity<InternshipOffer> createOffer(@RequestBody InternshipOffer newOffer) {
         return offerService.uploadInternshipOffer(newOffer)
-                .map(offer -> ResponseEntity.status(HttpStatus.ACCEPTED.CREATED).body(offer))
+                .map(offer -> ResponseEntity.status(HttpStatus.CREATED).body(offer))
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
