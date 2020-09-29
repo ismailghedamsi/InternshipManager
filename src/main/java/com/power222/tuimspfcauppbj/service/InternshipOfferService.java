@@ -47,7 +47,7 @@ public class InternshipOfferService {
     }
 
     public List<InternshipOffer> getInternshipOffersOfEmployer(String username){
-        return internshipOfferRepository.findByEmployerEmail(username);
+        return internshipOfferRepository.findByEmployerUsername(username);
     }
 
     public InternshipOffer updateInternshipOffer(long id, InternshipOffer offer) {

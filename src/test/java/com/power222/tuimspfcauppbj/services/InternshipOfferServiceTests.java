@@ -125,7 +125,7 @@ class InternshipOfferServiceTests {
 
     @Test
     void getInternshipOffersOfEmployer(){
-        when(offerRepository.findByEmployerEmail("a@gmail.com")).thenReturn(expectedOffersOfEmployer);
+        when(offerRepository.findByEmployerUsername("a@gmail.com")).thenReturn(expectedOffersOfEmployer);
         List<InternshipOffer> offers = service.getInternshipOffersOfEmployer("a@gmail.com");
         assertThat(expectedOffersOfEmployer.size()).isEqualTo(offers.size());
         assertThat(offers.get(0)).isEqualTo(expectedOffersOfEmployer.get(0));
