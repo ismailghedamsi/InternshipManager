@@ -3,7 +3,6 @@ package com.power222.tuimspfcauppbj.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -24,6 +23,5 @@ public class Employer extends User {
     @OneToMany(mappedBy = "employer",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonIgnoreProperties("employer")
     private List<InternshipOffer> offers;
-
 
 }
