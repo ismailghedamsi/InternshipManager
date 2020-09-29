@@ -60,11 +60,13 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .address("6600 St-Jacques Ouest")
                     .build());
 
-            resumeRepo.saveAndFlush(Resume.builder()
-                    .name("testResumeFileName")
-                    .file(new String(Base64.encodeBase64(new FileInputStream(new File("designpatternscard.pdf")).readAllBytes())))
-                    .owner(u)
-                    .build());
+            for (int i = 1; i < 7; i++) {
+                resumeRepo.saveAndFlush(Resume.builder()
+                        .name("testResumeFileName " + i)
+                        .file(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .owner(u)
+                        .build());
+            }
 
             userRepo.saveAndFlush(User.builder()
                     .enabled(true)
