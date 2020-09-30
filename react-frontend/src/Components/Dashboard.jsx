@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
         minHeight: "100vh",
     },
     container: {
-        backgroundColor: "#fff",
         flex: 1
     }
 

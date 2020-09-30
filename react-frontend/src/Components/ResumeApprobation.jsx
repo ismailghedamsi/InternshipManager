@@ -5,6 +5,16 @@ import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import {Typography} from "@material-ui/core";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import * as yup from "yup";
+import {Field, Form, Formik} from "formik";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {TextField} from "formik-material-ui";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
@@ -38,43 +48,54 @@ const useStyles = makeStyles((theme) => ({
     },
     page: {
         margin: theme.spacing(1, 0)
+    },
+    main: {
+        backgroundColor: "#fff"
     }
 }));
 
 export default function ResumeApprobation() {
     const classes = useStyles();
-    const [currentDoc, setCurrentDoc] = useState('');
     const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
-    const [numPages, setNumPages] = useState(null);
+    const [currentDoc, setCurrentDoc] = useState('');
+    const [numPages, setNumPages] = useState(0);
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
+    const [reasonModalOpen, setReasonModalOpen] = useState(false);
+    const [refusalIndex, setRefusalIndex] = useState(-1);
 
-    function onDocumentLoadSuccess({numPages}) {
-        setNumPages(numPages);
-    }
-
-    function sendDecision(index, approuved) {
+    function sendDecision(index, approuved, reason = "") {
         const nextState = [...resumes];
         nextState[index].approuved = approuved;
         nextState[index].reviewed = true;
-        setResumes(nextState)
-        axios.put("http://localhost:8080/resumes/" + resumes[index].id, resumes[index])
+        nextState[index].reasonForRejection = reason;
+        return axios.put("http://localhost:8080/resumes/" + nextState[index].id, nextState[index])
             .then(r => {
-                const nextState = [...resumes];
                 nextState.splice(index, 1)
-                console.log(nextState)
                 setResumes(nextState)
+                setReasonModalOpen(false)
             })
+            .catch(() => setErrorModalOpen(true))
     }
 
     useEffect(() => {
         const getData = async () => {
             const result = await axios.get("http://localhost:8080/resumes/pending")
+                .catch(() => {
+                    console.log("bullshit")
+                    setErrorModalOpen(true)
+                })
             setResumes(result.data)
         }
         getData()
     }, [])
 
+    useEffect(() => {
+        if (resumes[0].file !== '')
+            setCurrentDoc(resumes[0].file)
+    }, [resumes])
+
     return (
-        <Container component="main">
+        <Container component="main" className={classes.main}>
             <Grid
                 container
                 spacing={0}
@@ -90,6 +111,7 @@ export default function ResumeApprobation() {
                                 <button
                                     type={"button"}
                                     className={["nav-links", classes.linkButton, classes.fileButton].join(' ')}
+                                    autoFocus={i === 0}
                                     onClick={() => setCurrentDoc(item.file)}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
@@ -104,12 +126,15 @@ export default function ResumeApprobation() {
                                         type={"button"}
                                         className={["nav-links", classes.linkButton].join(' ')}
                                         onClick={() => sendDecision(i, true)}
-                                        style={{marginRight: 25}}
+                                        style={{marginRight: 5}}
                                     ><i className="fa fa-check-square" style={{color: "green"}}/></button>
                                     <button
                                         type={"button"}
                                         className={["nav-links", classes.linkButton].join(' ')}
-                                        onClick={() => sendDecision(i, false)}
+                                        onClick={() => {
+                                            setRefusalIndex(i)
+                                            setReasonModalOpen(true)
+                                        }}
                                     ><i className="fa fa-ban" style={{color: "red"}}/></button>
                                 </div>
                             </div>
@@ -118,7 +143,7 @@ export default function ResumeApprobation() {
                 </Grid>
                 <Grid item className={classes.viewbox} xs={8} align="center">
                     <Document
-                        onLoadSuccess={onDocumentLoadSuccess}
+                        onLoadSuccess={({numPages}) => setNumPages(numPages)}
                         error={"Veuillez choisir un fichier"}
                         file={"data:application/pdf;base64," + currentDoc}
                     >
@@ -136,6 +161,72 @@ export default function ResumeApprobation() {
                     </Document>
                 </Grid>
             </Grid>
+            <Dialog open={errorModalOpen} onClose={() => setErrorModalOpen(false)}>
+                <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Erreur réseau: impossible de communiquer avec le serveur
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setErrorModalOpen(false)} color="primary">
+                        J'ai compris
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={reasonModalOpen} onClose={() => setReasonModalOpen(false)} fullWidth maxWidth={"md"}>
+                <DialogTitle id="alert-dialog-title">{"Refus d'un CV"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description" component={"div"}>
+                        <Formik
+                            onSubmit={async (values) => sendDecision(refusalIndex, false, values.reasonForRejection)}
+
+                            validationSchema={yup.object()
+                                .shape({
+                                    reasonForRejection: yup.string().trim().required("ce champ est requis")
+                                })}
+                            validateOnBlur={false}
+                            validateOnChange={false}
+                            enableReinitialize={true}
+                            initialValues={{reasonForRejection: ""}}
+                        >
+                            {({submitForm, isSubmitting}) => (
+                                <Form>
+                                    <Field
+                                        component={TextField}
+                                        multiline
+                                        rows={5}
+                                        name="reasonForRejection"
+                                        id="reasonForRejection"
+                                        variant="outlined"
+                                        label="Justifiez le refus"
+                                        required
+                                        fullWidth
+                                    />
+                                    <br/>
+                                    {isSubmitting && <LinearProgress/>}
+                                    <Button
+                                        type={"submit"}
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        size={"large"}
+                                        className={classes.submit}
+                                        disabled={isSubmitting}
+                                    >
+                                        Envoyer
+                                    </Button>
+                                </Form>
+                            )}
+                        </Formik>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setReasonModalOpen(false)} color={"primary"}>
+                        Annuler
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     )
 }

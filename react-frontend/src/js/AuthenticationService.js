@@ -21,10 +21,11 @@ class AuthenticationService {
             method: "GET",
             url: this.baseUrl + "/auth/user",
             headers: {
-                authorization: "Basic " + window.btoa(values.username + ":" + values.password)
+                authorization: "Basic " + btoa(values.username + ":" + values.password)
             }
         }).then((response) => {
             let user = response.data
+            user.password = values.password
             this.setupAxiosInterceptors(values.username, values.password)
             this.saveValueToSession("authenticatedUser", JSON.stringify(user))
         })
@@ -52,7 +53,7 @@ class AuthenticationService {
 
     setupAxiosInterceptors(username, password) {
 
-        let basicAuthHeader = 'Basic ' + window.btoa(username + ":" + password)
+        let basicAuthHeader = 'Basic ' + btoa(username + ":" + password)
         this.interceptorId = axios.interceptors.request.use(
             (config) => {
                 config.headers.authorization = basicAuthHeader

@@ -63,9 +63,7 @@ export default function Login(props) {
         username: "",
         password: ""
     }
-    const closeModal = () => {
-        setOpen(false);
-    };
+
     const handleHttpError = (error, setFieldError) => {
         if (error.response) {
             if (error.response.status === 401) {
@@ -107,12 +105,9 @@ export default function Login(props) {
                             </Typography>
                         </div>
                         <Divider className={classes.divider}/>
-                        <Dialog
-                            open={open}
-                            onClose={closeModal}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                        >
+                        <Dialog open={open} onClose={() => {
+                            setOpen(false)
+                        }}>
                             <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
@@ -120,7 +115,9 @@ export default function Login(props) {
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={closeModal} color="primary">
+                                <Button onClick={() => {
+                                    setOpen(false)
+                                }} color="primary">
                                     J'ai compris
                                 </Button>
                             </DialogActions>

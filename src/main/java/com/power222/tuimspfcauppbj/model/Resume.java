@@ -24,6 +24,7 @@ public class Resume {
     private String name;
     private boolean reviewed;
     private boolean approuved;
+    private String reasonForRejection;
 
     @ManyToOne
     @JsonIgnoreProperties("resumes")
