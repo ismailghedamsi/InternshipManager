@@ -63,6 +63,9 @@ class UploadCV extends Component {
                             enableReinitialize={true}
                             validate={(values) => {
                                 const errors = {};
+                                if (values.name.length === 0) {
+                                    errors.name = "Le nom du fichier ne doit pas être vite"
+                                }
                                 if (values.file.type !== "application/pdf") {
                                     errors.file = "Le fichier doit être de type PDF"
                                 }
@@ -81,7 +84,6 @@ class UploadCV extends Component {
                                         id="name"
                                         variant="outlined"
                                         label="Nom du fichier"
-                                        required
                                         fullWidth
                                     />
                                     <input
