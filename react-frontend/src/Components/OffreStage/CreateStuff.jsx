@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(1, 0, 1),
-    },    container: {
+    }, container: {
         backgroundColor: "#fff",
         borderRadius: theme.spacing(2),
     }
@@ -28,32 +28,38 @@ const useStyles = makeStyles((theme) => ({
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir au plus " + value.max + " caractères";
+const tooLittleError = (valueNumber) => "Doit avoir au moins un chiffre plus grand que ou égal que " + valueNumber.min;
+const tooBigError = (valueNumber) => "Doit avoir au moins plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function CreateStuff() {
     const [open, setOpen] = useState(false);
-    const classes = useStyles(); 
+    const classes = useStyles();
     const validationSchema = yup.object()
         .shape({
+            title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
+            description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
             companyName: yup.string().trim().min(5, tooShortError).required(requiredFieldMsg),
-            address: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            contactName: yup.string().trim().min(5, tooShortError).max(50, tooLongError).required(requiredFieldMsg),
-            phoneNumber: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            username: yup.string().trim().min(5, tooShortError).max(30, tooLongError).required(requiredFieldMsg),
-            email: yup.string().trim().email().required(requiredFieldMsg),
-            password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
-            passwordConfirm: yup.string()
-                .oneOf([yup.ref('password'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg),
+            nbOfWeeks: yup.number().min(5,tooLittleError).required(requiredFieldMsg),
+            salary: yup.number().min(0,tooLittleError).required(requiredFieldMsg),
+            beginHour: yup.number().min(0,tooLittleError).required(requiredFieldMsg),
+            endHour: yup.number().max(24,tooBigError).required(requiredFieldMsg),
+            companyLocation: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
+            creationDate: yup.date().required(),
+            limitDateToApply: yup.date().required(),
         });
     const initialValues = {
+        title: '',
+        description: '',
         companyName: '',
-        contactName: '',
-        phoneNumber: '',
-        address: '',
-        email: '',
-        username: '',
-        password: '',
-        passwordConfirm: '',
+        nbOfWeeks: '',
+        salary: '',
+        beginHour: '',
+        endHour: '',
+        companyLocation: '',
+        creationDate: '',
+        limitDateToApply: '',
+        joinedFile: '',
     }
     const handleClose = () => {
         setOpen(false);
@@ -61,155 +67,193 @@ export default function CreateStuff() {
 
     return (
         <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{minHeight: '100vh'}}
-    >
-        <Grid item xs={3}>
-            <Container component="main" maxWidth="sm" className={classes.container}>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle id="alert-dialog-title">Erreur réseau</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Erreur réseau: impossible de communiquer avec le serveur
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: '100vh' }}
+        >
+            <Grid item xs={3}>
+                <Container component="main" maxWidth="sm" className={classes.container}>
+                    <Dialog open={open} onClose={handleClose}>
+                        <DialogTitle id="alert-dialog-title">Erreur réseau</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Erreur réseau: impossible de communiquer avec le serveur
                     </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        J'ai compris
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} color="primary">
+                                J'ai compris
                     </Button>
-                </DialogActions>
-            </Dialog>
-            <Formik
-               onSubmit={async (values, {setFieldError}) =>
-                   console.log(values)
-               }
+                        </DialogActions>
+                    </Dialog>
+                    <Formik
+                        onSubmit={async (values, { setFieldError }) =>
+                            console.log(values)
+                        }
 
-                validateOnBlur={false}
-                validateOnChange={false}
-                enableReinitialize={true}
-                //validationSchema={validationSchema}
-                initialValues={initialValues} 
-            >
-                {({submitForm, isSubmitting}) => (
-                    <Form className={classes.form}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Field
-                                    component={TextField}
-                                    name="companyName"
-                                    id="companyName"
-                                    variant="outlined"
-                                    label="Nom de la compagnie"
-                                    required
+                        validateOnBlur={false}
+                        validateOnChange={false}
+                        enableReinitialize={true}
+                        validationSchema={validationSchema}
+                        initialValues={initialValues}
+                    >
+                        {({ submitForm, isSubmitting }) => (
+                            <Form className={classes.form}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            component={TextField}
+                                            name="title"
+                                            id="title"
+                                            variant="outlined"
+                                            label="Titre"
+                                            required
+                                            fullWidth
+                                            autoFocus
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            component={TextField}
+                                            name="description"
+                                            id="description"
+                                            variant="outlined"
+                                            label="Description"
+                                            required
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="companyName"
+                                            id="companyName"
+                                            variant="outlined"
+                                            label="Nom de company"
+                                            required
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="nbOfWeeks"
+                                            id="nbOfWeeks"
+                                            variant="outlined"
+                                            label="Nombre de semaine"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="salary"
+                                            id="salary"
+                                            variant="outlined"
+                                            label="Salaire"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="beginHour"
+                                            id="beginHour"
+                                            variant="outlined"
+                                            label="Heure du debut"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="endHour"
+                                            id="endHour"
+                                            variant="outlined"
+                                            label="Heure de fin"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="companyLocation"
+                                            id="companyLocation"
+                                            variant="outlined"
+                                            label="Location de la company"
+                                            required
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="creationDate"
+                                            id="creationDate"
+                                            variant="outlined"
+                                            label="Date de creation d'offre"
+                                            required
+                                            fullWidth
+                                            type={"date"}
+                                            
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="limitDateToApply"
+                                            id="limitDateToApply"
+                                            variant="outlined"
+                                            label="limit de date pour appliquer"
+                                            required
+                                            fullWidth
+                                            type={"date"}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            component={TextField}
+                                            name="joinedFile"
+                                            id="joinedFile"
+                                            variant="outlined"
+                                            label="Fichier"
+                                            required
+                                            fullWidth
+                                            
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <br />
+                                {isSubmitting && <LinearProgress />}
+                                <Button
+                                    type={"submit"}
                                     fullWidth
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Field
-                                    component={TextField}
-                                    name="address"
-                                    id="address"
-                                    variant="outlined"
-                                    label="Addresse de la compagnie"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="contactName"
-                                    id="contactName"
-                                    variant="outlined"
-                                    label="Nom du contact"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="phoneNumber"
-                                    id="phoneNumber"
-                                    variant="outlined"
-                                    label="Numéro de téléphone"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="username"
-                                    id="username"
-                                    variant="outlined"
-                                    label="Nom d'utilisateur"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="email"
-                                    id="email"
-                                    variant="outlined"
-                                    label="Addresse courriel"
-                                    type={"email"}
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="password"
-                                    id="password"
-                                    variant="outlined"
-                                    label="Mot de passe"
-                                    type={"password"}
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="passwordConfirm"
-                                    id="passwordConfirm"
-                                    variant="outlined"
-                                    label="Confirmez"
-                                    type={"password"}
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                        </Grid>
-                        <br/>
-                        {isSubmitting && <LinearProgress/>}
-                        <Button
-                            type={"submit"}
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            size={"large"}
-                            className={classes.submit}
-                           disabled={isSubmitting}
-                            onClick={submitForm}
-                            
-                        >
-                            S'enregistrer
-                        </Button>
-                    </Form>
-                )}
-            </Formik>
-        </Container>
-        </Grid>
+                                    variant="contained"
+                                    color="primary"
+                                    size={"large"}
+                                    className={classes.submit}
+                                    disabled={isSubmitting}
+                                    onClick={submitForm}
+
+                                >
+                                    S'enregistrer
+                                </Button>
+                            </Form>
+                        )}
+                    </Formik>
+                </Container>
+            </Grid>
         </Grid>
     )
         ;
