@@ -22,9 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import({TestsWithoutSecurityConfig.class})
@@ -98,5 +97,25 @@ public class StudentControllerTests {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateResumeTest() throws Exception {
+        expected.setPassword(null);
+        MvcResult result = mvc.perform(put("/students/" + expected.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(studentService, times(1)).updateStudent(expected.getId(), expected);
+    }
+
+    @Test
+    void deleteResumeTest() throws Exception {
+        MvcResult result = mvc.perform(delete("/students/1")).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(studentService, times(1)).deleteStudentById(1);
     }
 }
