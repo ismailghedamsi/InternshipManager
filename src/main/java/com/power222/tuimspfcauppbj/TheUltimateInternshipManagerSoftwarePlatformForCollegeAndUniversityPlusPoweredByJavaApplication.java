@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.User;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -44,9 +45,14 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            userRepo.saveAndFlush(User.builder()
+            userRepo.saveAndFlush(Employer.builder()
                     .enabled(true)
+                    .companyName("Dacima")
+                    .contactName("Zack")
                     .username("employeur")
+                    .phoneNumber("5144317713")
+                    .address("1300 rue ducas")
+                    .email("employer@gmail.com")
                     .role("employer")
                     .password(passwordEncoder.encode("password"))
                     .build());
