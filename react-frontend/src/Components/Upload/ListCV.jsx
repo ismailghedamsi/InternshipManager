@@ -38,7 +38,7 @@ export default function ListCV() {
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/resumes/pending")
+            const result = await axios.get("http://localhost:8080/resumes")
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
