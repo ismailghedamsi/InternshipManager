@@ -73,7 +73,7 @@ class UploadCV extends Component {
                                 file: ""
                             }}
                         >
-                            {({submitForm, isSubmitting, setFieldValue, errors}) => (
+                            {({submitForm, isSubmitting, setFieldValue}) => (
                                 <Form>
                                     <Field
                                         component={TextField}

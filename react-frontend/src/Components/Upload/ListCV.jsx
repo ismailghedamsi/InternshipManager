@@ -1,24 +1,59 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 import './ListCV.css'
 import Grid from "@material-ui/core/Grid";
-import {withStyles} from "@material-ui/core/styles";
+import {Document, Page} from 'react-pdf';
+import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../js/AuthenticationService';
 
-
-const useStyles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
+    viewbox: {
+        height: "90vh",
+        overflow: "auto",
+        backgroundColor: "#888",
+        padding: theme.spacing(2, 0)
+    },
+    page: {
+        margin: theme.spacing(1, 0)
+    },
     container: {
         backgroundColor: "#fff",
         borderRadius: theme.spacing(2)
     }
-});
+}));
 
-class ListCV extends Component {
-    render() {
-        const {classes} = this.props;
-        return (
+export default function ListCV() {
+    const classes = useStyles();
+    const [currentDoc, setCurrentDoc] = useState('');
+    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
+    const [numPages, setNumPages] = useState(null);
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
 
+
+    function onDocumentLoadSuccess({numPages}) {
+        setNumPages(numPages);
+    }
+
+    useEffect(() => {
+        const getData = async () => {
+            const result = await axios.get("http://localhost:8080/resumes/pending")
+                .catch(() => {
+                    setErrorModalOpen(true)
+                })
+            setResumes(result.data)
+        }
+        getData()
+    }, [])
+
+    useEffect(() => {
+        if (resumes[0].file !== '')
+            setCurrentDoc(resumes[0].file)
+    }, [resumes])
+
+    return (
+        <Container component="main" maxWidth="sm" className={classes.container}>
             <Grid
                 container
                 spacing={0}
@@ -28,41 +63,49 @@ class ListCV extends Component {
                 style={{minHeight: '100vh'}}
             >
                 <Grid item xs={12}>
-                    <Container component="main" maxWidth="sm" className={classes.container}>
-                        <div id="container">
-                            <Typography variant="h5" id="title">Étudiant :
-                                {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).firstName}
-                                {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).lastName}
-                            </Typography>
-                            <table id="tab">
-                                <thead>
-                                <tr>
-                                    <th>Version</th>
-                                    <th>Titre du CV</th>
-                                    <th>Détail</th>
-                                    <th>Supprimer</th>
-                                </tr>
-                                </thead>
-                                {/*<tbody>*/}
-                                {/*<tr>*/}
-                                {/*    <td>1</td>*/}
-                                {/*    <td>mon cv</td>*/}
-                                {/*    <td>*/}
-                                {/*        <button>Click</button>*/}
-                                {/*    </td>*/}
-                                {/*    <td>*/}
-                                {/*        <button>Supprimer</button>*/}
-                                {/*    </td>*/}
-                                {/*</tr>*/}
-                                {/*</tbody>*/}
-                            </table>
-                            <br/>
-                        </div>
-                    </Container>
+                    <Typography variant="h5" id="title">Étudiant :
+                        {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).firstName},
+                        {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).lastName}
+                    </Typography>
+                    {
+                        resumes.map((item, i) => (
+                            <div key={i}>
+                                <button
+                                    type={"button"}
+                                    className={["nav-links", classes.linkButton, classes.fileButton].join(' ')}
+                                    onClick={() => setCurrentDoc(item.file)}
+                                >
+                                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                        {item.name + " "}
+                                    </Typography>
+                                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                                        {item.owner.firstName} {item.owner.lastName}
+                                    </Typography>
+                                </button>
+                            </div>
+                        ))
+                    }
+                </Grid>
+                <Grid item className={classes.viewbox} xs={8} align="center">
+                    <Document
+                        onLoadSuccess={onDocumentLoadSuccess}
+                        error={"Veuillez choisir un fichier"}
+                        file={"data:application/pdf;base64," + currentDoc}
+                    >
+                        {Array.from(
+                            new Array(numPages),
+                            (el, index) => (
+                                <Page
+                                    key={`page_${index + 1}`}
+                                    pageNumber={index + 1}
+                                    renderTextLayer={false}
+                                    className={classes.page}
+                                />
+                            ),
+                        )}
+                    </Document>
                 </Grid>
             </Grid>
-        )
-    }
+        </Container>
+    );
 }
-
-export default withStyles(useStyles)(ListCV)
