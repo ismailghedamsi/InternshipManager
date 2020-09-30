@@ -20,7 +20,7 @@ public class Employer extends User {
     private String phoneNumber;
     private String address;
     private String email;
-    @OneToMany(mappedBy = "employer",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employer",fetch = FetchType.LAZY)
     @JsonIgnoreProperties("employer")
     private List<InternshipOffer> offers;
 
