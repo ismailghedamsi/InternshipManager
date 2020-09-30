@@ -18,7 +18,8 @@ public class AuthenticationService {
     }
 
     private UserDetails getPrincipal() {
-        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var detail = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (UserDetails) detail;
     }
 
     public User getCurrentUser() {

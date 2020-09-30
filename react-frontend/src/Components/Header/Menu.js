@@ -1,17 +1,11 @@
 export const Menu = [
     {
         title: 'Accueil',
-        url:'/',
-        cn:'nav-links'
+        url: '/dashboard'
     },
     {
-        title: 'Register',
-        url:'/register',
-        cn:'nav-links'
-    },
-    {
-        title: 'Login',
-        url:'/login',
-        cn:'nav-links'
+        title: 'Approbation CV',
+        url: '/dashboard/approbation/cv',
+        role: 'admin'
     }
 ]

@@ -24,14 +24,13 @@ public class AuthenticationServiceTests {
     }
 
     @Test
-    @WithMockUser("etudiant")
+    @WithMockUser("admin")
     void validUser() {
         User expected = User.builder()
-                .id(2L)
-                .username("etudiant")
-                .password(null)
+                .id(1L)
+                .username("admin")
                 .enabled(true)
-                .role("student")
+                .role("admin")
                 .build();
 
         User actual = authSvc.getCurrentUser();
