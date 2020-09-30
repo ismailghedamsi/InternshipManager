@@ -1,12 +1,12 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import {withStyles} from "@material-ui/core/styles";
-import {ErrorMessage, Field, Form, Formik} from "formik";
+import { withStyles } from "@material-ui/core/styles";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import {TextField} from "formik-material-ui";
+import { TextField } from "formik-material-ui";
 import './UploadCV.css'
 import LinearProgress from "@material-ui/core/LinearProgress";
 
@@ -34,7 +34,7 @@ class UploadCV extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const { classes } = this.props;
         return (
             <Grid
                 container
@@ -42,7 +42,7 @@ class UploadCV extends Component {
                 direction="column"
                 alignItems="center"
                 justify="center"
-                style={{minHeight: '100vh'}}
+                style={{ minHeight: '100vh' }}
             >
                 <Grid item xs={12}>
                     <Container component="main" maxWidth="sm" className={classes.container}>
@@ -52,7 +52,7 @@ class UploadCV extends Component {
                         <Formik
                             onSubmit={async (values) => {
                                 return this.readFileAsync(values.file).then((file) => {
-                                    let dto = {...values};
+                                    let dto = { ...values };
                                     dto.file = file;
                                     return axios.post("http://localhost:8080/resumes", dto)
                                 })
@@ -63,6 +63,11 @@ class UploadCV extends Component {
                             enableReinitialize={true}
                             validate={(values) => {
                                 const errors = {};
+
+                                if (values.name.length === 0) {
+                                    errors.name = "Le nom ne doit pas être vide."
+                                }
+
                                 if (values.file.type !== "application/pdf") {
                                     errors.file = "Le fichier doit être de type PDF"
                                 }
@@ -73,7 +78,7 @@ class UploadCV extends Component {
                                 file: ""
                             }}
                         >
-                            {({submitForm, isSubmitting, setFieldValue}) => (
+                            {({ submitForm, isSubmitting, setFieldValue }) => (
                                 <Form>
                                     <Field
                                         component={TextField}
@@ -81,9 +86,9 @@ class UploadCV extends Component {
                                         id="name"
                                         variant="outlined"
                                         label="Nom du fichier"
-                                        required
                                         fullWidth
                                     />
+
                                     <input
                                         name="file"
                                         id="file"
@@ -94,10 +99,10 @@ class UploadCV extends Component {
                                         }}
                                     />
                                     <ErrorMessage name={"file"}>
-                                        {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
+                                        {msg => <p className="msgError"><span style={{ color: "red" }}>{msg}</span>
                                         </p>}
                                     </ErrorMessage>
-                                    {isSubmitting && <LinearProgress/>}
+                                    {isSubmitting && <LinearProgress />}
                                     <Button
                                         id="buttonSubmit"
                                         type={"submit"}
