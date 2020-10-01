@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj;
 
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Resume;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
@@ -66,9 +67,13 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .companyName("Dacima")
                     .contactName("Zack")
                     .username("employeur")
+                    .phoneNumber("5144317713")
+                    .address("1300 rue ducas")
+                    .email("employer@gmail.com")
                     .role("employer")
                     .password(passwordEncoder.encode("password"))
                     .build());
+
         }
     }
 }
