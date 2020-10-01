@@ -24,16 +24,14 @@ public class InternshipOffer {
     private long id;
     private String title;
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "employer_id", nullable = false)
     @JsonIgnoreProperties("offers")
     private Employer employer;
-    private String companyName;
     private int nbOfWeeks;
     private double salary;
     private int beginHour;
     private int endHour;
-    private String companyLocation;
     private Date creationDate;
     private Date limitDateToApply;
     @ManyToMany
