@@ -34,6 +34,11 @@ public class ResumeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/student/{id}")
+    public List<Resume> getResumesByOwnerId(@PathVariable long id) {
+        return svc.getResumesByOwnerId(id);
+    }
+
     @PostMapping
     public ResponseEntity<Resume> createResume(@RequestBody Resume newResume) {
         return svc.persistNewResume(newResume)
