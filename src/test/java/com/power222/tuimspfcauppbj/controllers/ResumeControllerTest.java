@@ -109,6 +109,8 @@ class ResumeControllerTest {
     @Test
     void updateResumeTest() throws Exception {
         expectedStudent.setPassword(null);
+        when(svc.updateResume(expectedResume.getId(), expectedResume)).thenReturn(Optional.of(expectedResume));
+
         MvcResult result = mvc.perform(put("/resumes/" + expectedResume.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedResume))).andReturn();
@@ -158,5 +160,17 @@ class ResumeControllerTest {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         assertEquals(actuals.size(), nbStudent);
+    }
+
+    @Test
+    void errorOnUpdateTest() throws Exception {
+        when(svc.updateResume(expectedResume.getId(), expectedResume)).thenReturn(Optional.empty());
+
+        MvcResult result = mvc.perform(put("/resumes/" + expectedResume.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expectedResume)))
+                .andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.CONFLICT.value());
     }
 }
