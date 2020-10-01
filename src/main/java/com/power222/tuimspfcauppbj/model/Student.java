@@ -1,10 +1,9 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Entity;
 
 @Data
 @SuperBuilder(toBuilder = true)
@@ -29,4 +28,7 @@ public class Student extends User {
     @JsonIgnoreProperties({"joinedFile", "employer"})
     private List<InternshipOffer> appliedoffers;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"file", "owner"})
+    private List<Resume> resumes;
 }

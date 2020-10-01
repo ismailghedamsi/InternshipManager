@@ -2,23 +2,19 @@ import React from "react";
 import Login from './Components/Login';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import RegisteringManager from "./Components/RegisteringManager";
-import Welcome from "./Components/Welcome";
-import OffreStage from "./Components/OffreStage/OffreStage";
-import CreateStage from "./Components/OffreStage/CreateStage";
-import CreateStuff from "./Components/OffreStage/CreateStuff";
+import Dashboard from "./Components/Dashboard";
+import {BasicProtectedRoute} from "./Components/Routes";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 function App() {
     return (
         <div className="App">
+            <CssBaseline/>
             <Router>
                 <Switch>
                     <Route exact path="/" component={Login}/>
-                    <Route path="/register" component={RegisteringManager}/>
-                    <Route path="/login" component={Login}/>
-                    <Route path="/welcome" component={Welcome}/>
-                    <Route path="/OffreStage" component={OffreStage}/>
-                    <Route path="/CreateStage" component={CreateStage}/>
-                    <Route path="/CreateStuff" component={CreateStuff}/>
+                    <Route exact path="/register" component={RegisteringManager}/>
+                    <BasicProtectedRoute exact={false} path="/dashboard" component={Dashboard}/>
                 </Switch>
             </Router>
         </div>

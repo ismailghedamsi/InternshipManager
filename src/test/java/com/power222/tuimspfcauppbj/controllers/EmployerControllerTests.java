@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import({TestsWithoutSecurityConfig.class})
@@ -49,7 +48,6 @@ public class EmployerControllerTests {
                 .enabled(true)
                 .id(1L)
                 .username("employer")
-                .password("password")
                 .role("employer")
                 .companyName("AL")
                 .contactName("emp1")
@@ -100,5 +98,25 @@ public class EmployerControllerTests {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateEmployerTest() throws Exception {
+        when(employerService.updateEmployer(anyLong(), eq(expected))).thenReturn(expected);
+
+        MvcResult result = mvc.perform(put("/employers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+    }
+
+    @Test
+    void deleteEmployerTest() throws Exception {
+        MvcResult result = mvc.perform(delete("/employers/1")).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(employerService, times(1)).deleteEmployerById(1);
     }
 }

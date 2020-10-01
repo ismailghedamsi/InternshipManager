@@ -122,13 +122,13 @@ public class StudentServiceTests {
 
     @Test
     void updateStudentWithModifiedId() {
-        var initialId = expectedStudent.getId();
-        var alteredId = 5L;
-        var alteredIdStudent = expectedStudent.toBuilder().id(alteredId).build();
-        when(studentRepo.findById(initialId)).thenReturn(Optional.of(expectedStudent));
+        var idToPersistTo = expectedStudent.getId();
+        var idToBeOverwritten = 5L;
+        var studentWithIdToIgnore = expectedStudent.toBuilder().id(idToBeOverwritten).build();
+        when(studentRepo.findById(idToPersistTo)).thenReturn(Optional.of(expectedStudent));
         when(studentRepo.saveAndFlush(expectedStudent)).thenReturn(expectedStudent);
 
-        var actual = svc.updateStudent(initialId, alteredIdStudent);
+        var actual = svc.updateStudent(idToPersistTo, studentWithIdToIgnore);
 
         assertThat(actual).isEqualTo(expectedStudent);
     }

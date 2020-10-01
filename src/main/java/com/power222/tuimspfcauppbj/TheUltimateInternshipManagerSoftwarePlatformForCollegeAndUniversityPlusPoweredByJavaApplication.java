@@ -1,14 +1,21 @@
 package com.power222.tuimspfcauppbj;
 
+import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.model.Resume;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -23,14 +30,16 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
         private final UserRepository userRepo;
         private final PasswordEncoder passwordEncoder;
+        private final ResumeRepository resumeRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
+            this.resumeRepo = resumeRepo;
         }
 
         @Override
-        public void run(String... args) {
+        public void run(String... args) throws IOException {
             userRepo.saveAndFlush(User.builder()
                     .enabled(true)
                     .username("admin")
@@ -38,21 +47,25 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            userRepo.saveAndFlush(User.builder()
-                    .enabled(true)
-                    .username("etudiant")
-                    .role("student")
+            var u = userRepo.saveAndFlush(Student.builder()
+                    .username("student")
                     .password(passwordEncoder.encode("password"))
                     .build());
+
+            for (int i = 1; i < 7; i++) {
+                resumeRepo.saveAndFlush(Resume.builder()
+                        .name("testResumeFileName " + i)
+                        .file(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .reviewed(i == 4)
+                        .owner(u)
+                        .build());
+            }
 
             userRepo.saveAndFlush(Employer.builder()
                     .enabled(true)
                     .companyName("Dacima")
                     .contactName("Zack")
                     .username("employeur")
-                    .phoneNumber("5144317713")
-                    .address("1300 rue ducas")
-                    .email("employer@gmail.com")
                     .role("employer")
                     .password(passwordEncoder.encode("password"))
                     .build());
