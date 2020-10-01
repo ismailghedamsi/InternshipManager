@@ -2,13 +2,35 @@ import React, {useEffect, useState} from "react";
 import './ListCV.css'
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import {Document, Page} from 'react-pdf';
+import {Document, Page, pdfjs} from 'react-pdf';
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../js/AuthenticationService';
 import Container from "@material-ui/core/Container";
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 const useStyles = makeStyles((theme) => ({
+    linkButton: {
+        fontSize: "1.5rem",
+        backgroundColor: "transparent",
+        border: "none",
+        cursor: "pointer",
+        margin: 0,
+        padding: 5,
+        borderRadius: 0,
+        '&:hover': {
+            backgroundColor: "#00000055",
+        },
+        '&:focus': {
+            outline: "none",
+        }
+    },
+    fileButton: {
+        '&:focus': {
+            outline: "none",
+            backgroundColor: theme.palette.secondary.light,
+        }
+    },
     viewbox: {
         height: "90vh",
         overflow: "auto",
@@ -28,13 +50,12 @@ export default function ListCV() {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState('');
     const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
-    const [numPages, setNumPages] = useState(null);
+    const [numPages, setNumPages] = useState(1);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
-
     function onDocumentLoadSuccess({numPages}) {
-        setNumPages(numPages);
-    }
+        this.setState({numPages});
+    };
 
     useEffect(() => {
         const getData = async () => {
@@ -90,7 +111,7 @@ export default function ListCV() {
                     <Document
                         onLoadSuccess={onDocumentLoadSuccess}
                         error={"Veuillez choisir un fichier"}
-                        file={"data:application/pdf;base64," + currentDoc}
+                        file={currentDoc}
                     >
                         {Array.from(
                             new Array(numPages),

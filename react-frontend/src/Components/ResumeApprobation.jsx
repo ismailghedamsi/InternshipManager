@@ -145,7 +145,7 @@ export default function ResumeApprobation() {
                     <Document
                         onLoadSuccess={({numPages}) => setNumPages(numPages)}
                         error={"Veuillez choisir un fichier"}
-                        file={"data:application/pdf;base64," + currentDoc}
+                        file={currentDoc}
                     >
                         {Array.from(
                             new Array(numPages),
@@ -190,7 +190,7 @@ export default function ResumeApprobation() {
                             enableReinitialize={true}
                             initialValues={{reasonForRejection: ""}}
                         >
-                            {({submitForm, isSubmitting}) => (
+                            {({isSubmitting}) => (
                                 <Form>
                                     <Field
                                         component={TextField}
