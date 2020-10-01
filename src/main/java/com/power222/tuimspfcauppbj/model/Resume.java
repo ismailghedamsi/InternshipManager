@@ -18,10 +18,13 @@ public class Resume {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String name;
-
     @Lob
     private String file;
+
+    private String name;
+    private boolean reviewed;
+    private boolean approuved;
+    private String reasonForRejection;
 
     @ManyToOne
     @JsonIgnoreProperties("resumes")

@@ -1,15 +1,21 @@
 package com.power222.tuimspfcauppbj;
 
-import com.power222.tuimspfcauppbj.dao.StudentRepository;
+import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.Resume;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -23,17 +29,17 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
     public static class BootstrapConfig implements CommandLineRunner {
 
         private final UserRepository userRepo;
-        private final StudentRepository studentRepo;
         private final PasswordEncoder passwordEncoder;
+        private final ResumeRepository resumeRepo;
 
-        public BootstrapConfig(UserRepository userRepo, StudentRepository studentRepo, PasswordEncoder passwordEncoder) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo) {
             this.userRepo = userRepo;
-            this.studentRepo = studentRepo;
             this.passwordEncoder = passwordEncoder;
+            this.resumeRepo = resumeRepo;
         }
 
         @Override
-        public void run(String... args) {
+        public void run(String... args) throws IOException {
             userRepo.saveAndFlush(User.builder()
                     .enabled(true)
                     .username("admin")
@@ -41,9 +47,11 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            studentRepo.saveAndFlush(Student.builder()
+            var u = userRepo.saveAndFlush(Student.builder()
                     .username("student")
                     .password(passwordEncoder.encode("password"))
+                    .role("student")
+                    .enabled(true)
                     .firstName("Simon")
                     .lastName("Longpré")
                     .studentId("1386195")
@@ -51,6 +59,15 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .phoneNumber("5144816959")
                     .address("6600 St-Jacques Ouest")
                     .build());
+
+            for (int i = 1; i < 7; i++) {
+                resumeRepo.saveAndFlush(Resume.builder()
+                        .name("testResumeFileName " + i)
+                        .file(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .reviewed(i == 4)
+                        .owner(u)
+                        .build());
+            }
 
             userRepo.saveAndFlush(User.builder()
                     .enabled(true)

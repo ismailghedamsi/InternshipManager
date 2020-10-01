@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         paddingBottom: theme.spacing(1),
         backgroundColor: theme.palette.primary.main,
+        maxHeight: "3vh"
     }
 }));
 

@@ -4,29 +4,30 @@ class AuthenticationService {
     interceptorId = 0;
     baseUrl = "http://localhost:8080";
 
-    async authenticate(values, setFieldError, setModalOpen, history) {
+    constructor() {
+        console.info("Called AuthService constructor")
+        if (this.isUserLoggedIn()) {
+            console.info("Setting up...")
+            const user = this.getCurrentUser().username;
+            const pass = this.getCurrentUser().password;
+            this.setupAxiosInterceptors(user, pass);
+        }
+    }
+
+
+    async authenticate(values) {
         this.logout()
-        this.setupAxiosInterceptors(values.username, values.password)
         return axios({
             method: "GET",
             url: this.baseUrl + "/auth/user",
             headers: {
-                authorization: "Basic " + window.btoa(values.username + ":" + values.password)
+                authorization: "Basic " + btoa(values.username + ":" + values.password)
             }
         }).then((response) => {
             let user = response.data
+            user.password = values.password
+            this.setupAxiosInterceptors(values.username, values.password)
             this.saveValueToSession("authenticatedUser", JSON.stringify(user))
-            history.push("/welcome")
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status === 401) {
-                    setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
-                    setFieldError("password", "   ")
-                } else
-                    setModalOpen(true)
-            } else {
-                setModalOpen(true)
-            }
         })
     }
 
@@ -35,7 +36,7 @@ class AuthenticationService {
         delete dto.passwordConfirm;
         return axios.post(this.baseUrl + endpoint, dto)
             .then(() => {
-                history.push("/login")
+                history.push("/")
             })
             .catch((error) => {
                 console.error(error)
@@ -52,7 +53,7 @@ class AuthenticationService {
 
     setupAxiosInterceptors(username, password) {
 
-        let basicAuthHeader = 'Basic ' + window.btoa(username + ":" + password)
+        let basicAuthHeader = 'Basic ' + btoa(username + ":" + password)
         this.interceptorId = axios.interceptors.request.use(
             (config) => {
                 config.headers.authorization = basicAuthHeader
@@ -63,6 +64,15 @@ class AuthenticationService {
 
     isUserLoggedIn() {
         return sessionStorage.getItem("authenticatedUser") != null
+    }
+
+    getCurrentUser() {
+        return JSON.parse(sessionStorage.getItem("authenticatedUser"));
+    }
+
+
+    getCurrentUserRole() {
+        return this.getCurrentUser().role;
     }
 
     getValueFromSession(key) {

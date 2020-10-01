@@ -7,6 +7,7 @@ a{
     display: flex;
     justify-content: center;
     align-items: center;
+    max-height: 7vh;
 }
 
 .nav-menu{
@@ -17,11 +18,11 @@ a{
     justify-content: end;
 }
 
-.Navbar-logo{
+.Navbar-logo {
     color: whitesmoke;
-    font-size: 50px;
+    font-size: 2.5rem;
     text-decoration: none;
-    margin:10px 0px 10px ;
+    margin: 10px 0 10px;
 }
 
 

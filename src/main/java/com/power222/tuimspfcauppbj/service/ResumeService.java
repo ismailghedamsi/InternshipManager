@@ -24,6 +24,10 @@ public class ResumeService {
         return resumeRepo.findAll();
     }
 
+    public List<Resume> getResumeWithPendingApprouval() {
+        return resumeRepo.findByReviewedFalse();
+    }
+
     public Optional<Resume> getResumeById(long id) {
         return resumeRepo.findById(id);
     }
