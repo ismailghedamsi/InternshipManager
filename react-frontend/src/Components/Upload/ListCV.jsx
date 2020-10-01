@@ -2,11 +2,13 @@ import React, {useEffect, useState} from "react";
 import './ListCV.css'
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import {Document, Page} from 'react-pdf';
+import {Document, Page, pdfjs} from 'react-pdf';
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../js/AuthenticationService';
 import Container from "@material-ui/core/Container";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 const useStyles = makeStyles((theme) => ({
     viewbox: {
@@ -93,7 +95,9 @@ export default function ListCV() {
                 </Grid>
                 <Grid item className={classes.viewbox} xs={8} align="center">
                     <Document
-                        onLoadSuccess={({numPages}) => {setNumPages(numPages)}}
+                        onLoadSuccess={({numPages}) => {
+                            setNumPages(numPages)
+                        }}
                         error={"Veuillez choisir un fichier"}
                         file={currentDoc}
                     >
