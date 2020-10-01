@@ -61,12 +61,16 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             for (int i = 1; i < 7; i++) {
+                FileInputStream fileInputStream = new FileInputStream(new File("pdf/" + i + ".pdf"));
+
                 resumeRepo.saveAndFlush(Resume.builder()
                         .name("testResumeFileName " + i)
-                        .file(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(fileInputStream.readAllBytes())))
                         .reviewed(i == 4)
                         .owner(u)
                         .build());
+
+                fileInputStream.close();
             }
 
             userRepo.saveAndFlush(User.builder()

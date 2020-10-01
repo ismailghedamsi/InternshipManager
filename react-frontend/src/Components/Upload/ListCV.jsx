@@ -31,14 +31,9 @@ export default function ListCV() {
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
-
-    function onDocumentLoadSuccess({numPages}) {
-        setNumPages(numPages);
-    }
-
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/resumes")
+            const result = await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
@@ -46,6 +41,15 @@ export default function ListCV() {
         }
         getData()
     }, [])
+
+    function getResumeState(resume) {
+        if (!resume.reviewed)
+            return "En attente de revue";
+        else if (!resume.approuved)
+            return "Rejeté : " + resume.reasonForRejection;
+        else
+            return "Approuvé"
+    }
 
     useEffect(() => {
         if (resumes[0].file !== '')
@@ -63,10 +67,7 @@ export default function ListCV() {
                 style={{minHeight: '100vh'}}
             >
                 <Grid item xs={12}>
-                    <Typography variant="h5" id="title">Étudiant :
-                        {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).firstName},
-                        {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).lastName}
-                    </Typography>
+                    <Typography variant="h5" id="title">Mes résumés</Typography>
                     {
                         resumes.map((item, i) => (
                             <div key={i}>
@@ -82,15 +83,19 @@ export default function ListCV() {
                                         {item.owner.firstName} {item.owner.lastName}
                                     </Typography>
                                 </button>
+
+                                <p id="resumeState">
+                                    {getResumeState(item)}
+                                </p>
                             </div>
                         ))
                     }
                 </Grid>
                 <Grid item className={classes.viewbox} xs={8} align="center">
                     <Document
-                        onLoadSuccess={onDocumentLoadSuccess}
+                        onLoadSuccess={({numPages}) => {setNumPages(numPages)}}
                         error={"Veuillez choisir un fichier"}
-                        file={"data:application/pdf;base64," + currentDoc}
+                        file={currentDoc}
                     >
                         {Array.from(
                             new Array(numPages),

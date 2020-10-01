@@ -32,6 +32,10 @@ public class ResumeService {
         return resumeRepo.findById(id);
     }
 
+    public List<Resume> getResumesByOwnerId(long id) {
+        return resumeRepo.findAllByOwner_Id(id);
+    }
+
     public Optional<Resume> persistNewResume(Resume resume) {
         User currentUser = authSvc.getCurrentUser();
         if (currentUser instanceof Student) {
