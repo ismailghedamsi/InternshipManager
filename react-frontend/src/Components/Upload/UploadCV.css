@@ -36,7 +36,7 @@
     margin-bottom: 15px;
 }
 
-#msgError {
+.msgError {
     text-align: center;
     margin: 0;
 }
