@@ -118,18 +118,18 @@ class ResumeServiceTests {
         var alteredId = 123L;
         var alteredResume = expectedResume.toBuilder().id(alteredId).build();
         when(resumeRepo.findById(initialId)).thenReturn(Optional.of(expectedResume));
-        when(resumeRepo.saveAndFlush(expectedResume)).thenReturn(expectedResume);
+        when(resumeRepo.saveAndFlush(alteredResume)).thenReturn(expectedResume);
 
         var actual = resumeSvc.updateResume(initialId, alteredResume);
 
-        assertThat(actual).isEqualTo(expectedResume);
+        assertThat(actual).contains(expectedResume);
     }
 
     @Test
     void updateResumeWithNonexistentId() {
         var actual = resumeSvc.updateResume(expectedResume.getId(), expectedResume);
 
-        assertThat(actual).isEqualTo(expectedResume);
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -139,5 +139,15 @@ class ResumeServiceTests {
         resumeSvc.deleteResumeById(idToDelete);
 
         verify(resumeRepo, times(1)).deleteById(idToDelete);
+    }
+
+    @Test
+    void updateResumeWIthInvalidState() {
+        var updatedResume = expectedResume.toBuilder().approuved(true).build();
+        when(resumeRepo.findById(expectedResume.getId())).thenReturn(Optional.of(expectedResume));
+
+        var actual = resumeSvc.updateResume(expectedResume.getId(), updatedResume);
+
+        assertThat(actual).isEmpty();
     }
 }
