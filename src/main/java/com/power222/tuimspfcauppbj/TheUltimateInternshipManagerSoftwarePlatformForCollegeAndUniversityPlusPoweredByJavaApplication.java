@@ -67,6 +67,9 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .name("testResumeFileName " + i)
                         .file("data:application/pdf;base64," + new String(Base64.encodeBase64(fileInputStream.readAllBytes())))
                         .reviewed(i == 4)
+                        .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
+                                "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +
+                                "nunc bibendum vel. Nulla facilisi. Donec aliquet fringilla ante sit amet pretium. " : null)
                         .owner(u)
                         .build());
 

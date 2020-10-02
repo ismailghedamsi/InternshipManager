@@ -6,7 +6,7 @@ import {RoleProtectedRoute} from "./Routes";
 import ResumeApprobation from "./ResumeApprobation";
 import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
-import ListCV from "./Upload/ListCV";
+import ListCV from "./ListCV";
 
 const useStyles = makeStyles((theme) => ({
     root: {

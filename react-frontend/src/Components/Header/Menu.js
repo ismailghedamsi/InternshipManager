@@ -10,10 +10,12 @@ export const Menu = [
     },
     {
         title: 'Téléverser un résumé',
-        url: '/dashboard/upload'
+        url: '/dashboard/upload',
+        role: 'student'
     },
     {
         title: 'Mes résumés',
-        url: '/dashboard/listcv'
+        url: '/dashboard/listcv',
+        role: 'student'
     }
 ]
