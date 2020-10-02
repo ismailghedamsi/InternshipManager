@@ -72,6 +72,19 @@ class ResumeServiceTests {
     }
 
     @Test
+    void getAllResumesByOwnerId() {
+        var r1 = Resume.builder().id(1L).build();
+        var r2 = Resume.builder().id(2L).build();
+        var r3 = Resume.builder().id(3L).build();
+
+        when(resumeRepo.findAllByOwner_Id(expectedStudent.getId())).thenReturn(Arrays.asList(r1, r2, r3));
+
+        var actual = resumeSvc.getResumesByOwnerId(expectedStudent.getId());
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
     void getResumesWithPendingApprouval() {
         var r1 = Resume.builder().id(1L).build();
         var r2 = Resume.builder().id(2L).build();

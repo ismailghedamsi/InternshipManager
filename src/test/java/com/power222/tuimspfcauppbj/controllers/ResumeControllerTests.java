@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import(TestsWithoutSecurityConfig.class)
 @WebMvcTest(ResumeController.class)
-class ResumeControllerTest {
+class ResumeControllerTests {
 
     @Autowired
     private MockMvc mvc;
@@ -129,6 +130,18 @@ class ResumeControllerTest {
     }
 
     @Test
+    void getAllResumesByOwnerIdTest() throws Exception {
+        var list = Arrays.asList(new Resume(), new Resume());
+        when(svc.getResumesByOwnerId(expectedStudent.getId())).thenReturn(list);
+
+        MvcResult result = mvc.perform(get("/resumes/student/" + expectedStudent.getId())).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertEquals(actuals.size(), list.size());
+    }
+
+    @Test
     void getAllResumes() throws Exception {
         final int nbStudent = 3;
 
@@ -144,6 +157,7 @@ class ResumeControllerTest {
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         assertEquals(actuals.size(), nbStudent);
     }
+
 
     @Test
     void getPendingResumes() throws Exception {

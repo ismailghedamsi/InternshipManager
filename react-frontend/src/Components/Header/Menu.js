@@ -9,12 +9,12 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Téléverser un résumé',
+        title: 'Téléverser un CV',
         url: '/dashboard/upload',
         role: 'student'
     },
     {
-        title: 'Mes résumés',
+        title: 'Mes CV',
         url: '/dashboard/listcv',
         role: 'student'
     }
