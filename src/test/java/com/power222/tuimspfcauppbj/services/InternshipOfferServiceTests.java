@@ -45,12 +45,12 @@ class InternshipOfferServiceTests {
         Employer employer = Employer.builder().username("mark").email("a@gmail.com").build();
         pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
         expectedOffer = InternshipOffer.builder().id(1L).allowedStudents(new ArrayList<>())
-                .beginHour(8).endHour(16).companyLocation("Montreal").companyName("Dacima").creationDate(new Date(2020,8,8))
+                .beginHour(8).endHour(16).creationDate(new Date(2020, 8, 8))
                 .description("description").employer(employer).joinedFile(pdfContent).limitDateToApply(new Date(2020,11,10))
                 .nbOfWeeks(8).salary(20).title("Title").build();
 
         expectedOffer2 = InternshipOffer.builder().id(2).allowedStudents(new ArrayList<>())
-                .beginHour(8).endHour(16).companyLocation("Japon").companyName("SquareEnix").creationDate(new Date(2020,8,8))
+                .beginHour(8).endHour(16).creationDate(new Date(2020, 8, 8))
                 .description("description").employer(new Employer()).joinedFile(pdfContent).limitDateToApply(new Date(2020,11,10))
                 .nbOfWeeks(8).salary(20).title("Title").build();
 

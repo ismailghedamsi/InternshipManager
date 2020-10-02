@@ -1,11 +1,9 @@
 package com.power222.tuimspfcauppbj;
 
+import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.Employer;
-import com.power222.tuimspfcauppbj.model.Resume;
-import com.power222.tuimspfcauppbj.model.Student;
-import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.model.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +15,9 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.Instant;
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -32,11 +33,13 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final UserRepository userRepo;
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
+        private final InternshipOfferRepository internshipRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
+            this.internshipRepo = internshipRepo;
         }
 
         @Override
@@ -48,28 +51,33 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            var u = userRepo.saveAndFlush(Student.builder()
-                    .username("student")
-                    .password(passwordEncoder.encode("password"))
+            var s = userRepo.saveAndFlush(Student.builder()
+                    .enabled(true)
+                    .username("etudiant")
+                    .role("student")
+                    .firstName("Bob")
+                    .lastName("Brutus")
+                    .id(4L)
+                    .studentId("1234")
+                    .email("power@gmail.ca")
+                    .phoneNumber("911")
+                    .address("9310 Lasalle")
                     .build());
 
             for (int i = 1; i < 7; i++) {
-                FileInputStream fileInputStream = new FileInputStream(new File("pdf/" + i + ".pdf"));
 
                 resumeRepo.saveAndFlush(Resume.builder()
                         .name("testResumeFileName " + i)
-                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(fileInputStream.readAllBytes())))
+                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
                         .reviewed(i == 4)
                         .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
                                 "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +
                                 "nunc bibendum vel. Nulla facilisi. Donec aliquet fringilla ante sit amet pretium. " : null)
-                        .owner(u)
+                        .owner(s)
                         .build());
-
-                fileInputStream.close();
             }
 
-            userRepo.saveAndFlush(Employer.builder()
+            var e = userRepo.saveAndFlush(Employer.builder()
                     .enabled(true)
                     .companyName("Dacima")
                     .contactName("Zack")
@@ -80,6 +88,21 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .role("employer")
                     .password(passwordEncoder.encode("password"))
                     .build());
+
+            for (int i = 1; i < 7; i++) {
+                internshipRepo.saveAndFlush(InternshipOffer.builder()
+                        .title("testInternship " + i)
+                        .description("Some basic description " + i)
+                        .nbOfWeeks(15)
+                        .salary(15.98)
+                        .beginHour(8)
+                        .endHour(18)
+                        .creationDate(Date.from(Instant.now()))
+                        .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
+                        .joinedFile(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .employer(e)
+                        .build());
+            }
 
         }
     }

@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/offers")
 public class IntershipOfferController {
-    private  InternshipOfferService offerService;
+    private final InternshipOfferService offerService;
 
     public IntershipOfferController(InternshipOfferService offerService) {
         this.offerService = offerService;

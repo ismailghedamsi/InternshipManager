@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {Document, Page, pdfjs} from 'react-pdf';
+import {Document, Page} from 'react-pdf';
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -15,8 +15,6 @@ import * as yup from "yup";
 import {Field, Form, Formik} from "formik";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {TextField} from "formik-material-ui";
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 const useStyles = makeStyles((theme) => ({
     linkButton: {
@@ -38,13 +36,21 @@ const useStyles = makeStyles((theme) => ({
         '&:focus': {
             outline: "none",
             backgroundColor: theme.palette.secondary.light,
+            display: "inline"
         }
+    },
+    buttonDiv: {
+        display: "inline"
     },
     viewbox: {
         height: "90vh",
         overflow: "auto",
         backgroundColor: "#888",
         padding: theme.spacing(2, 0)
+    },
+    resumeList: {
+        height: "90vh",
+        overflow: "auto",
     },
     page: {
         margin: theme.spacing(1, 0)
@@ -90,8 +96,11 @@ export default function ResumeApprobation() {
     }, [])
 
     useEffect(() => {
-        if (resumes[0].file !== '')
-            setCurrentDoc(resumes[0].file)
+        if (resumes[0]) {
+            if (resumes[0].file !== '' && resumes[0].file !== undefined && resumes[0].file !== null)
+                setCurrentDoc(resumes[0].file)
+        } else
+            setCurrentDoc('')
     }, [resumes])
 
     return (
@@ -101,47 +110,48 @@ export default function ResumeApprobation() {
                 spacing={0}
                 style={{alignItems: "stretch"}}
             >
-                <Grid item xs={4}>
+                <Grid item xs={5} className={classes.resumeList}>
                     <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                         En attente d'approbation
                     </Typography>
                     {
                         resumes.map((item, i) => (
                             <div key={i}>
-                                <button
-                                    type={"button"}
-                                    className={["nav-links", classes.linkButton, classes.fileButton].join(' ')}
-                                    autoFocus={i === 0}
-                                    onClick={() => setCurrentDoc(item.file)}
-                                >
-                                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                                        {item.name + " "}
-                                    </Typography>
-                                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                                        {item.owner.firstName} {item.owner.lastName}
-                                    </Typography>
-                                </button>
-                                <div>
+                                <div className={classes.buttonDiv}>
                                     <button
                                         type={"button"}
-                                        className={["nav-links", classes.linkButton].join(' ')}
+                                        className={[classes.linkButton].join(' ')}
                                         onClick={() => sendDecision(i, true)}
                                         style={{marginRight: 5}}
                                     ><i className="fa fa-check-square" style={{color: "green"}}/></button>
                                     <button
                                         type={"button"}
-                                        className={["nav-links", classes.linkButton].join(' ')}
+                                        className={[classes.linkButton].join(' ')}
                                         onClick={() => {
                                             setRefusalIndex(i)
                                             setReasonModalOpen(true)
                                         }}
                                     ><i className="fa fa-ban" style={{color: "red"}}/></button>
                                 </div>
+                                <button
+                                    type={"button"}
+                                    className={[classes.linkButton, classes.fileButton].join(' ')}
+                                    autoFocus={i === 0}
+                                    onClick={() => setCurrentDoc(item.file)}
+                                >
+                                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                        {" " + item.name + " "}
+                                    </Typography>
+                                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                                        {item.owner.firstName} {item.owner.lastName}
+                                    </Typography>
+                                </button>
+                                <hr/>
                             </div>
                         ))
                     }
                 </Grid>
-                <Grid item className={classes.viewbox} xs={8} align="center">
+                <Grid item className={classes.viewbox} xs={7} align="center">
                     <Document
                         onLoadSuccess={({numPages}) => setNumPages(numPages)}
                         error={"Veuillez choisir un fichier"}
