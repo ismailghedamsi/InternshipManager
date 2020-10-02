@@ -6,6 +6,7 @@ import {RoleProtectedRoute} from "./Routes";
 import ResumeApprobation from "./ResumeApprobation";
 import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
+import ListCV from "./ListCV";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     container: {
         flex: 1
     }
-
 }));
 
 export default function Dashboard(props) {
@@ -35,6 +35,7 @@ export default function Dashboard(props) {
                                         component={ResumeApprobation}
                                         role={"admin"}/>
                     <Route exact={true} path="/dashboard/upload" component={UploadCV}/>
+                    <Route exact={true} path="/dashboard/listcv" component={ListCV}/>
                 </Switch>
             </div>
             <Footer/>

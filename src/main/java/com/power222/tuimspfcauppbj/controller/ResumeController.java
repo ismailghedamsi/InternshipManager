@@ -34,6 +34,11 @@ public class ResumeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/student/{id}")
+    public List<Resume> getResumesByOwnerId(@PathVariable long id) {
+        return svc.getResumesByOwnerId(id);
+    }
+
     @PostMapping
     public ResponseEntity<Resume> createResume(@RequestBody Resume newResume) {
         return svc.persistNewResume(newResume)
@@ -42,8 +47,10 @@ public class ResumeController {
     }
 
     @PutMapping("/{id}")
-    public Resume updateResume(@RequestBody Resume resume, @PathVariable long id) {
-        return svc.updateResume(id, resume);
+    public ResponseEntity<Resume> updateResume(@RequestBody Resume requestBody, @PathVariable long id) {
+        return svc.updateResume(id, requestBody)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
     @DeleteMapping("/{id}")
