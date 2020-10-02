@@ -145,7 +145,7 @@ export default function ResumeApprobation() {
                     <Document
                         onLoadSuccess={({numPages}) => setNumPages(numPages)}
                         error={"Veuillez choisir un fichier"}
-                        file={"data:application/pdf;base64," + currentDoc}
+                        file={currentDoc}
                     >
                         {Array.from(
                             new Array(numPages),
@@ -183,14 +183,14 @@ export default function ResumeApprobation() {
 
                             validationSchema={yup.object()
                                 .shape({
-                                    reasonForRejection: yup.string().trim().required("ce champ est requis")
+                                    reasonForRejection: yup.string().trim().max(255).required("ce champ est requis")
                                 })}
                             validateOnBlur={false}
                             validateOnChange={false}
                             enableReinitialize={true}
                             initialValues={{reasonForRejection: ""}}
                         >
-                            {({submitForm, isSubmitting}) => (
+                            {({isSubmitting}) => (
                                 <Form>
                                     <Field
                                         component={TextField}

@@ -72,6 +72,19 @@ class ResumeServiceTests {
     }
 
     @Test
+    void getAllResumesByOwnerId() {
+        var r1 = Resume.builder().id(1L).build();
+        var r2 = Resume.builder().id(2L).build();
+        var r3 = Resume.builder().id(3L).build();
+
+        when(resumeRepo.findAllByOwner_Id(expectedStudent.getId())).thenReturn(Arrays.asList(r1, r2, r3));
+
+        var actual = resumeSvc.getResumesByOwnerId(expectedStudent.getId());
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
     void getResumesWithPendingApprouval() {
         var r1 = Resume.builder().id(1L).build();
         var r2 = Resume.builder().id(2L).build();
@@ -118,18 +131,18 @@ class ResumeServiceTests {
         var alteredId = 123L;
         var alteredResume = expectedResume.toBuilder().id(alteredId).build();
         when(resumeRepo.findById(initialId)).thenReturn(Optional.of(expectedResume));
-        when(resumeRepo.saveAndFlush(expectedResume)).thenReturn(expectedResume);
+        when(resumeRepo.saveAndFlush(alteredResume)).thenReturn(expectedResume);
 
         var actual = resumeSvc.updateResume(initialId, alteredResume);
 
-        assertThat(actual).isEqualTo(expectedResume);
+        assertThat(actual).contains(expectedResume);
     }
 
     @Test
     void updateResumeWithNonexistentId() {
         var actual = resumeSvc.updateResume(expectedResume.getId(), expectedResume);
 
-        assertThat(actual).isEqualTo(expectedResume);
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -139,5 +152,15 @@ class ResumeServiceTests {
         resumeSvc.deleteResumeById(idToDelete);
 
         verify(resumeRepo, times(1)).deleteById(idToDelete);
+    }
+
+    @Test
+    void updateResumeWIthInvalidState() {
+        var updatedResume = expectedResume.toBuilder().approuved(true).build();
+        when(resumeRepo.findById(expectedResume.getId())).thenReturn(Optional.of(expectedResume));
+
+        var actual = resumeSvc.updateResume(expectedResume.getId(), updatedResume);
+
+        assertThat(actual).isEmpty();
     }
 }
