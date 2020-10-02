@@ -7,5 +7,15 @@ export const Menu = [
         title: 'Approbation CV',
         url: '/dashboard/approbation/cv',
         role: 'admin'
+    },
+    {
+        title: 'Téléverser un CV',
+        url: '/dashboard/upload',
+        role: 'student'
+    },
+    {
+        title: 'Mes CV',
+        url: '/dashboard/listcv',
+        role: 'student'
     }
 ]
