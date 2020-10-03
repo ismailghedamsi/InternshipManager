@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#888",
         padding: theme.spacing(2, 0),
     },
-    listResumes: {
+    listOffers: {
         height: "90vh",
         overflow: "auto",
     },
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: "#fff",
     },
-    resumeState: {
+    offerState: {
         color: "black",
         display: "block",
         padding: theme.spacing(0.5, 2, 2),
