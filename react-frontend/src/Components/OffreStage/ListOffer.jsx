@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import {Document, Page, pdfjs} from 'react-pdf';
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import AuthenticationService from '../js/AuthenticationService';
+import AuthenticationService from '../../js/AuthenticationService';
 import Container from "@material-ui/core/Container";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -62,47 +62,59 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ListCV() {
+export default function ListOffer() {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState('');
-    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
+    const [offers, setOffers] = useState([{
+        title: '',
+        description: '',
+        nbOfWeeks: '',
+        salary: '',
+        beginHour: '',
+        endHour: '',
+        creationDate: '',
+        limitDateToApply: '',
+        joinedFile: "",
+        owner: {}
+    }]);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
+
+            const result = await axios.get("http://localhost:8080/offers/employer/" + AuthenticationService.getCurrentUser().username)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
-            setResumes(result.data)
+
+            setOffers(result.data)
         }
         getData()
     }, [])
 
     useEffect(() => {
-        if (resumes[0].file !== '')
-            setCurrentDoc(resumes[0].file)
-    }, [resumes])
+        if (offers[0]) {
+            if (offers[0].joinedFile !== '')
+                setCurrentDoc(offers[0].joinedFile)
+        } else {
+            setCurrentDoc("")
+        }
 
-    function deleteResume(index) {
-        const nextState = [...resumes];
-        return axios.delete("http://localhost:8080/resumes/" + nextState[index].id)
+    }, [offers])
+
+    function deleteOffer(index) {
+        const nextState = [...offers];
+        return axios.delete("http://localhost:8080/offers/" + nextState[index].id)
             .then(r => {
                 nextState.splice(index, 1)
-                setResumes(nextState)
+                setOffers(nextState)
             })
             .catch(() => setErrorModalOpen(true))
     }
 
-    function getResumeState(resume) {
-        if (!resume.reviewed)
-            return <span style={{color: "blue"}}>En attente</span>;
-        else if (!resume.approuved)
-            return (<span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>);
-        else
-            return <span style={{color: "green"}}>Approuvé</span>;
+    function getOfferState(resume) {
+
     }
 
 
@@ -114,32 +126,36 @@ export default function ListCV() {
                 style={{alignItems: "stretch"}}
             >
                 <Grid item xs={5} className={classes.listResumes}>
-                    <Typography variant="h4" id="title">Mes résumés</Typography>
+                    <Typography variant="h4" id="title">Mes offres de stage</Typography>
                     {
-                        resumes.map((item, i) => (
+                        offers.map((item, i) => (
+
                             <div key={i}>
                                 <button
                                     type={"button"}
                                     className={classes.linkButton}
-                                    onClick={() => deleteResume(i)}>
+                                    onClick={() => deleteOffer(i)}>
                                     <i className="fa fa-trash" style={{color: "red"}}/>
                                 </button>
                                 <button
                                     type={"button"}
                                     className={[classes.linkButton, classes.fileButton].join(' ')}
                                     autoFocus={i === 0}
-                                    onClick={() => setCurrentDoc(item.file)}
+                                    onClick={() => {
+                                        setCurrentDoc(item.joinedFile)
+                                    }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                                        {item.name + " "}
+                                        {item.title + ""}
                                     </Typography>
                                     <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                                        {item.owner.firstName} {item.owner.lastName}
+                                        {item.title}
                                     </Typography>
                                     <Typography
-                                        className={classes.resumeState}
+                                        className={classes.offerState}
                                         variant={"body2"}>
-                                        État : {getResumeState(item)}
+                                        blablabla
+                                        {/* État : {getOfferState(item)} */}
                                     </Typography>
                                 </button>
                                 <hr/>
@@ -152,6 +168,7 @@ export default function ListCV() {
                         onLoadSuccess={({numPages}) => {
                             setNumPages(numPages)
                         }}
+
                         error={"Veuillez choisir un fichier"}
                         file={currentDoc}
                     >
@@ -167,6 +184,7 @@ export default function ListCV() {
                             ),
                         )}
                     </Document>
+
                 </Grid>
             </Grid>
             <Dialog open={errorModalOpen} onClose={() => setErrorModalOpen(false)}>
