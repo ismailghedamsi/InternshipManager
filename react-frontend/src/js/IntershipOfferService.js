@@ -5,9 +5,6 @@ class IntershipOfferService {
     interceptorId = 0;
     baseUrl = "http://localhost:8080";
 
-    constructor() {
-    }
-
     async sendOfferToBackEnd(values) {
 
         return this.readFileAsync(values.file).then(function (base64file) {
@@ -21,7 +18,6 @@ class IntershipOfferService {
         })
     }
 
-
     async readFileAsync(file) {
         return new Promise((resolve, reject) => {
             let reader = new FileReader();
@@ -34,10 +30,7 @@ class IntershipOfferService {
 
             reader.readAsDataURL(file);
         })
-
-
     }
-
 }
 
 export default new IntershipOfferService()
