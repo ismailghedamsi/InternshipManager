@@ -28,25 +28,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = (value) => "Doit avoir au plus " + value.max + " caractères";
 const tooLittleError = (valueNumber) => "Doit avoir au moins un chiffre plus grand que ou égal que " + valueNumber.min;
 const tooBigError = (valueNumber) => "Doit avoir au moins plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
-export default function CreateStuff() {
+export default function CreateStuff(props) {
     const [open, setOpen] = useState(false);
     const classes = useStyles();
-    const validationSchema = yup.object()
-        .shape({
-            title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
-            description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            nbOfWeeks: yup.number().min(5, tooLittleError).required(requiredFieldMsg),
-            salary: yup.number().min(0, tooLittleError).required(requiredFieldMsg),
-            beginHour: yup.number().min(0, tooLittleError).max(24, tooBigError).required(requiredFieldMsg),
-            endHour: yup.number().min(0, tooLittleError).max(24, tooBigError).required(requiredFieldMsg),
-            creationDate: yup.date().required(),
-            limitDateToApply: yup.date().required(), // creation date < limitdate
-        });
+    const validationSchema = yup.object().shape({
+        title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
+        description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
+        nbOfWeeks: yup.number().min(5, tooLittleError).required(requiredFieldMsg),
+        salary: yup.number().min(0, tooLittleError).required(requiredFieldMsg),
+        beginHour: yup.number().min(0, tooLittleError).max(24, tooBigError).required(requiredFieldMsg),
+        endHour: yup.number().min(0, tooLittleError).max(24, tooBigError).required(requiredFieldMsg).when(
+            "beginHour",
+            (beginHour, schema) => beginHour && schema.min(beginHour, "L'heure du debut doit etre plus petit que l'heure de fin")),
+        creationDate: yup.date().required(),
+        limitDateToApply: yup.date().required().when(
+            "creationDate",
+            (creationDate, schema) => creationDate && schema.min(creationDate, "la date de limit doit etre posterieur a la date de creation")),
+    });
     const initialValues = {
         title: '',
         description: '',
@@ -61,7 +63,6 @@ export default function CreateStuff() {
     const handleClose = () => {
         setOpen(false);
     };
-
 
     return (
         <Grid
@@ -89,8 +90,10 @@ export default function CreateStuff() {
                     </Dialog>
                     <Formik
                         onSubmit={
-                            async (values /*,{ setFieldError }*/) => {
-                                InternshipOfferService.sendOfferToBackEnd(values);
+                            async (values) => {
+                                InternshipOfferService.sendOfferToBackEnd(values).then((e) => {
+                                    props.history.push("/dashboard/ListOffer")
+                                })
                             }
                         }
 
@@ -99,6 +102,16 @@ export default function CreateStuff() {
                         enableReinitialize={true}
                         validationSchema={validationSchema}
                         initialValues={initialValues}
+                        validate={(values) => {
+                            const errors = {};
+                            if (values.file.type !== "application/pdf") {
+                                errors.file = "Le fichier doit être de type PDF"
+                            }
+                            if (values.file.length == 0) {
+                                errors.file = "Aucun fichier selectionne"
+                            }
+                            return errors;
+                        }}
                     >
                         {({submitForm, isSubmitting, setFieldValue}) => (
                             <Form className={classes.form}>
@@ -184,7 +197,6 @@ export default function CreateStuff() {
                                             required
                                             fullWidth
                                             type={"date"}
-                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -202,10 +214,14 @@ export default function CreateStuff() {
                                     <input
                                         name="file"
                                         id="file"
+                                        accept="application/pdf"
                                         type="file"
                                         className="file"
                                         onChange={(e) => {
-                                            setFieldValue("file", e.currentTarget.files[0])
+                                            const {target} = e
+                                            if (target.value.length > 0) {
+                                                setFieldValue("file", e.currentTarget.files[0])
+                                            }
                                         }}
                                     />
                                     <ErrorMessage name={"file"}>
@@ -223,8 +239,6 @@ export default function CreateStuff() {
                                     size={"large"}
                                     className={classes.submit}
                                     disabled={isSubmitting}
-                                    onClick={submitForm}
-
                                 >
                                     S'enregistrer
                                 </Button>
@@ -235,5 +249,4 @@ export default function CreateStuff() {
             </Grid>
         </Grid>
     )
-        ;
 }

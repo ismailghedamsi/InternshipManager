@@ -19,7 +19,7 @@ export const Menu = [
         role: 'student'
     },
     {
-        title: 'creer un stage',
+        title: 'Creer un stage',
         url: '/dashboard/CreateStuff',
         role: 'employer'
     },
