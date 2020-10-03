@@ -1,39 +1,38 @@
 package com.power222.tuimspfcauppbj.service;
 
-import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class InternshipOfferService {
 
-    private InternshipOfferRepository internshipOfferRepository;
-    private EmployerRepository employerRepository;
-    private AuthenticationService authenticationService;
+    private final InternshipOfferRepository internshipOfferRepository;
+    private final AuthenticationService authenticationService;
 
-    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, EmployerRepository employerRepository, AuthenticationService authenticationService) {
+    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,
+        AuthenticationService authenticationService) {
         this.internshipOfferRepository = internshipOfferRepository;
-        this.employerRepository = employerRepository;
         this.authenticationService = authenticationService;
     }
 
-    public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer){
-        Employer employer = OfferUploader();
-        if(employer == null)
-            return  Optional.empty();
+    public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer) {
+        Employer employer = offerUploader();
+        if (employer == null) {
+            return Optional.empty();
+        }
         employer.getOffers().add(offer);
         offer.setEmployer(employer);
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
     }
 
-    private Employer OfferUploader() {
+    private Employer offerUploader() {
         Employer employer = null;
-        if(authenticationService.getCurrentUser() instanceof Employer){
-            employer =(Employer) authenticationService.getCurrentUser();
+        if (authenticationService.getCurrentUser() instanceof Employer) {
+            employer = (Employer) authenticationService.getCurrentUser();
         }
         return employer;
     }
@@ -62,5 +61,4 @@ public class InternshipOfferService {
     public void deleteOfferById(long id) {
         internshipOfferRepository.deleteById(id);
     }
-
 }

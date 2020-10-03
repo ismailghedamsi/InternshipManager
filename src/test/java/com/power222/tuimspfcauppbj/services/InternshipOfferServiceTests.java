@@ -1,11 +1,20 @@
 package com.power222.tuimspfcauppbj.services;
 
-import com.power222.tuimspfcauppbj.dao.EmployerRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,22 +22,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.when;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 @ExtendWith(MockitoExtension.class)
 class InternshipOfferServiceTests {
     @Mock
     private InternshipOfferRepository offerRepository;
-    @Mock
-    private EmployerRepository employerRepository;
     @Mock
     private AuthenticationService authenticationService;
     @InjectMocks
@@ -38,21 +35,33 @@ class InternshipOfferServiceTests {
     private List<InternshipOffer> expectedOffers;
     private List<InternshipOffer> expectedOffersOfEmployer;
     private Employer expectedEmployer;
-    private String pdfContent;
 
     @BeforeEach
     void setUp() {
-        Employer employer = Employer.builder().username("mark").email("a@gmail.com").build();
-        pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
-        expectedOffer = InternshipOffer.builder().id(1L).allowedStudents(new ArrayList<>())
-                .beginHour(8).endHour(16).creationDate(new Date(2020,8,8))
-                .description("description").employer(employer).joinedFile(pdfContent).limitDateToApply(new Date(2020,11,10))
-                .nbOfWeeks(8).salary(20).title("Title").build();
 
-        expectedOffer2 = InternshipOffer.builder().id(2).allowedStudents(new ArrayList<>())
-                .beginHour(8).endHour(16).creationDate(new Date(2020,8,8))
-                .description("description").employer(new Employer()).joinedFile(pdfContent).limitDateToApply(new Date(2020,11,10))
+        Employer employer = Employer.builder().username("mark").email("a@gmail.com").build();
+        String pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
+        try {
+            expectedOffer = InternshipOffer.builder().id(1L).allowedStudents(new ArrayList<>())
+                .beginHour(8).endHour(16)
+                .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
+                .description("description").employer(employer).joinedFile(pdfContent)
+                .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
                 .nbOfWeeks(8).salary(20).title("Title").build();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            expectedOffer2 = InternshipOffer.builder().id(2).allowedStudents(new ArrayList<>())
+                .beginHour(8).endHour(16)
+                .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
+                .description("description").employer(new Employer()).joinedFile(pdfContent)
+                .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
+                .nbOfWeeks(8).salary(20).title("Title").build();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         expectedOffers = new ArrayList<>();
         expectedOffers.add(expectedOffer);
@@ -62,7 +71,7 @@ class InternshipOfferServiceTests {
         expectedOffersOfEmployer.add(expectedOffer);
 
         expectedEmployer = Employer.builder()
-                .enabled(true)
+            .enabled(true)
                 .username("employeur")
                 .role("employer")
                 .offers(new ArrayList<>())
@@ -103,7 +112,6 @@ class InternshipOfferServiceTests {
         when(offerRepository.findById(1L)).thenReturn(Optional.of(expectedOffer));
         var actual = service.getInternshipOfferById(1L);
         assertThat(actual).contains(expectedOffer);
-
     }
 
     @Test
