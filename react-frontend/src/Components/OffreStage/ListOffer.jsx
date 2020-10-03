@@ -146,16 +146,36 @@ export default function ListOffer() {
                                     }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                                        {item.title + ""}
+                                        {`Titre :${item.title}`}
+                                        <br/>
                                     </Typography>
-                                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                                        {item.title}
+                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                        {`Description: ${item.description}`}
+                                        <br/>
                                     </Typography>
-                                    <Typography
-                                        className={classes.offerState}
-                                        variant={"body2"}>
-                                        blablabla
-                                        {/* État : {getOfferState(item)} */}
+                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                        {`Nombre de Semaine: ${item.nbOfWeeks}`}
+                                        <br/>
+                                    </Typography>
+                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                        {`Salaire: ${item.salary}`}
+                                        <br/>
+                                    </Typography>
+                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                        {`Heure du debut: ${item.beginHour}`}
+                                        <br/>
+                                    </Typography>
+                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                        {`Heure de fin: ${item.endHour}`}
+                                        <br/>
+                                    </Typography>
+                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                        {`Date de creation: ${item.creationDate}`}
+                                        <br/>
+                                    </Typography>
+                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                        {`Date limite pour appliquer : ${item.limitDateToApply}`}
+                                        <br/>
                                     </Typography>
                                 </button>
                                 <hr/>
