@@ -7,11 +7,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { makeStyles } from '@material-ui/core/styles';
-import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
-import React, { useState } from "react";
+import {makeStyles} from '@material-ui/core/styles';
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {TextField} from "formik-material-ui";
+import React, {useState} from "react";
 import * as yup from "yup";
+import InternshipOfferService from '../../js/IntershipOfferService.js'
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -39,31 +40,28 @@ export default function CreateStuff() {
         .shape({
             title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
             description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            companyName: yup.string().trim().min(5, tooShortError).required(requiredFieldMsg),
-            nbOfWeeks: yup.number().min(5,tooLittleError).required(requiredFieldMsg),
-            salary: yup.number().min(0,tooLittleError).required(requiredFieldMsg),
-            beginHour: yup.number().min(0,tooLittleError).required(requiredFieldMsg),
-            endHour: yup.number().max(24,tooBigError).required(requiredFieldMsg),
-            companyLocation: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
+            nbOfWeeks: yup.number().min(5, tooLittleError).required(requiredFieldMsg),
+            salary: yup.number().min(0, tooLittleError).required(requiredFieldMsg),
+            beginHour: yup.number().min(0, tooLittleError).max(24, tooBigError).required(requiredFieldMsg),
+            endHour: yup.number().min(0, tooLittleError).max(24, tooBigError).required(requiredFieldMsg),
             creationDate: yup.date().required(),
-            limitDateToApply: yup.date().required(),
+            limitDateToApply: yup.date().required(), // creation date < limitdate
         });
     const initialValues = {
         title: '',
         description: '',
-        companyName: '',
         nbOfWeeks: '',
         salary: '',
         beginHour: '',
         endHour: '',
-        companyLocation: '',
         creationDate: '',
         limitDateToApply: '',
-        joinedFile: '',
+        file: ""
     }
     const handleClose = () => {
         setOpen(false);
     };
+
 
     return (
         <Grid
@@ -81,17 +79,19 @@ export default function CreateStuff() {
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 Erreur réseau: impossible de communiquer avec le serveur
-                    </DialogContentText>
+                            </DialogContentText>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose} color="primary">
                                 J'ai compris
-                    </Button>
+                            </Button>
                         </DialogActions>
                     </Dialog>
                     <Formik
-                        onSubmit={async (values, { setFieldError }) =>
-                            console.log(values)
+                        onSubmit={
+                            async (values /*,{ setFieldError }*/) => {
+                                InternshipOfferService.sendOfferToBackEnd(values);
+                            }
                         }
 
                         validateOnBlur={false}
@@ -100,7 +100,7 @@ export default function CreateStuff() {
                         validationSchema={validationSchema}
                         initialValues={initialValues}
                     >
-                        {({ submitForm, isSubmitting }) => (
+                        {({submitForm, isSubmitting, setFieldValue}) => (
                             <Form className={classes.form}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
@@ -122,17 +122,6 @@ export default function CreateStuff() {
                                             id="description"
                                             variant="outlined"
                                             label="Description"
-                                            required
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Field
-                                            component={TextField}
-                                            name="companyName"
-                                            id="companyName"
-                                            variant="outlined"
-                                            label="Nom de company"
                                             required
                                             fullWidth
                                         />
@@ -188,17 +177,6 @@ export default function CreateStuff() {
                                     <Grid item xs={12} sm={6}>
                                         <Field
                                             component={TextField}
-                                            name="companyLocation"
-                                            id="companyLocation"
-                                            variant="outlined"
-                                            label="Location de la company"
-                                            required
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Field
-                                            component={TextField}
                                             name="creationDate"
                                             id="creationDate"
                                             variant="outlined"
@@ -221,20 +199,21 @@ export default function CreateStuff() {
                                             type={"date"}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <Field
-                                            component={TextField}
-                                            name="joinedFile"
-                                            id="joinedFile"
-                                            variant="outlined"
-                                            label="Fichier"
-                                            required
-                                            fullWidth
-                                            
-                                        />
-                                    </Grid>
+                                    <input
+                                        name="file"
+                                        id="file"
+                                        type="file"
+                                        className="file"
+                                        onChange={(e) => {
+                                            setFieldValue("file", e.currentTarget.files[0])
+                                        }}
+                                    />
+                                    <ErrorMessage name={"file"}>
+                                        {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
+                                        </p>}
+                                    </ErrorMessage>
                                 </Grid>
-                                <br />
+                                <br/>
                                 {isSubmitting && <LinearProgress />}
                                 <Button
                                     type={"submit"}
