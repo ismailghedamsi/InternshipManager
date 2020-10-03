@@ -121,6 +121,7 @@ class ResumeControllerTests {
         verify(svc, times(1)).updateResume(expectedResume.getId(), expectedResume);
     }
 
+
     @Test
     void deleteResumeTest() throws Exception {
         MvcResult result = mvc.perform(delete("/resumes/1")).andReturn();

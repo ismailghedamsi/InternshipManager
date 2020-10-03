@@ -2,9 +2,11 @@ package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
+import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -14,11 +16,13 @@ public class InternshipOfferService {
     private InternshipOfferRepository internshipOfferRepository;
     private EmployerRepository employerRepository;
     private AuthenticationService authenticationService;
+    private final StudentRepository studentRepo;
 
-    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, EmployerRepository employerRepository, AuthenticationService authenticationService) {
+    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, EmployerRepository employerRepository, AuthenticationService authenticationService, StudentRepository studentRepo) {
         this.internshipOfferRepository = internshipOfferRepository;
         this.employerRepository = employerRepository;
         this.authenticationService = authenticationService;
+        this.studentRepo = studentRepo;
     }
 
     public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer){
@@ -59,8 +63,16 @@ public class InternshipOfferService {
                 .orElse(offer);
     }
 
+    public Optional<InternshipOffer> addStudentToOffer(long offerId, long studentId) {
+        return internshipOfferRepository.findById(offerId)
+                .flatMap(offer -> studentRepo.findById(studentId)
+                        .map(student -> {
+                            offer.getAllowedStudents().add(student);
+                            return internshipOfferRepository.saveAndFlush(offer);
+                        }));
+    }
+
     public void deleteOfferById(long id) {
         internshipOfferRepository.deleteById(id);
     }
-
 }

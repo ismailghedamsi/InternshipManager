@@ -2,8 +2,10 @@ package com.power222.tuimspfcauppbj.services;
 
 import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
+import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.when;
@@ -27,10 +26,16 @@ import static org.mockito.Mockito.verify;
 class InternshipOfferServiceTests {
     @Mock
     private InternshipOfferRepository offerRepository;
+
+    @Mock
+    private StudentRepository studentRepo;
+
     @Mock
     private EmployerRepository employerRepository;
+
     @Mock
     private AuthenticationService authenticationService;
+
     @InjectMocks
     private InternshipOfferService service;
     private InternshipOffer expectedOffer;
@@ -39,6 +44,7 @@ class InternshipOfferServiceTests {
     private List<InternshipOffer> expectedOffersOfEmployer;
     private Employer expectedEmployer;
     private String pdfContent;
+    private Student expectedStudent;
 
     @BeforeEach
     void setUp() {
@@ -67,7 +73,21 @@ class InternshipOfferServiceTests {
                 .role("employer")
                 .offers(new ArrayList<>())
                 .build();
-        }
+
+        expectedStudent = Student.builder()
+                .id(1L)
+                .username("student")
+                .password("password")
+                .role("student")
+                .enabled(true)
+                .firstName("Simon")
+                .lastName("Longpré")
+                .studentId("1386195")
+                .email("simon@cal.qc.ca")
+                .phoneNumber("5144816959")
+                .address("6600 St-Jacques Ouest")
+                .build();
+    }
 
     @Test
     void succesfulInternshipOfferUpload() {
@@ -142,6 +162,38 @@ class InternshipOfferServiceTests {
         var actual = service.updateInternshipOffer(initialId, alteredResume);
 
         assertThat(actual).isEqualTo(expectedOffer);
+    }
+
+    @Test
+    void addStudentToOffer() {
+        expectedOffer2 = expectedOffer.toBuilder().build();
+        expectedOffer2.setAllowedStudents(Collections.singletonList(expectedStudent));
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+        when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.of(expectedStudent));
+        when(offerRepository.saveAndFlush(expectedOffer2)).thenReturn(expectedOffer2);
+
+        var actual = service.addStudentToOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).contains(expectedOffer2);
+    }
+
+    @Test
+    void addInvalidStudentToOffer() {
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+        when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.empty());
+
+        var actual = service.addStudentToOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void addStudentToInvalidOffer() {
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.empty());
+
+        var actual = service.addStudentToOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).isEmpty();
     }
 
     @Test

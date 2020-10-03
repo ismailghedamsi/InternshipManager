@@ -41,6 +41,13 @@ public class IntershipOfferController {
         return offerService.updateInternshipOffer(id, offer);
     }
 
+    @PutMapping("/{offerId}/addStudent/{studentId}")
+    public ResponseEntity<InternshipOffer> addStudentToOffer(@PathVariable long offerId, @PathVariable long studentId) {
+        return offerService.addStudentToOffer(offerId, studentId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
+
     @DeleteMapping("/{id}")
     public void deleteOffer(@PathVariable long id) {
         offerService.deleteOfferById(id);
