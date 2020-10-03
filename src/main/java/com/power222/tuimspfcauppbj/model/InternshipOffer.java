@@ -2,7 +2,6 @@ package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -36,6 +35,6 @@ public class InternshipOffer {
     private Employer employer;
 
     @ManyToMany
-    @JsonIgnore
+    @JsonIgnoreProperties({"appliedOffers", "resumes"})
     private List<Student> allowedStudents;
 }

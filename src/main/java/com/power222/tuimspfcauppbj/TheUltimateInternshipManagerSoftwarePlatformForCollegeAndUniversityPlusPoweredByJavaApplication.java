@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Collections;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -101,6 +102,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
                         .joinedFile(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
                         .employer(e)
+                        .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
                         .build());
             }
 
