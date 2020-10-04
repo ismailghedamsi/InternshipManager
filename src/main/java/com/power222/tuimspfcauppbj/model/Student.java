@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -28,4 +29,8 @@ public class Student extends User {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"file", "owner"})
     private List<Resume> resumes;
+
+    @ManyToMany
+    @JsonIgnoreProperties({"joinedFile", "employer"})
+    private List<InternshipOffer> appliedOffers;
 }

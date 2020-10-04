@@ -5,6 +5,9 @@ import RegisteringManager from "./Components/RegisteringManager";
 import Dashboard from "./Components/Dashboard";
 import {BasicProtectedRoute} from "./Components/Routes";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import {pdfjs} from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 function App() {
     return (

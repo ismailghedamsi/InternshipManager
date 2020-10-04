@@ -54,7 +54,7 @@ class UploadCV extends Component {
                                     let dto = {...values};
                                     dto.file = file;
                                     return axios.post("http://localhost:8080/resumes", dto)
-                                        .then((e) => this.props.history.push("/dashboard"))
+                                        .then((e) => this.props.history.push("/dashboard/listcv"))
                                 })
                             }}
 
