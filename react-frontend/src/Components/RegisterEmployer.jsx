@@ -70,7 +70,7 @@ export default function RegisterEmployer(props) {
                 validationSchema={validationSchema}
                 initialValues={initialValues}
             >
-                {({submitForm, isSubmitting}) => (
+                {({isSubmitting}) => (
                     <Form className={props.classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
@@ -176,7 +176,6 @@ export default function RegisterEmployer(props) {
                             size={"large"}
                             className={props.classes.submit}
                             disabled={isSubmitting}
-                            onClick={submitForm}
                         >
                             S'enregistrer
                         </Button>

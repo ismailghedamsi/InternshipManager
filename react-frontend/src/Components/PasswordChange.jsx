@@ -13,7 +13,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import {Field, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import * as yup from "yup";
 import {TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -130,8 +130,8 @@ export default function PasswordChange() {
                             enableReinitialize={true}
                             initialValues={initialValues}
                         >
-                            {({submitForm, isSubmitting}) => (
-                                <form className={classes.form}>
+                            {({isSubmitting}) => (
+                                <Form className={classes.form}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={6}>
                                             <Field
@@ -191,11 +191,10 @@ export default function PasswordChange() {
                                         size={"large"}
                                         className={classes.submit}
                                         disabled={isSubmitting}
-                                        onClick={submitForm}
                                     >
                                         Changer le mot de passe
                                     </Button>
-                                </form>
+                                </Form>
                             )}
                         </Formik>
                         <Grid container justify="flex-end" className={classes.link}>

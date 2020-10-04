@@ -1,4 +1,4 @@
-import {Field, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import AuthenticationService from '../js/AuthenticationService';
 import Grid from "@material-ui/core/Grid";
@@ -142,8 +142,8 @@ export default function Login() {
                             enableReinitialize={true}
                             initialValues={initialValues}
                         >
-                            {({submitForm, isSubmitting}) => (
-                                <form className={classes.form}>
+                            {({isSubmitting}) => (
+                                <Form className={classes.form}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
                                             <Field
@@ -179,11 +179,10 @@ export default function Login() {
                                         size={"large"}
                                         className={classes.submit}
                                         disabled={isSubmitting}
-                                        onClick={submitForm}
                                     >
                                         Se connecter
                                     </Button>
-                                </form>
+                                </Form>
                             )}
                         </Formik>
                         <Grid container justify="flex-end" className={classes.link}>
