@@ -27,6 +27,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userRepository = userRepository;
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                //Boilerplate
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                //For h2-console
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+                .and()
+                .authorizeRequests()
+
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/", "/*.*", "/static/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/students").permitAll()
+                .antMatchers(HttpMethod.POST, "/employers").permitAll()
+                .antMatchers("/h2-console/*").permitAll()
+                .antMatchers("/hello").permitAll()
+
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic()
+                .authenticationEntryPoint(new NoPopupBasicAuthenticationEntrypoint());
+    }
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl(userRepository);
@@ -46,33 +79,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .authorizeRequests()
-
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/", "/*.*", "/static/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/students").permitAll()
-                .antMatchers(HttpMethod.POST, "/employers").permitAll()
-                .antMatchers("/h2-console/*").permitAll()
-                .antMatchers("/hello").permitAll()
-
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic()
-                .authenticationEntryPoint(new NoPopupBasicAuthenticationEntrypoint())
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin();
-    }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -83,5 +89,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         return source;
     }
-
 }
