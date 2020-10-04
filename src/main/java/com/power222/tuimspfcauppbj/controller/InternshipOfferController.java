@@ -10,10 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/offers")
-public class IntershipOfferController {
+public class InternshipOfferController {
     private final InternshipOfferService offerService;
 
-    public IntershipOfferController(InternshipOfferService offerService) {
+    public InternshipOfferController(InternshipOfferService offerService) {
         this.offerService = offerService;
     }
 
@@ -37,8 +37,10 @@ public class IntershipOfferController {
     }
 
     @PutMapping("/{id}")
-    public InternshipOffer updateOffer(@RequestBody InternshipOffer offer, @PathVariable long id) {
-        return offerService.updateInternshipOffer(id, offer);
+    public ResponseEntity<InternshipOffer> updateOffer(@RequestBody InternshipOffer offer, @PathVariable long id) {
+        return offerService.updateInternshipOffer(id, offer)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
     @PutMapping("/{offerId}/addRemoveStudent/{studentId}")

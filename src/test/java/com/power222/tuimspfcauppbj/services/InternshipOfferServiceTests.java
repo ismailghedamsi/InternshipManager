@@ -88,7 +88,7 @@ class InternshipOfferServiceTests {
     }
 
     @Test
-    void succesfulInternshipOfferUpload() {
+    void successfulInternshipOfferUpload() {
         when(authenticationService.getCurrentUser()).thenReturn(expectedEmployer);
         when(offerRepository.saveAndFlush(expectedOffer)).thenReturn(expectedOffer);
         expectedOffer.setEmployer(null);
@@ -97,7 +97,7 @@ class InternshipOfferServiceTests {
     }
 
     @Test
-    void tryToUploadOfferForUnexistantUser() {
+    void tryToUploadOfferForNonexistentUser() {
         when(authenticationService.getCurrentUser()).thenReturn(null);
 
         Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer);
@@ -159,7 +159,7 @@ class InternshipOfferServiceTests {
 
         var actual = service.updateInternshipOffer(initialId, alteredResume);
 
-        assertThat(actual).isEqualTo(expectedOffer);
+        assertThat(actual).contains(expectedOffer);
     }
 
     @Test
@@ -212,7 +212,16 @@ class InternshipOfferServiceTests {
     void updateOfferWithNonexistentId() {
         var actual = service.updateInternshipOffer(expectedOffer.getId(), expectedOffer);
 
-        assertThat(actual).isEqualTo(expectedOffer);
+        assertThat(actual).contains(expectedOffer);
     }
 
+    @Test
+    void updateOfferWithInvalidState() {
+        var updatedOffer = expectedOffer.toBuilder().reviewState(InternshipOffer.ReviewState.DENIED).build();
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+
+        var actual = service.updateInternshipOffer(expectedOffer.getId(), updatedOffer);
+
+        assertThat(actual).isEmpty();
+    }
 }

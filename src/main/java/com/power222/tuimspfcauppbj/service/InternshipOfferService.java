@@ -46,6 +46,10 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAll();
     }
 
+    public List<InternshipOffer> getInternshipOffersWithPendingApproval() {
+        return internshipOfferRepository.findAllByReviewStatePending();
+    }
+
     public Optional<InternshipOffer> getInternshipOfferById(long id) {
         return internshipOfferRepository.findById(id);
     }
@@ -54,13 +58,11 @@ public class InternshipOfferService {
         return internshipOfferRepository.findByEmployerUsername(username);
     }
 
-    public InternshipOffer updateInternshipOffer(long id, InternshipOffer offer) {
+    public Optional<InternshipOffer> updateInternshipOffer(long id, InternshipOffer offer) {
         return internshipOfferRepository.findById(id)
-                .map(oldOffer -> {
-                    offer.setId(oldOffer.getId());
-                    return internshipOfferRepository.saveAndFlush(offer);
-                })
-                .orElse(offer);
+                .map(oldOffer -> offer.toBuilder().id(oldOffer.getId()).build())
+                .filter(this::isOfferStateValid)
+                .map(newOffer -> internshipOfferRepository.saveAndFlush(newOffer));
     }
 
     public Optional<InternshipOffer> addOrRemoveStudentFromOffer(long offerId, long studentId) {
@@ -78,5 +80,15 @@ public class InternshipOfferService {
 
     public void deleteOfferById(long id) {
         internshipOfferRepository.deleteById(id);
+    }
+
+    private boolean isOfferStateValid(InternshipOffer offer) {
+        if (offer.getReviewState() == InternshipOffer.ReviewState.DENIED) {
+            if (offer.getReasonForRejection() == null)
+                return false;
+            return !offer.getReasonForRejection().isBlank();
+        }
+
+        return true;
     }
 }

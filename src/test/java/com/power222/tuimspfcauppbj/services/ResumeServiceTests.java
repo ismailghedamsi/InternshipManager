@@ -84,7 +84,7 @@ class ResumeServiceTests {
     }
 
     @Test
-    void getResumesWithPendingApprouval() {
+    void getResumesWithPendingApproval() {
         var r1 = Resume.builder().id(1L).build();
         var r2 = Resume.builder().id(2L).build();
 
