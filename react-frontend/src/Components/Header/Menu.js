@@ -20,12 +20,12 @@ export const Menu = [
     },
     {
         title: 'Creer un stage',
-        url: '/dashboard/CreateStuff',
+        url: '/dashboard/createstage',
         role: 'employer'
     },
     {
         title: 'Liste des offres',
-        url: '/dashboard/ListOffer',
+        url: '/dashboard/listoffer',
         role: 'employer'
     }
 ]

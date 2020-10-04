@@ -2,11 +2,8 @@ import axios from 'axios'
 import AuthenticationService from './AuthenticationService';
 
 class IntershipOfferService {
-    interceptorId = 0;
-    baseUrl = "http://localhost:8080";
 
     async sendOfferToBackEnd(values) {
-
         return this.readFileAsync(values.file).then(function (base64file) {
 
             let dto = {...values};

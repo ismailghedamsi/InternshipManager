@@ -100,7 +100,6 @@ export default function ListOffer() {
         } else {
             setCurrentDoc("")
         }
-
     }, [offers])
 
     function deleteOffer(index) {
@@ -113,10 +112,11 @@ export default function ListOffer() {
             .catch(() => setErrorModalOpen(true))
     }
 
-    function getOfferState(resume) {
-
+    function parseDate(date) {
+        const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        const d = new Date(date);
+        return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
     }
-
 
     return (
         <Container component="main" className={classes.container}>
@@ -145,37 +145,29 @@ export default function ListOffer() {
                                         setCurrentDoc(item.joinedFile)
                                     }}
                                 >
-                                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                    <Typography color={"textPrimary"} variant={"body1"}>
                                         {`Titre :${item.title}`}
-                                        <br/>
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                    <Typography color={"textPrimary"} variant={"body2"}>
                                         {`Description: ${item.description}`}
-                                        <br/>
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
-                                        {`Nombre de Semaine: ${item.nbOfWeeks}`}
-                                        <br/>
+                                    <Typography color={"textPrimary"} variant={"body2"}>
+                                        {`Nombre de semaine: ${item.nbOfWeeks}`}
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
+                                    <Typography color={"textPrimary"} variant={"body2"}>
                                         {`Salaire: ${item.salary}`}
-                                        <br/>
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
-                                        {`Heure du debut: ${item.beginHour}`}
-                                        <br/>
+                                    <Typography color={"textPrimary"} variant={"body2"}>
+                                        {`Heure de début: ${item.beginHour}h00`}
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
-                                        {`Heure de fin: ${item.endHour}`}
-                                        <br/>
+                                    <Typography color={"textPrimary"} variant={"body2"}>
+                                        {`Heure de fin: ${item.endHour}h00`}
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
-                                        {`Date de creation: ${item.creationDate}`}
-                                        <br/>
+                                    <Typography color={"textPrimary"} variant={"body2"}>
+                                        {`Date de création: ${parseDate(item.creationDate)}`}
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"} display={"inline"}>
-                                        {`Date limite pour appliquer : ${item.limitDateToApply}`}
-                                        <br/>
+                                    <Typography color={"textPrimary"} variant={"body2"}>
+                                        {`Date limite pour appliquer : ${parseDate(item.limitDateToApply)}`}
                                     </Typography>
                                 </button>
                                 <hr/>
