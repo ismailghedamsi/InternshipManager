@@ -28,4 +28,10 @@ export const Menu = [
         url: '/dashboard/listoffer',
         role: 'employer'
     }
+    ,
+    {
+        title: 'Assignation Offres',
+        url: '/dashboard/assignement/cv',
+        role: 'admin'
+    }
 ]

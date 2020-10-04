@@ -43,7 +43,6 @@ public class StudentServiceTests {
                 .username("student")
                 .password("password")
                 .role("student")
-                .enabled(true)
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
@@ -95,7 +94,7 @@ public class StudentServiceTests {
     @Test
     void createStudent() {
         expectedStudent.setPassword("encodedPassword");
-        var dto = expectedStudent.toBuilder().role(null).enabled(false).password("password").build();
+        var dto = expectedStudent.toBuilder().role(null).password("password").build();
         when(studentRepo.saveAndFlush(expectedStudent)).thenReturn(expectedStudent);
         when(passwordEncoder.encode(dto.getPassword())).thenReturn("encodedPassword");
 

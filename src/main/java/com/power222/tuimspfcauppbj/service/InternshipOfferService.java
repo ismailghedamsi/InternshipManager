@@ -1,22 +1,25 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
+import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
 
 @Service
 public class InternshipOfferService {
 
-    private final InternshipOfferRepository internshipOfferRepository;
-    private final AuthenticationService authenticationService;
+    private InternshipOfferRepository internshipOfferRepository;
+    private AuthenticationService authenticationService;
+    private final StudentRepository studentRepo;
 
-    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,
-        AuthenticationService authenticationService) {
+    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,AuthenticationService authenticationService, StudentRepository studentRepo) {
         this.internshipOfferRepository = internshipOfferRepository;
         this.authenticationService = authenticationService;
+        this.studentRepo = studentRepo;
     }
 
     public Optional<InternshipOffer> uploadInternshipOffer(InternshipOffer offer) {
@@ -56,6 +59,19 @@ public class InternshipOfferService {
                     return internshipOfferRepository.saveAndFlush(offer);
                 })
                 .orElse(offer);
+    }
+
+    public Optional<InternshipOffer> addOrRemoveStudentFromOffer(long offerId, long studentId) {
+        return internshipOfferRepository.findById(offerId)
+                .flatMap(offer -> studentRepo.findById(studentId)
+                        .map(student -> {
+                            if (offer.getAllowedStudents().contains(student))
+                                offer.getAllowedStudents().remove(student);
+                            else
+                                offer.getAllowedStudents().add(student);
+
+                            return internshipOfferRepository.saveAndFlush(offer);
+                        }));
     }
 
     public void deleteOfferById(long id) {

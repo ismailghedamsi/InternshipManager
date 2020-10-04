@@ -81,8 +81,11 @@ export default function ListCV() {
     }, [])
 
     useEffect(() => {
-        if (resumes[0].file !== '')
-            setCurrentDoc(resumes[0].file)
+        if (resumes[0]) {
+            if (resumes[0].file !== '' && resumes[0].file !== undefined && resumes[0].file !== null)
+                setCurrentDoc(resumes[0].file)
+        } else
+            setCurrentDoc('')
     }, [resumes])
 
     function deleteResume(index) {

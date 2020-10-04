@@ -3,7 +3,10 @@ package com.power222.tuimspfcauppbj.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Data
@@ -20,6 +23,7 @@ public class Employer extends User {
     private String phoneNumber;
     private String address;
     private String email;
+
     @OneToMany(mappedBy = "employer",fetch = FetchType.LAZY)
     @JsonIgnoreProperties("employer")
     private List<InternshipOffer> offers;

@@ -50,7 +50,6 @@ public class SecurityDemoControllerTests {
     @WithMockUser("test")
     void authenticatedPrivateHelloWorldTest() throws Exception {
         when(userRepo.findByUsername(any())).thenReturn(Optional.of(User.builder()
-                .enabled(true)
                 .username("admin")
                 .role("admin")
                 .password("password")

@@ -7,8 +7,6 @@ import ResumeApprobation from "./ResumeApprobation";
 import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
 import ListCV from "./ListCV";
-import CreateStage from './OffreStage/CreateStage';
-import ListOffer from './OffreStage/ListOffer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,6 +33,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/approbation/cv"
                                         component={ResumeApprobation}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/assignement/cv"
+                                        component={OfferAssignements}
                                         role={"admin"}/>
                     <Route exact={true} path="/dashboard/upload" component={UploadCV}/>
                     <Route exact={true} path="/dashboard/listcv" component={ListCV}/>

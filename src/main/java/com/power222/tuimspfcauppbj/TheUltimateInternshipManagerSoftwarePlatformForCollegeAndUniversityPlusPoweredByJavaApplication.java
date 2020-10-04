@@ -1,11 +1,9 @@
 package com.power222.tuimspfcauppbj;
 
+import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.Employer;
-import com.power222.tuimspfcauppbj.model.Resume;
-import com.power222.tuimspfcauppbj.model.Student;
-import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.model.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +15,10 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Collections;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -32,53 +34,37 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final UserRepository userRepo;
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
+        private final InternshipOfferRepository internshipRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
+            this.internshipRepo = internshipRepo;
         }
 
         @Override
         public void run(String... args) throws IOException {
             userRepo.saveAndFlush(User.builder()
-                    .enabled(true)
                     .username("admin")
                     .role("admin")
                     .password(passwordEncoder.encode("password"))
+                    .passwordExpired(true)
                     .build());
 
-            var u = userRepo.saveAndFlush(Student.builder()
-                    .username("student")
-                    .password(passwordEncoder.encode("password"))
+            var s = userRepo.saveAndFlush(Student.builder()
+                    .username("etudiant")
                     .role("student")
-                    .enabled(true)
-                    .firstName("Simon")
-                    .lastName("Longpré")
-                    .studentId("1386195")
-                    .email("simon@cal.qc.ca")
-                    .phoneNumber("5144816959")
-                    .address("6600 St-Jacques Ouest")
+                    .password(passwordEncoder.encode("password"))
+                    .firstName("Bob")
+                    .lastName("Brutus")
+                    .studentId("1234")
+                    .email("power@gmail.ca")
+                    .phoneNumber("911")
+                    .address("9310 Lasalle")
                     .build());
 
-            for (int i = 1; i < 7; i++) {
-                FileInputStream fileInputStream = new FileInputStream(new File("pdf/" + i + ".pdf"));
-
-                resumeRepo.saveAndFlush(Resume.builder()
-                        .name("testResumeFileName " + i)
-                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(fileInputStream.readAllBytes())))
-                        .reviewed(i == 4)
-                        .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
-                                "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +
-                                "nunc bibendum vel. Nulla facilisi. Donec aliquet fringilla ante sit amet pretium. " : null)
-                        .owner(u)
-                        .build());
-
-                fileInputStream.close();
-            }
-
-            userRepo.saveAndFlush(Employer.builder()
-                    .enabled(true)
+            var e = userRepo.saveAndFlush(Employer.builder()
                     .companyName("Dacima")
                     .contactName("Zack")
                     .username("employeur")
@@ -88,6 +74,52 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .role("employer")
                     .password(passwordEncoder.encode("password"))
                     .build());
+
+            //Generating resumes for live testing of resume services
+            for (int i = 1; i < 7; i++) {
+                resumeRepo.saveAndFlush(Resume.builder()
+                        .name("testResumeFileName " + i)
+                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .reviewed(i == 4)
+                        .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
+                                "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +
+                                "nunc bibendum vel. Nulla facilisi. Donec aliquet fringilla ante sit amet pretium. " : null)
+                        .owner(s)
+                        .build());
+            }
+
+            //Generating students for offer assignement live testing
+            for (int i = 0; i < 7; i++) {
+                userRepo.saveAndFlush(Student.builder()
+                        .username("etudiant" + i)
+                        .password(passwordEncoder.encode("password"))
+                        .role("student")
+                        .firstName("Bob " + i)
+                        .lastName("Brutus")
+                        .studentId("1234")
+                        .email("power@gmail.ca")
+                        .phoneNumber("911")
+                        .address("9310 Lasalle")
+                        .build());
+
+            }
+
+            //Generating offers for offer assignement live testing
+            for (int i = 1; i < 7; i++) {
+                internshipRepo.saveAndFlush(InternshipOffer.builder()
+                        .title("testInternship " + i)
+                        .description("Some basic description " + i)
+                        .nbOfWeeks(15)
+                        .salary(15.98)
+                        .beginHour(8)
+                        .endHour(18)
+                        .creationDate(Date.from(Instant.now()))
+                        .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
+                        .joinedFile(new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .employer(e)
+                        .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
+                        .build());
+            }
 
         }
     }

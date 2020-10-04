@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/offers")
 public class IntershipOfferController {
-    private  InternshipOfferService offerService;
+    private final InternshipOfferService offerService;
 
     public IntershipOfferController(InternshipOfferService offerService) {
         this.offerService = offerService;
@@ -44,6 +44,13 @@ public class IntershipOfferController {
     @PutMapping("/{id}")
     public InternshipOffer updateOffer(@RequestBody InternshipOffer offer, @PathVariable long id) {
         return offerService.updateInternshipOffer(id, offer);
+    }
+
+    @PutMapping("/{offerId}/addRemoveStudent/{studentId}")
+    public ResponseEntity<InternshipOffer> addOrRemoveStudentFromOffer(@PathVariable long offerId, @PathVariable long studentId) {
+        return offerService.addOrRemoveStudentFromOffer(offerId, studentId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @DeleteMapping("/{id}")

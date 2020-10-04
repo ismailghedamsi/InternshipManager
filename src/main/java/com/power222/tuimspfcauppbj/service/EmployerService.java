@@ -37,7 +37,6 @@ public class EmployerService {
 
         employer.setPassword(passwordEncoder.encode(employer.getPassword()));
         employer.setRole("employer");
-        employer.setEnabled(true);
         return Optional.of(employerRepo.saveAndFlush(employer));
     }
 

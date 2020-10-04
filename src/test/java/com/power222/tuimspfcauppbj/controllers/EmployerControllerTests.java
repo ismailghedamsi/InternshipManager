@@ -45,7 +45,6 @@ public class EmployerControllerTests {
     @BeforeEach
     void beforeEach() {
         expected = Employer.builder()
-                .enabled(true)
                 .id(1L)
                 .username("employer")
                 .role("employer")

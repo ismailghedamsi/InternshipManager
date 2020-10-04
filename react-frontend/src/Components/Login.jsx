@@ -1,4 +1,4 @@
-import {Field, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import AuthenticationService from '../js/AuthenticationService';
 import Grid from "@material-ui/core/Grid";
@@ -6,7 +6,7 @@ import {TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
-import {Link as RouterLink, Redirect} from "react-router-dom";
+import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -56,19 +56,22 @@ const useStyles = makeStyles((theme) => ({
 
 const requiredFieldMsg = "Ce champs est requis";
 
-export default function Login(props) {
+export default function Login() {
     const [open, setOpen] = useState(false);
+    const history = useHistory();
     const classes = useStyles();
     const initialValues = {
         username: "",
         password: ""
     }
 
-    const handleHttpError = (error, setFieldError) => {
+    const handleHttpError = (error, setFieldError, username) => {
         if (error.response) {
             if (error.response.status === 401) {
                 setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
                 setFieldError("password", "   ")
+            } else if (error.response.status === 498) {
+                history.push("/passwordChange", {username: username})
             } else
                 setOpen(true);
         } else
@@ -89,7 +92,7 @@ export default function Login(props) {
                 justify="center"
                 style={{minHeight: '100vh'}}
             >
-                <Grid item xs={3}>
+                <Grid item xs={12} md={6} xl={3}>
                     <Container component="main" maxWidth="sm" className={classes.container}>
                         <CssBaseline/>
                         <div className={classes.paper}>
@@ -125,8 +128,8 @@ export default function Login(props) {
                         <Formik
                             onSubmit={async (values, {setFieldError}) =>
                                 AuthenticationService.authenticate(values)
-                                    .then(() => props.history.push("/dashboard"))
-                                    .catch((error) => handleHttpError(error, setFieldError))
+                                    .then(() => history.push("/dashboard"))
+                                    .catch((error) => handleHttpError(error, setFieldError, values.username))
                             }
 
                             validationSchema={yup.object()
@@ -139,8 +142,8 @@ export default function Login(props) {
                             enableReinitialize={true}
                             initialValues={initialValues}
                         >
-                            {({submitForm, isSubmitting}) => (
-                                <form className={classes.form}>
+                            {({isSubmitting}) => (
+                                <Form className={classes.form}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
                                             <Field
@@ -176,11 +179,10 @@ export default function Login(props) {
                                         size={"large"}
                                         className={classes.submit}
                                         disabled={isSubmitting}
-                                        onClick={submitForm}
                                     >
                                         Se connecter
                                     </Button>
-                                </form>
+                                </Form>
                             )}
                         </Formik>
                         <Grid container justify="flex-end" className={classes.link}>

@@ -1,13 +1,10 @@
 package com.power222.tuimspfcauppbj.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.when;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
+import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
 import java.text.ParseException;
@@ -22,12 +19,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 @ExtendWith(MockitoExtension.class)
 class InternshipOfferServiceTests {
     @Mock
     private InternshipOfferRepository offerRepository;
+
+    @Mock
+    private StudentRepository studentRepo;
+
     @Mock
     private AuthenticationService authenticationService;
+
     @InjectMocks
     private InternshipOfferService service;
     private InternshipOffer expectedOffer;
@@ -35,10 +44,10 @@ class InternshipOfferServiceTests {
     private List<InternshipOffer> expectedOffers;
     private List<InternshipOffer> expectedOffersOfEmployer;
     private Employer expectedEmployer;
+    private Student expectedStudent;
 
     @BeforeEach
     void setUp() {
-
         Employer employer = Employer.builder().username("mark").email("a@gmail.com").build();
         String pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
         try {
@@ -71,12 +80,24 @@ class InternshipOfferServiceTests {
         expectedOffersOfEmployer.add(expectedOffer);
 
         expectedEmployer = Employer.builder()
-            .enabled(true)
                 .username("employeur")
                 .role("employer")
                 .offers(new ArrayList<>())
                 .build();
-        }
+
+        expectedStudent = Student.builder()
+                .id(1L)
+                .username("student")
+                .password("password")
+                .role("student")
+                .firstName("Simon")
+                .lastName("Longpré")
+                .studentId("1386195")
+                .email("simon@cal.qc.ca")
+                .phoneNumber("5144816959")
+                .address("6600 St-Jacques Ouest")
+                .build();
+    }
 
     @Test
     void succesfulInternshipOfferUpload() {
@@ -150,6 +171,52 @@ class InternshipOfferServiceTests {
         var actual = service.updateInternshipOffer(initialId, alteredResume);
 
         assertThat(actual).isEqualTo(expectedOffer);
+    }
+
+    @Test
+    void addStudentToOffer() {
+        expectedOffer2 = expectedOffer.toBuilder().build();
+        expectedOffer2.setAllowedStudents(Collections.singletonList(expectedStudent));
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+        when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.of(expectedStudent));
+        when(offerRepository.saveAndFlush(expectedOffer2)).thenReturn(expectedOffer2);
+
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).contains(expectedOffer2);
+    }
+
+    @Test
+    void removeStudentFromOffer() {
+        expectedOffer.getAllowedStudents().add(expectedStudent);
+        expectedOffer2 = expectedOffer.toBuilder().build();
+        expectedOffer2.setAllowedStudents(Collections.emptyList());
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+        when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.of(expectedStudent));
+        when(offerRepository.saveAndFlush(expectedOffer2)).thenReturn(expectedOffer2);
+
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).contains(expectedOffer2);
+    }
+
+    @Test
+    void addInvalidStudentToOffer() {
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+        when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.empty());
+
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void addStudentToInvalidOffer() {
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.empty());
+
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).isEmpty();
     }
 
     @Test
