@@ -1,28 +1,40 @@
 package com.power222.tuimspfcauppbj.controller;
 
+import com.power222.tuimspfcauppbj.model.PasswordDTO;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService authSvc;
+    private final AuthenticationService authSvc;
 
-    @GetMapping("/basic")
-    public String authenticate() {
-        return "{ message: \"Login successful\" }";
+    public AuthenticationController(AuthenticationService authSvc) {
+        this.authSvc = authSvc;
     }
 
     @GetMapping("/user")
     public User getCurrentUser() {
         return authSvc.getCurrentUser();
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<Void> updateUserPassword(@RequestBody PasswordDTO dto) {
+        switch (authSvc.updateUserPassword(dto)) {
+            case SUCCESS:
+                return ResponseEntity.ok().build();
+            case OLD_AND_NEW_EQUAL:
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            case OLD_WRONG:
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            case USER_NOT_FOUND:
+            default:
+                return ResponseEntity.notFound().build();
+        }
     }
 
 

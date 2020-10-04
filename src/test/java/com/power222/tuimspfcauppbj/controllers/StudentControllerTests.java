@@ -43,7 +43,7 @@ public class StudentControllerTests {
 
     @BeforeEach
     void beforeEach() {
-        expected = Student.builder().enabled(true)
+        expected = Student.builder()
                 .username("etudiant")
                 .role("student")
                 .firstName("Bob")

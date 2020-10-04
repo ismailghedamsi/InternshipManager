@@ -72,7 +72,7 @@ export default function RegisterStudent(props) {
                 validationSchema={validationSchema}
                 initialValues={initialValues}
             >
-                {({submitForm, isSubmitting}) => (
+                {({isSubmitting}) => (
                     <Form className={props.classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
@@ -189,7 +189,6 @@ export default function RegisterStudent(props) {
                             size={"large"}
                             className={props.classes.submit}
                             disabled={isSubmitting}
-                            onClick={submitForm}
                         >
                             S'enregistrer
                         </Button>

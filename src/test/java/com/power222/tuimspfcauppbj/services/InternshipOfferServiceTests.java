@@ -68,7 +68,6 @@ class InternshipOfferServiceTests {
         expectedOffersOfEmployer.add(expectedOffer);
 
         expectedEmployer = Employer.builder()
-                .enabled(true)
                 .username("employeur")
                 .role("employer")
                 .offers(new ArrayList<>())
@@ -79,7 +78,6 @@ class InternshipOfferServiceTests {
                 .username("student")
                 .password("password")
                 .role("student")
-                .enabled(true)
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")

@@ -6,6 +6,7 @@ import Dashboard from "./Components/Dashboard";
 import {BasicProtectedRoute} from "./Components/Routes";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {pdfjs} from "react-pdf";
+import PasswordChange from "./Components/PasswordChange";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
@@ -17,6 +18,7 @@ function App() {
                 <Switch>
                     <Route exact path="/" component={Login}/>
                     <Route exact path="/register" component={RegisteringManager}/>
+                    <Route exact path="/passwordChange" component={PasswordChange}/>
                     <BasicProtectedRoute exact={false} path="/dashboard" component={Dashboard}/>
                 </Switch>
             </Router>

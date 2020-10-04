@@ -25,7 +25,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -54,7 +53,6 @@ class ResumeControllerTests {
                 .username("student")
                 .password("password")
                 .role("student")
-                .enabled(true)
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")

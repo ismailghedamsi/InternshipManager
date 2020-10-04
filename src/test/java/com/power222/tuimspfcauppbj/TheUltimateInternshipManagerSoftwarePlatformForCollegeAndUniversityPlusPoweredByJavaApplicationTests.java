@@ -38,11 +38,11 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
 
     @Test
     void authenticatedPrivateHelloWorldTest() {
-		ResponseEntity<String> response = restTemplate.withBasicAuth("admin", "password")
-				.getForEntity("/hello/private", String.class);
-		assertThat(response, is(notNullValue()));
-		assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
-		assertThat(response.getBody(), is(equalTo("Hello, private world!")));
+        ResponseEntity<String> response = restTemplate.withBasicAuth("employeur", "password")
+                .getForEntity("/hello/private", String.class);
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
+        assertThat(response.getBody(), is(equalTo("Hello, private world!")));
     }
 
     @Test
