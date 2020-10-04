@@ -55,6 +55,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
             var s = userRepo.saveAndFlush(Student.builder()
                     .username("etudiant")
                     .role("student")
+                    .password(passwordEncoder.encode("password"))
                     .firstName("Bob")
                     .lastName("Brutus")
                     .studentId("1234")
@@ -91,6 +92,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
             for (int i = 0; i < 7; i++) {
                 userRepo.saveAndFlush(Student.builder()
                         .username("etudiant" + i)
+                        .password(passwordEncoder.encode("password"))
                         .role("student")
                         .firstName("Bob " + i)
                         .lastName("Brutus")
