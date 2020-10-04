@@ -4,16 +4,16 @@ import axios from "axios";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import {Typography} from "@material-ui/core";
-import {Document, Page} from "react-pdf";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
 import {Field, Form, Formik} from "formik";
 import {Checkbox} from "formik-material-ui";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import {Document, Page} from "react-pdf";
 
 const useStyles = makeStyles((theme) => ({
     linkButton: {
@@ -62,8 +62,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OfferAssignements() {
     const classes = useStyles();
-    const [students, setStudents] = useState([{firstName: '', lastName: ''}])
-    const [offers, setOffers] = useState([{title: '', employer: {}, joinedFile: '', allowedStudents: [{}]}]);
+    const [students, setStudents] = useState([])
+    const [offers, setOffers] = useState([]);
     const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
     const [currentDoc, setCurrentDoc] = useState('');
     const [numPages, setNumPages] = useState(0);
@@ -82,18 +82,27 @@ export default function OfferAssignements() {
             .catch(() => {
                 setErrorModalOpen(true)
             })
-            .then(r => setStudents(r.data))
+            .then(r => {
+                r.data.forEach((s) => {
+                    delete s.resumes;
+                    delete s.appliedOffers;
+                })
+                setStudents(r.data)
+            })
     }, [])
 
     useEffect(() => {
-        if (offers[0]) {
-            if (offers[0].joinedFile !== '' && offers[0].joinedFile !== undefined && offers[0].joinedFile !== null) {
-                setCurrentDoc(offers[0].joinedFile)
+        if (offers[currentOfferIndex]) {
+            if (offers[currentOfferIndex].joinedFile !== '' && offers[currentOfferIndex].joinedFile !== undefined && offers[currentOfferIndex].joinedFile !== null) {
+                setCurrentDoc(offers[currentOfferIndex].joinedFile)
             }
-            setCurrentOfferIndex(0);
         } else
             setCurrentDoc('')
-    }, [offers])
+    }, [offers, currentOfferIndex])
+
+    function isStudentAllowedInOffer(offer, student) {
+        return offer.allowedStudents.find(s => s.id === student.id) !== undefined && offer.allowedStudents.length !== 0;
+    }
 
     return (
         <Container component="main" className={classes.main}>
@@ -106,7 +115,7 @@ export default function OfferAssignements() {
                     <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                         En attente d'approbation
                     </Typography>
-                    {offers.map((offer, i) => (
+                    {offers.length > 0 && offers.map((offer, i) => (
                         <div key={i} style={{width: "80%"}}>
                             <button
                                 type={"button"}
@@ -124,18 +133,23 @@ export default function OfferAssignements() {
                                 </Typography>
                             </button>
                             {currentOfferIndex === i &&
-                            students.map((student, i) => (
-                                <div key={i}>
+                            students.map((student, j) => (
+                                <div key={j}>
                                     <Formik
                                         initialValues={{
                                             offerId: offer.id,
                                             studentId: student.id,
-                                            allowed: offer.allowedStudents.map(s => s.id === student.id) && offer.allowedStudents.length !== 0
+                                            allowed: false
                                         }}
-                                        onSubmit={async (values) => {
-                                            axios.put("http://localhost:8080/" + {offerId} + "/addStudent/" + {studentId})
-                                        }}
-                                    >
+                                        onSubmit={(values) => {
+                                            return axios.put("http://localhost:8080/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
+                                                .then((r) => {
+                                                    const nextState = [...offers];
+                                                    nextState.splice(i, 1, r.data);
+                                                    setOffers(nextState);
+                                                })
+                                                .catch(() => setErrorModalOpen(true))
+                                        }}>
                                         {({submitForm, isSubmitting}) => (
                                             <Form style={{display: "inline", marginLeft: 16}}>
                                                 <Field name={"offerId"} type={"hidden"}/>
@@ -143,7 +157,8 @@ export default function OfferAssignements() {
                                                 <label
                                                     htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
                                                 <Field id={"allowed"} name={"allowed"} component={Checkbox}
-                                                       type="checkbox" onChange={submitForm} disabled={isSubmitting}/>
+                                                       type="checkbox" onChange={submitForm} disabled={isSubmitting}
+                                                       checked={isStudentAllowedInOffer(offer, student)}/>
                                                 {isSubmitting && <CircularProgress size={18}/>}
                                             </Form>)}
                                     </Formik>

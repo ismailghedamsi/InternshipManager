@@ -41,9 +41,9 @@ public class IntershipOfferController {
         return offerService.updateInternshipOffer(id, offer);
     }
 
-    @PutMapping("/{offerId}/addStudent/{studentId}")
-    public ResponseEntity<InternshipOffer> addStudentToOffer(@PathVariable long offerId, @PathVariable long studentId) {
-        return offerService.addStudentToOffer(offerId, studentId)
+    @PutMapping("/{offerId}/addRemoveStudent/{studentId}")
+    public ResponseEntity<InternshipOffer> addOrRemoveStudentFromOffer(@PathVariable long offerId, @PathVariable long studentId) {
+        return offerService.addOrRemoveStudentFromOffer(offerId, studentId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }

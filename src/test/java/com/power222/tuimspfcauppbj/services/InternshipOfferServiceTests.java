@@ -172,7 +172,21 @@ class InternshipOfferServiceTests {
         when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.of(expectedStudent));
         when(offerRepository.saveAndFlush(expectedOffer2)).thenReturn(expectedOffer2);
 
-        var actual = service.addStudentToOffer(expectedOffer.getId(), expectedStudent.getId());
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+
+        assertThat(actual).contains(expectedOffer2);
+    }
+
+    @Test
+    void removeStudentFromOffer() {
+        expectedOffer.getAllowedStudents().add(expectedStudent);
+        expectedOffer2 = expectedOffer.toBuilder().build();
+        expectedOffer2.setAllowedStudents(Collections.emptyList());
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+        when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.of(expectedStudent));
+        when(offerRepository.saveAndFlush(expectedOffer2)).thenReturn(expectedOffer2);
+
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
 
         assertThat(actual).contains(expectedOffer2);
     }
@@ -182,7 +196,7 @@ class InternshipOfferServiceTests {
         when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
         when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.empty());
 
-        var actual = service.addStudentToOffer(expectedOffer.getId(), expectedStudent.getId());
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
 
         assertThat(actual).isEmpty();
     }
@@ -191,7 +205,7 @@ class InternshipOfferServiceTests {
     void addStudentToInvalidOffer() {
         when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.empty());
 
-        var actual = service.addStudentToOffer(expectedOffer.getId(), expectedStudent.getId());
+        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
 
         assertThat(actual).isEmpty();
     }

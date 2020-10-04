@@ -58,7 +58,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .role("student")
                     .firstName("Bob")
                     .lastName("Brutus")
-                    .id(4L)
                     .studentId("1234")
                     .email("power@gmail.ca")
                     .phoneNumber("911")
@@ -89,6 +88,21 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .role("employer")
                     .password(passwordEncoder.encode("password"))
                     .build());
+
+            for (int i = 0; i < 7; i++) {
+                userRepo.saveAndFlush(Student.builder()
+                        .enabled(true)
+                        .username("etudiant" + i)
+                        .role("student")
+                        .firstName("Bob " + i)
+                        .lastName("Brutus")
+                        .studentId("1234")
+                        .email("power@gmail.ca")
+                        .phoneNumber("911")
+                        .address("9310 Lasalle")
+                        .build());
+
+            }
 
             for (int i = 1; i < 7; i++) {
                 internshipRepo.saveAndFlush(InternshipOffer.builder()

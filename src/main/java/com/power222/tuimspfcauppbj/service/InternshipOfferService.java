@@ -63,11 +63,15 @@ public class InternshipOfferService {
                 .orElse(offer);
     }
 
-    public Optional<InternshipOffer> addStudentToOffer(long offerId, long studentId) {
+    public Optional<InternshipOffer> addOrRemoveStudentFromOffer(long offerId, long studentId) {
         return internshipOfferRepository.findById(offerId)
                 .flatMap(offer -> studentRepo.findById(studentId)
                         .map(student -> {
-                            offer.getAllowedStudents().add(student);
+                            if (offer.getAllowedStudents().contains(student))
+                                offer.getAllowedStudents().remove(student);
+                            else
+                                offer.getAllowedStudents().add(student);
+
                             return internshipOfferRepository.saveAndFlush(offer);
                         }));
     }
