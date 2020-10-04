@@ -29,7 +29,6 @@ public class AuthenticationServiceTests {
         User expected = User.builder()
                 .id(1L)
                 .username("admin")
-                .enabled(true)
                 .role("admin")
                 .build();
 

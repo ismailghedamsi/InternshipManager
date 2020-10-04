@@ -43,7 +43,6 @@ public class EmployerServiceTests {
                 .username("employer")
                 .password("password")
                 .role("employer")
-                .enabled(true)
                 .companyName("Cal Inc.")
                 .contactName("Simon Longpré")
                 .phoneNumber("5144816959")
@@ -94,7 +93,7 @@ public class EmployerServiceTests {
     @Test
     void createEmployer() {
         expectedEmployer.setPassword("encodedPassword");
-        var dto = expectedEmployer.toBuilder().role(null).enabled(false).password("password").build();
+        var dto = expectedEmployer.toBuilder().role(null).password("password").build();
         when(employerRepo.saveAndFlush(expectedEmployer)).thenReturn(expectedEmployer);
         when(passwordEncoder.encode(dto.getPassword())).thenReturn("encodedPassword");
 

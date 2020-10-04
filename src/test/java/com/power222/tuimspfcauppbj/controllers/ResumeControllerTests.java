@@ -53,7 +53,6 @@ class ResumeControllerTests {
                 .username("student")
                 .password("password")
                 .role("student")
-                .enabled(true)
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")

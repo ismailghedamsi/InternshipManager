@@ -37,7 +37,6 @@ public class StudentService {
 
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRole("student");
-        student.setEnabled(true);
         return Optional.of(studentRepo.saveAndFlush(student));
     }
 

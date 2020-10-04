@@ -37,7 +37,6 @@ public class AuthenticationControllerTests {
     @WithMockUser("etudiant")
     void authenticatedBasic() throws Exception {
         when(authSvc.getCurrentUser()).thenReturn(User.builder()
-                .enabled(true)
                 .username("etudiant")
                 .role("student")
                 .password(new BCryptPasswordEncoder().encode("password"))
@@ -52,7 +51,6 @@ public class AuthenticationControllerTests {
     @WithMockUser("etudiant")
     void getUserInfos() throws Exception {
         User u = User.builder()
-                .enabled(true)
                 .username("etudiant")
                 .role("student")
                 .password(new BCryptPasswordEncoder().encode("password"))

@@ -46,14 +46,13 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         @Override
         public void run(String... args) throws IOException {
             userRepo.saveAndFlush(User.builder()
-                    .enabled(true)
                     .username("admin")
                     .role("admin")
                     .password(passwordEncoder.encode("password"))
+                    .passwordExpired(true)
                     .build());
 
             var s = userRepo.saveAndFlush(Student.builder()
-                    .enabled(true)
                     .username("etudiant")
                     .role("student")
                     .firstName("Bob")
@@ -64,8 +63,19 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .address("9310 Lasalle")
                     .build());
 
-            for (int i = 1; i < 7; i++) {
+            var e = userRepo.saveAndFlush(Employer.builder()
+                    .companyName("Dacima")
+                    .contactName("Zack")
+                    .username("employeur")
+                    .phoneNumber("5144317713")
+                    .address("1300 rue ducas")
+                    .email("employer@gmail.com")
+                    .role("employer")
+                    .password(passwordEncoder.encode("password"))
+                    .build());
 
+            //Generating resumes for live testing of resume services
+            for (int i = 1; i < 7; i++) {
                 resumeRepo.saveAndFlush(Resume.builder()
                         .name("testResumeFileName " + i)
                         .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
@@ -77,21 +87,9 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .build());
             }
 
-            var e = userRepo.saveAndFlush(Employer.builder()
-                    .enabled(true)
-                    .companyName("Dacima")
-                    .contactName("Zack")
-                    .username("employeur")
-                    .phoneNumber("5144317713")
-                    .address("1300 rue ducas")
-                    .email("employer@gmail.com")
-                    .role("employer")
-                    .password(passwordEncoder.encode("password"))
-                    .build());
-
+            //Generating students for offer assignement live testing
             for (int i = 0; i < 7; i++) {
                 userRepo.saveAndFlush(Student.builder()
-                        .enabled(true)
                         .username("etudiant" + i)
                         .role("student")
                         .firstName("Bob " + i)
@@ -104,6 +102,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             }
 
+            //Generating offers for offer assignement live testing
             for (int i = 1; i < 7; i++) {
                 internshipRepo.saveAndFlush(InternshipOffer.builder()
                         .title("testInternship " + i)
