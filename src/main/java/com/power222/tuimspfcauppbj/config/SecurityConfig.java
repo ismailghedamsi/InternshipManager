@@ -47,14 +47,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
+                //For browser pre-flight requests
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                //React build
                 .antMatchers("/", "/*.*", "/static/**").permitAll()
+
+                //Always accessible enpoints
                 .antMatchers(HttpMethod.POST, "/students").permitAll()
                 .antMatchers(HttpMethod.POST, "/employers").permitAll()
+
+                //Password update endpoint has built-in auth
+                .antMatchers(HttpMethod.PUT, "/auth/password").permitAll()
+
+                //Demo controllers & H2
                 .antMatchers("/h2-console/*").permitAll()
                 .antMatchers("/hello").permitAll()
 
-                .anyRequest().authenticated()
+                .anyRequest().fullyAuthenticated()
                 .and()
                 .httpBasic()
                 .authenticationEntryPoint(new NoPopupBasicAuthenticationEntrypoint());

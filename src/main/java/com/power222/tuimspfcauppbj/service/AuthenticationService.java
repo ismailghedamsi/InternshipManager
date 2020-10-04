@@ -3,13 +3,12 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.PasswordDTO;
 import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.util.PasswordUpdateStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
-
-import java.util.Optional;
 
 @Service
 @SessionScope
@@ -32,14 +31,20 @@ public class AuthenticationService {
         return userRepo.findByUsername(getPrincipal().getUsername()).orElse(new User());
     }
 
-    //todo: test
-    public Optional<User> updateUserPassword(PasswordDTO dto) {
-        return userRepo.findById(dto.getUserId()).map(user -> {
-            if (encoder.matches(dto.getOldPassword(), user.getPassword())) {
-                user.setPassword(encoder.encode(dto.getNewPassword()));
-                return userRepo.saveAndFlush(user);
-            } else
-                return null;
-        });
+    public PasswordUpdateStatus updateUserPassword(PasswordDTO dto) {
+        return userRepo.findById(dto.getUserId())
+                .map(user -> {
+                    if (encoder.matches(dto.getOldPassword(), user.getPassword())
+                            && !encoder.matches(dto.getNewPassword(), user.getPassword())) {
+                        user.setPassword(encoder.encode(dto.getNewPassword()));
+                        user.setPasswordExpired(false);
+                        userRepo.saveAndFlush(user);
+                        return PasswordUpdateStatus.SUCCESS;
+                    } else if (encoder.matches(dto.getNewPassword(), user.getPassword()))
+                        return PasswordUpdateStatus.OLD_AND_NEW_EQUAL;
+                    else
+                        return PasswordUpdateStatus.OLD_WRONG;
+
+                }).orElse(PasswordUpdateStatus.USER_NOT_FOUND);
     }
 }
