@@ -3,10 +3,13 @@ import Navbar from "./Header/Navbar";
 import Footer from "./Footer";
 import {makeStyles} from "@material-ui/core/styles";
 import {RoleProtectedRoute} from "./Routes";
-import ResumeApprobation from "./ResumeApprobation";
 import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
 import ListCV from "./ListCV";
+import CreateStage from "./OffreStage/CreateStage";
+import ListOffer from "./OffreStage/ListOffer";
+import ResumeApprobation from "./Manager/ResumeApprobation";
+import OfferAssignements from "./Manager/OfferAssignements";
 
 const useStyles = makeStyles((theme) => ({
     root: {
