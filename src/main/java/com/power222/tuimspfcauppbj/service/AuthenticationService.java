@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.PasswordDTO;
 import com.power222.tuimspfcauppbj.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,10 +33,10 @@ public class AuthenticationService {
     }
 
     //todo: test
-    public Optional<User> updateUserPassword(long userId, String password) {
-        return userRepo.findById(userId).map(user -> {
-            if (user.isPasswordExpired()) {
-                user.setPassword(encoder.encode(password));
+    public Optional<User> updateUserPassword(PasswordDTO dto) {
+        return userRepo.findById(dto.getUserId()).map(user -> {
+            if (encoder.matches(dto.getOldPassword(), user.getPassword())) {
+                user.setPassword(encoder.encode(dto.getNewPassword()));
                 return userRepo.saveAndFlush(user);
             } else
                 return null;
