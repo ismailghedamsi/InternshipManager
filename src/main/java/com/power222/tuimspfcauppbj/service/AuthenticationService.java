@@ -32,7 +32,7 @@ public class AuthenticationService {
     }
 
     public PasswordUpdateStatus updateUserPassword(PasswordDTO dto) {
-        return userRepo.findById(dto.getUserId())
+        return userRepo.findByUsername(dto.getUsername())
                 .map(user -> {
                     if (encoder.matches(dto.getOldPassword(), user.getPassword())
                             && !encoder.matches(dto.getNewPassword(), user.getPassword())) {

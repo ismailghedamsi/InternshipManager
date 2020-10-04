@@ -61,7 +61,7 @@ public class AuthenticationServiceTests {
         var dto = PasswordDTO.builder()
                 .oldPassword("password")
                 .newPassword("motdepasse")
-                .userId(expectedUser.getId())
+                .username(expectedUser.getUsername())
                 .build();
 
         var actual = authSvc.updateUserPassword(dto);
@@ -74,7 +74,7 @@ public class AuthenticationServiceTests {
         var dto = PasswordDTO.builder()
                 .oldPassword("password")
                 .newPassword("motdepasse")
-                .userId(23L)
+                .username("bozo")
                 .build();
 
         var actual = authSvc.updateUserPassword(dto);
@@ -87,7 +87,7 @@ public class AuthenticationServiceTests {
         var dto = PasswordDTO.builder()
                 .oldPassword("password")
                 .newPassword("password")
-                .userId(expectedUser.getId())
+                .username(expectedUser.getUsername())
                 .build();
 
         var actual = authSvc.updateUserPassword(dto);
@@ -100,7 +100,7 @@ public class AuthenticationServiceTests {
         var dto = PasswordDTO.builder()
                 .oldPassword("bad_pass")
                 .newPassword("motdepasse")
-                .userId(expectedUser.getId())
+                .username(expectedUser.getUsername())
                 .build();
 
         var actual = authSvc.updateUserPassword(dto);

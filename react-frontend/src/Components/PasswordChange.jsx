@@ -1,23 +1,24 @@
-import {Field, Formik} from 'formik';
-import React, {useState} from 'react';
-import AuthenticationService from '../js/AuthenticationService';
-import Grid from "@material-ui/core/Grid";
-import {TextField} from "formik-material-ui";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
-import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
+import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
+import AuthenticationService from "../js/AuthenticationService";
+import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-import * as yup from "yup";
+import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
+import {Field, Formik} from "formik";
+import * as yup from "yup";
+import {TextField} from "formik-material-ui";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Link from "@material-ui/core/Link";
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -29,12 +30,13 @@ const useStyles = makeStyles((theme) => ({
     },
     logo: {
         margin: theme.spacing(6, 0, 0.5),
-        fontSize: "3em",
+        fontSize: "2em",
+        textAlign: "center"
     },
     subtitle: {
         fontSize: "1em",
         textAlign: "center",
-        margin: theme.spacing(0, 0, 6)
+        margin: theme.spacing(1, 0, 2)
     },
     paper: {
         display: 'flex',
@@ -55,28 +57,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 
-export default function Login() {
-    const [open, setOpen] = useState(false);
+export default function PasswordChange() {
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
     const history = useHistory();
+    const location = useLocation();
     const classes = useStyles();
     const initialValues = {
-        username: "",
-        password: ""
+        username: location.state ? location.state.username : "",
+        oldPassword: "",
+        newPassword: "",
+        newConfirm: ""
     }
 
-    const handleHttpError = (error, setFieldError, username) => {
+    const handleHttpError = (error, setFieldError) => {
         if (error.response) {
-            if (error.response.status === 401) {
-                setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
-                setFieldError("password", "   ")
-            } else if (error.response.status === 498) {
-                history.push("/passwordChange", {username: username})
-            } else
-                setOpen(true);
+            if (error.response.status === 401)
+                setFieldError("oldPassword", "Le  mot de passe est erroné")
+            else if (error.response.status === 409)
+                setFieldError("newPassword", "L'ancien et le nouveau mot de passe ne doivent pas êtres identiques")
+            else if (error.response.status === 404)
+                setFieldError("username", "Le nom d'utilisateur n'est pas valide")
+            else
+                setErrorModalOpen(true);
         } else
-            setOpen(true);
-
+            setErrorModalOpen(true);
     };
 
 
@@ -97,45 +103,27 @@ export default function Login() {
                         <CssBaseline/>
                         <div className={classes.paper}>
                             <Typography variant="h1" className={classes.logo}>
-                                TUIMSPFCAUPPBJ
+                                Votre mot de passe est expiré
                             </Typography>
                             <Typography variant="h2" className={classes.subtitle}>
-                                The Ultimate Internship Manager Software Platform For College And University Plus
-                                Powered By Java
-                            </Typography>
-                            <Typography component="h1" variant="h5">
-                                Se connecter
+                                Veuillez le changer en utilisant le formulaire ci-dessous
                             </Typography>
                         </div>
                         <Divider className={classes.divider}/>
-                        <Dialog open={open} onClose={() => {
-                            setOpen(false)
-                        }}>
-                            <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    Erreur réseau: impossible de communiquer avec le serveur
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={() => {
-                                    setOpen(false)
-                                }} color="primary">
-                                    J'ai compris
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
                         <Formik
                             onSubmit={async (values, {setFieldError}) =>
-                                AuthenticationService.authenticate(values)
-                                    .then(() => history.push("/dashboard"))
-                                    .catch((error) => handleHttpError(error, setFieldError, values.username))
+                                axios.put("http://localhost:8080/auth/password", values)
+                                    .then(() => history.push("/"))
+                                    .catch((error) => handleHttpError(error, setFieldError))
                             }
 
                             validationSchema={yup.object()
                                 .shape({
                                     username: yup.string().trim().required(requiredFieldMsg),
-                                    password: yup.string().trim().required(requiredFieldMsg)
+                                    oldPassword: yup.string().trim().required(requiredFieldMsg),
+                                    newPassword: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
+                                    newConfirm: yup.string()
+                                        .oneOf([yup.ref('newPassword'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
                                 })}
                             validateOnBlur={false}
                             validateOnChange={false}
@@ -145,7 +133,7 @@ export default function Login() {
                             {({submitForm, isSubmitting}) => (
                                 <form className={classes.form}>
                                     <Grid container spacing={2}>
-                                        <Grid item xs={12}>
+                                        <Grid item xs={6}>
                                             <Field
                                                 component={TextField}
                                                 name="username"
@@ -156,13 +144,37 @@ export default function Login() {
                                                 fullWidth
                                             />
                                         </Grid>
-                                        <Grid item xs={12}>
+                                        <Grid item xs={6}>
                                             <Field
                                                 component={TextField}
-                                                name="password"
-                                                id="password"
+                                                name="oldPassword"
+                                                id="oldPassword"
                                                 variant="outlined"
-                                                label="Mot de passe"
+                                                label="Ancien mot de passe"
+                                                type={"password"}
+                                                required
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Field
+                                                component={TextField}
+                                                name="newPassword"
+                                                id="newPassword"
+                                                variant="outlined"
+                                                label="Nouveau mot de passe"
+                                                type={"password"}
+                                                required
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Field
+                                                component={TextField}
+                                                name="newConfirm"
+                                                id="newConfirm"
+                                                variant="outlined"
+                                                label="Confirmez"
                                                 type={"password"}
                                                 required
                                                 fullWidth
@@ -181,20 +193,37 @@ export default function Login() {
                                         disabled={isSubmitting}
                                         onClick={submitForm}
                                     >
-                                        Se connecter
+                                        Changer le mot de passe
                                     </Button>
                                 </form>
                             )}
                         </Formik>
                         <Grid container justify="flex-end" className={classes.link}>
                             <Grid item>
-                                <Link component={RouterLink} to={"/register"} variant="body2">
-                                    Vous n'avez pas de compte? S'enregister
+                                <Link component={RouterLink} to={"/"} variant="body2">
+                                    Retourner à la page de connexion
                                 </Link>
                             </Grid>
                         </Grid>
                     </Container>
                 </Grid>
+                <Dialog open={errorModalOpen} onClose={() => {
+                    setErrorModalOpen(false)
+                }}>
+                    <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Erreur réseau: impossible de communiquer avec le serveur
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {
+                            setErrorModalOpen(false)
+                        }} color="primary">
+                            J'ai compris
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Grid>
         );
 }

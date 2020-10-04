@@ -1,6 +1,5 @@
 package com.power222.tuimspfcauppbj.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.controller.AuthenticationController;
 import com.power222.tuimspfcauppbj.model.PasswordDTO;
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,19 +37,13 @@ public class AuthenticationControllerTests {
 
     private PasswordDTO dto;
 
-    private MockHttpServletRequestBuilder passwordRequest;
-
     @BeforeEach
-    void beforeEach() throws JsonProcessingException {
+    void beforeEach() {
         dto = PasswordDTO.builder()
                 .oldPassword("password")
                 .newPassword("motdepasse")
-                .userId(1L)
+                .username("admin")
                 .build();
-
-        passwordRequest = put("/auth/password")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(dto));
     }
 
     @Test
