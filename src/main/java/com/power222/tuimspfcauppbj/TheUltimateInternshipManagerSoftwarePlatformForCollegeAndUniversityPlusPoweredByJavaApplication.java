@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj;
 
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
+import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.*;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -35,12 +36,14 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
         private final InternshipOfferRepository internshipRepo;
+        private final StudentApplicationRepository appliRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
             this.internshipRepo = internshipRepo;
+            this.appliRepo = appliRepo;
         }
 
         @Override
@@ -62,6 +65,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .email("power@gmail.ca")
                     .phoneNumber("911")
                     .address("9310 Lasalle")
+                    .resumes(Collections.singletonList(Resume.builder()
+                            .name("testResumeFileName XX")
+                            .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/1.pdf")).readAllBytes())))
+                            .reviewed(true)
+                            .approuved(true)
+                            .build()))
                     .build());
 
             var e = userRepo.saveAndFlush(Employer.builder()
@@ -104,9 +113,10 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             }
 
+            InternshipOffer o = null;
             //Generating offers for offer assignement live testing
             for (int i = 1; i < 7; i++) {
-                internshipRepo.saveAndFlush(InternshipOffer.builder()
+                o = internshipRepo.saveAndFlush(InternshipOffer.builder()
                         .title("testInternship " + i)
                         .description("Some basic description " + i)
                         .nbOfWeeks(15)
@@ -120,6 +130,13 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
                         .build());
             }
+
+            userRepo.saveAndFlush(s.toBuilder()
+                    .applications(Collections.singletonList(StudentApplication.builder()
+                            .resume(s.getResumes().get(0))
+                            .offer(o)
+                            .student(s)
+                            .build())).build());
 
         }
     }

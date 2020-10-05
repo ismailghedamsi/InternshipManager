@@ -37,10 +37,10 @@ public class InternshipOffer {
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ManyToMany
     @JoinTable(name = "OFFER_ALLOWED_STUDENT")
-    @JsonIgnoreProperties({"appliedOffers", "resumes", "allowedOffers"})
+    @JsonIgnoreProperties({"applications", "resumes", "allowedOffers"})
     private List<Student> allowedStudents;
 
-    @ManyToMany(mappedBy = "appliedOffers")
-    @JsonIgnoreProperties({"appliedOffers", "resumes", "allowedOffers"})
-    private List<Student> appliedStudents;
+    @OneToMany(mappedBy = "offer")
+    @JsonIgnoreProperties({"offer"})
+    private List<StudentApplication> applications;
 }
