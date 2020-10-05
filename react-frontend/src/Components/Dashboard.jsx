@@ -8,6 +8,7 @@ import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
 import ListCV from "./ListCV";
 import OfferAssignements from "./Manager/OfferAssignements";
+import ApplyStage from "./ApplyStage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +42,7 @@ export default function Dashboard(props) {
                                         role={"admin"}/>
                     <Route exact={true} path="/dashboard/upload" component={UploadCV}/>
                     <Route exact={true} path="/dashboard/listcv" component={ListCV}/>
+                    <Route exact={true} path="/dashboard/stagelist" component={ApplyStage}/>
                 </Switch>
             </div>
             <Footer/>
