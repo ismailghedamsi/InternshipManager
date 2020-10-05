@@ -113,7 +113,7 @@ export default function OfferAssignements() {
             >
                 <Grid item xs={4} className={classes.resumeList}>
                     <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                        En attente d'approbation
+                        Assignation des offres
                     </Typography>
                     {offers.length > 0 && offers.map((offer, i) => (
                         <div key={i} style={{width: "80%"}}>
