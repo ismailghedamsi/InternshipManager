@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,8 @@ public class StudentService {
 
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRole("student");
+        student.setResumes(Collections.emptyList());
+        student.setAppliedOffers(Collections.emptyList());
         return Optional.of(studentRepo.saveAndFlush(student));
     }
 

@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class InternshipOfferService {
         employer.getOffers().add(offer);
         offer.setEmployer(employer);
         offer.setReviewState(InternshipOffer.ReviewState.PENDING);
+        offer.setAllowedStudents(Collections.emptyList());
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
     }
 

@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ public class EmployerService {
 
         employer.setPassword(passwordEncoder.encode(employer.getPassword()));
         employer.setRole("employer");
+        employer.setOffers(Collections.emptyList());
         return Optional.of(employerRepo.saveAndFlush(employer));
     }
 
