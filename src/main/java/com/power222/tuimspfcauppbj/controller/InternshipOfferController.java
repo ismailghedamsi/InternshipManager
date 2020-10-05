@@ -34,6 +34,11 @@ public class InternshipOfferController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/employer/{username}")
+    public List<InternshipOffer> getOffersByEmployerUsername(@PathVariable String username) {
+        return offerService.getInternshipOffersOfEmployer(username);
+    }
+
     @PostMapping
     public ResponseEntity<InternshipOffer> createOffer(@RequestBody InternshipOffer newOffer) {
         return offerService.uploadInternshipOffer(newOffer)
