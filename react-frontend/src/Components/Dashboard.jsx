@@ -3,14 +3,14 @@ import Navbar from "./Header/Navbar";
 import Footer from "./Footer";
 import {makeStyles} from "@material-ui/core/styles";
 import {RoleProtectedRoute} from "./Routes";
+import ResumeApprobation from "./Manager/ResumeApprobation";
 import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
 import ListCV from "./ListCV";
-import CreateStage from "./OffreStage/CreateStage";
-import ListOffer from "./OffreStage/ListOffer";
-import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
+import ListOffer from "./OffreStage/ListOffer";
 import ApplyStage from "./ApplyStage";
+import CreateStage from "./OffreStage/CreateStage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,6 +47,7 @@ export default function Dashboard(props) {
                     <Route exact={true} path="/dashboard/createstage" component={CreateStage}/>
                     <Route exact={true} path="/dashboard/listoffer" component={ListOffer}/>
                     <Route exact={true} path="/dashboard/stagelist" component={ApplyStage}/>
+
                 </Switch>
             </div>
             <Footer/>
