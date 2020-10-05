@@ -3,15 +3,9 @@ package com.power222.tuimspfcauppbj.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 @Data
 @Entity
@@ -40,7 +34,13 @@ public class InternshipOffer {
     @JsonIgnoreProperties("offers")
     private Employer employer;
 
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @ManyToMany
-    @JsonIgnoreProperties({"appliedOffers", "resumes"})
+    @JoinTable(name = "OFFER_ALLOWED_STUDENT")
+    @JsonIgnoreProperties({"appliedOffers", "resumes", "allowedOffers"})
     private List<Student> allowedStudents;
+
+    @ManyToMany(mappedBy = "appliedOffers")
+    @JsonIgnoreProperties({"appliedOffers", "resumes", "allowedOffers"})
+    private List<Student> appliedStudents;
 }

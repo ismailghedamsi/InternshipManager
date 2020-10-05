@@ -44,11 +44,15 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAll();
     }
 
+    public List<InternshipOffer> getOfferByAllowedStudentId(long studentId) {
+        return internshipOfferRepository.findAllByAllowedStudentsId(studentId);
+    }
+
     public Optional<InternshipOffer> getInternshipOfferById(long id) {
         return internshipOfferRepository.findById(id);
     }
 
-    public List<InternshipOffer> getInternshipOffersOfEmployer(String username){
+    public List<InternshipOffer> getInternshipOffersOfEmployer(String username) {
         return internshipOfferRepository.findByEmployerUsername(username);
     }
 

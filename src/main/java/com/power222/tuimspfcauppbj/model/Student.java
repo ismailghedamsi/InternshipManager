@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -30,7 +27,13 @@ public class Student extends User {
     @JsonIgnoreProperties({"file", "owner"})
     private List<Resume> resumes;
 
+    @ManyToMany(mappedBy = "allowedStudents")
+    @JsonIgnoreProperties({"joinedFile", "employer", "appliedStudents", "allowedStudents"})
+    private List<InternshipOffer> allowedOffers;
+
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @ManyToMany
-    @JsonIgnoreProperties({"joinedFile", "employer"})
+    @JoinTable(name = "OFFER_APPLIED_STUDENT")
+    @JsonIgnoreProperties({"joinedFile", "employer", "appliedStudents", "allowedStudents"})
     private List<InternshipOffer> appliedOffers;
 }

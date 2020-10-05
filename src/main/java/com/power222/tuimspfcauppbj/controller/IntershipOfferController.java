@@ -22,6 +22,11 @@ public class IntershipOfferController {
         return offerService.getAllInternshipOffers();
     }
 
+    @GetMapping("/student/{id}")
+    public List<InternshipOffer> getOfferByAllowedStudentId(@PathVariable long id) {
+        return offerService.getOfferByAllowedStudentId(id);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<InternshipOffer> getOffer(@PathVariable long id) {
         return offerService.getInternshipOfferById(id)
