@@ -56,7 +56,7 @@ class InternshipOfferServiceTests {
                 .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
                 .description("description").employer(employer).joinedFile(pdfContent)
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                .nbOfWeeks(8).salary(20).title("Title").build();
+                .nbOfWeeks(8).salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ class InternshipOfferServiceTests {
                 .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
                 .description("description").employer(new Employer()).joinedFile(pdfContent)
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                .nbOfWeeks(8).salary(20).title("Title").build();
+                .nbOfWeeks(8).salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -223,7 +223,7 @@ class InternshipOfferServiceTests {
     void updateOfferWithNonexistentId() {
         var actual = service.updateInternshipOffer(expectedOffer.getId(), expectedOffer);
 
-        assertThat(actual).contains(expectedOffer);
+        assertThat(actual).isEmpty();
     }
 
     @Test
