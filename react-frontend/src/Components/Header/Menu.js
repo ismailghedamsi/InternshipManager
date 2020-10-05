@@ -17,6 +17,16 @@ export const Menu = [
         title: 'Mes CV',
         url: '/dashboard/listcv',
         role: 'student'
+    },
+    {
+        title: 'Créer une offre',
+        url: '/dashboard/createstage',
+        role: 'employer'
+    },
+    {
+        title: 'Liste des offres',
+        url: '/dashboard/listoffer',
+        role: 'employer'
     }
     ,
     {
