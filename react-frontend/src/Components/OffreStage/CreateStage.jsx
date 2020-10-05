@@ -237,7 +237,7 @@ export default function CreateStuff(props) {
                                     className={classes.submit}
                                     disabled={isSubmitting}
                                 >
-                                    S'enregistrer
+                                    Créer l'offre de stage
                                 </Button>
                             </Form>
                         )}
