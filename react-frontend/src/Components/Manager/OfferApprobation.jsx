@@ -190,7 +190,7 @@ export default function OfferApprobation() {
                 </DialogActions>
             </Dialog>
             <Dialog open={reasonModalOpen} onClose={() => setReasonModalOpen(false)} fullWidth maxWidth={"md"}>
-                <DialogTitle id="alert-dialog-title">{"Refus d'un CV"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"Refus d'une offre de stage"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
