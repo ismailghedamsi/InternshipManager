@@ -64,6 +64,7 @@ export default function OfferApprobation() {
     const classes = useStyles();
     const [offers, setOffers] = useState([{title: '', joinedFile: '', employer: {companyName: "", contactName: ""}}]);
     const [currentDoc, setCurrentDoc] = useState('');
+    const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
     const [numPages, setNumPages] = useState(0);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const [reasonModalOpen, setReasonModalOpen] = useState(false);
@@ -135,7 +136,10 @@ export default function OfferApprobation() {
                                     type={"button"}
                                     className={[classes.linkButton, classes.fileButton].join(' ')}
                                     autoFocus={i === 0}
-                                    onClick={() => setCurrentDoc(item.joinedFile)}
+                                    onClick={() => {
+                                        setCurrentDoc(item.joinedFile);
+                                        setCurrentOfferIndex(i);
+                                    }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                         {" " + item.title + " "}
@@ -145,6 +149,9 @@ export default function OfferApprobation() {
                                     </Typography>
                                 </button>
                                 <hr/>
+                                {currentOfferIndex === i &&
+                                <div>Hello</div>
+                                }
                             </div>
                         ))
                     }
