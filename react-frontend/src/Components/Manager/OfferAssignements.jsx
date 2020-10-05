@@ -70,7 +70,7 @@ export default function OfferAssignements() {
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/offers")
+        axios.get("http://localhost:8080/offers/approved")
             .catch(() => {
                 setErrorModalOpen(true)
             })

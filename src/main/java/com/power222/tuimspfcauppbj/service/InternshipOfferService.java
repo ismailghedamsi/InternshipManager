@@ -51,11 +51,15 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAllByReviewStatePending();
     }
 
+    public List<InternshipOffer> getApprovedInternshipOffers() {
+        return internshipOfferRepository.findAllByReviewStateApproved();
+    }
+
     public Optional<InternshipOffer> getInternshipOfferById(long id) {
         return internshipOfferRepository.findById(id);
     }
 
-    public List<InternshipOffer> getInternshipOffersOfEmployer(String username){
+    public List<InternshipOffer> getInternshipOffersOfEmployer(String username) {
         return internshipOfferRepository.findByEmployerUsername(username);
     }
 
