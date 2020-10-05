@@ -55,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
     page: {
         margin: theme.spacing(1, 0)
     },
+    offreInfos: {
+        margin: theme.spacing(1, 3, 2)
+    },
     main: {
         backgroundColor: "#fff"
     }
@@ -148,10 +151,34 @@ export default function OfferApprobation() {
                                         {item.employer.companyName} {item.employer.contactName}
                                     </Typography>
                                 </button>
-                                <hr/>
                                 {currentOfferIndex === i &&
-                                <div>Hello</div>
+                                <div className={[classes.offreInfos]}>
+                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
+                                        {"Date limite d'application : " + (item.limitDateToApply + "").split("T")[0]}
+                                    </Typography>
+
+                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
+                                        {"Date de création de l'offre : " + (item.creationDate + "").split("T")[0]}
+                                    </Typography>
+
+                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
+                                        {"Nombre de semaines : " + item.nbOfWeeks}
+                                    </Typography>
+
+                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
+                                        {"Salaire horaire : $ " + item.salary}
+                                    </Typography>
+
+                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
+                                        {"Horaire : " + (item.beginHour < 10 ? "0" : "") + item.beginHour + ":00 - " + item.endHour + ":00"}
+                                    </Typography>
+
+                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
+                                        {"Description de l'offre : " + item.description}
+                                    </Typography>
+                                </div>
                                 }
+                                <hr/>
                             </div>
                         ))
                     }
