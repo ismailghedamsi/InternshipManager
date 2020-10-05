@@ -27,6 +27,13 @@ a{
     padding: 20px;
 }
 
+.NavbarItem{
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .nav-links:hover{
     color: black;
 }

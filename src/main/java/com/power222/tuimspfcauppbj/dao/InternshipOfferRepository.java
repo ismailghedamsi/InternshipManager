@@ -8,7 +8,11 @@ import java.util.List;
 
 @Repository
 public interface InternshipOfferRepository extends JpaRepository<InternshipOffer, Long> {
-        List<InternshipOffer> findByEmployerUsername(String username);
-        List<InternshipOffer> findByAllowedStudentsContains(Student student);
-        List<InternshipOffer> findAllByReviewStatePending();
+    List<InternshipOffer> findByEmployerUsername(String username);
+    List<InternshipOffer> findByAllowedStudentsContains(Student student);
+    List<InternshipOffer> findAllByReviewState(InternshipOffer.ReviewState reviewState);
+
+    default List<InternshipOffer> findAllByReviewStatePending() {
+        return findAllByReviewState(InternshipOffer.ReviewState.PENDING);
+    }
 }

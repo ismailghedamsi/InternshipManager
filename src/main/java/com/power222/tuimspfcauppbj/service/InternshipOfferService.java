@@ -31,6 +31,7 @@ public class InternshipOfferService {
             return  Optional.empty();
         employer.getOffers().add(offer);
         offer.setEmployer(employer);
+        offer.setReviewState(InternshipOffer.ReviewState.PENDING);
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
     }
 

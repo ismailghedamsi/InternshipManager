@@ -22,6 +22,11 @@ public class InternshipOfferController {
         return offerService.getAllInternshipOffers();
     }
 
+    @GetMapping("/pending")
+    public List<InternshipOffer> getOffersWithPendingApproval() {
+        return offerService.getInternshipOffersWithPendingApproval();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<InternshipOffer> getOffer(@PathVariable long id) {
         return offerService.getInternshipOfferById(id)
