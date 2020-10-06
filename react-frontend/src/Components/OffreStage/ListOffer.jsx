@@ -12,6 +12,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import Link from "@material-ui/core/Link";
+import {useHistory} from "react-router-dom";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
@@ -44,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#888",
         padding: theme.spacing(2, 0),
     },
-    listOffers: {
+    list: {
         height: "90vh",
         overflow: "auto",
     },
@@ -64,7 +66,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ListOffer() {
     const classes = useStyles();
+    const history = useHistory();
     const [currentDoc, setCurrentDoc] = useState('');
+    const [numPages, setNumPages] = useState(null);
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
+    const [currentOfferId, setCurrentOfferId] = useState(-1);
     const [offers, setOffers] = useState([{
         title: '',
         description: '',
@@ -75,10 +81,10 @@ export default function ListOffer() {
         creationDate: '',
         limitDateToApply: '',
         joinedFile: "",
-        owner: {}
+        owner: {},
+        applications: [],
+        id: null
     }]);
-    const [numPages, setNumPages] = useState(null);
-    const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -95,6 +101,7 @@ export default function ListOffer() {
 
     useEffect(() => {
         if (offers[0]) {
+            setCurrentOfferId(offers[0].id)
             if (offers[0].joinedFile !== '')
                 setCurrentDoc(offers[0].joinedFile)
         } else {
@@ -125,7 +132,7 @@ export default function ListOffer() {
                 spacing={0}
                 style={{alignItems: "stretch"}}
             >
-                <Grid item xs={5} className={classes.listResumes}>
+                <Grid item xs={5} className={classes.list}>
                     <Typography variant="h4" id="title">Mes offres de stage</Typography>
                     {
                         offers.map((item, i) => (
@@ -142,33 +149,43 @@ export default function ListOffer() {
                                     className={[classes.linkButton, classes.fileButton].join(' ')}
                                     autoFocus={i === 0}
                                     onClick={() => {
+                                        setCurrentOfferId(item.id)
                                         setCurrentDoc(item.joinedFile)
                                     }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"}>
-                                        {`Titre :${item.title}`}
+                                        {`Titre :${item.title} ${item.id}`}
                                     </Typography>
                                     <Typography color={"textPrimary"} variant={"body2"}>
                                         {`Description: ${item.description}`}
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"}>
-                                        {`Nombre de semaine: ${item.nbOfWeeks}`}
-                                    </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"}>
-                                        {`Salaire: ${item.salary}`}
-                                    </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"}>
-                                        {`Heure de début: ${item.beginHour}h00`}
-                                    </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"}>
-                                        {`Heure de fin: ${item.endHour}h00`}
-                                    </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"}>
-                                        {`Date de création: ${parseDate(item.creationDate)}`}
-                                    </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"}>
-                                        {`Date limite pour appliquer : ${parseDate(item.limitDateToApply)}`}
-                                    </Typography>
+                                    {currentOfferId === item.id &&
+                                    <div>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Nombre de semaine: ${item.nbOfWeeks}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Salaire: ${item.salary}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Heure de début: ${item.beginHour}h00`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Heure de fin: ${item.endHour}h00`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Date de création: ${parseDate(item.creationDate)}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Date limite pour appliquer : ${parseDate(item.limitDateToApply)}`}
+                                        </Typography>
+                                    </div>
+                                    }
+                                    {item.applications.length !== 0 &&
+                                    <Link variant={"body1"}
+                                          onClick={() => history.push("/dashboard/applications", {offerId: item.id})}>Voir
+                                        les applications</Link>
+                                    }
                                 </button>
                                 <hr/>
                             </div>

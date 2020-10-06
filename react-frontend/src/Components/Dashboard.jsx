@@ -11,6 +11,7 @@ import OfferAssignements from "./Manager/OfferAssignements";
 import ListOffer from "./OffreStage/ListOffer";
 import ApplyStage from "./ApplyStage";
 import CreateStage from "./OffreStage/CreateStage";
+import ApplicationList from "./ApplicationList";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,6 +48,7 @@ export default function Dashboard(props) {
                     <Route exact={true} path="/dashboard/createstage" component={CreateStage}/>
                     <Route exact={true} path="/dashboard/listoffer" component={ListOffer}/>
                     <Route exact={true} path="/dashboard/stagelist" component={ApplyStage}/>
+                    <Route exact={true} path="/dashboard/applications" component={ApplicationList}/>
                 </Switch>
             </div>
             <Footer/>
