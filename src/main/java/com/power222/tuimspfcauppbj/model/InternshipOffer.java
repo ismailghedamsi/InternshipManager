@@ -32,6 +32,8 @@ public class InternshipOffer {
     private int endHour;
     private Date creationDate;
     private Date limitDateToApply;
+    private ReviewState reviewState;
+    private String reasonForRejection;
 
     @Lob
     private String joinedFile;
@@ -43,4 +45,8 @@ public class InternshipOffer {
     @ManyToMany
     @JsonIgnoreProperties({"appliedOffers", "resumes"})
     private List<Student> allowedStudents;
+
+    public enum ReviewState {
+        PENDING, APPROVED, DENIED
+    }
 }

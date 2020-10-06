@@ -3,12 +3,13 @@ import Navbar from "./Header/Navbar";
 import Footer from "./Footer";
 import {makeStyles} from "@material-ui/core/styles";
 import {RoleProtectedRoute} from "./Routes";
+import ResumeApprobation from "./Manager/ResumeApprobation";
+import OfferApprobation from "./Manager/OfferApprobation";
 import {Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
 import ListCV from "./ListCV";
 import CreateStage from "./OffreStage/CreateStage";
 import ListOffer from "./OffreStage/ListOffer";
-import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +37,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/approbation/cv"
                                         component={ResumeApprobation}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/approbation/offres"
+                                        component={OfferApprobation}
                                         role={"admin"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/assignement/cv"

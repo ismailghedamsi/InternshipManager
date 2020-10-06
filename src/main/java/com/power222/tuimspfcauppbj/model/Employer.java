@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class Employer extends User {
     private String address;
     private String email;
 
-    @OneToMany(mappedBy = "employer",fetch = FetchType.LAZY)
+    @OneToMany
     @JsonIgnoreProperties("employer")
     private List<InternshipOffer> offers;
 

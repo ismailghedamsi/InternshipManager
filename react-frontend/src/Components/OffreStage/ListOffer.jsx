@@ -125,7 +125,7 @@ export default function ListOffer() {
                 spacing={0}
                 style={{alignItems: "stretch"}}
             >
-                <Grid item xs={5} className={classes.listResumes}>
+                <Grid item xs={5} className={classes.listOffers}>
                     <Typography variant="h4" id="title">Mes offres de stage</Typography>
                     {
                         offers.map((item, i) => (

@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public class InternshipOfferService {
         }
         employer.getOffers().add(offer);
         offer.setEmployer(employer);
+        offer.setReviewState(InternshipOffer.ReviewState.PENDING);
+        offer.setAllowedStudents(Collections.emptyList());
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
     }
 
@@ -44,21 +47,27 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAll();
     }
 
+    public List<InternshipOffer> getInternshipOffersWithPendingApproval() {
+        return internshipOfferRepository.findAllByReviewStatePending();
+    }
+
+    public List<InternshipOffer> getApprovedInternshipOffers() {
+        return internshipOfferRepository.findAllByReviewStateApproved();
+    }
+
     public Optional<InternshipOffer> getInternshipOfferById(long id) {
         return internshipOfferRepository.findById(id);
     }
 
-    public List<InternshipOffer> getInternshipOffersOfEmployer(String username){
+    public List<InternshipOffer> getInternshipOffersOfEmployer(String username) {
         return internshipOfferRepository.findByEmployerUsername(username);
     }
 
-    public InternshipOffer updateInternshipOffer(long id, InternshipOffer offer) {
+    public Optional<InternshipOffer> updateInternshipOffer(long id, InternshipOffer offer) {
         return internshipOfferRepository.findById(id)
-                .map(oldOffer -> {
-                    offer.setId(oldOffer.getId());
-                    return internshipOfferRepository.saveAndFlush(offer);
-                })
-                .orElse(offer);
+                .map(oldOffer -> offer.toBuilder().id(oldOffer.getId()).build())
+                .filter(this::isOfferStateValid)
+                .map(newOffer -> internshipOfferRepository.saveAndFlush(newOffer));
     }
 
     public Optional<InternshipOffer> addOrRemoveStudentFromOffer(long offerId, long studentId) {
@@ -76,5 +85,15 @@ public class InternshipOfferService {
 
     public void deleteOfferById(long id) {
         internshipOfferRepository.deleteById(id);
+    }
+
+    private boolean isOfferStateValid(InternshipOffer offer) {
+        if (offer.getReviewState() == InternshipOffer.ReviewState.DENIED) {
+            if (offer.getReasonForRejection() == null)
+                return false;
+            return !offer.getReasonForRejection().isBlank();
+        }
+
+        return true;
     }
 }

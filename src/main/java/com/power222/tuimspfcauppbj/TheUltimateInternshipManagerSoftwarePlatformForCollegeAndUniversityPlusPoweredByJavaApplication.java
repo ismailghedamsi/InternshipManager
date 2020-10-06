@@ -118,6 +118,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .joinedFile("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
                         .employer(e)
                         .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
+                        .reviewState(InternshipOffer.ReviewState.PENDING)
                         .build());
             }
 

@@ -49,6 +49,8 @@ public class StudentServiceTests {
                 .email("simon@cal.qc.ca")
                 .phoneNumber("5144816959")
                 .address("6600 St-Jacques Ouest")
+                .appliedOffers(Collections.EMPTY_LIST)
+                .resumes(Collections.EMPTY_LIST)
                 .build();
     }
 

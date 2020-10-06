@@ -9,6 +9,11 @@ export const Menu = [
         role: 'admin'
     },
     {
+        title: 'Approbation offres',
+        url: '/dashboard/approbation/offres',
+        role: 'admin'
+    },
+    {
         title: 'Téléverser un CV',
         url: '/dashboard/upload',
         role: 'student'
@@ -33,5 +38,5 @@ export const Menu = [
         title: 'Assignation Offres',
         url: '/dashboard/assignement/cv',
         role: 'admin'
-    }
+    },
 ]
