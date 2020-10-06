@@ -12,6 +12,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import AuthenticationService from "../js/AuthenticationService";
+import {Field, Form, Formik} from "formik";
+import {Select} from "formik-material-ui";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import * as yup from "yup";
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
     linkButton: {
@@ -29,7 +34,18 @@ const useStyles = makeStyles((theme) => ({
         '&:focus': {
             outline: "none",
         }
-    }, viewbox: {
+    },
+    fileButton: {
+        '&:focus': {
+            outline: "none",
+            backgroundColor: theme.palette.secondary.light,
+            display: "inline"
+        }
+    },
+    buttonDiv: {
+        display: "inline"
+    },
+    viewbox: {
         height: "90vh",
         overflow: "auto",
         backgroundColor: "#888",
@@ -56,15 +72,17 @@ const useStyles = makeStyles((theme) => ({
 export default function ApplyStage() {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState('');
-    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
+    const [offers, setOffers] = useState([{title: '', joinedFile: '', employer: {}}]);
+    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}, id: -1}]);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
+    const [reasonModalOpen, setReasonModalOpen] = useState(false);
+    const [currentOfferId, setCurrentOfferId] = useState(-1);
 
     useEffect(() => {
         const getData = async () => {
             const result = await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
-                    console.log("bullshit")
                     setErrorModalOpen(true)
                 })
             setResumes(result.data)
@@ -73,12 +91,24 @@ export default function ApplyStage() {
     }, [])
 
     useEffect(() => {
-        if (resumes[0]) {
-            if (resumes[0].file !== '' && resumes[0].file !== undefined && resumes[0].file !== null)
-                setCurrentDoc(resumes[0].file)
+        const getData = async () => {
+            const result = await axios.get("http://localhost:8080/offers/student/" + AuthenticationService.getCurrentUser().id)
+                .catch(() => {
+                    setErrorModalOpen(true)
+                })
+            setOffers(result.data)
+        }
+        getData()
+    }, [])
+
+    useEffect(() => {
+        if (offers[0]) {
+            if (offers[0].joinedFile !== '' && offers[0].joinedFile !== undefined && offers[0].joinedFile !== null)
+                setCurrentDoc(offers[0].joinedFile)
         } else
             setCurrentDoc('')
-    }, [resumes])
+    }, [offers])
+
 
     return (
         <Container component="main" className={classes.container}>
@@ -90,14 +120,34 @@ export default function ApplyStage() {
                 <Grid item xs={5} className={classes.listResumes}>
                     <Typography variant="h4" id="title">Les stages</Typography>
                     {
-                        resumes.map((item, i) => (
+                        offers.map((item, i) => (
                             <div key={i}>
                                 <div className={classes.buttonDiv}>
                                     <button
                                         type={"button"}
                                         className={[classes.linkButton].join(' ')}
+                                        style={{marginRight: 5}}
+                                        onClick={() => {
+                                            setCurrentDoc(item.joinedFile)
+                                            setReasonModalOpen(true)
+                                        }}
                                     ><i className="fa fa-check-square" style={{color: "green"}}/></button>
                                 </div>
+                                <button
+                                    type={"button"}
+                                    className={[classes.linkButton, classes.fileButton].join(' ')}
+                                    autoFocus={i === 0}
+                                >
+                                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                        {item.title + " "}
+                                    </Typography>
+                                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                                        {item.employer.companyName}
+                                    </Typography>
+                                    <Typography>
+                                        {AuthenticationService.getCurrentUser().firstName}
+                                    </Typography>
+                                </button>
                             </div>
                         ))
                     }
@@ -134,6 +184,68 @@ export default function ApplyStage() {
                 <DialogActions>
                     <Button onClick={() => setErrorModalOpen(false)} color="primary">
                         J'ai compris
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={reasonModalOpen} onClose={() => setReasonModalOpen(false)} fullWidth maxWidth={"md"}>
+                <DialogTitle id="alert-dialog-title">{"Veuillez choisir un CV :"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description" component={"div"}>
+                        <Formik
+                            onSubmit={async (values) => {
+                                return this.readFileAsync(values.file).then((file) => {
+                                    let dto = {...values};
+                                    dto.file = file;
+                                    return axios.post("http://localhost:8080/application/" + offers +, dto)
+                                        .then((e) => this.props.history.push("/dashboard/listcv"))
+                                })
+                            }}
+                            validateOnBlur={false}
+                            validateOnChange={false}
+                            enableReinitialize={true}
+                            validationSchema={yup.object()
+                                .shape({
+                                    resumes: yup.mixed().required("Ce champ est requis")
+                                })}
+                            initialValues={{
+                                resumes: resumes[0].id,
+                            }}
+                        >
+                            {({submitForm, isSubmitting}) => (
+                                <Form>
+                                    <Field
+                                        component={Select}
+                                        name="resumes"
+                                        fullWidth
+                                        style={{marginBottom: "10px"}}
+                                    >
+                                        {
+                                            resumes.map((item, i) => (
+                                                <MenuItem key={i} value={item.id}>{item.name}</MenuItem>
+                                            ))
+                                        }
+                                    </Field>
+                                    {isSubmitting && <LinearProgress/>}
+                                    <Button
+                                        id="buttonSubmit"
+                                        type={"submit"}
+                                        variant="contained"
+                                        fullWidth
+                                        size={"large"}
+                                        color="primary"
+                                        disabled={isSubmitting}
+                                        onClick={submitForm}
+                                    >
+                                        Envoyer ma candidature
+                                    </Button>
+                                </Form>
+                            )}
+                        </Formik>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setReasonModalOpen(false)} color={"primary"}>
+                        Annuler
                     </Button>
                 </DialogActions>
             </Dialog>

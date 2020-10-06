@@ -193,7 +193,7 @@ export default function ResumeApprobation() {
 
                             validationSchema={yup.object()
                                 .shape({
-                                    reasonForRejection: yup.string().trim().max(255).required("ce champ est requis")
+                                    reasonForRejection: yup.string().trim().max(255).required("Ce champ est requis")
                                 })}
                             validateOnBlur={false}
                             validateOnChange={false}

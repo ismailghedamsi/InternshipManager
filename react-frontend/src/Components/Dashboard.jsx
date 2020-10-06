@@ -47,7 +47,6 @@ export default function Dashboard(props) {
                     <Route exact={true} path="/dashboard/createstage" component={CreateStage}/>
                     <Route exact={true} path="/dashboard/listoffer" component={ListOffer}/>
                     <Route exact={true} path="/dashboard/stagelist" component={ApplyStage}/>
-
                 </Switch>
             </div>
             <Footer/>
