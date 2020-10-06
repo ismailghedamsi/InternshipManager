@@ -47,6 +47,10 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAll();
     }
 
+    public List<InternshipOffer> getOfferByAllowedStudentId(long studentId) {
+        return internshipOfferRepository.findAllByAllowedStudentsId(studentId);
+    }
+
     public List<InternshipOffer> getInternshipOffersWithPendingApproval() {
         return internshipOfferRepository.findAllByReviewStatePending();
     }

@@ -39,4 +39,9 @@ export const Menu = [
         url: '/dashboard/assignement/cv',
         role: 'admin'
     },
+    {
+        title: 'Offre de stages',
+        url: '/dashboard/stagelist',
+        role: 'student'
+    }
 ]

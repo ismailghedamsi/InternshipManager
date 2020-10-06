@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -23,7 +24,7 @@ public class Employer extends User {
     private String address;
     private String email;
 
-    @OneToMany
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("employer")
     private List<InternshipOffer> offers;
 

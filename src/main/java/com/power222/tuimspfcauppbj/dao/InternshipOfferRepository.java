@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface InternshipOfferRepository extends JpaRepository<InternshipOffer, Long> {
     List<InternshipOffer> findByEmployerUsername(String username);
-
+    List<InternshipOffer> findAllByAllowedStudentsId(long id);
     List<InternshipOffer> findAllByReviewState(InternshipOffer.ReviewState reviewState);
 
     default List<InternshipOffer> findAllByReviewStatePending() {

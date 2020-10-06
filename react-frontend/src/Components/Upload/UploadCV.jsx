@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import {TextField} from "formik-material-ui";
 import './UploadCV.css'
 import LinearProgress from "@material-ui/core/LinearProgress";
+import * as yup from "yup";
 
 const useStyles = (theme) => ({
     container: {
@@ -63,14 +64,15 @@ class UploadCV extends Component {
                             enableReinitialize={true}
                             validate={(values) => {
                                 const errors = {};
-                                if (values.name.length === 0) {
-                                    errors.name = "Le nom du fichier ne doit pas être vite"
-                                }
                                 if (values.file.type !== "application/pdf") {
                                     errors.file = "Le fichier doit être de type PDF"
                                 }
                                 return errors;
                             }}
+                            validationSchema={yup.object()
+                                .shape({
+                                    name: yup.string().trim().max(255).required("Ce champ est requis")
+                                })}
                             initialValues={{
                                 name: "",
                                 file: ""

@@ -39,7 +39,7 @@ public class StudentService {
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRole("student");
         student.setResumes(Collections.emptyList());
-        student.setAppliedOffers(Collections.emptyList());
+        student.setApplications(Collections.emptyList());
         return Optional.of(studentRepo.saveAndFlush(student));
     }
 
