@@ -35,6 +35,15 @@ const useStyles = makeStyles((theme) => ({
             outline: "none",
         }
     },
+    appliedMark: {
+        fontSize: "1.5rem",
+        backgroundColor: "transparent",
+        border: "none",
+        margin: 0,
+        padding: 5,
+        borderRadius: 0,
+        textAlign: "left",
+    },
     fileButton: {
         '&:focus': {
             outline: "none",
@@ -72,8 +81,14 @@ const useStyles = makeStyles((theme) => ({
 export default function ApplyStage() {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState('');
-    const [offers, setOffers] = useState([{title: '', joinedFile: '', employer: {}, id: -1}]);
-    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}, id: -1}]);
+    const [offers, setOffers] = useState([{
+        id: -1,
+        title: '',
+        joinedFile: '',
+        employer: {},
+        applications: [{student: {id: null}}]
+    }]);
+    const [resumes, setResumes] = useState([{id: -1, name: '', file: '', owner: {}}]);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const [reasonModalOpen, setReasonModalOpen] = useState(false);
@@ -103,11 +118,22 @@ export default function ApplyStage() {
 
     useEffect(() => {
         if (offers[0]) {
+            setCurrentOfferId(offers[0].id)
             if (offers[0].joinedFile !== '' && offers[0].joinedFile !== undefined && offers[0].joinedFile !== null)
                 setCurrentDoc(offers[0].joinedFile)
         } else
             setCurrentDoc('')
     }, [offers])
+
+    function hasStudentAppliedOnOffer(offer, student) {
+        return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
+    }
+
+    function parseDate(date) {
+        const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        const d = new Date(date);
+        return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
+    }
 
 
     return (
@@ -122,31 +148,69 @@ export default function ApplyStage() {
                     {
                         offers.map((item, i) => (
                             <div key={i}>
+                                {!hasStudentAppliedOnOffer(item, AuthenticationService.getCurrentUser()) &&
                                 <div className={classes.buttonDiv}>
                                     <button
                                         type={"button"}
-                                        className={[classes.linkButton].join(' ')}
+                                        className={classes.linkButton}
                                         style={{marginRight: 5}}
                                         onClick={() => {
                                             setCurrentOfferId(item.id);
                                             setReasonModalOpen(true);
                                         }}
-                                    ><i className="fa fa-check-square" style={{color: "green"}}/></button>
+                                    ><i className="fa fa-share-square-o"/></button>
                                 </div>
+                                }
+                                {hasStudentAppliedOnOffer(item, AuthenticationService.getCurrentUser()) &&
+                                <div className={classes.buttonDiv}>
+                                    <i className={["fa fa-check-square", classes.appliedMark].join(' ')}
+                                       style={{color: "green", marginRight: 5}}/>
+                                </div>
+                                }
                                 <button
                                     type={"button"}
                                     className={[classes.linkButton, classes.fileButton].join(' ')}
                                     autoFocus={i === 0}
+                                    onClick={() => {
+                                        setCurrentOfferId(item.id);
+                                        setCurrentDoc(item.joinedFile)
+                                    }}
                                 >
+
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                         {item.title + " "}
                                     </Typography>
                                     <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
                                         {item.employer.companyName}
                                     </Typography>
-                                    <Typography>
-                                        {AuthenticationService.getCurrentUser().firstName}
-                                    </Typography>
+                                    {currentOfferId === item.id &&
+                                    <div>
+                                        <Typography color={"textPrimary"} variant={"body1"}>
+                                            {`Titre :${item.title}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Description: ${item.description}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Nombre de semaine: ${item.nbOfWeeks}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Salaire: ${item.salary}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Heure de début: ${item.beginHour}h00`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Heure de fin: ${item.endHour}h00`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Date de création: ${parseDate(item.creationDate)}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                            {`Date limite pour appliquer : ${parseDate(item.limitDateToApply)}`}
+                                        </Typography>
+                                    </div>
+                                    }
                                 </button>
                             </div>
                         ))
@@ -194,7 +258,12 @@ export default function ApplyStage() {
                         <Formik
                             onSubmit={async (values) => {
                                 return axios.post("http://localhost:8080/application/" + currentOfferId + "/" + values.resumeId, {})
-                                    .then((e) => setReasonModalOpen(false))
+                                    .then((r) => {
+                                        const nextState = [...offers];
+                                        nextState.find(o => o.id === currentOfferId).applications.push(r.data)
+                                        setOffers(nextState);
+                                        setReasonModalOpen(false)
+                                    })
                             }}
                             validateOnBlur={false}
                             validateOnChange={false}
@@ -207,7 +276,7 @@ export default function ApplyStage() {
                                 resumeId: resumes[0].id,
                             }}
                         >
-                            {({submitForm, isSubmitting}) => (
+                            {({isSubmitting}) => (
                                 <Form>
                                     <Field
                                         component={Select}
@@ -230,7 +299,6 @@ export default function ApplyStage() {
                                         size={"large"}
                                         color="primary"
                                         disabled={isSubmitting}
-                                        onClick={submitForm}
                                     >
                                         Envoyer ma candidature
                                     </Button>

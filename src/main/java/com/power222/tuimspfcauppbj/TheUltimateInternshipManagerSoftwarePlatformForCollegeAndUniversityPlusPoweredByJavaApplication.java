@@ -55,6 +55,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .passwordExpired(true)
                     .build());
 
+            userRepo.saveAndFlush(User.builder()
+                    .username("admin2")
+                    .role("admin")
+                    .password(passwordEncoder.encode("password"))
+                    .build());
+
             var s = userRepo.saveAndFlush(Student.builder()
                     .username("etudiant")
                     .role("student")
