@@ -154,7 +154,7 @@ export default function ListOffer() {
                                     }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"}>
-                                        {`Titre :${item.title} ${item.id}`}
+                                        {`Titre :${item.title}`}
                                     </Typography>
                                     <Typography color={"textPrimary"} variant={"body2"}>
                                         {`Description: ${item.description}`}

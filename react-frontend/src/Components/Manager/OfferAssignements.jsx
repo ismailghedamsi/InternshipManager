@@ -70,7 +70,7 @@ export default function OfferAssignements() {
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/offers")
+        axios.get("http://localhost:8080/offers/approved")
             .catch(() => {
                 setErrorModalOpen(true)
             })
@@ -113,7 +113,7 @@ export default function OfferAssignements() {
             >
                 <Grid item xs={4} className={classes.resumeList}>
                     <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                        En attente d'approbation
+                        Assignation des offres
                     </Typography>
                     {offers.length > 0 && offers.map((offer, i) => (
                         <div key={i} style={{width: "80%"}}>
@@ -171,7 +171,7 @@ export default function OfferAssignements() {
                     <Document
                         onLoadSuccess={({numPages}) => setNumPages(numPages)}
                         error={"Veuillez choisir un fichier"}
-                        file={"data:application/pdf;base64," + currentDoc}
+                        file={currentDoc}
                     >
                         {Array.from(
                             new Array(numPages),

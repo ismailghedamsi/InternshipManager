@@ -26,6 +26,8 @@ public class InternshipOffer {
     private int endHour;
     private Date creationDate;
     private Date limitDateToApply;
+    private ReviewState reviewState;
+    private String reasonForRejection;
 
     @Lob
     private String joinedFile;
@@ -43,4 +45,8 @@ public class InternshipOffer {
     @OneToMany(mappedBy = "offer")
     @JsonIgnoreProperties({"offer"})
     private List<StudentApplication> applications;
+
+    public enum ReviewState {
+        PENDING, APPROVED, DENIED
+    }
 }

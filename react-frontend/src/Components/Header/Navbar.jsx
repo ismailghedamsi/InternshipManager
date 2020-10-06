@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
         border: "none",
         cursor: "pointer",
         margin: 0,
+        lineHeight: 1.43,
         '&:hover': {
             color: "#000"
         },
@@ -57,7 +58,7 @@ export default function Navbar() {
                             AuthenticationService.logout()
                             history.push("/")
                         }}>
-                        Logout {JSON.parse(AuthenticationService.getValueFromSession("authenticatedUser")).username}
+                        Logout
                     </button>
                 </li>
             </ul>
