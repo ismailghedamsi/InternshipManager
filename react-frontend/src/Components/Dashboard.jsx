@@ -11,9 +11,7 @@ import CreateStage from "./OffreStage/CreateStage";
 import ListOffer from "./OffreStage/ListOffer";
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
-import ListOffer from "./OffreStage/ListOffer";
 import ApplyStage from "./ApplyStage";
-import CreateStage from "./OffreStage/CreateStage";
 import ApplicationList from "./ApplicationList";
 
 const useStyles = makeStyles((theme) => ({
