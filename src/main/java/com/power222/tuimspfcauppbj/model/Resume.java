@@ -27,6 +27,6 @@ public class Resume {
     private String reasonForRejection;
 
     @ManyToOne
-    @JsonIgnoreProperties("resumes")
+    @JsonIgnoreProperties({"resumes", "allowedOffers", "applications"})
     private Student owner;
 }

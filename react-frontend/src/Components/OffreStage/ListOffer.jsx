@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import {Document, Page, pdfjs} from 'react-pdf';
+import {Document, Page} from 'react-pdf';
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../js/AuthenticationService';
@@ -15,8 +15,6 @@ import Dialog from "@material-ui/core/Dialog";
 import Link from "@material-ui/core/Link";
 import {useHistory} from "react-router-dom";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
-
 const useStyles = makeStyles((theme) => ({
     linkButton: {
         fontSize: "1.5rem",
@@ -27,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 5,
         borderRadius: 0,
         textAlign: "left",
+        width: "90%",
         '&:hover': {
             backgroundColor: "#00000055",
         },
@@ -35,10 +34,10 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     fileButton: {
-        '&:focus': {
-            outline: "none",
-            backgroundColor: theme.palette.secondary.light,
-        }
+        outline: "none",
+        backgroundColor: theme.palette.primary.light,
+        display: "inline"
+
     },
     viewbox: {
         height: "90vh",
@@ -112,7 +111,7 @@ export default function ListOffer() {
     function deleteOffer(index) {
         const nextState = [...offers];
         return axios.delete("http://localhost:8080/offers/" + nextState[index].id)
-            .then(r => {
+            .then(() => {
                 nextState.splice(index, 1)
                 setOffers(nextState)
             })
@@ -146,7 +145,7 @@ export default function ListOffer() {
                                 </button>
                                 <button
                                     type={"button"}
-                                    className={[classes.linkButton, classes.fileButton].join(' ')}
+                                    className={[classes.linkButton, item.id === currentOfferId ? classes.fileButton : null].join(' ')}
                                     autoFocus={i === 0}
                                     onClick={() => {
                                         setCurrentOfferId(item.id)

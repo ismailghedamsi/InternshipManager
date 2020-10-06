@@ -39,9 +39,6 @@ const useStyles = makeStyles((theme) => ({
         display: "inline"
 
     },
-    buttonDiv: {
-        display: "inline"
-    },
     viewbox: {
         height: "90vh",
         overflow: "auto",

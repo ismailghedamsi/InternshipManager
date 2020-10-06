@@ -33,11 +33,10 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     fileButton: {
-        '&:focus': {
-            outline: "none",
-            backgroundColor: theme.palette.secondary.light,
-            display: "inline"
-        }
+        outline: "none",
+        backgroundColor: theme.palette.primary.light,
+        display: "inline"
+
     },
     buttonDiv: {
         display: "inline"
@@ -78,7 +77,7 @@ export default function OfferApprobation() {
         nextState[index].reviewState = reviewState;
         nextState[index].reasonForRejection = reason;
         return axios.put("http://localhost:8080/offers/" + nextState[index].id, nextState[index])
-            .then(r => {
+            .then(() => {
                 nextState.splice(index, 1)
                 setOffers(nextState)
                 setReasonModalOpen(false)
@@ -103,6 +102,7 @@ export default function OfferApprobation() {
                 setCurrentDoc(offers[0].joinedFile)
         } else
             setCurrentDoc('')
+        setCurrentOfferIndex(0)
     }, [offers])
 
     return (
@@ -137,7 +137,7 @@ export default function OfferApprobation() {
                                 </div>
                                 <button
                                     type={"button"}
-                                    className={[classes.linkButton, classes.fileButton].join(' ')}
+                                    className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(' ')}
                                     autoFocus={i === 0}
                                     onClick={() => {
                                         setCurrentDoc(item.joinedFile);
@@ -225,7 +225,7 @@ export default function OfferApprobation() {
 
                             validationSchema={yup.object()
                                 .shape({
-                                    reasonForRejection: yup.string().trim().max(255).required("ce champ est requis")
+                                    reasonForRejection: yup.string().trim().max(255).required("Ce champ est requis")
                                 })}
                             validateOnBlur={false}
                             validateOnChange={false}

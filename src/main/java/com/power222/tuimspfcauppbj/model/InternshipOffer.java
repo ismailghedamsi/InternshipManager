@@ -42,7 +42,7 @@ public class InternshipOffer {
     @JsonIgnoreProperties({"applications", "resumes", "allowedOffers"})
     private List<Student> allowedStudents;
 
-    @OneToMany(mappedBy = "offer")
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"offer"})
     private List<StudentApplication> applications;
 

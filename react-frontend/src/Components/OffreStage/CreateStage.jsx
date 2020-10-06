@@ -11,6 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
 import React, {useState} from "react";
+import {useHistory} from 'react-router-dom';
 import * as yup from "yup";
 import InternshipOfferService from '../../js/IntershipOfferService.js';
 
@@ -32,8 +33,8 @@ const tooLittleError = (valueNumber) => "Doit avoir au moins un chiffre plus gra
 const tooBigError = (valueNumber) => "Doit avoir au moins plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
-export default function CreateStuff(props) {
-
+export default function CreateStuff() {
+    const history = useHistory();
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const classes = useStyles();
     const validationSchema = yup.object().shape({
@@ -95,9 +96,14 @@ export default function CreateStuff(props) {
                     <Formik
                         onSubmit={
                             async (values) => {
-                                InternshipOfferService.sendOfferToBackEnd(values).then((e) => {
-                                    props.history.push("/dashboard/listoffer")
-                                }).catch(() => setErrorModalOpen(true))
+                                InternshipOfferService.sendOfferToBackEnd(values)
+                                    .then(() => {
+                                        history.push("/dashboard/listoffer")
+                                    })
+                                    .catch((e) => {
+                                        console.log(e)
+                                        setErrorModalOpen(true)
+                                    })
                             }
                         }
 
@@ -117,7 +123,7 @@ export default function CreateStuff(props) {
                             return errors;
                         }}
                     >
-                        {({submitForm, isSubmitting, setFieldValue}) => (
+                        {({isSubmitting, setFieldValue}) => (
                             <Form className={classes.form}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
