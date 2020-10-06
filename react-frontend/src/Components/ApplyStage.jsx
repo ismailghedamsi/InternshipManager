@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ApplyStage() {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState('');
-    const [offers, setOffers] = useState([{title: '', joinedFile: '', employer: {}}]);
+    const [offers, setOffers] = useState([{title: '', joinedFile: '', employer: {}, id: -1}]);
     const [resumes, setResumes] = useState([{name: '', file: '', owner: {}, id: -1}]);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
@@ -128,8 +128,8 @@ export default function ApplyStage() {
                                         className={[classes.linkButton].join(' ')}
                                         style={{marginRight: 5}}
                                         onClick={() => {
-                                            setCurrentDoc(item.joinedFile)
-                                            setReasonModalOpen(true)
+                                            setCurrentOfferId(item.id);
+                                            setReasonModalOpen(true);
                                         }}
                                     ><i className="fa fa-check-square" style={{color: "green"}}/></button>
                                 </div>
@@ -193,29 +193,25 @@ export default function ApplyStage() {
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
                             onSubmit={async (values) => {
-                                return this.readFileAsync(values.file).then((file) => {
-                                    let dto = {...values};
-                                    dto.file = file;
-                                    return axios.post("http://localhost:8080/application/" + offers +, dto)
-                                        .then((e) => this.props.history.push("/dashboard/listcv"))
-                                })
+                                return axios.post("http://localhost:8080/application/" + currentOfferId + "/" + values.resumeId, {})
+                                    .then((e) => setReasonModalOpen(false))
                             }}
                             validateOnBlur={false}
                             validateOnChange={false}
                             enableReinitialize={true}
                             validationSchema={yup.object()
                                 .shape({
-                                    resumes: yup.mixed().required("Ce champ est requis")
+                                    resumeId: yup.mixed().required("Ce champ est requis")
                                 })}
                             initialValues={{
-                                resumes: resumes[0].id,
+                                resumeId: resumes[0].id,
                             }}
                         >
                             {({submitForm, isSubmitting}) => (
                                 <Form>
                                     <Field
                                         component={Select}
-                                        name="resumes"
+                                        name="resumeId"
                                         fullWidth
                                         style={{marginBottom: "10px"}}
                                     >
