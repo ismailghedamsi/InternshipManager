@@ -7,7 +7,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "formik-material-ui";
-import './UploadCV.css'
+import './ResumeUpload.css'
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
 import {withRouter} from "react-router-dom";
@@ -19,7 +19,7 @@ const useStyles = (theme) => ({
     }
 });
 
-class UploadCV extends Component {
+class ResumeUpload extends Component {
 
     readFileAsync(file) {
         return new Promise((resolve, reject) => {
@@ -126,4 +126,4 @@ class UploadCV extends Component {
     }
 }
 
-export default withRouter(withStyles(useStyles)(UploadCV))
+export default withRouter(withStyles(useStyles)(ResumeUpload))

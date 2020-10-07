@@ -33,7 +33,7 @@ const tooLittleError = (valueNumber) => "Doit avoir au moins un chiffre plus gra
 const tooBigError = (valueNumber) => "Doit avoir au moins plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
-export default function CreateStuff() {
+export default function OfferCreation() {
     const history = useHistory();
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const classes = useStyles();

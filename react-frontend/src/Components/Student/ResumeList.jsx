@@ -12,8 +12,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import Link from "@material-ui/core/Link";
-import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     linkButton: {
@@ -39,13 +37,16 @@ const useStyles = makeStyles((theme) => ({
         display: "inline"
 
     },
+    buttonDiv: {
+        display: "inline"
+    },
     viewbox: {
         height: "90vh",
         overflow: "auto",
         backgroundColor: "#888",
         padding: theme.spacing(2, 0),
     },
-    list: {
+    listResumes: {
         height: "90vh",
         overflow: "auto",
     },
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: "#fff",
     },
-    offerState: {
+    resumeState: {
         color: "black",
         display: "block",
         padding: theme.spacing(0.5, 2, 2),
@@ -63,66 +64,54 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ListOffer() {
+export default function ResumeList() {
     const classes = useStyles();
-    const history = useHistory();
     const [currentDoc, setCurrentDoc] = useState('');
+    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}, applications: [{id: null}]}]);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
-    const [currentOfferId, setCurrentOfferId] = useState(-1);
-    const [offers, setOffers] = useState([{
-        title: '',
-        description: '',
-        nbOfWeeks: '',
-        salary: '',
-        beginHour: '',
-        endHour: '',
-        creationDate: '',
-        limitDateToApply: '',
-        joinedFile: "",
-        owner: {},
-        applications: [],
-        id: null
-    }]);
 
     useEffect(() => {
         const getData = async () => {
-
-            const result = await axios.get("http://localhost:8080/offers/employer/" + AuthenticationService.getCurrentUser().username)
+            await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
-
-            setOffers(result.data)
+                .then(r => setResumes(r.data))
         }
         getData()
     }, [])
 
     useEffect(() => {
-        if (offers[0]) {
-            setCurrentOfferId(offers[0].id)
-            if (offers[0].joinedFile !== '')
-                setCurrentDoc(offers[0].joinedFile)
-        } else {
-            setCurrentDoc("")
-        }
-    }, [offers])
+        if (resumes[currentIndex]) {
+            if (resumes[currentIndex].file !== '' && resumes[currentIndex].file !== undefined && resumes[currentIndex].file !== null) {
+                setCurrentDoc(resumes[currentIndex].file)
+            }
+        } else
+            setCurrentDoc('')
+    }, [resumes, currentIndex])
 
-    function deleteOffer(index) {
-        const nextState = [...offers];
-        return axios.delete("http://localhost:8080/offers/" + nextState[index].id)
+    function deleteResume(index) {
+        const nextState = [...resumes];
+        return axios.delete("http://localhost:8080/resumes/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)
-                setOffers(nextState)
+                setResumes(nextState)
             })
             .catch(() => setErrorModalOpen(true))
     }
 
-    function parseDate(date) {
-        const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-        const d = new Date(date);
-        return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
+    function getResumeState(resume) {
+        if (!resume.reviewed)
+            return <span style={{color: "blue"}}>En attente</span>;
+        else if (!resume.approuved)
+            return (<span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>);
+        else
+            return <span style={{color: "green"}}>Approuvé</span>;
     }
+
 
     return (
         <Container component="main" className={classes.container}>
@@ -131,60 +120,41 @@ export default function ListOffer() {
                 spacing={0}
                 style={{alignItems: "stretch"}}
             >
-                <Grid item xs={5} className={classes.list}>
-                    <Typography variant="h4" id="title">Mes offres de stage</Typography>
+                <Grid item xs={5} className={classes.listResumes}>
+                    <Typography variant="h4" id="title">Mes résumés</Typography>
                     {
-                        offers.map((item, i) => (
-
-                            <div key={i}>
+                        resumes.map((item, i) => (
+                            <div key={i} style={{width: "90%"}}>
                                 <button
                                     type={"button"}
                                     className={classes.linkButton}
-                                    onClick={() => deleteOffer(i)}>
-                                    <i className="fa fa-trash" style={{color: "red"}}/>
+                                    onClick={() => deleteResume(i)}
+                                    style={{width: "auto"}}
+                                    disabled={item.applications.length !== 0}
+                                    title={item.applications.length === 0 ? '' : 'Impossible de supprimer un CV déja soumis dans une offre'}
+                                >
+                                    <i className="fa fa-trash"
+                                       style={item.applications.length === 0 ? {color: "red"} : {
+                                           color: "grey",
+                                           cursor: "not-allowed"
+                                       }}/>
                                 </button>
                                 <button
                                     type={"button"}
-                                    className={[classes.linkButton, item.id === currentOfferId ? classes.fileButton : null].join(' ')}
+                                    className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                                     autoFocus={i === 0}
                                     onClick={() => {
-                                        setCurrentOfferId(item.id)
-                                        setCurrentDoc(item.joinedFile)
+                                        setCurrentIndex(i)
                                     }}
                                 >
-                                    <Typography color={"textPrimary"} variant={"body1"}>
-                                        {`Titre :${item.title}`}
+                                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                        {item.name + " "}
                                     </Typography>
-                                    <Typography color={"textPrimary"} variant={"body2"}>
-                                        {`Description: ${item.description}`}
+                                    <Typography
+                                        className={classes.resumeState}
+                                        variant={"body2"}>
+                                        État : {getResumeState(item)}
                                     </Typography>
-                                    {currentOfferId === item.id &&
-                                    <div>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Nombre de semaine: ${item.nbOfWeeks}`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Salaire: ${item.salary}`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Heure de début: ${item.beginHour}h00`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Heure de fin: ${item.endHour}h00`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Date de création: ${parseDate(item.creationDate)}`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Date limite pour appliquer : ${parseDate(item.limitDateToApply)}`}
-                                        </Typography>
-                                    </div>
-                                    }
-                                    {item.applications.length !== 0 &&
-                                    <Link variant={"body1"}
-                                          onClick={() => history.push("/dashboard/applications", {offerId: item.id})}>Voir
-                                        les applications</Link>
-                                    }
                                 </button>
                                 <hr/>
                             </div>
@@ -196,7 +166,6 @@ export default function ListOffer() {
                         onLoadSuccess={({numPages}) => {
                             setNumPages(numPages)
                         }}
-
                         error={"Veuillez choisir un fichier"}
                         file={currentDoc}
                     >
@@ -212,7 +181,6 @@ export default function ListOffer() {
                             ),
                         )}
                     </Document>
-
                 </Grid>
             </Grid>
             <Dialog open={errorModalOpen} onClose={() => setErrorModalOpen(false)}>

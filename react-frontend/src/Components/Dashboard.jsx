@@ -1,19 +1,19 @@
 import React from 'react';
+import {makeStyles} from "@material-ui/core/styles";
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {RoleProtectedRoute} from "./Routes";
 import Navbar from "./Header/Navbar";
 import Footer from "./Footer";
-import {makeStyles} from "@material-ui/core/styles";
-import {RoleProtectedRoute} from "./Routes";
-import OfferApprobation from "./Manager/OfferApprobation";
-import {Redirect, Route, Switch} from 'react-router-dom';
-import UploadCV from "./Upload/UploadCV";
-import ListCV from "./ListCV";
-import CreateStage from "./OffreStage/CreateStage";
-import ListOffer from "./OffreStage/ListOffer";
-import ResumeApprobation from "./Manager/ResumeApprobation";
-import OfferAssignements from "./Manager/OfferAssignements";
-import ApplyStage from "./ApplyStage";
-import ApplicationList from "./ApplicationList";
 import AuthenticationService from '../js/AuthenticationService';
+import ResumeApprobation from "./Manager/ResumeApprobation";
+import OfferApprobation from "./Manager/OfferApprobation";
+import OfferAssignements from "./Manager/OfferAssignements";
+import OfferCreation from "./Employer/OfferCreation";
+import OfferList from "./Employer/OfferList";
+import ApplicationList from "./Employer/ApplicationList";
+import ResumeUpload from "./Student/Upload/ResumeUpload";
+import ResumeList from "./Student/ResumeList";
+import OfferApplication from "./Student/OfferApplication";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -60,11 +60,11 @@ export default function Dashboard(props) {
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
-                                        component={CreateStage}
+                                        component={OfferCreation}
                                         role={"employer"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/listoffer"
-                                        component={ListOffer}
+                                        component={OfferList}
                                         role={"employer"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/applications"
@@ -73,15 +73,15 @@ export default function Dashboard(props) {
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/upload"
-                                        component={UploadCV}
+                                        component={ResumeUpload}
                                         role={"student"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/listcv"
-                                        component={ListCV}
+                                        component={ResumeList}
                                         role={"student"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
-                                        component={ApplyStage}
+                                        component={OfferApplication}
                                         role={"student"}/>
                 </Switch>
             </div>
