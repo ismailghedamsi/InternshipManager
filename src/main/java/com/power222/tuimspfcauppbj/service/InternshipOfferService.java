@@ -13,11 +13,11 @@ import java.util.Optional;
 @Service
 public class InternshipOfferService {
 
-    private InternshipOfferRepository internshipOfferRepository;
-    private AuthenticationService authenticationService;
+    private final InternshipOfferRepository internshipOfferRepository;
+    private final AuthenticationService authenticationService;
     private final StudentRepository studentRepo;
 
-    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,AuthenticationService authenticationService, StudentRepository studentRepo) {
+    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, AuthenticationService authenticationService, StudentRepository studentRepo) {
         this.internshipOfferRepository = internshipOfferRepository;
         this.authenticationService = authenticationService;
         this.studentRepo = studentRepo;
@@ -71,7 +71,7 @@ public class InternshipOfferService {
         return internshipOfferRepository.findById(id)
                 .map(oldOffer -> offer.toBuilder().id(oldOffer.getId()).build())
                 .filter(this::isOfferStateValid)
-                .map(newOffer -> internshipOfferRepository.saveAndFlush(newOffer));
+                .map(internshipOfferRepository::saveAndFlush);
     }
 
     public Optional<InternshipOffer> addOrRemoveStudentFromOffer(long offerId, long studentId) {

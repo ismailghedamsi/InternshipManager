@@ -33,11 +33,10 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     fileButton: {
-        '&:focus': {
-            outline: "none",
-            backgroundColor: theme.palette.secondary.light,
-            display: "inline"
-        }
+        outline: "none",
+        backgroundColor: theme.palette.primary.light,
+        display: "inline"
+
     },
     buttonDiv: {
         display: "inline"
@@ -63,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ResumeApprobation() {
     const classes = useStyles();
     const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [currentDoc, setCurrentDoc] = useState('');
     const [numPages, setNumPages] = useState(0);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
@@ -75,7 +75,7 @@ export default function ResumeApprobation() {
         nextState[index].reviewed = true;
         nextState[index].reasonForRejection = reason;
         return axios.put("http://localhost:8080/resumes/" + nextState[index].id, nextState[index])
-            .then(r => {
+            .then(() => {
                 nextState.splice(index, 1)
                 setResumes(nextState)
                 setReasonModalOpen(false)
@@ -87,7 +87,6 @@ export default function ResumeApprobation() {
         const getData = async () => {
             const result = await axios.get("http://localhost:8080/resumes/pending")
                 .catch(() => {
-                    console.log("bullshit")
                     setErrorModalOpen(true)
                 })
             setResumes(result.data)
@@ -101,6 +100,7 @@ export default function ResumeApprobation() {
                 setCurrentDoc(resumes[0].file)
         } else
             setCurrentDoc('')
+        setCurrentIndex(0)
     }, [resumes])
 
     return (
@@ -135,9 +135,12 @@ export default function ResumeApprobation() {
                                 </div>
                                 <button
                                     type={"button"}
-                                    className={[classes.linkButton, classes.fileButton].join(' ')}
+                                    className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                                     autoFocus={i === 0}
-                                    onClick={() => setCurrentDoc(item.file)}
+                                    onClick={() => {
+                                        setCurrentIndex(i)
+                                        setCurrentDoc(item.file)
+                                    }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                         {" " + item.name + " "}

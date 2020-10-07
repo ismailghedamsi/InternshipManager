@@ -119,8 +119,10 @@ export default function ApplyStage() {
     useEffect(() => {
         if (offers[0]) {
             setCurrentOfferId(offers[0].id)
-            if (offers[0].joinedFile !== '' && offers[0].joinedFile !== undefined && offers[0].joinedFile !== null)
+            if (offers[0].joinedFile !== '' && offers[0].joinedFile !== undefined && offers[0].joinedFile !== null) {
                 setCurrentDoc(offers[0].joinedFile)
+                setCurrentOfferId(offers[0].id)
+            }
         } else
             setCurrentDoc('')
     }, [offers])
@@ -185,9 +187,6 @@ export default function ApplyStage() {
                                     </Typography>
                                     {currentOfferId === item.id &&
                                     <div>
-                                        <Typography color={"textPrimary"} variant={"body1"}>
-                                            {`Titre :${item.title}`}
-                                        </Typography>
                                         <Typography color={"textPrimary"} variant={"body2"}>
                                             {`Description: ${item.description}`}
                                         </Typography>
@@ -273,7 +272,7 @@ export default function ApplyStage() {
                                     resumeId: yup.mixed().required("Ce champ est requis")
                                 })}
                             initialValues={{
-                                resumeId: resumes[0].id,
+                                resumeId: resumes[0] ? resumes[0].id : null,
                             }}
                         >
                             {({isSubmitting}) => (

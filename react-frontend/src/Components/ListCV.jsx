@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import {Document, Page, pdfjs} from 'react-pdf';
+import {Document, Page} from 'react-pdf';
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../js/AuthenticationService';
@@ -13,8 +13,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
-
 const useStyles = makeStyles((theme) => ({
     linkButton: {
         fontSize: "1.5rem",
@@ -25,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 5,
         borderRadius: 0,
         textAlign: "left",
+        width: "90%",
         '&:hover': {
             backgroundColor: "#00000055",
         },
@@ -33,10 +32,13 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     fileButton: {
-        '&:focus': {
-            outline: "none",
-            backgroundColor: theme.palette.secondary.light,
-        }
+        outline: "none",
+        backgroundColor: theme.palette.primary.light,
+        display: "inline"
+
+    },
+    buttonDiv: {
+        display: "inline"
     },
     viewbox: {
         height: "90vh",
@@ -66,6 +68,7 @@ export default function ListCV() {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState('');
     const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
@@ -81,17 +84,18 @@ export default function ListCV() {
     }, [])
 
     useEffect(() => {
-        if (resumes[0]) {
-            if (resumes[0].file !== '' && resumes[0].file !== undefined && resumes[0].file !== null)
-                setCurrentDoc(resumes[0].file)
+        if (resumes[currentIndex]) {
+            if (resumes[currentIndex].file !== '' && resumes[currentIndex].file !== undefined && resumes[currentIndex].file !== null) {
+                setCurrentDoc(resumes[currentIndex].joinedFile)
+            }
         } else
             setCurrentDoc('')
-    }, [resumes])
+    }, [resumes, currentIndex])
 
     function deleteResume(index) {
         const nextState = [...resumes];
         return axios.delete("http://localhost:8080/resumes/" + nextState[index].id)
-            .then(r => {
+            .then(() => {
                 nextState.splice(index, 1)
                 setResumes(nextState)
             })
@@ -120,18 +124,22 @@ export default function ListCV() {
                     <Typography variant="h4" id="title">Mes résumés</Typography>
                     {
                         resumes.map((item, i) => (
-                            <div key={i}>
+                            <div key={i} style={{width: "90%"}}>
                                 <button
                                     type={"button"}
                                     className={classes.linkButton}
-                                    onClick={() => deleteResume(i)}>
+                                    onClick={() => deleteResume(i)}
+                                    style={{width: "auto"}}>
                                     <i className="fa fa-trash" style={{color: "red"}}/>
                                 </button>
                                 <button
                                     type={"button"}
-                                    className={[classes.linkButton, classes.fileButton].join(' ')}
+                                    className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                                     autoFocus={i === 0}
-                                    onClick={() => setCurrentDoc(item.file)}
+                                    onClick={() => {
+                                        setCurrentIndex(i)
+                                        setCurrentDoc(item.file)
+                                    }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                         {item.name + " "}

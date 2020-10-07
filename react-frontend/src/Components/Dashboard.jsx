@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import {makeStyles} from "@material-ui/core/styles";
 import {RoleProtectedRoute} from "./Routes";
 import OfferApprobation from "./Manager/OfferApprobation";
-import {Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import UploadCV from "./Upload/UploadCV";
 import ListCV from "./ListCV";
 import CreateStage from "./OffreStage/CreateStage";
@@ -13,8 +13,9 @@ import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 import ApplyStage from "./ApplyStage";
 import ApplicationList from "./ApplicationList";
+import AuthenticationService from '../js/AuthenticationService';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
         flexDirection: "column",
@@ -34,8 +35,16 @@ export default function Dashboard(props) {
             <div className={classes.container}>
                 <Switch>
                     <Route exact={true} path={"/dashboard"}>
-                        <h1>Welcome</h1>
+                        <Redirect to={function () {
+                            if (AuthenticationService.getCurrentUserRole() === "student")
+                                return "/dashboard/stagelist"
+                            else if (AuthenticationService.getCurrentUserRole() === "employer")
+                                return "/dashboard/listoffer"
+                            else
+                                return "/dashboard/approbation/offres"
+                        }()}/>
                     </Route>
+                    {/* Admin */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/approbation/cv"
                                         component={ResumeApprobation}
@@ -48,12 +57,32 @@ export default function Dashboard(props) {
                                         path="/dashboard/assignement/cv"
                                         component={OfferAssignements}
                                         role={"admin"}/>
-                    <Route exact={true} path="/dashboard/upload" component={UploadCV}/>
-                    <Route exact={true} path="/dashboard/listcv" component={ListCV}/>
-                    <Route exact={true} path="/dashboard/createstage" component={CreateStage}/>
-                    <Route exact={true} path="/dashboard/listoffer" component={ListOffer}/>
-                    <Route exact={true} path="/dashboard/stagelist" component={ApplyStage}/>
-                    <Route exact={true} path="/dashboard/applications" component={ApplicationList}/>
+                    {/* Employeur */}
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/createstage"
+                                        component={CreateStage}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/listoffer"
+                                        component={ListOffer}
+                                        role={"employer"}/>
+                    {/* Etudiant */}
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/upload"
+                                        component={UploadCV}
+                                        role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/listcv"
+                                        component={ListCV}
+                                        role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/stagelist"
+                                        component={ApplyStage}
+                                        role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/applications"
+                                        component={ApplicationList}
+                                        role={"student"}/>
                 </Switch>
             </div>
             <Footer/>

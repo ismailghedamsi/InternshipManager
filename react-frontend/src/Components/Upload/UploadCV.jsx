@@ -10,6 +10,7 @@ import {TextField} from "formik-material-ui";
 import './UploadCV.css'
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
+import {withRouter} from "react-router-dom";
 
 const useStyles = (theme) => ({
     container: {
@@ -55,7 +56,7 @@ class UploadCV extends Component {
                                     let dto = {...values};
                                     dto.file = file;
                                     return axios.post("http://localhost:8080/resumes", dto)
-                                        .then((e) => this.props.history.push("/dashboard/listcv"))
+                                        .then(() => this.props.history.push("/dashboard/listcv"))
                                 })
                             }}
 
@@ -125,4 +126,4 @@ class UploadCV extends Component {
     }
 }
 
-export default withStyles(useStyles)(UploadCV)
+export default withRouter(withStyles(useStyles)(UploadCV))
