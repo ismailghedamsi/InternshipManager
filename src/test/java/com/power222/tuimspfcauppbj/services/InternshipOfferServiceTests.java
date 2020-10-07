@@ -7,11 +7,6 @@ import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.when;
@@ -124,8 +124,37 @@ class InternshipOfferServiceTests {
         List<InternshipOffer> createdOffers = service.getAllInternshipOffers();
 
         assertThat(createdOffers.size()).isEqualTo(2);
-        assertThat(createdOffers.get(0)).isEqualTo(expectedOffer);
-        assertThat(createdOffers.get(1)).isEqualTo(expectedOffer2);
+        assertThat(createdOffers).contains(expectedOffer, expectedOffer2);
+    }
+
+    @Test
+    void getAllInternshipOffersByStudentID() {
+        when(offerRepository.findAllByAllowedStudentsId(expectedStudent.getId())).thenReturn(expectedOffers);
+
+        List<InternshipOffer> createdOffers = service.getOfferByAllowedStudentId(expectedStudent.getId());
+
+        assertThat(createdOffers.size()).isEqualTo(2);
+        assertThat(createdOffers).contains(expectedOffer, expectedOffer2);
+    }
+
+    @Test
+    void getAllInternshipOffersWithPendingApproval() {
+        when(offerRepository.findAllByReviewStatePending()).thenReturn(expectedOffers);
+
+        List<InternshipOffer> createdOffers = service.getInternshipOffersWithPendingApproval();
+
+        assertThat(createdOffers.size()).isEqualTo(2);
+        assertThat(createdOffers).contains(expectedOffer, expectedOffer2);
+    }
+
+    @Test
+    void getAllApprovedInternshipOffers() {
+        when(offerRepository.findAllByReviewStateApproved()).thenReturn(expectedOffers);
+
+        List<InternshipOffer> createdOffers = service.getApprovedInternshipOffers();
+
+        assertThat(createdOffers.size()).isEqualTo(2);
+        assertThat(createdOffers).contains(expectedOffer, expectedOffer2);
     }
 
     @Test
@@ -227,8 +256,21 @@ class InternshipOfferServiceTests {
     }
 
     @Test
-    void updateOfferWithInvalidState() {
+    void updateOfferWithInvalidStateNullMessage() {
         var updatedOffer = expectedOffer.toBuilder().reviewState(InternshipOffer.ReviewState.DENIED).build();
+        when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
+
+        var actual = service.updateInternshipOffer(expectedOffer.getId(), updatedOffer);
+
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void updateOfferWithInvalidStateBlankMessage() {
+        var updatedOffer = expectedOffer.toBuilder()
+                .reviewState(InternshipOffer.ReviewState.DENIED)
+                .reasonForRejection(" ")
+                .build();
         when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
 
         var actual = service.updateInternshipOffer(expectedOffer.getId(), updatedOffer);

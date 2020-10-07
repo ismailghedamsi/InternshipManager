@@ -18,7 +18,7 @@ public class InternshipOfferController {
     }
 
     @GetMapping
-    public List<InternshipOffer> getAllOffers() {
+    public List<InternshipOffer> getAllisNoOffers() {
         return offerService.getAllInternshipOffers();
     }
 
