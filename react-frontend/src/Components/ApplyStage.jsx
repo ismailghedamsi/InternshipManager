@@ -12,7 +12,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import AuthenticationService from "../js/AuthenticationService";
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Select} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
@@ -139,6 +139,14 @@ export default function ApplyStage() {
         return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
     }
 
+    function generateMenuItems() {
+        const filteredResumes = resumes.filter(r => r.approuved);
+        if (filteredResumes.length !== 0)
+            return filteredResumes.map((item, i) => (<MenuItem key={i} value={item.id}>{item.name}</MenuItem>))
+                .push(<MenuItem value={-1} disabled>Veuillez choisir un CV</MenuItem>);
+        else
+            return <MenuItem value={-1} disabled>Aucun CV n'a été approuvé</MenuItem>;
+    }
 
     return (
         <Container component="main" className={classes.container}>
@@ -271,27 +279,29 @@ export default function ApplyStage() {
                             enableReinitialize={true}
                             validationSchema={yup.object()
                                 .shape({
-                                    resumeId: yup.mixed().required("Ce champ est requis")
+                                    resumeId: yup.number().notOneOf([-1], "Impossible d'appliquer sans un CV valide").required("Ce champ est requis")
                                 })}
                             initialValues={{
-                                resumeId: resumes[0] ? resumes[0].id : null,
+                                resumeId: -1
                             }}
                         >
                             {({isSubmitting}) => (
                                 <Form>
                                     <Field
                                         component={Select}
+                                        id="resumeId"
                                         name="resumeId"
                                         fullWidth
                                         style={{marginBottom: "10px"}}
                                     >
                                         {
-                                            resumes.filter(r => r.approuved)
-                                                .map((item, i) => (
-                                                    <MenuItem key={i} value={item.id}>{item.name}</MenuItem>
-                                                ))
+                                            generateMenuItems()
                                         }
                                     </Field>
+                                    <ErrorMessage name="resumeId">
+                                        {msg => <span
+                                            style={{color: "red", lineHeight: 3, verticalAlign: "center"}}>{msg}</span>}
+                                    </ErrorMessage>
                                     {isSubmitting && <LinearProgress/>}
                                     <Button
                                         id="buttonSubmit"
