@@ -86,7 +86,7 @@ export default function ListCV() {
     useEffect(() => {
         if (resumes[currentIndex]) {
             if (resumes[currentIndex].file !== '' && resumes[currentIndex].file !== undefined && resumes[currentIndex].file !== null) {
-                setCurrentDoc(resumes[currentIndex].joinedFile)
+                setCurrentDoc(resumes[currentIndex].file)
             }
         } else
             setCurrentDoc('')
@@ -145,7 +145,6 @@ export default function ListCV() {
                                     autoFocus={i === 0}
                                     onClick={() => {
                                         setCurrentIndex(i)
-                                        setCurrentDoc(item.file)
                                     }}
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>

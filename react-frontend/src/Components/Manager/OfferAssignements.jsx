@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
     fileButton: {
         outline: "none",
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.primary.light,
         display: "inline"
 
     },
