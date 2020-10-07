@@ -58,6 +58,7 @@ class InternshipOfferServiceTests {
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
                 .nbOfWeeks(8).salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
         } catch (ParseException e) {
+
             e.printStackTrace();
         }
 
@@ -182,7 +183,7 @@ class InternshipOfferServiceTests {
     }
 
     @Test
-    void getInternshipOffersOfEmployer(){
+    void getInternshipOffersOfEmployer() {
         when(offerRepository.findByEmployerUsername("a@gmail.com")).thenReturn(expectedOffersOfEmployer);
         List<InternshipOffer> offers = service.getInternshipOffersOfEmployer("a@gmail.com");
         assertThat(expectedOffersOfEmployer.size()).isEqualTo(offers.size());

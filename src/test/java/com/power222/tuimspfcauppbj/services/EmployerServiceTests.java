@@ -48,7 +48,7 @@ public class EmployerServiceTests {
                 .phoneNumber("5144816959")
                 .address("6600 St-Jacques Ouest")
                 .email("simon@cal.qc.ca")
-                .offers(Collections.EMPTY_LIST)
+                .offers(Collections.emptyList())
                 .build();
     }
 
