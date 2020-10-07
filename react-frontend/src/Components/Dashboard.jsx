@@ -66,6 +66,10 @@ export default function Dashboard(props) {
                                         path="/dashboard/listoffer"
                                         component={ListOffer}
                                         role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/applications"
+                                        component={ApplicationList}
+                                        role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/upload"
@@ -78,10 +82,6 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
                                         component={ApplyStage}
-                                        role={"student"}/>
-                    <RoleProtectedRoute exact={true}
-                                        path="/dashboard/applications"
-                                        component={ApplicationList}
                                         role={"student"}/>
                 </Switch>
             </div>

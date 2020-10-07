@@ -67,18 +67,18 @@ const useStyles = makeStyles((theme) => ({
 export default function ListCV() {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState('');
-    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}]);
+    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}, applications: [{id: null}]}]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
+            await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
-            setResumes(result.data)
+                .then(r => setResumes(r.data))
         }
         getData()
     }, [])
@@ -129,8 +129,15 @@ export default function ListCV() {
                                     type={"button"}
                                     className={classes.linkButton}
                                     onClick={() => deleteResume(i)}
-                                    style={{width: "auto"}}>
-                                    <i className="fa fa-trash" style={{color: "red"}}/>
+                                    style={{width: "auto"}}
+                                    disabled={item.applications.length !== 0}
+                                    title={item.applications.length === 0 ? '' : 'Impossible de supprimer un CV déja soumis dans une offre'}
+                                >
+                                    <i className="fa fa-trash"
+                                       style={item.applications.length === 0 ? {color: "red"} : {
+                                           color: "grey",
+                                           cursor: "not-allowed"
+                                       }}/>
                                 </button>
                                 <button
                                     type={"button"}
@@ -143,9 +150,6 @@ export default function ListCV() {
                                 >
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                         {item.name + " "}
-                                    </Typography>
-                                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                                        {item.owner.firstName} {item.owner.lastName}
                                     </Typography>
                                     <Typography
                                         className={classes.resumeState}

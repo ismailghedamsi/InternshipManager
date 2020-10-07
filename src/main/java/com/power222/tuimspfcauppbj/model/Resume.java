@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,4 +30,8 @@ public class Resume {
     @ManyToOne
     @JsonIgnoreProperties({"resumes", "allowedOffers", "applications"})
     private Student owner;
+
+    @OneToMany(mappedBy = "resume")
+    @JsonIgnoreProperties({"student", "offer", "resume"})
+    private List<StudentApplication> applications;
 }
