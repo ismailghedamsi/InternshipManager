@@ -25,7 +25,7 @@ export default function RegisterEmployer(props) {
             contactName: yup.string().trim().min(5, tooShortError).max(50, tooLongError).required(requiredFieldMsg),
             phoneNumber: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
             username: yup.string().trim().min(5, tooShortError).max(30, tooLongError).required(requiredFieldMsg),
-            email: yup.string().trim().email().required(requiredFieldMsg),
+            email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
             passwordConfirm: yup.string()
                 .oneOf([yup.ref('password'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg),
