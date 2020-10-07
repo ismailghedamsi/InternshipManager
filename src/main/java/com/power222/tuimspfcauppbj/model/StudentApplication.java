@@ -26,6 +26,6 @@ public class StudentApplication {
     private Student student;
 
     @ManyToOne
-    @JsonIgnoreProperties("owner")
+    @JsonIgnoreProperties({"owner", "applications"})
     private Resume resume;
 }

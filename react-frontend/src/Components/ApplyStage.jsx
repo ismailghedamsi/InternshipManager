@@ -88,7 +88,7 @@ export default function ApplyStage() {
         employer: {},
         applications: [{student: {id: null}}]
     }]);
-    const [resumes, setResumes] = useState([{id: -1, name: '', file: '', owner: {}}]);
+    const [resumes, setResumes] = useState([{id: -1, name: '', file: '', approuved: false, owner: {}}]);
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const [reasonModalOpen, setReasonModalOpen] = useState(false);
@@ -96,22 +96,24 @@ export default function ApplyStage() {
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
+            await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
-            setResumes(result.data)
+                .then(result =>
+                    setResumes(result.data))
         }
         getData()
     }, [])
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/offers/student/" + AuthenticationService.getCurrentUser().id)
+            await axios.get("http://localhost:8080/offers/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
-            setOffers(result.data)
+                .then(result =>
+                    setOffers(result.data))
         }
         getData()
     }, [])
@@ -284,9 +286,10 @@ export default function ApplyStage() {
                                         style={{marginBottom: "10px"}}
                                     >
                                         {
-                                            resumes.map((item, i) => (
-                                                <MenuItem key={i} value={item.id}>{item.name}</MenuItem>
-                                            ))
+                                            resumes.filter(r => r.approuved)
+                                                .map((item, i) => (
+                                                    <MenuItem key={i} value={item.id}>{item.name}</MenuItem>
+                                                ))
                                         }
                                     </Field>
                                     {isSubmitting && <LinearProgress/>}
