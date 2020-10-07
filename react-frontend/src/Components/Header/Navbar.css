@@ -28,6 +28,7 @@ a {
 }
 
 .NavbarItem {
+
     overflow: hidden;
     display: flex;
     justify-content: center;
