@@ -1,6 +1,6 @@
 import React from "react";
 import Login from './Components/Login';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import RegisteringManager from "./Components/RegisteringManager";
 import Dashboard from "./Components/Dashboard";
 import {BasicProtectedRoute} from "./Components/Routes";

@@ -36,14 +36,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
         private final InternshipOfferRepository internshipRepo;
-        private final StudentApplicationRepository appliRepo;
 
         public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
             this.internshipRepo = internshipRepo;
-            this.appliRepo = appliRepo;
         }
 
         @Override
