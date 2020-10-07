@@ -1,16 +1,16 @@
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import React, {useState} from "react";
-import {Field, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
 import {TextField} from "formik-material-ui";
-import axios from 'axios'
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
+import AuthenticationService from "../js/AuthenticationService";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir au plus " + value.max + " caractères";
@@ -60,24 +60,9 @@ export default function RegisterEmployer(props) {
                 </DialogActions>
             </Dialog>
             <Formik
-                onSubmit={async (values, {setFieldError}) => {
-                    delete values.passwordConfirm;
-                    return axios.post(`http://localhost/employers`, values)
-                        .then(() => {
-                            props.history.push("/login")
-                        })
-                        .catch((error) => {
-                            console.error(error)
-                            if (error.response) {
-                                if (error.response.status === 409) {
-                                    setFieldError("username", "Le nom d'utilisateur n'est pas disponible")
-                                } else
-                                    setOpen(true)
-                            } else {
-                                setOpen(true)
-                            }
-                        })
-                }}
+                onSubmit={async (values, {setFieldError}) =>
+                    AuthenticationService.registerUser("/employers", values, setFieldError, setOpen, props.history)
+                }
 
                 validateOnBlur={false}
                 validateOnChange={false}
@@ -85,8 +70,8 @@ export default function RegisterEmployer(props) {
                 validationSchema={validationSchema}
                 initialValues={initialValues}
             >
-                {({submitForm, isSubmitting}) => (
-                    <form className={props.classes.form}>
+                {({isSubmitting}) => (
+                    <Form className={props.classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Field
@@ -191,11 +176,10 @@ export default function RegisterEmployer(props) {
                             size={"large"}
                             className={props.classes.submit}
                             disabled={isSubmitting}
-                            onClick={submitForm}
                         >
                             S'enregistrer
                         </Button>
-                    </form>
+                    </Form>
                 )}
             </Formik>
         </div>

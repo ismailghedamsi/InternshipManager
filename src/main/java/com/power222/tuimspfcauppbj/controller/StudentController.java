@@ -1,62 +1,50 @@
 package com.power222.tuimspfcauppbj.controller;
 
-import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Student;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.power222.tuimspfcauppbj.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 
-    @Autowired
-    private StudentRepository repository;
+    private final StudentService svc;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public StudentController(StudentService svc) {
+        this.svc = svc;
+    }
 
     @GetMapping
     public List<Student> getAllStudents() {
-        return repository.findAll();
-    }
-
-    @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student newStudent) {
-        newStudent.setRole("student");
-        newStudent.setEnabled(true);
-        newStudent.setPassword(passwordEncoder.encode(newStudent.getPassword()));
-        return repository.findByUsername(newStudent.getUsername())
-                .map(student -> ResponseEntity.status(HttpStatus.CONFLICT).<Student>build())
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(repository.saveAndFlush(newStudent)));
+        return svc.getAllStudents();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable long id) {
-        return repository.findById(id)
+        return svc.getStudentById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    public ResponseEntity<Student> createStudent(@RequestBody Student newStudent) {
+        return svc.persistNewStudent(newStudent)
+                .map(student -> ResponseEntity.status(HttpStatus.CREATED).body(student))
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@RequestBody Student newStudent, @PathVariable long id) {
-        Optional<Student> optStudent = repository.findById(id).map(oldStudent -> {
-            newStudent.setId(oldStudent.getId());
-            return repository.saveAndFlush(newStudent);
-        });
-        return ResponseEntity.of(optStudent);
+    public Student updateStudent(@RequestBody Student student, @PathVariable long id) {
+        return svc.updateStudent(id, student);
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     public void deleteStudent(@PathVariable long id) {
-        repository.deleteById(id);
+        svc.deleteStudentById(id);
     }
 
 

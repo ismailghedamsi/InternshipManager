@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.config;
 
+import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.util.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -20,9 +21,57 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserRepository userRepository;
+
+    public SecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                //Boilerplate
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                //For h2-console
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+                .and()
+                .authorizeRequests()
+
+                //For browser pre-flight requests
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                //React build
+                .antMatchers("/", "/*.*", "/static/**").permitAll()
+
+                //Always accessible enpoints
+                .antMatchers(HttpMethod.POST, "/students").permitAll()
+                .antMatchers(HttpMethod.POST, "/employers").permitAll()
+
+                //Password update endpoint has built-in auth
+                .antMatchers(HttpMethod.PUT, "/auth/password").permitAll()
+
+                //Demo controllers & H2
+                .antMatchers("/h2-console/*").permitAll()
+                .antMatchers("/hello").permitAll()
+
+                .anyRequest().fullyAuthenticated()
+                .and()
+                .httpBasic()
+                .authenticationEntryPoint(new NoPopupBasicAuthenticationEntrypoint());
+    }
+
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl();
+        return new UserDetailsServiceImpl(userRepository);
     }
 
     @Bean
@@ -39,39 +88,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .authorizeRequests()
-
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/*").permitAll()
-                .antMatchers("/static/**/").permitAll()
-                .antMatchers(HttpMethod.POST,"/students").permitAll()
-                .antMatchers(HttpMethod.POST, "/employers").permitAll()
-                .antMatchers("/h2-console/*").permitAll()
-                .antMatchers("/hello").permitAll()
-
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic()
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin();
-    }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        final var corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        corsConfiguration.addAllowedMethod(HttpMethod.PUT);
+        corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
+        source.registerCorsConfiguration("/**", corsConfiguration);
 
         return source;
     }
-
 }

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ImportAutoConfiguration(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
 public class TestsWithoutSecurityConfig {
 
+    @SuppressWarnings("deprecation")
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();

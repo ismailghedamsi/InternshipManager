@@ -3,8 +3,8 @@ package com.power222.tuimspfcauppbj.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.StudentController;
-import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Student;
+import com.power222.tuimspfcauppbj.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,11 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import({TestsWithoutSecurityConfig.class})
@@ -38,16 +37,15 @@ public class StudentControllerTests {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private StudentRepository studentRepository;
+    private StudentService studentService;
 
     private Student expected;
 
     @BeforeEach
     void beforeEach() {
-        expected = Student.builder().enabled(true)
+        expected = Student.builder()
                 .username("etudiant")
                 .role("student")
-                .password("password")
                 .firstName("Bob")
                 .lastName("Brutus")
                 .id(4L)
@@ -60,7 +58,7 @@ public class StudentControllerTests {
 
     @Test
     void getStudentByIdTest() throws Exception {
-        when(studentRepository.findById(4L)).thenReturn(java.util.Optional.ofNullable(expected));
+        when(studentService.getStudentById(4L)).thenReturn(Optional.of(expected));
 
         MvcResult result = mvc.perform(get("/students/4").contentType(MediaType.APPLICATION_JSON)).andReturn();
 
@@ -71,33 +69,53 @@ public class StudentControllerTests {
     }
 
     @Test
-    void createStudentTest() throws Exception {
-        when(studentRepository.saveAndFlush(any())).thenReturn(expected);
-
-        MvcResult result = mvc.perform(post("/students")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expected))).andReturn();
-
-        Student actual = objectMapper.readValue(result.getResponse().getContentAsString(), Student.class);
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void getAllEmployers() throws Exception {
+    void getAllStudents() throws Exception {
         final int nbStudent = 3;
 
         List<Student> studentList = new ArrayList<>();
         for (int i = 0; i < nbStudent; i++)
             studentList.add(new Student());
 
-        when(studentRepository.findAll()).thenReturn(studentList);
+        when(studentService.getAllStudents()).thenReturn(studentList);
 
         MvcResult result = mvc.perform(get("/students")).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         assertEquals(actuals.size(), nbStudent);
+    }
+
+    @Test
+    void createStudentTest() throws Exception {
+        when(studentService.persistNewStudent(expected)).thenReturn(Optional.of(expected));
+
+        MvcResult result = mvc.perform(post("/students")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+        var actual = objectMapper.readValue(result.getResponse().getContentAsString(), Student.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateResumeTest() throws Exception {
+        expected.setPassword(null);
+        MvcResult result = mvc.perform(put("/students/" + expected.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(studentService, times(1)).updateStudent(expected.getId(), expected);
+    }
+
+    @Test
+    void deleteResumeTest() throws Exception {
+        MvcResult result = mvc.perform(delete("/students/1")).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(studentService, times(1)).deleteStudentById(1);
     }
 }

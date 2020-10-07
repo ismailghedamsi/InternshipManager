@@ -1,15 +1,19 @@
 package com.power222.tuimspfcauppbj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Employer extends User {
@@ -20,5 +24,8 @@ public class Employer extends User {
     private String address;
     private String email;
 
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("employer")
+    private List<InternshipOffer> offers;
 
 }
