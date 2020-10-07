@@ -83,7 +83,7 @@ export default function RegisteringManager(props) {
             justify="center"
             style={{minHeight: '100vh'}}
         >
-            <Grid item xs={4}>
+            <Grid item xs={12} md={6} xl={3}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <CssBaseline/>
                     <div className={classes.paper}>
