@@ -1,9 +1,9 @@
 import React from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {RoleProtectedRoute} from "./Routes";
-import Navbar from "./Header/Navbar";
-import Footer from "./Footer";
+import {RoleProtectedRoute} from "./Utils/Routes";
+import Navbar from "./Utils/Header/Navbar";
+import Footer from "./Utils/Footer";
 import AuthenticationService from '../js/AuthenticationService';
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferApprobation from "./Manager/OfferApprobation";

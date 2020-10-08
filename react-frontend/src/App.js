@@ -3,7 +3,7 @@ import Login from './Components/Login';
 import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import RegisteringManager from "./Components/RegisteringManager";
 import Dashboard from "./Components/Dashboard";
-import {BasicProtectedRoute} from "./Components/Routes";
+import {BasicProtectedRoute} from "./Components/Utils/Routes";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {pdfjs} from "react-pdf";
 import PasswordChange from "./Components/PasswordChange";
