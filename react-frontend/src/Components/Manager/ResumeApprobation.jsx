@@ -156,7 +156,7 @@ export default function ResumeApprobation() {
                 </Grid>
                 <Grid item className={classes.viewbox} xs={7} align="center">
                     <Document
-                        onLoadSuccess={({numPages}) => setNumPages(numPages)}
+                        onLoadSuccess={async ({pages}) => await setNumPages(pages)}
                         error={"Veuillez choisir un fichier"}
                         file={currentDoc}
                     >

@@ -183,24 +183,26 @@ export default function OfferApprobation() {
                         ))
                     }
                 </Grid>
-                <Grid item className={classes.viewbox} xs={7} align="center">
-                    <Document
-                        onLoadSuccess={({numPages}) => setNumPages(numPages)}
-                        error={"Veuillez choisir un fichier"}
-                        file={currentDoc}
-                    >
-                        {Array.from(
-                            new Array(numPages),
-                            (el, index) => (
-                                <Page
-                                    key={`page_${index + 1}`}
-                                    pageNumber={index + 1}
-                                    renderTextLayer={false}
-                                    className={classes.page}
-                                />
-                            ),
-                        )}
-                    </Document>
+                <Grid item xs={7} align="center">
+                    <div className={classes.viewbox}>
+                        <Document
+                            onLoadSuccess={async ({pages}) => await setNumPages(pages)}
+                            error={"Veuillez choisir un fichier"}
+                            file={currentDoc}
+                        >
+                            {Array.from(
+                                new Array(numPages),
+                                (el, index) => (
+                                    <Page
+                                        key={`page_${index + 1}`}
+                                        pageNumber={index + 1}
+                                        renderTextLayer={false}
+                                        className={classes.page}
+                                    />
+                                ),
+                            )}
+                        </Document>
+                    </div>
                 </Grid>
             </Grid>
             <Dialog open={errorModalOpen} onClose={() => setErrorModalOpen(false)}>
