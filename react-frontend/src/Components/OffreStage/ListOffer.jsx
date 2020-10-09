@@ -160,24 +160,38 @@ export default function ListOffer() {
                                     </Typography>
                                     {currentOfferId === item.id &&
                                     <div>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Nombre de semaine: ${item.nbOfWeeks}`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
                                             {`Salaire: ${item.salary}`}
                                         </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Heure de début: ${item.beginHour}h00`}
+
+                                        <Typography color={"textSecondary"}
+                                                    variant={"body1"}
+                                                    display={"block"}>
+                                            {"Nombre de places restants :  "
+                                            + item.nbStudentToHire}
+                                        </Typography>
+
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
+                                            {`Date de création: ${parseDate(
+                                                item.creationDate)}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
+                                            {`Date limite pour appliquer : ${parseDate(
+                                                item.limitDateToApply)}`}
+                                        </Typography>
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
+                                            {`Date Debut du stage : ${parseDate(
+                                                item.internshipStartDate)}`}
                                         </Typography>
                                         <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Heure de fin: ${item.endHour}h00`}
+                                            {`Date fin du stage : ${parseDate(
+                                                item.internshipEndDate)}`}
                                         </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Date de création: ${parseDate(item.creationDate)}`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Date limite pour appliquer : ${parseDate(item.limitDateToApply)}`}
-                                        </Typography>
+
                                     </div>
                                     }
                                     {item.applications.length !== 0 &&

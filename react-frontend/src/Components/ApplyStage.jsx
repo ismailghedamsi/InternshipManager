@@ -189,26 +189,45 @@ export default function ApplyStage() {
                                     </Typography>
                                     {currentOfferId === item.id &&
                                     <div>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
                                             {`Description: ${item.description}`}
                                         </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Nombre de semaine: ${item.nbOfWeeks}`}
-                                        </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
                                             {`Salaire: ${item.salary}`}
                                         </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Heure de début: ${item.beginHour}h00`}
+                                        <Typography color={"textSecondary"}
+                                                    variant={"body1"}
+                                                    display={"block"}>
+                                            {"Nombre de places restants :  "
+                                            + item.nbStudentToHire}
                                         </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Heure de fin: ${item.endHour}h00`}
+
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
+                                            {`Date de création: ${parseDate(
+                                                item.creationDate)}`}
                                         </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Date de création: ${parseDate(item.creationDate)}`}
+                                        <Typography color={"textSecondary"}
+                                                    variant={"body1"}
+                                                    display={"block"}>
+                                            {"Date limite d'application : "
+                                            + (item.limitDateToApply
+                                                + "").split("T")[0]}
                                         </Typography>
-                                        <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Date limite pour appliquer : ${parseDate(item.limitDateToApply)}`}
+
+                                        <Typography color={"textSecondary"}
+                                                    variant={"body1"}
+                                                    display={"block"}>
+                                            {"Date du début du stage : "
+                                            + (item.creationDate + "").split(
+                                                "T")[0]}
+                                        </Typography>
+                                        <Typography color={"textPrimary"}
+                                                    variant={"body2"}>
+                                            {`Date limite pour appliquer : ${parseDate(
+                                                item.limitDateToApply)}`}
                                         </Typography>
                                     </div>
                                     }

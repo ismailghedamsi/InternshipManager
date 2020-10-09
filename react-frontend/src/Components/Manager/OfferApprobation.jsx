@@ -153,16 +153,34 @@ export default function OfferApprobation() {
                                 </button>
                                 {currentOfferIndex === i &&
                                 <div className={[classes.offreInfos]}>
-                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                        {"Date limite d'application : " + (item.limitDateToApply + "").split("T")[0]}
-                                    </Typography>
+                                  <Typography color={"textSecondary"}
+                                              variant={"body1"}
+                                              display={"block"}>
+                                    {"Date de création de l'offre : "
+                                    + (item.creationDate + "").split("T")[0]}
+                                  </Typography>
 
-                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                        {"Date de création de l'offre : " + (item.creationDate + "").split("T")[0]}
-                                    </Typography>
+                                  <Typography color={"textSecondary"}
+                                              variant={"body1"}
+                                              display={"block"}>
+                                    {"Date limite d'application : "
+                                    + (item.limitDateToApply + "").split(
+                                        "T")[0]}
+                                  </Typography>
 
-                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                        {"Nombre de semaines : " + item.nbOfWeeks}
+                                  <Typography color={"textSecondary"}
+                                              variant={"body1"}
+                                              display={"block"}>
+                                    {"Date du début du stage : "
+                                    + (item.creationDate + "").split("T")[0]}
+                                  </Typography>
+
+                                  <Typography color={"textSecondary"}
+                                              variant={"body1"}
+                                              display={"block"}>
+                                    {"Date de fin du stage : "
+                                    + (item.limitDateToApply + "").split(
+                                        "T")[0]}
                                     </Typography>
 
                                     <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
@@ -170,7 +188,8 @@ export default function OfferApprobation() {
                                     </Typography>
 
                                     <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                        {"Horaire : " + (item.beginHour < 10 ? "0" : "") + item.beginHour + ":00 - " + item.endHour + ":00"}
+                                      {"Nombre de place restantes :  "
+                                      + item.nbStudentToHire}
                                     </Typography>
 
                                     <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
