@@ -52,11 +52,12 @@ class InternshipOfferServiceTests {
         String pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
         try {
             expectedOffer = InternshipOffer.builder().id(1L).allowedStudents(new ArrayList<>())
-                .beginHour(8).endHour(16)
                 .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
                 .description("description").employer(employer).joinedFile(pdfContent)
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                .nbOfWeeks(8).salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
+                .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/11/2020"))
+                .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/04/2021"))
+                .salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
         } catch (ParseException e) {
 
             e.printStackTrace();
@@ -64,11 +65,12 @@ class InternshipOfferServiceTests {
 
         try {
             expectedOffer2 = InternshipOffer.builder().id(2).allowedStudents(new ArrayList<>())
-                .beginHour(8).endHour(16)
                 .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
                 .description("description").employer(new Employer()).joinedFile(pdfContent)
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                .nbOfWeeks(8).salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
+                .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2021"))
+                .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2021"))
+                .salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
         } catch (ParseException e) {
             e.printStackTrace();
         }
