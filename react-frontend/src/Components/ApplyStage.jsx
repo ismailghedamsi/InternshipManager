@@ -184,9 +184,11 @@ export default function ApplyStage() {
                                     <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                         {item.title + " "}
                                     </Typography>
+
                                     <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
                                         {item.employer.companyName}
                                     </Typography>
+
                                     {currentOfferId === item.id &&
                                     <div>
                                         <Typography color={"textPrimary"}
@@ -203,7 +205,6 @@ export default function ApplyStage() {
                                             {"Nombre de places restants :  "
                                             + item.nbStudentToHire}
                                         </Typography>
-
                                         <Typography color={"textPrimary"}
                                                     variant={"body2"}>
                                             {`Date de création: ${parseDate(
@@ -216,7 +217,6 @@ export default function ApplyStage() {
                                             + (item.limitDateToApply
                                                 + "").split("T")[0]}
                                         </Typography>
-
                                         <Typography color={"textSecondary"}
                                                     variant={"body1"}
                                                     display={"block"}>

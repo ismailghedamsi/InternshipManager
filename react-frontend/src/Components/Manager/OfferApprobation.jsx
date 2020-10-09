@@ -159,7 +159,6 @@ export default function OfferApprobation() {
                                     {"Date de création de l'offre : "
                                     + (item.creationDate + "").split("T")[0]}
                                   </Typography>
-
                                   <Typography color={"textSecondary"}
                                               variant={"body1"}
                                               display={"block"}>
@@ -167,34 +166,36 @@ export default function OfferApprobation() {
                                     + (item.limitDateToApply + "").split(
                                         "T")[0]}
                                   </Typography>
-
                                   <Typography color={"textSecondary"}
                                               variant={"body1"}
                                               display={"block"}>
                                     {"Date du début du stage : "
                                     + (item.creationDate + "").split("T")[0]}
                                   </Typography>
-
                                   <Typography color={"textSecondary"}
                                               variant={"body1"}
                                               display={"block"}>
                                     {"Date de fin du stage : "
                                     + (item.limitDateToApply + "").split(
                                         "T")[0]}
-                                    </Typography>
-
-                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                        {"Salaire horaire : $ " + item.salary}
-                                    </Typography>
-
-                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                      {"Nombre de place restantes :  "
-                                      + item.nbStudentToHire}
-                                    </Typography>
-
-                                    <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                        {"Description de l'offre : " + item.description}
-                                    </Typography>
+                                  </Typography>
+                                  <Typography color={"textSecondary"}
+                                              variant={"body1"}
+                                              display={"block"}>
+                                    {"Salaire horaire : $ " + item.salary}
+                                  </Typography>
+                                  <Typography color={"textSecondary"}
+                                              variant={"body1"}
+                                              display={"block"}>
+                                    {"Nombre de places restants :  "
+                                    + item.nbStudentToHire}
+                                  </Typography>
+                                  <Typography color={"textSecondary"}
+                                              variant={"body1"}
+                                              display={"block"}>
+                                    {"Description de l'offre : "
+                                    + item.description}
+                                  </Typography>
                                 </div>
                                 }
                                 <hr/>

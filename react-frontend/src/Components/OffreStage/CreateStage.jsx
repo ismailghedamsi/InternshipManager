@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLittleError = (valueNumber) => "Doit avoir au moins un chiffre plus grand que ou égal que " + valueNumber.min;
-const tooBigError = (valueNumber) => "Doit avoir au moins plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function CreateStuff() {

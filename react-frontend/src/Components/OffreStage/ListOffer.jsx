@@ -164,14 +164,12 @@ export default function ListOffer() {
                                                     variant={"body2"}>
                                             {`Salaire: ${item.salary}`}
                                         </Typography>
-
                                         <Typography color={"textSecondary"}
                                                     variant={"body1"}
                                                     display={"block"}>
                                             {"Nombre de places restants :  "
                                             + item.nbStudentToHire}
                                         </Typography>
-
                                         <Typography color={"textPrimary"}
                                                     variant={"body2"}>
                                             {`Date de création: ${parseDate(
@@ -191,7 +189,6 @@ export default function ListOffer() {
                                             {`Date fin du stage : ${parseDate(
                                                 item.internshipEndDate)}`}
                                         </Typography>
-
                                     </div>
                                     }
                                     {item.applications.length !== 0 &&
