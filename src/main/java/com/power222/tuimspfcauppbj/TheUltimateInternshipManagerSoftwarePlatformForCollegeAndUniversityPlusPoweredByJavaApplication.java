@@ -4,15 +4,12 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.*;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Profile;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-
+import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.Resume;
+import com.power222.tuimspfcauppbj.model.Student;
+import com.power222.tuimspfcauppbj.model.StudentApplication;
+import com.power222.tuimspfcauppbj.model.User;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +17,13 @@ import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collections;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -125,10 +129,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 o = internshipRepo.saveAndFlush(InternshipOffer.builder()
                         .title("testInternship " + i)
                         .description("Some basic description " + i)
-                        .nbOfWeeks(15)
                         .salary(15.98)
-                        .beginHour(8)
-                        .endHour(18)
                         .creationDate(Date.from(Instant.now()))
                         .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
                         .joinedFile("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
