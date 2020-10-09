@@ -43,5 +43,10 @@ export const Menu = [
         title: 'Offre de stages',
         url: '/dashboard/stagelist',
         role: 'student'
+    },
+    {
+        title: 'Entrevue',
+        url: '/dashboard/entrevue',
+        role: 'student'
     }
 ]
