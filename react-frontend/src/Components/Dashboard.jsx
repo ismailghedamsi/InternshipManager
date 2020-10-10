@@ -22,7 +22,9 @@ const useStyles = makeStyles(() => ({
         minHeight: "100vh",
     },
     container: {
-        flex: 1
+        flex: 1,
+        minHeight: "90vh",
+        maxHeight: "90vh"
     }
 }));
 
