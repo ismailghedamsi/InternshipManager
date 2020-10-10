@@ -76,7 +76,7 @@ export default function OfferApprobation() {
         const nextState = [...offers];
         nextState[index].reviewState = reviewState;
         nextState[index].reasonForRejection = reason;
-        return axios.put("http://localhost:8080/offers/" + nextState[index].id, nextState[index])
+        return axios.put("http://localhost:8080/api/offers/" + nextState[index].id, nextState[index])
             .then(() => {
                 nextState.splice(index, 1)
                 setOffers(nextState)
@@ -87,7 +87,7 @@ export default function OfferApprobation() {
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/offers/pending")
+            const result = await axios.get("http://localhost:8080/api/offers/pending")
                 .catch(() => {
                     setErrorModalOpen(true)
                 })

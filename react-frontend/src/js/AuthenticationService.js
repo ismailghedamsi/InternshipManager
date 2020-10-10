@@ -2,7 +2,7 @@ import axios from 'axios'
 
 class AuthenticationService {
     interceptorId = 0;
-    baseUrl = "http://localhost:8080";
+    baseUrl = "http://localhost:8080/api";
 
     constructor() {
         console.info("Called AuthService constructor")

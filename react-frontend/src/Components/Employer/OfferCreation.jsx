@@ -151,7 +151,7 @@ export default function OfferCreation() {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Field
-                                            component={TextField}
+                                            component={Field}
                                             name="nbOfWeeks"
                                             id="nbOfWeeks"
                                             variant="outlined"
@@ -164,7 +164,7 @@ export default function OfferCreation() {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Field
-                                            component={TextField}
+                                            component={Field}
                                             name="salary"
                                             id="salary"
                                             variant="outlined"
@@ -177,7 +177,7 @@ export default function OfferCreation() {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Field
-                                            component={TextField}
+                                            component={Field}
                                             name="beginHour"
                                             id="beginHour"
                                             variant="outlined"
@@ -190,7 +190,7 @@ export default function OfferCreation() {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Field
-                                            component={TextField}
+                                            component={Field}
                                             name="endHour"
                                             id="endHour"
                                             variant="outlined"
@@ -204,7 +204,7 @@ export default function OfferCreation() {
 
                                     <Grid item xs={12}>
                                         <Field
-                                            component={TextField}
+                                            component={Field}
                                             name="limitDateToApply"
                                             id="limitDateToApply"
                                             variant="outlined"

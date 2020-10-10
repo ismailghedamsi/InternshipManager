@@ -55,7 +55,7 @@ class ResumeUpload extends Component {
                                 return this.readFileAsync(values.file).then((file) => {
                                     let dto = {...values};
                                     dto.file = file;
-                                    return axios.post("http://localhost:8080/resumes", dto)
+                                    return axios.post("http://localhost:8080/api/resumes", dto)
                                         .then(() => this.props.history.push("/dashboard/listcv"))
                                 })
                             }}

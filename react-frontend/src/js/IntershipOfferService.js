@@ -11,7 +11,7 @@ class IntershipOfferService {
             dto.joinedFile = base64file;
             dto.employer = AuthenticationService.getCurrentUser();
 
-            return axios.post("http://localhost:8080/offers", dto)
+            return axios.post("http://localhost:8080/api/offers", dto)
         })
     }
 

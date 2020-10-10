@@ -112,7 +112,7 @@ export default function PasswordChange() {
                         <Divider className={classes.divider}/>
                         <Formik
                             onSubmit={async (values, {setFieldError}) =>
-                                axios.put("http://localhost:8080/auth/password", values)
+                                axios.put("http://localhost:8080/api/auth/password", values)
                                     .then(() => history.push("/"))
                                     .catch((error) => handleHttpError(error, setFieldError))
                             }

@@ -74,7 +74,7 @@ export default function ResumeApprobation() {
         nextState[index].approuved = approuved;
         nextState[index].reviewed = true;
         nextState[index].reasonForRejection = reason;
-        return axios.put("http://localhost:8080/resumes/" + nextState[index].id, nextState[index])
+        return axios.put("http://localhost:8080/api/resumes/" + nextState[index].id, nextState[index])
             .then(() => {
                 nextState.splice(index, 1)
                 setResumes(nextState)
@@ -85,7 +85,7 @@ export default function ResumeApprobation() {
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/resumes/pending")
+            const result = await axios.get("http://localhost:8080/api/resumes/pending")
                 .catch(() => {
                     setErrorModalOpen(true)
                 })

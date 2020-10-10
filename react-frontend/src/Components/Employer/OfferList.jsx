@@ -88,7 +88,7 @@ export default function OfferList() {
     useEffect(() => {
         const getData = async () => {
 
-            const result = await axios.get("http://localhost:8080/offers/employer/" + AuthenticationService.getCurrentUser().username)
+            const result = await axios.get("http://localhost:8080/api/offers/employer/" + AuthenticationService.getCurrentUser().username)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
@@ -110,7 +110,7 @@ export default function OfferList() {
 
     function deleteOffer(index) {
         const nextState = [...offers];
-        return axios.delete("http://localhost:8080/offers/" + nextState[index].id)
+        return axios.delete("http://localhost:8080/api/offers/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)
                 setOffers(nextState)

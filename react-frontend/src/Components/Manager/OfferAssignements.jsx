@@ -67,7 +67,7 @@ export default function OfferAssignements() {
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/offers/approved")
+        axios.get("http://localhost:8080/api/offers/approved")
             .catch(() => {
                 setErrorModalOpen(true)
             })
@@ -75,7 +75,7 @@ export default function OfferAssignements() {
     }, [])
 
     useEffect(() => {
-        axios.get("http://localhost:8080/students")
+        axios.get("http://localhost:8080/api/students")
             .catch(() => {
                 setErrorModalOpen(true)
             })
@@ -139,7 +139,7 @@ export default function OfferAssignements() {
                                             allowed: false
                                         }}
                                         onSubmit={(values) => {
-                                            return axios.put("http://localhost:8080/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
+                                            return axios.put("http://localhost:8080/api/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
                                                 .then((r) => {
                                                     const nextState = [...offers];
                                                     nextState.splice(i, 1, r.data);

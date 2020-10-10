@@ -76,6 +76,7 @@ export default function Login() {
                 setOpen(true);
         } else
             setOpen(true);
+        console.log(error)
 
     };
 

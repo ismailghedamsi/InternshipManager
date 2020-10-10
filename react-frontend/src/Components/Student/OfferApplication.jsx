@@ -96,7 +96,7 @@ export default function OfferApplication() {
 
     useEffect(() => {
         const getData = async () => {
-            await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
+            await axios.get("http://localhost:8080/api/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
@@ -108,7 +108,7 @@ export default function OfferApplication() {
 
     useEffect(() => {
         const getData = async () => {
-            await axios.get("http://localhost:8080/offers/student/" + AuthenticationService.getCurrentUser().id)
+            await axios.get("http://localhost:8080/api/offers/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
@@ -266,7 +266,7 @@ export default function OfferApplication() {
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
                             onSubmit={async (values) => {
-                                return axios.post("http://localhost:8080/application/" + currentOfferId + "/" + values.resumeId, {})
+                                return axios.post("http://localhost:8080/api/application/" + currentOfferId + "/" + values.resumeId, {})
                                     .then((r) => {
                                         const nextState = [...offers];
                                         nextState.find(o => o.id === currentOfferId).applications.push(r.data)

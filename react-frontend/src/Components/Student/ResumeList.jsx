@@ -74,7 +74,7 @@ export default function ResumeList() {
 
     useEffect(() => {
         const getData = async () => {
-            await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
+            await axios.get("http://localhost:8080/api/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
@@ -94,7 +94,7 @@ export default function ResumeList() {
 
     function deleteResume(index) {
         const nextState = [...resumes];
-        return axios.delete("http://localhost:8080/resumes/" + nextState[index].id)
+        return axios.delete("http://localhost:8080/api/resumes/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)
                 setResumes(nextState)
