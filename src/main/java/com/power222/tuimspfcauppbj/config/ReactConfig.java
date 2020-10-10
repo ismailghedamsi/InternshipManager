@@ -15,7 +15,7 @@ public class ReactConfig implements WebMvcConfigurer {
         // Single directory level - no need to exclude "api"
         registry.addViewController("/{x:[\\w\\-]+}").setViewName("forward:/index.html");
         // Multi-level directory path, need to exclude "api" on the first part of the path
-        registry.addViewController("/{x:^(?!api$).*$}/**/{y:[\\w\\-]+}").setViewName("forward:/index.html");
+        registry.addViewController("/{x:^((?!api$)(?!swagger-ui$)).*$}/**/{y:[\\w\\-]+}").setViewName("forward:/index.html");
 
     }
 
