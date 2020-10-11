@@ -85,6 +85,12 @@ export default function OfferApprobation() {
             .catch(() => setErrorModalOpen(true))
     }
 
+    function parseDate(date) {
+        const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        const d = new Date(date);
+        return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
+    }
+
     useEffect(() => {
         const getData = async () => {
             const result = await axios.get("http://localhost:8080/offers/pending")
@@ -153,37 +159,35 @@ export default function OfferApprobation() {
                                 </button>
                                 {currentOfferIndex === i &&
                                 <div className={[classes.offreInfos]}>
-                                  <Typography color={"textSecondary"}
-                                              variant={"body1"}
-                                              display={"block"}>
-                                    {"Date de création de l'offre : "
-                                    + (item.creationDate + "").split("T")[0]}
-                                  </Typography>
-                                  <Typography color={"textSecondary"}
-                                              variant={"body1"}
-                                              display={"block"}>
-                                    {"Date limite d'application : "
-                                    + (item.limitDateToApply + "").split(
-                                        "T")[0]}
-                                  </Typography>
-                                  <Typography color={"textSecondary"}
-                                              variant={"body1"}
-                                              display={"block"}>
-                                    {"Date du début du stage : "
-                                    + (item.creationDate + "").split("T")[0]}
-                                  </Typography>
-                                  <Typography color={"textSecondary"}
-                                              variant={"body1"}
-                                              display={"block"}>
-                                    {"Date de fin du stage : "
-                                    + (item.limitDateToApply + "").split(
-                                        "T")[0]}
-                                  </Typography>
-                                  <Typography color={"textSecondary"}
-                                              variant={"body1"}
-                                              display={"block"}>
-                                    {"Salaire horaire : $ " + item.salary}
-                                  </Typography>
+                                    <Typography color={"textSecondary"}
+                                                variant={"body1"}
+                                                display={"block"}>
+                                        {`Date de création de l'offre :  ${parseDate(
+                                            item.creationDate)}`}
+                                    </Typography>
+                                    <Typography color={"textSecondary"}
+                                                variant={"body1"}
+                                                display={"block"}>
+                                        {`Date limite d'application : ${parseDate(
+                                            item.limitDateToApply)} `}
+                                    </Typography>
+                                    <Typography color={"textSecondary"}
+                                                variant={"body1"}
+                                                display={"block"}>
+                                        {`Date du début du stage : ${parseDate(
+                                            item.internshipStartDate)} `}
+                                    </Typography>
+                                    <Typography color={"textSecondary"}
+                                                variant={"body1"}
+                                                display={"block"}>
+                                        {`Date de fin du stage : 
+                                     ${parseDate(item.internshipEndDate)}`}
+                                    </Typography>
+                                    <Typography color={"textSecondary"}
+                                                variant={"body1"}
+                                                display={"block"}>
+                                        {"Salaire horaire : $ " + item.salary}
+                                    </Typography>
                                   <Typography color={"textSecondary"}
                                               variant={"body1"}
                                               display={"block"}>

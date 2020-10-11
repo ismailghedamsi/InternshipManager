@@ -14,6 +14,7 @@ import OfferAssignements from "./Manager/OfferAssignements";
 import ApplyStage from "./ApplyStage";
 import ApplicationList from "./ApplicationList";
 import AuthenticationService from '../js/AuthenticationService';
+import ApplicationListManager from './Manager/ApplicationListManager';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -57,6 +58,13 @@ export default function Dashboard(props) {
                                         path="/dashboard/assignement/cv"
                                         component={OfferAssignements}
                                         role={"admin"}/>
+
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/applicationList"
+                                        component={ApplicationListManager}
+                                        role={"admin"}/>
+
+
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"

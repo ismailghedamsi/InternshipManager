@@ -156,7 +156,6 @@ export default function CreateStuff() {
                                             fullWidth
                                         />
                                     </Grid>
-
                                     <Grid item xs={12} sm={6}>
                                         <Field
                                             component={TextField}
@@ -189,7 +188,7 @@ export default function CreateStuff() {
                                             name="internshipStartDate"
                                             id="internshipStartDate"
                                             variant="outlined"
-                                            label="Date du début du stage"
+                                            label="Date de début du stage"
                                             required
                                             fullWidth
                                             type={"date"}
@@ -201,7 +200,7 @@ export default function CreateStuff() {
                                             name="internshipEndDate"
                                             id="internshipEndDate"
                                             variant="outlined"
-                                            label="Date de la fin du stage"
+                                            label="Fin du stage"
                                             required
                                             fullWidth
                                             type={"date"}

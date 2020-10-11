@@ -202,7 +202,7 @@ export default function ApplyStage() {
                                         <Typography color={"textSecondary"}
                                                     variant={"body1"}
                                                     display={"block"}>
-                                            {"Nombre de places restants :  "
+                                            {"Nombre de places disponibles :  "
                                             + item.nbStudentToHire}
                                         </Typography>
                                         <Typography color={"textPrimary"}
@@ -213,16 +213,14 @@ export default function ApplyStage() {
                                         <Typography color={"textSecondary"}
                                                     variant={"body1"}
                                                     display={"block"}>
-                                            {"Date limite d'application : "
-                                            + (item.limitDateToApply
-                                                + "").split("T")[0]}
+                                            {`Date du début du stage :  ${parseDate(
+                                                item.internshipStartDate)}`}
                                         </Typography>
                                         <Typography color={"textSecondary"}
                                                     variant={"body1"}
                                                     display={"block"}>
-                                            {"Date du début du stage : "
-                                            + (item.creationDate + "").split(
-                                                "T")[0]}
+                                            {`Date de fin du stage : 
+                                     ${parseDate(item.internshipEndDate)}`}
                                         </Typography>
                                         <Typography color={"textPrimary"}
                                                     variant={"body2"}>
