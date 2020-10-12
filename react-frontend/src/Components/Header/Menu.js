@@ -48,5 +48,10 @@ export const Menu = [
         title: 'Entrevue',
         url: '/dashboard/entrevue',
         role: 'student'
+    },
+    {
+        title: 'Acceptation',
+        url: '/dashboard/acceptation',
+        role: 'student'
     }
 ]

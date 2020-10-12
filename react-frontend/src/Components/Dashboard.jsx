@@ -15,6 +15,7 @@ import ApplyStage from "./ApplyStage";
 import ApplicationList from "./ApplicationList";
 import AuthenticationService from '../js/AuthenticationService';
 import Interview from "./Interview";
+import AcceptStage from "./AcceptStage";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -87,6 +88,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/entrevue"
                                         component={Interview}
+                                        role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/Acceptation"
+                                        component={AcceptStage}
                                         role={"student"}/>
                 </Switch>
             </div>
