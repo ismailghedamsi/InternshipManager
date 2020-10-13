@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.StudentApplicationController;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
@@ -23,8 +24,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import({TestsWithoutSecurityConfig.class})
@@ -33,6 +35,9 @@ class StudentApplicationControllerTests {
 
     @Autowired
     MockMvc mvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private StudentApplicationService svc;
@@ -46,6 +51,7 @@ class StudentApplicationControllerTests {
                 .offer(new InternshipOffer())
                 .student(new Student())
                 .resume(new Resume())
+                .isHired(false)
                 .build();
     }
 
@@ -69,5 +75,30 @@ class StudentApplicationControllerTests {
                 .content("{}")).andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void updateAppliIsHired() throws Exception {
+
+        when(svc.updateStudentApplicationIsHired((expected.getId()))).thenReturn(Optional.of(expected));
+
+        MvcResult result = mvc.perform(put("/application/isHired/" + expected.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(svc, times(1)).updateStudentApplicationIsHired(expected.getId());
+    }
+
+    @Test
+    void updateAppliIsHiredBadId() throws Exception {
+
+        when(svc.updateStudentApplicationIsHired((expected.getId()))).thenReturn(Optional.of(expected));
+
+        MvcResult result = mvc.perform(put("/application/isHired/" + 100)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
     }
 }

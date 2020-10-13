@@ -30,7 +30,7 @@ public class StudentApplicationController {
     public ResponseEntity<StudentApplication> updateIsHiredStudentApplication(@PathVariable long id) {
         return svc.updateStudentApplicationIsHired(id)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 
     }
 
