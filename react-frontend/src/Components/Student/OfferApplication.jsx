@@ -11,7 +11,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
-import AuthenticationService from "../../js/AuthenticationService";
+import AuthenticationService from "../../Services/AuthenticationService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Select} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";

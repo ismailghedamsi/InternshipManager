@@ -129,7 +129,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .endHour(18)
                         .creationDate(Date.from(Instant.now()))
                         .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
-                        .joinedFile("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + (i > 6 ? i / 2 : i) + ".pdf")).readAllBytes())))
+                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + (i > 6 ? i / 2 : i) + ".pdf")).readAllBytes())))
                         .employer(e)
                         .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
                         .reviewState(i == 5 ? InternshipOffer.ReviewState.APPROVED : InternshipOffer.ReviewState.PENDING)

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import AuthenticationService from "../js/AuthenticationService";
+import AuthenticationService from "../Services/AuthenticationService";
 import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";

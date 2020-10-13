@@ -4,7 +4,7 @@ import {Redirect, Route, Switch} from 'react-router-dom';
 import {RoleProtectedRoute} from "./Utils/Routes";
 import Navbar from "./Utils/Header/Navbar";
 import Footer from "./Utils/Footer";
-import AuthenticationService from '../js/AuthenticationService';
+import AuthenticationService from '../Services/AuthenticationService';
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
@@ -14,6 +14,7 @@ import ApplicationList from "./Employer/ApplicationList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
+import {Container} from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -23,8 +24,8 @@ const useStyles = makeStyles(() => ({
     },
     container: {
         flex: 1,
-        minHeight: "90vh",
-        maxHeight: "90vh"
+        height: "90vh",
+        overflow: "hidden"
     }
 }));
 
@@ -34,7 +35,7 @@ export default function Dashboard(props) {
     return (
         <div className={classes.root}>
             <Navbar {...props}/>
-            <div className={classes.container}>
+            <Container className={classes.container}>
                 <Switch>
                     <Route exact={true} path={"/dashboard"}>
                         <Redirect to={function () {
@@ -86,7 +87,7 @@ export default function Dashboard(props) {
                                         component={OfferApplication}
                                         role={"student"}/>
                 </Switch>
-            </div>
+            </Container>
             <Footer/>
         </div>
     );

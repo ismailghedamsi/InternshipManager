@@ -3,7 +3,7 @@ import {Menu} from "./Menu"
 import './Navbar.css'
 import {Link, useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
-import AuthenticationService from "../../../js/AuthenticationService";
+import AuthenticationService from "../../../Services/AuthenticationService";
 
 const useStyles = makeStyles((theme) => ({
     navbarColor: {

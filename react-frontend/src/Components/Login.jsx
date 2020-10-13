@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
-import AuthenticationService from '../js/AuthenticationService';
+import AuthenticationService from '../Services/AuthenticationService';
 import Grid from "@material-ui/core/Grid";
 import {TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";

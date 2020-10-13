@@ -5,9 +5,7 @@ class AuthenticationService {
     baseUrl = "http://localhost:8080/api";
 
     constructor() {
-        console.info("Called AuthService constructor")
         if (this.isUserLoggedIn()) {
-            console.info("Setting up...")
             const user = this.getCurrentUser().username;
             const pass = this.getCurrentUser().password;
             this.setupAxiosInterceptors(user, pass);

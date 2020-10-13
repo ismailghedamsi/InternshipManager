@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import {Document, Page} from 'react-pdf';
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import AuthenticationService from '../../js/AuthenticationService';
+import AuthenticationService from '../../Services/AuthenticationService';
 import Container from "@material-ui/core/Container";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
