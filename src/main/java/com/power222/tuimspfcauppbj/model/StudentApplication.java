@@ -17,6 +17,8 @@ public class StudentApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private boolean hasStudentAccepted;
+
     @ManyToOne
     @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})
     private InternshipOffer offer;

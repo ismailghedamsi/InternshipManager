@@ -38,4 +38,12 @@ public class StudentApplicationService {
         } else
             return Optional.empty();
     }
+
+    public Optional<StudentApplication> updateStudentApplicationHasStudentAccepted(long idStudentApplication) {
+        return appliRepo.findById(idStudentApplication)
+                .map(oldAppli -> {
+                    oldAppli.setHasStudentAccepted(true);
+                    return appliRepo.saveAndFlush(oldAppli);
+                });
+    }
 }
