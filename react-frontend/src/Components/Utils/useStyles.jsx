@@ -59,4 +59,13 @@ export const useStyles = makeStyles((theme) => ({
         backgroundColor: "#fff",
         borderRadius: theme.spacing(2),
     },
+    appliedMark: {
+        fontSize: "1.5rem",
+        backgroundColor: "transparent",
+        border: "none",
+        margin: 0,
+        padding: 5,
+        borderRadius: 0,
+        textAlign: "left",
+    },
 }));

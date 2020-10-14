@@ -62,8 +62,7 @@ export default function OfferApprobation() {
                             onClick={() => {
                                 setCurrent(i);
                                 setCurrentOfferIndex(i);
-                            }}
-                        >
+                            }}>
                             <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                 {" " + offers[i].title + " "}
                             </Typography>
