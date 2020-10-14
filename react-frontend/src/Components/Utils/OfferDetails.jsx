@@ -8,26 +8,40 @@ export default function OfferDetails(props) {
 
     return (
         <div>
-            <Typography color={"textPrimary"} variant={"body2"}>
-                {`Description: ${props.offer.description}`}
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {`Date de création de l'offre :  ${parseDate(props.offer.creationDate)}`}
             </Typography>
-            <Typography color={"textPrimary"} variant={"body2"}>
-                {`Nombre de semaine: ${props.offer.nbOfWeeks}`}
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {`Date limite d'application : ${parseDate(props.offer.limitDateToApply)} `}
             </Typography>
-            <Typography color={"textPrimary"} variant={"body2"}>
-                {`Salaire: ${props.offer.salary}`}
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {`Début du stage : ${parseDate(props.offer.internshipStartDate)} `}
             </Typography>
-            <Typography color={"textPrimary"} variant={"body2"}>
-                {`Heure de début: ${props.offer.beginHour}h00`}
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {`Fin du stage : ${parseDate(props.offer.internshipEndDate)}`}
             </Typography>
-            <Typography color={"textPrimary"} variant={"body2"}>
-                {`Heure de fin: ${props.offer.endHour}h00`}
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {"Salaire horaire : $ " + props.offer.salary}
             </Typography>
-            <Typography color={"textPrimary"} variant={"body2"}>
-                {`Date de création: ${parseDate(props.offer.creationDate)}`}
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {"Nombre de places disponibles :  " + props.offer.nbStudentToHire}
             </Typography>
-            <Typography color={"textPrimary"} variant={"body2"}>
-                {`Date limite pour appliquer : ${parseDate(props.offer.limitDateToApply)}`}
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {"Description de l'offre : " + props.offer.description}
             </Typography>
         </div>
     );

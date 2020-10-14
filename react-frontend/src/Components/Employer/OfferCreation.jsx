@@ -50,7 +50,7 @@ export default function OfferCreation() {
         creationDate: new Date(),
         internshipStartDate: new Date(),
         internshipEndDate: new Date(),
-        nbStudentToHire: 0,
+        nbStudentToHire: '',
         limitDateToApply: new Date(),
         file: ""
     }
@@ -83,7 +83,7 @@ export default function OfferCreation() {
             justify="center"
             style={{minHeight: '100vh'}}
         >
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <Formik
                         onSubmit={async (values) => sendOfferToBackEnd(values)
@@ -131,7 +131,7 @@ export default function OfferCreation() {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12}>
                                         <Field
                                             component={TextField}
                                             name="nbStudentToHire"
@@ -157,32 +157,32 @@ export default function OfferCreation() {
                                             InputProps={{inputProps: {min: 0}}}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} sm={6}>
                                         <Field
-                                            component={TextField}
+                                            component={DatePicker}
                                             name="internshipStartDate"
                                             id="internshipStartDate"
                                             variant="outlined"
                                             label="Début du stage"
                                             required
                                             fullWidth
-                                            type={"date"}
+                                            format="MM/dd/yyyy"
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} sm={6}>
                                         <Field
-                                            component={TextField}
+                                            component={DatePicker}
                                             name="internshipEndDate"
                                             id="internshipEndDate"
                                             variant="outlined"
                                             label="Fin du stage"
                                             required
                                             fullWidth
-                                            type={"date"}
+                                            format="MM/dd/yyyy"
                                         />
                                     </Grid>
 
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} sm={6}>
                                         <Field
                                             component={DatePicker}
                                             name="limitDateToApply"

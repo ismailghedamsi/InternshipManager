@@ -72,7 +72,7 @@ public class InternshipOfferControllerTests {
                 .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("1/08/2020"))
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
                 .description("desc")
-                .joinedFile("alalalala")
+                .file("alalalala")
                 .file("alalalala")
                 .salary(15.87)
                 .reviewState(InternshipOffer.ReviewState.APPROVED)
