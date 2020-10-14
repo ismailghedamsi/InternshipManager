@@ -15,6 +15,8 @@ import * as yup from "yup";
 import {useStyles} from "./Utils/useStyles";
 import {ModalContext} from "../App";
 
+const HTTP_UNAUTHORIZED = 401;
+const HTTP_TOKEN_EXPIRED = 498;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function Login() {
@@ -28,10 +30,10 @@ export default function Login() {
 
     const handleHttpError = (error, setFieldError, username) => {
         if (error.response) {
-            if (error.response.status === 401) {
+            if (error.response.status === HTTP_UNAUTHORIZED) {
                 setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
                 setFieldError("password", "   ")
-            } else if (error.response.status === 498) {
+            } else if (error.response.status === HTTP_TOKEN_EXPIRED) {
                 history.push("/passwordChange", {username: username})
             } else
                 open();
