@@ -34,6 +34,9 @@ public class StudentApplicationService {
                     .student((Student) currentUser)
                     .offer(offer.get())
                     .resume(resume.get())
+                    .isHired(false)
+                    .hasStudentAccepted(false)
+                    .reasonForRejection("")
                     .build()));
         } else
             return Optional.empty();
@@ -45,5 +48,14 @@ public class StudentApplicationService {
                     oldAppli.setHasStudentAccepted(true);
                     return appliRepo.saveAndFlush(oldAppli);
                 });
+    }
+
+    public StudentApplication updateStudentApplication(long id, StudentApplication application) {
+        return appliRepo.findById(id)
+                .map(oldApplication -> {
+                    application.setId(oldApplication.getId());
+                    return appliRepo.saveAndFlush(application);
+                })
+                .orElse(application);
     }
 }
