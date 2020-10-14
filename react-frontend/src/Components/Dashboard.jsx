@@ -1,19 +1,20 @@
 import React from 'react';
-import Navbar from "./Header/Navbar";
-import Footer from "./Footer";
 import {makeStyles} from "@material-ui/core/styles";
-import {RoleProtectedRoute} from "./Routes";
-import OfferApprobation from "./Manager/OfferApprobation";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import UploadCV from "./Upload/UploadCV";
-import ListCV from "./ListCV";
-import CreateStage from "./OffreStage/CreateStage";
-import ListOffer from "./OffreStage/ListOffer";
+import {RoleProtectedRoute} from "./Utils/Routes";
+import Navbar from "./Utils/Header/Navbar";
+import Footer from "./Utils/Footer";
+import AuthenticationService from '../Services/AuthenticationService';
 import ResumeApprobation from "./Manager/ResumeApprobation";
+import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
-import ApplyStage from "./ApplyStage";
-import ApplicationList from "./ApplicationList";
-import AuthenticationService from '../js/AuthenticationService';
+import OfferCreation from "./Employer/OfferCreation";
+import OfferList from "./Employer/OfferList";
+import ApplicationList from "./Employer/ApplicationList";
+import ResumeUpload from "./Student/Upload/ResumeUpload";
+import ResumeList from "./Student/ResumeList";
+import OfferApplication from "./Student/OfferApplication";
+import {Container} from "@material-ui/core";
 import Interview from "./Interview";
 
 const useStyles = makeStyles(() => ({
@@ -23,7 +24,9 @@ const useStyles = makeStyles(() => ({
         minHeight: "100vh",
     },
     container: {
-        flex: 1
+        flex: 1,
+        height: "90vh",
+        overflow: "hidden"
     }
 }));
 
@@ -33,14 +36,14 @@ export default function Dashboard(props) {
     return (
         <div className={classes.root}>
             <Navbar {...props}/>
-            <div className={classes.container}>
+            <Container className={classes.container}>
                 <Switch>
                     <Route exact={true} path={"/dashboard"}>
                         <Redirect to={function () {
                             if (AuthenticationService.getCurrentUserRole() === "student")
-                                return "/dashboard/stagelist"
+                                return "/dashboard/stagelist";
                             else if (AuthenticationService.getCurrentUserRole() === "employer")
-                                return "/dashboard/listoffer"
+                                return "/dashboard/listoffer";
                             else
                                 return "/dashboard/approbation/offres"
                         }()}/>
@@ -61,11 +64,11 @@ export default function Dashboard(props) {
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
-                                        component={CreateStage}
+                                        component={OfferCreation}
                                         role={"employer"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/listoffer"
-                                        component={ListOffer}
+                                        component={OfferList}
                                         role={"employer"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/applications"
@@ -74,22 +77,22 @@ export default function Dashboard(props) {
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/upload"
-                                        component={UploadCV}
+                                        component={ResumeUpload}
                                         role={"student"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/listcv"
-                                        component={ListCV}
+                                        component={ResumeList}
                                         role={"student"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
-                                        component={ApplyStage}
+                                        component={OfferApplication}
                                         role={"student"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/entrevue"
                                         component={Interview}
                                         role={"student"}/>
                 </Switch>
-            </div>
+            </Container>
             <Footer/>
         </div>
     );

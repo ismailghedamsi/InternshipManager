@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/offers")
+@RequestMapping("/api/offers")
 public class InternshipOfferController {
     private final InternshipOfferService offerService;
 
@@ -18,7 +18,7 @@ public class InternshipOfferController {
     }
 
     @GetMapping
-    public List<InternshipOffer> getAllisNoOffers() {
+    public List<InternshipOffer> getAllOffers() {
         return offerService.getAllInternshipOffers();
     }
 
@@ -37,16 +37,16 @@ public class InternshipOfferController {
         return offerService.getApprovedInternshipOffers();
     }
 
+    @GetMapping("/employer/{username}")
+    public List<InternshipOffer> getOffersByEmployerUsername(@PathVariable String username) {
+        return offerService.getInternshipOffersOfEmployer(username);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<InternshipOffer> getOffer(@PathVariable long id) {
         return offerService.getInternshipOfferById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/employer/{username}")
-    public List<InternshipOffer> getOffersByEmployerUsername(@PathVariable String username) {
-        return offerService.getInternshipOffersOfEmployer(username);
     }
 
     @PostMapping

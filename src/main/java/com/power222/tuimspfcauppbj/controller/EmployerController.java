@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
-@RequestMapping("/employers")
+@RequestMapping("/api/employers")
 public class EmployerController {
 
     private final EmployerService svc;

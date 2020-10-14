@@ -60,7 +60,7 @@ public class EmployerControllerTests {
     void getEmployerTest() throws Exception {
         when(employerService.getEmployerById(1L)).thenReturn(Optional.ofNullable(expected));
 
-        MvcResult result = mvc.perform(get("/employers/1").contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = mvc.perform(get("/api/employers/1").contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Employer actual = objectMapper.readValue(result.getResponse().getContentAsString(), Employer.class);
 
@@ -78,7 +78,7 @@ public class EmployerControllerTests {
 
         when(employerService.getAllEmployers()).thenReturn(employerList);
 
-        MvcResult result = mvc.perform(get("/employers")).andReturn();
+        MvcResult result = mvc.perform(get("/api/employers")).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
@@ -89,7 +89,7 @@ public class EmployerControllerTests {
     void createEmployerTest() throws Exception {
         when(employerService.persistNewEmployer(expected)).thenReturn(Optional.of(expected));
 
-        MvcResult result = mvc.perform(post("/employers")
+        MvcResult result = mvc.perform(post("/api/employers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
@@ -103,7 +103,7 @@ public class EmployerControllerTests {
     void updateEmployerTest() throws Exception {
         when(employerService.updateEmployer(anyLong(), eq(expected))).thenReturn(expected);
 
-        MvcResult result = mvc.perform(put("/employers/1")
+        MvcResult result = mvc.perform(put("/api/employers/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
@@ -113,7 +113,7 @@ public class EmployerControllerTests {
 
     @Test
     void deleteEmployerTest() throws Exception {
-        MvcResult result = mvc.perform(delete("/employers/1")).andReturn();
+        MvcResult result = mvc.perform(delete("/api/employers/1")).andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(employerService, times(1)).deleteEmployerById(1);
