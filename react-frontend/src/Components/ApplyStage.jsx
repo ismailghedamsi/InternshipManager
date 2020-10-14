@@ -13,7 +13,7 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import AuthenticationService from "../js/AuthenticationService";
 import {Field, Form, Formik} from "formik";
-import {Select} from "formik-material-ui";
+import {Select, TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -86,30 +86,32 @@ export default function ApplyStage() {
         title: '',
         joinedFile: '',
         employer: {},
-        applications: [{student: {id: null}}]
+        applications: [{id: -1, isHired: false, student: {id: null}}]
     }]);
     const [resumes, setResumes] = useState([{id: -1, name: '', file: '', approuved: false, owner: {}}]);
-    const [acceptStudent, setAcceptStudent] = useState([{
+    const [application, setApplication] = useState([{
         id: -1,
         hasStudentAccepted: false,
+        reasonForRejection: '',
         offer: {},
         student: {},
-        resumer: {}
+        resume: {}
     }])
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const [reasonModalOpen, setReasonModalOpen] = useState(false);
+    const [applyModalOpen, setApplyModalOpen] = useState(false);
     const [currentOfferId, setCurrentOfferId] = useState(-1);
     const [refusalIndex, setRefusalIndex] = useState(-1);
 
     function sendDecision(index, hasStudentAccepted, reason = "") {
-        const nextState = [...acceptStudent];
+        const nextState = [...application];
         nextState[index].hasStudentAccepted = hasStudentAccepted;
         nextState[index].reasonForRejection = reason;
-        return axios.put("http://localhost:8080/applications/" + AuthenticationService.getCurrentUser().id, nextState[index])
+        return axios.put("http://localhost:8080/application/" + application.id, nextState[index])
             .then(() => {
                 nextState.splice(index, 1)
-                setAcceptStudent(nextState)
+                setApplication(nextState)
                 setReasonModalOpen(false)
             })
             .catch(() => setErrorModalOpen(true))
@@ -161,6 +163,10 @@ export default function ApplyStage() {
         return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
     }
 
+    function hasEmployeurAcceptedStudentOnOffer(offer, student) {
+        //return offer.applications.find(a => a.student.id === student.id && a.isHired === true) !== undefined && offer.applications.length !== 0;
+        return true;
+    }
 
     return (
         <Container component="main" className={classes.container}>
@@ -182,7 +188,7 @@ export default function ApplyStage() {
                                         style={{marginRight: 5}}
                                         onClick={() => {
                                             setCurrentOfferId(item.id);
-                                            setReasonModalOpen(true);
+                                            setApplyModalOpen(true);
                                         }}
                                     ><i className="fa fa-share-square-o"/></button>
                                 </div>
@@ -235,6 +241,24 @@ export default function ApplyStage() {
                                     </div>
                                     }
                                 </button>
+                                {hasEmployeurAcceptedStudentOnOffer(item, AuthenticationService.getCurrentUser()) &&
+                                <div className={classes.buttonDiv}>
+                                    <button
+                                        type={"button"}
+                                        className={[classes.linkButton].join(' ')}
+                                        onClick={() => sendDecision(i, true)}
+                                        style={{marginRight: 5}}
+                                    ><i className="fa fa-check-square" style={{color: "green"}}/></button>
+                                    <button
+                                        type={"button"}
+                                        className={[classes.linkButton].join(' ')}
+                                        onClick={() => {
+                                            setRefusalIndex(i)
+                                            setReasonModalOpen(true)
+                                        }}
+                                    ><i className="fa fa-ban" style={{color: "red"}}/></button>
+                                </div>
+                                }
                             </div>
                         ))
                     }
@@ -274,7 +298,7 @@ export default function ApplyStage() {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Dialog open={reasonModalOpen} onClose={() => setReasonModalOpen(false)} fullWidth maxWidth={"md"}>
+            <Dialog open={applyModalOpen} onClose={() => setApplyModalOpen(false)} fullWidth maxWidth={"md"}>
                 <DialogTitle id="alert-dialog-title">{"Veuillez choisir un CV :"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
@@ -285,7 +309,7 @@ export default function ApplyStage() {
                                         const nextState = [...offers];
                                         nextState.find(o => o.id === currentOfferId).applications.push(r.data)
                                         setOffers(nextState);
-                                        setReasonModalOpen(false)
+                                        setApplyModalOpen(false)
                                     })
                             }}
                             validateOnBlur={false}
@@ -325,6 +349,60 @@ export default function ApplyStage() {
                                         disabled={isSubmitting}
                                     >
                                         Envoyer ma candidature
+                                    </Button>
+                                </Form>
+                            )}
+                        </Formik>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setApplyModalOpen(false)} color={"primary"}>
+                        Annuler
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={reasonModalOpen} onClose={() => setReasonModalOpen(false)} fullWidth maxWidth={"md"}>
+                <DialogTitle id="alert-dialog-title">{"Les raisons du rejet de l'offre"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description" component={"div"}>
+                        <Formik
+                            onSubmit={async (values) => sendDecision(refusalIndex, false, values.reasonForRejection)}
+
+                            validationSchema={yup.object()
+                                .shape({
+                                    reasonForRejection: yup.string().trim().max(255).required("Ce champ est requis")
+                                })}
+                            validateOnBlur={false}
+                            validateOnChange={false}
+                            enableReinitialize={true}
+                            initialValues={{reasonForRejection: ""}}
+                        >
+                            {({isSubmitting}) => (
+                                <Form>
+                                    <Field
+                                        component={TextField}
+                                        multiline
+                                        rows={5}
+                                        name="reasonForRejection"
+                                        id="reasonForRejection"
+                                        variant="outlined"
+                                        label="Justifiez le refus"
+                                        required
+                                        fullWidth
+                                    />
+                                    <br/>
+                                    {isSubmitting && <LinearProgress/>}
+                                    <Button
+                                        type={"submit"}
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        size={"large"}
+                                        className={classes.submit}
+                                        disabled={isSubmitting}
+                                        style={{marginTop: "10px"}}
+                                    >
+                                        Envoyer
                                     </Button>
                                 </Form>
                             )}

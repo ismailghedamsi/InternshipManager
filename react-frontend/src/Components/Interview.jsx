@@ -114,7 +114,7 @@ export default function Interview() {
             >
                 <Grid item xs={5} className={classes.offerList}>
                     <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                        Entrevue
+                        Liste des entrevues
                     </Typography>
                     {
                         offers.map((item, i) => (
