@@ -15,6 +15,7 @@ import * as yup from "yup";
 import {Field, Form, Formik} from "formik";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {TextField} from "formik-material-ui";
+import AuthenticationService from "../js/AuthenticationService";
 
 const useStyles = makeStyles((theme) => ({
     linkButton: {
@@ -64,7 +65,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AcceptStage() {
     const classes = useStyles();
-    const [offers, setOffers] = useState([{title: '', joinedFile: '', employer: {companyName: "", contactName: ""}}]);
+    const [offers, setOffers] = useState([{
+        id: -1,
+        title: '',
+        joinedFile: '',
+        employer: {companyName: "", contactName: ""}
+    }]);
+    const [resumes, setResumes] = useState([{id: -1, name: '', file: '', approuved: false, owner: {}}]);
+    const [acceptStudent, setAcceptStudent] = useState([{
+        id: -1,
+        hasStudentAccepted: false,
+        offer: {},
+        student: {},
+        resumer: {}
+    }])
     const [currentDoc, setCurrentDoc] = useState('');
     const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
     const [numPages, setNumPages] = useState(0);
@@ -72,14 +86,14 @@ export default function AcceptStage() {
     const [reasonModalOpen, setReasonModalOpen] = useState(false);
     const [refusalIndex, setRefusalIndex] = useState(-1);
 
-    function sendDecision(index, reviewState, reason = "") {
-        const nextState = [...offers];
-        nextState[index].reviewState = reviewState;
+    function sendDecision(index, hasStudentAccepted, reason = "") {
+        const nextState = [...acceptStudent];
+        nextState[index].hasStudentAccepted = hasStudentAccepted;
         nextState[index].reasonForRejection = reason;
-        return axios.put("http://localhost:8080/offers/" + nextState[index].id, nextState[index])
+        return axios.put("http://localhost:8080/applications/" + AuthenticationService.getCurrentUser().id, nextState[index])
             .then(() => {
                 nextState.splice(index, 1)
-                setOffers(nextState)
+                setAcceptStudent(nextState)
                 setReasonModalOpen(false)
             })
             .catch(() => setErrorModalOpen(true))
@@ -87,7 +101,19 @@ export default function AcceptStage() {
 
     useEffect(() => {
         const getData = async () => {
-            const result = await axios.get("http://localhost:8080/offers/pending")
+            await axios.get("http://localhost:8080/resumes/student/" + AuthenticationService.getCurrentUser().id)
+                .catch(() => {
+                    setErrorModalOpen(true)
+                })
+                .then(result =>
+                    setResumes(result.data))
+        }
+        getData()
+    }, [])
+
+    useEffect(() => {
+        const getData = async () => {
+            const result = await axios.get("http://localhost:8080/offers/student/" + AuthenticationService.getCurrentUser().id)
                 .catch(() => {
                     setErrorModalOpen(true)
                 })
@@ -123,7 +149,7 @@ export default function AcceptStage() {
                                     <button
                                         type={"button"}
                                         className={[classes.linkButton].join(' ')}
-                                        onClick={() => sendDecision(i, "APPROVED")}
+                                        onClick={() => sendDecision(i, true)}
                                         style={{marginRight: 5}}
                                     ><i className="fa fa-check-square" style={{color: "green"}}/></button>
                                     <button
@@ -221,7 +247,7 @@ export default function AcceptStage() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) => sendDecision(refusalIndex, "DENIED", values.reasonForRejection)}
+                            onSubmit={async (values) => sendDecision(refusalIndex, false, values.reasonForRejection)}
 
                             validationSchema={yup.object()
                                 .shape({

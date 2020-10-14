@@ -89,10 +89,32 @@ export default function ApplyStage() {
         applications: [{student: {id: null}}]
     }]);
     const [resumes, setResumes] = useState([{id: -1, name: '', file: '', approuved: false, owner: {}}]);
+    const [acceptStudent, setAcceptStudent] = useState([{
+        id: -1,
+        hasStudentAccepted: false,
+        offer: {},
+        student: {},
+        resumer: {}
+    }])
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const [reasonModalOpen, setReasonModalOpen] = useState(false);
     const [currentOfferId, setCurrentOfferId] = useState(-1);
+    const [refusalIndex, setRefusalIndex] = useState(-1);
+
+    function sendDecision(index, hasStudentAccepted, reason = "") {
+        const nextState = [...acceptStudent];
+        nextState[index].hasStudentAccepted = hasStudentAccepted;
+        nextState[index].reasonForRejection = reason;
+        return axios.put("http://localhost:8080/applications/" + AuthenticationService.getCurrentUser().id, nextState[index])
+            .then(() => {
+                nextState.splice(index, 1)
+                setAcceptStudent(nextState)
+                setReasonModalOpen(false)
+            })
+            .catch(() => setErrorModalOpen(true))
+    }
+
 
     useEffect(() => {
         const getData = async () => {
