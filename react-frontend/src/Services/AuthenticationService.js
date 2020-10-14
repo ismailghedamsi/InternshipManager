@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const HTTP_CONFLICT = 409;
+
 class AuthenticationService {
     interceptorId = 0;
     baseUrl = "http://localhost:8080/api";
@@ -38,7 +40,7 @@ class AuthenticationService {
             })
             .catch((error) => {
                 if (error.response) {
-                    if (error.response.status === 409)
+                    if (error.response.status === HTTP_CONFLICT)
                         setFieldError("username", "Le nom d'utilisateur n'est pas disponible")
                     else
                         setModalOpen()
