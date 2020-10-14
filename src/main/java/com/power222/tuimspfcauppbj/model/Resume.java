@@ -32,6 +32,6 @@ public class Resume {
     private Student owner;
 
     @OneToMany(mappedBy = "resume")
-    @JsonIgnoreProperties({"student", "offer", "resume"})
+    @JsonIgnoreProperties({"student", "offer", "file"})
     private List<StudentApplication> applications;
 }

@@ -59,7 +59,7 @@ class StudentApplicationControllerTests {
     void createAppliSuccesTest() throws Exception {
         when(svc.createAndSaveNewApplication(anyLong(), anyLong())).thenReturn(Optional.of(expected));
 
-        MvcResult result = mvc.perform(post("/application/1/1")
+        MvcResult result = mvc.perform(post("/api/application/1/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}")).andReturn();
 
@@ -70,7 +70,7 @@ class StudentApplicationControllerTests {
     void createAppliErrorTest() throws Exception {
         when(svc.createAndSaveNewApplication(anyLong(), anyLong())).thenReturn(Optional.empty());
 
-        MvcResult result = mvc.perform(post("/application/1/1")
+        MvcResult result = mvc.perform(post("/api/application/1/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}")).andReturn();
 

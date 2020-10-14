@@ -31,10 +31,10 @@ public class Student extends User {
     private List<Resume> resumes;
 
     @ManyToMany(mappedBy = "allowedStudents")
-    @JsonIgnoreProperties({"joinedFile", "employer", "appliedStudents", "allowedStudents"})
+    @JsonIgnoreProperties({"file", "employer", "appliedStudents", "allowedStudents"})
     private List<InternshipOffer> allowedOffers;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"student", "resume"})
+    @JsonIgnoreProperties({"student", "file"})
     private List<StudentApplication> applications;
 }

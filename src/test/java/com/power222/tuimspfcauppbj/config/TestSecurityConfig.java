@@ -15,8 +15,8 @@ public class TestSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
 
-                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/hello").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/api/hello").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
