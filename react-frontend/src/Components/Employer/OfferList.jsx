@@ -6,6 +6,7 @@ import {useHistory} from "react-router-dom";
 import {useStyles} from "../Utils/useStyles";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
+import OfferDetails from "../Utils/OfferDetails";
 
 export default function OfferList() {
     const classes = useStyles();
@@ -33,12 +34,6 @@ export default function OfferList() {
 
                 setOffers(nextState)
             })
-    }
-
-    function parseDate(date) {
-        const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-        const d = new Date(date);
-        return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
     }
 
     return (
@@ -70,35 +65,13 @@ export default function OfferList() {
                                 {offers[i].employer.companyName} {offers[i].employer.contactName}
                             </Typography>
                         </button>
-                        {currentIndex === i &&
-                        <div>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Description: ${offers[i].description}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Nombre de semaine: ${offers[i].nbOfWeeks}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Salaire: ${offers[i].salary}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Heure de début: ${offers[i].beginHour}h00`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Heure de fin: ${offers[i].endHour}h00`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Date de création: ${parseDate(offers[i].creationDate)}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Date limite pour appliquer : ${parseDate(offers[i].limitDateToApply)}`}
-                            </Typography>
-                        </div>
-                        }
+                        {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                         {offers[i].applications.length !== 0 &&
                         <Link variant={"body1"}
-                              onClick={() => history.push("/dashboard/applications", {offerId: offers[i].id})}>Voir
-                            les applications</Link>
+                              onClick={() => history.push("/dashboard/applications", {offerId: offers[i].id})}
+                        >
+                            Voir les applications
+                        </Link>
                         }
                         <hr/>
                     </div>

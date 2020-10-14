@@ -37,14 +37,14 @@ class AuthenticationService {
                 history.push("/")
             })
             .catch((error) => {
-                console.error(error)
                 if (error.response) {
-                    if (error.response.status === 409) {
+                    if (error.response.status === 409)
                         setFieldError("username", "Le nom d'utilisateur n'est pas disponible")
-                    } else
-                        setModalOpen(true)
+                    else
+                        setModalOpen()
                 } else {
-                    setModalOpen(true)
+                    console.error(error)
+                    setModalOpen()
                 }
             })
     }

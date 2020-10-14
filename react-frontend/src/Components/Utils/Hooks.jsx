@@ -34,3 +34,11 @@ export function useApi() {
 
     return api;
 }
+
+export function useDateParser() {
+    return (date) => {
+        const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        const d = new Date(date);
+        return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
+    }
+}

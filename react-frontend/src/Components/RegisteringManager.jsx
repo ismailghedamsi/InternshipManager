@@ -1,8 +1,6 @@
 import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -11,40 +9,9 @@ import * as PropTypes from "prop-types";
 import RegisterStudent from "./RegisterStudent";
 import RegisterEmployer from "./RegisterEmployer";
 import Grid from "@material-ui/core/Grid";
-import {Link as RouterLink} from "react-router-dom";
+import {Link as RouterLink, useHistory} from "react-router-dom";
 import Link from "@material-ui/core/Link";
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(2),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    link: {
-        padding: theme.spacing(1, 0, 2)
-    },
-    logo: {
-        margin: theme.spacing(6, 0, 0.5),
-        fontSize: "3em",
-    },
-    subtitle: {
-        fontSize: "1em",
-        textAlign: "center",
-        margin: theme.spacing(0, 0, 6)
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(2),
-    },
-    submit: {
-        margin: theme.spacing(1, 0, 1),
-    },
-    container: {
-        backgroundColor: "#fff",
-        borderRadius: theme.spacing(2),
-    }
-}));
+import {useStyles} from "./Utils/useStyles";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -66,8 +33,9 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-export default function RegisteringManager(props) {
+export default function RegisteringManager() {
     const classes = useStyles();
+    const history = useHistory();
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -85,7 +53,6 @@ export default function RegisteringManager(props) {
         >
             <Grid item xs={12} md={6} xl={3}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
-                    <CssBaseline/>
                     <div className={classes.paper}>
                         <Typography variant="h1" className={classes.logo}>
                             TUIMSPFCAUPPBJ
@@ -104,11 +71,11 @@ export default function RegisteringManager(props) {
                             <Tab label="Employeur" id={`simple-tab-1`}/>
                         </Tabs>
                     </AppBar>
-                    <TabPanel value={value} index={0} className={classes.tabPanel}>
-                        <RegisterStudent classes={useStyles()} {...props} />
+                    <TabPanel value={value} index={0}>
+                        <RegisterStudent classes={classes} history={history}/>
                     </TabPanel>
-                    <TabPanel value={value} index={1} className={classes.tabPanel}>
-                        <RegisterEmployer classes={useStyles()} {...props} />
+                    <TabPanel value={value} index={1}>
+                        <RegisterEmployer classes={classes} history={history}/>
                     </TabPanel>
                     <Grid container justify="flex-end" className={classes.link}>
                         <Grid item>

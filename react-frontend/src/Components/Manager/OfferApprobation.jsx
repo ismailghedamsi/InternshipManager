@@ -4,6 +4,7 @@ import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import TextboxModal from "../Utils/TextboxModal";
 import {useApi, useModal} from "../Utils/Hooks";
 import {useStyles} from "../Utils/useStyles";
+import OfferDetails from "../Utils/OfferDetails";
 
 export default function OfferApprobation() {
     const classes = useStyles();
@@ -70,33 +71,7 @@ export default function OfferApprobation() {
                                 {offers[i].employer.companyName} {offers[i].employer.contactName}
                             </Typography>
                         </button>
-                        {currentOfferIndex === i &&
-                        <div>
-                            <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                {"Date limite d'application : " + (offers[i].limitDateToApply + "").split("T")[0]}
-                            </Typography>
-
-                            <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                {"Date de création de l'offre : " + (offers[i].creationDate + "").split("T")[0]}
-                            </Typography>
-
-                            <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                {"Nombre de semaines : " + offers[i].nbOfWeeks}
-                            </Typography>
-
-                            <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                {"Salaire horaire : $ " + offers[i].salary}
-                            </Typography>
-
-                            <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                {"Horaire : " + (offers[i].beginHour < 10 ? "0" : "") + offers[i].beginHour + ":00 - " + offers[i].endHour + ":00"}
-                            </Typography>
-
-                            <Typography color={"textSecondary"} variant={"body1"} display={"block"}>
-                                {"Description de l'offre : " + offers[i].description}
-                            </Typography>
-                        </div>
-                        }
+                        {currentOfferIndex === i && <OfferDetails offer={offers[i]}/>}
                         <hr/>
                     </div>
                 )}

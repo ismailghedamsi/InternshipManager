@@ -55,7 +55,8 @@ export const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(1, 0, 1),
-    }, container: {
+    },
+    container: {
         backgroundColor: "#fff",
         borderRadius: theme.spacing(2),
     },
@@ -67,5 +68,26 @@ export const useStyles = makeStyles((theme) => ({
         padding: 5,
         borderRadius: 0,
         textAlign: "left",
+    },
+    logo: {
+        margin: theme.spacing(6, 0, 0.5),
+        fontSize: "3em",
+    },
+    subtitle: {
+        fontSize: "1em",
+        textAlign: "center",
+        margin: theme.spacing(0, 0, 6)
+    },
+    paper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    link: {
+        padding: theme.spacing(0, 0, 2)
+    },
+    divider: {
+        height: theme.spacing(1),
+        backgroundColor: theme.palette.primary.main,
     },
 }));

@@ -15,6 +15,7 @@ import {useStyles} from "../Utils/useStyles";
 import {useApi, useModal} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import MenuItem from "@material-ui/core/MenuItem";
+import OfferDetails from "../Utils/OfferDetails";
 
 export default function OfferApplication() {
     const classes = useStyles();
@@ -36,12 +37,6 @@ export default function OfferApplication() {
 
     function hasStudentAppliedOnOffer(offer, student) {
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
-    }
-
-    function parseDate(date) {
-        const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-        const d = new Date(date);
-        return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
     }
 
     function generateMenuItems() {
@@ -96,31 +91,7 @@ export default function OfferApplication() {
                                 {offers[i].employer.companyName}
                             </Typography>
                         </button>
-                        {currentIndex === i &&
-                        <div>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Description: ${offers[i].description}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Nombre de semaine: ${offers[i].nbOfWeeks}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Salaire: ${offers[i].salary}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Heure de début: ${offers[i].beginHour}h00`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Heure de fin: ${offers[i].endHour}h00`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Date de création: ${parseDate(offers[i].creationDate)}`}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body2"}>
-                                {`Date limite pour appliquer : ${parseDate(offers[i].limitDateToApply)}`}
-                            </Typography>
-                        </div>
-                        }
+                        {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                         <hr/>
                     </div>
                 )}
