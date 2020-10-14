@@ -162,7 +162,7 @@ export default function CreateStuff() {
                                             name="nbStudentToHire"
                                             id="nbStudentToHire"
                                             variant="outlined"
-                                            label="Nombre d'étudiant à embaucher"
+                                            label="Nombre d'étudiants à embaucher"
                                             required
                                             fullWidth
                                             type={"number"}
