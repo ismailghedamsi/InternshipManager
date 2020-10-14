@@ -79,10 +79,9 @@ class StudentApplicationControllerTests {
 
     @Test
     void updateAppliIsHired() throws Exception {
-
         when(svc.updateStudentApplicationIsHired((expected.getId()))).thenReturn(Optional.of(expected));
 
-        MvcResult result = mvc.perform(put("/application/ishired/" + expected.getId())
+        MvcResult result = mvc.perform(put("/application/hire/" + expected.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
@@ -92,10 +91,10 @@ class StudentApplicationControllerTests {
 
     @Test
     void updateAppliIsHiredBadId() throws Exception {
+        var id = 100L;
+        when(svc.updateStudentApplicationIsHired(id)).thenReturn(Optional.empty());
 
-        when(svc.updateStudentApplicationIsHired((expected.getId()))).thenReturn(Optional.of(expected));
-
-        MvcResult result = mvc.perform(put("/application/ishired/" + 100)
+        MvcResult result = mvc.perform(put("/application/hire/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 

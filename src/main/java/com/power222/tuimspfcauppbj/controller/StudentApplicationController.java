@@ -26,13 +26,11 @@ public class StudentApplicationController {
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/application/ishired/{id}")
-    public ResponseEntity<StudentApplication> updateIsHiredStudentApplication(@PathVariable long id) {
+    @PutMapping("/application/hire/{id}")
+    public ResponseEntity<StudentApplication> updateStudentApplicationIsHired(@PathVariable long id) {
         return svc.updateStudentApplicationIsHired(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 
     }
-
-
 }

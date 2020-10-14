@@ -33,20 +33,18 @@ public class StudentApplicationService {
             return Optional.of(appliRepo.saveAndFlush(StudentApplication.builder()
                     .student((Student) currentUser)
                     .offer(offer.get())
-                    .isHired(false) // -pas sure si ceci est bon
+                    .isHired(false)
                     .resume(resume.get())
                     .build()));
         } else
             return Optional.empty();
     }
 
-    public Optional<StudentApplication> updateStudentApplicationIsHired(long idStudentApplication) {
-        return appliRepo.findById(idStudentApplication)
+    public Optional<StudentApplication> updateStudentApplicationIsHired(long id) {
+        return appliRepo.findById(id)
                 .map(oldAppli -> {
                     oldAppli.setHired(true);
                     return appliRepo.saveAndFlush(oldAppli);
                 });
     }
-
-
 }

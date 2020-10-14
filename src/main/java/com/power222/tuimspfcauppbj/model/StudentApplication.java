@@ -19,7 +19,6 @@ public class StudentApplication {
 
     private boolean isHired;
 
-
     @ManyToOne
     @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})
     private InternshipOffer offer;
