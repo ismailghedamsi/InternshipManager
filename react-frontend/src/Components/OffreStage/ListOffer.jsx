@@ -186,7 +186,7 @@ export default function ListOffer() {
                                                 item.internshipStartDate)}`}
                                         </Typography>
                                         <Typography color={"textPrimary"} variant={"body2"}>
-                                            {`Date fin du stage : ${parseDate(
+                                            {`Fin du stage : ${parseDate(
                                                 item.internshipEndDate)}`}
                                         </Typography>
                                     </div>
