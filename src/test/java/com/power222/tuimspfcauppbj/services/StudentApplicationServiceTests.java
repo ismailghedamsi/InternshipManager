@@ -110,12 +110,17 @@ class StudentApplicationServiceTests {
 
     @Test
     void updateStudentApplicationIsHired() {
-        when(authSvc.getCurrentUser()).thenReturn(expectedUser);
-        when(offerRepo.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
-        when(resumeRepo.findById(expectedResume.getId())).thenReturn(Optional.of(expectedResume));
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.of(expectedAppli));
         when(appliRepo.saveAndFlush(expectedAppli)).thenReturn(expectedAppli);
 
-        appliSvc.createAndSaveNewApplication(expectedOffer.getId(), expectedResume.getId());
+        var actual = appliSvc.updateStudentApplicationIsHired(expectedAppli.getId());
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).contains(expectedAppli);
+    }
+
+    @Test
+    void updateStudentApplicationIsHiredWithNoneExistentId() {
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.empty());
         var actual = appliSvc.updateStudentApplicationIsHired(expectedAppli.getId());
         assertThat(actual).isEmpty();
     }
