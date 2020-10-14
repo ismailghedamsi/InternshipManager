@@ -26,7 +26,7 @@ public class StudentApplicationController {
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/application/hire/{id}")
+    @PutMapping("/api/application/hire/{id}")
     public ResponseEntity<StudentApplication> updateStudentApplicationIsHired(@PathVariable long id) {
         return svc.updateStudentApplicationIsHired(id)
                 .map(ResponseEntity::ok)

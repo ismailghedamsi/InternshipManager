@@ -124,6 +124,4 @@ class StudentApplicationServiceTests {
         var actual = appliSvc.updateStudentApplicationIsHired(expectedAppli.getId());
         assertThat(actual).isEmpty();
     }
-
-
 }

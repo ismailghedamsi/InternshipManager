@@ -43,7 +43,10 @@ public class StudentApplicationService {
     public Optional<StudentApplication> updateStudentApplicationIsHired(long id) {
         return appliRepo.findById(id)
                 .map(oldAppli -> {
-                    oldAppli.setHired(true);
+                    if (oldAppli.isHired())
+                        oldAppli.setHired(false);
+                    else if (!oldAppli.isHired())
+                        oldAppli.setHired(true);
                     return appliRepo.saveAndFlush(oldAppli);
                 });
     }
