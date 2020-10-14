@@ -48,7 +48,7 @@ public class AuthenticationControllerTests {
 
     @Test
     void unauthenticatedBasic() throws Exception {
-        mvc.perform(get("/auth/user").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/auth/user").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -63,7 +63,7 @@ public class AuthenticationControllerTests {
 
         when(authSvc.getCurrentUser()).thenReturn(u);
 
-        mvc.perform(get("/auth/user").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/auth/user").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.username").value("etudiant"))
@@ -75,7 +75,7 @@ public class AuthenticationControllerTests {
     void successfulPasswordUpdateTest() throws Exception {
         when(authSvc.updateUserPassword(dto)).thenReturn(PasswordUpdateStatus.SUCCESS);
 
-        mvc.perform(put("/auth/password")
+        mvc.perform(put("/api/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(dto))).andExpect(status().isOk());
     }
@@ -84,7 +84,7 @@ public class AuthenticationControllerTests {
     void wrongOldPasswordUpdateTest() throws Exception {
         when(authSvc.updateUserPassword(dto)).thenReturn(PasswordUpdateStatus.OLD_WRONG);
 
-        mvc.perform(put("/auth/password")
+        mvc.perform(put("/api/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(dto))).andExpect(status().isUnauthorized());
     }
@@ -93,7 +93,7 @@ public class AuthenticationControllerTests {
     void identicalPasswordsUpdateTest() throws Exception {
         when(authSvc.updateUserPassword(dto)).thenReturn(PasswordUpdateStatus.OLD_AND_NEW_EQUAL);
 
-        mvc.perform(put("/auth/password")
+        mvc.perform(put("/api/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(dto))).andExpect(status().isConflict());
     }
@@ -102,7 +102,7 @@ public class AuthenticationControllerTests {
     void invalidUserPasswordUpdateTest() throws Exception {
         when(authSvc.updateUserPassword(dto)).thenReturn(PasswordUpdateStatus.USER_NOT_FOUND);
 
-        mvc.perform(put("/auth/password")
+        mvc.perform(put("/api/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(dto))).andExpect(status().isNotFound());
     }

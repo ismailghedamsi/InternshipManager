@@ -30,7 +30,7 @@ public class InternshipOffer {
     private String reasonForRejection;
 
     @Lob
-    private String joinedFile;
+    private String file;
 
     @ManyToOne(optional = false)
     @JsonIgnoreProperties("offers")

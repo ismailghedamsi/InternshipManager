@@ -36,14 +36,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
         private final InternshipOfferRepository internshipRepo;
-        private final StudentApplicationRepository appliRepo;
 
         public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
             this.internshipRepo = internshipRepo;
-            this.appliRepo = appliRepo;
         }
 
         @Override
@@ -121,7 +119,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             InternshipOffer o = null;
             //Generating offers for offer assignement live testing
-            for (int i = 1; i < 7; i++) {
+            for (int i = 1; i < 14; i++) {
                 o = internshipRepo.saveAndFlush(InternshipOffer.builder()
                         .title("testInternship " + i)
                         .description("Some basic description " + i)
@@ -131,7 +129,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .endHour(18)
                         .creationDate(Date.from(Instant.now()))
                         .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
-                        .joinedFile("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + (i > 6 ? i / 2 : i) + ".pdf")).readAllBytes())))
                         .employer(e)
                         .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
                         .reviewState(i == 5 ? InternshipOffer.ReviewState.APPROVED : InternshipOffer.ReviewState.PENDING)

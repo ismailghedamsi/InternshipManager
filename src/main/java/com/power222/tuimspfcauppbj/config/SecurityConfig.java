@@ -53,15 +53,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/*.*", "/static/**").permitAll()
 
                 //Always accessible enpoints
-                .antMatchers(HttpMethod.POST, "/students").permitAll()
-                .antMatchers(HttpMethod.POST, "/employers").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/students").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/employers").permitAll()
 
                 //Password update endpoint has built-in auth
-                .antMatchers(HttpMethod.PUT, "/auth/password").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/auth/password").permitAll()
 
-                //Demo controllers & H2
+                //Dev
                 .antMatchers("/h2-console/*").permitAll()
-                .antMatchers("/hello").permitAll()
+                .antMatchers("/api/hello").permitAll()
+                .antMatchers("/swagger-ui/", "/swagger-ui/**", "/swagger-ui/*.*", "/swagger-resources/**", "/v2/api-docs").permitAll()
 
                 .anyRequest().fullyAuthenticated()
                 .and()

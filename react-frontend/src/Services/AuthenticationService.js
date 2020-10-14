@@ -2,12 +2,10 @@ import axios from 'axios'
 
 class AuthenticationService {
     interceptorId = 0;
-    baseUrl = "http://localhost:8080";
+    baseUrl = "http://localhost:8080/api";
 
     constructor() {
-        console.info("Called AuthService constructor")
         if (this.isUserLoggedIn()) {
-            console.info("Setting up...")
             const user = this.getCurrentUser().username;
             const pass = this.getCurrentUser().password;
             this.setupAxiosInterceptors(user, pass);
@@ -39,14 +37,14 @@ class AuthenticationService {
                 history.push("/")
             })
             .catch((error) => {
-                console.error(error)
                 if (error.response) {
-                    if (error.response.status === 409) {
+                    if (error.response.status === 409)
                         setFieldError("username", "Le nom d'utilisateur n'est pas disponible")
-                    } else
-                        setModalOpen(true)
+                    else
+                        setModalOpen()
                 } else {
-                    setModalOpen(true)
+                    console.error(error)
+                    setModalOpen()
                 }
             })
     }

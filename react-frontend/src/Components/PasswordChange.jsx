@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import AuthenticationService from "../js/AuthenticationService";
+import AuthenticationService from "../Services/AuthenticationService";
 import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -112,7 +112,7 @@ export default function PasswordChange() {
                         <Divider className={classes.divider}/>
                         <Formik
                             onSubmit={async (values, {setFieldError}) =>
-                                axios.put("http://localhost:8080/auth/password", values)
+                                axios.put("http://localhost:8080/api/auth/password", values)
                                     .then(() => history.push("/"))
                                     .catch((error) => handleHttpError(error, setFieldError))
                             }
