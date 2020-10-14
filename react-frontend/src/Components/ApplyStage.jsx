@@ -211,7 +211,7 @@ export default function ApplyStage() {
                                         <Typography color={"textSecondary"}
                                                     variant={"body1"}
                                                     display={"block"}>
-                                            {`Date du début du stage :  ${parseDate(
+                                            {`Début du stage :  ${parseDate(
                                                 item.internshipStartDate)}`}
                                         </Typography>
                                         <Typography color={"textSecondary"}
