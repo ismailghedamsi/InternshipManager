@@ -167,7 +167,7 @@ export default function ListOffer() {
                                         <Typography color={"textSecondary"}
                                                     variant={"body1"}
                                                     display={"block"}>
-                                            {"Nombre de places restants :  "
+                                            {"Nombre de places disponibles :  "
                                             + item.nbStudentToHire}
                                         </Typography>
                                         <Typography color={"textPrimary"}

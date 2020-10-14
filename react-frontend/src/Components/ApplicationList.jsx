@@ -71,7 +71,6 @@ export default function ApplicationList() {
     const [numPages, setNumPages] = useState(null);
 
     useEffect(() => {
-        console.log(location)
         axios.get("http://localhost:8080/offers/" + location.state.offerId)
             .catch(() => setErrorModalOpen(true))
             .then((r) => setOffer(r.data))

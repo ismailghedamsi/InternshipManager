@@ -50,15 +50,15 @@ export default function CreateStuff() {
                 "La date de fin doit être dans le futur")),
         internshipStartDate: yup.date().required().min(
             yup.ref("limitDateToApply"),
-            "La date du debut du stage ne peut pas être avant la date limite pour appliquer "),
+            "La date du début ne peut pas être avant la date limite pour appliquer "),
         internshipEndDate: yup.date().required().min(
             yup.ref("internshipStartDate"),
-            "La date de fin du stage ne peut pas être avant la date du début de stage")
-        .when(
-            "internshipStartDate",
-            (internshipStartDate, schema) => internshipStartDate && schema.min(
-                internshipStartDate,
-                "La date de fin doit être avant la date du debut"))
+            "La date de fin du stage ne peut pas être avant la date du début")
+            .when(
+                "internshipStartDate",
+                (internshipStartDate, schema) => internshipStartDate && schema.min(
+                    internshipStartDate,
+                    "La date de fin doit être avant la date de debut"))
     });
     const initialValues = {
         title: '',
@@ -188,7 +188,7 @@ export default function CreateStuff() {
                                             name="internshipStartDate"
                                             id="internshipStartDate"
                                             variant="outlined"
-                                            label="Date de début du stage"
+                                            label="Début du stage"
                                             required
                                             fullWidth
                                             type={"date"}

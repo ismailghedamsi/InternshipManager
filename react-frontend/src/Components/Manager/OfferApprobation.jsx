@@ -191,7 +191,7 @@ export default function OfferApprobation() {
                                   <Typography color={"textSecondary"}
                                               variant={"body1"}
                                               display={"block"}>
-                                    {"Nombre de places restants :  "
+                                    {"Nombre de places disponibles :  "
                                     + item.nbStudentToHire}
                                   </Typography>
                                   <Typography color={"textSecondary"}

@@ -44,11 +44,11 @@ export const Menu = [
         url: '/dashboard/stagelist',
         role: 'student'
     }, {
-        title: 'Application List',
+        title: 'Liste d\'applications',
         url: '/dashboard/applications',
         role: 'employer'
     }, {
-        title: 'Application List',
+        title: 'Liste d\'applications',
         url: '/dashboard/applicationList',
         role: 'admin'
     }
