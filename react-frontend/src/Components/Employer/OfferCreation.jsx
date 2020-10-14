@@ -1,46 +1,29 @@
-import Button from "@material-ui/core/Button";
 import Container from '@material-ui/core/Container';
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import {makeStyles} from '@material-ui/core/styles';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
-import React, {useState} from "react";
+import React from "react";
 import {useHistory} from 'react-router-dom';
 import * as yup from "yup";
-import InternshipOfferService from '../../js/IntershipOfferService.js';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(2),
-    },
-    submit: {
-        margin: theme.spacing(1, 0, 1),
-    }, container: {
-        backgroundColor: "#fff",
-        borderRadius: theme.spacing(2),
-    }
-}));
+import {DatePicker} from 'formik-material-ui-pickers';
+import {useApi} from "../Utils/Hooks";
+import AuthenticationService from "../../Services/AuthenticationService";
+import Button from "@material-ui/core/Button";
+import {useStyles} from "../Utils/useStyles";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
 const requiredFieldMsg = "Ce champs est requis";
 
-export default function CreateStuff() {
-    const history = useHistory();
-    const [errorModalOpen, setErrorModalOpen] = useState(false);
+export default function OfferCreation() {
     const classes = useStyles();
+    const api = useApi();
+    const history = useHistory();
     const validationSchema = yup.object().shape({
-        title: yup.string().trim().min(2, tooShortError).required(
-            requiredFieldMsg),
-        description: yup.string().trim().min(10, tooShortError).required(
-            requiredFieldMsg),
+        title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
+        description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
+        nbOfWeeks: yup.number().min(1, tooLittleError).required(requiredFieldMsg),
         salary: yup.number().min(0, tooLittleError).required(requiredFieldMsg),
         nbStudentToHire: yup.number().min(0, tooLittleError).required(
             requiredFieldMsg),
@@ -72,6 +55,25 @@ export default function CreateStuff() {
         file: ""
     }
 
+    function readFileAsync(file) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        })
+    }
+
+    function sendOfferToBackEnd(values) {
+        return readFileAsync(values.file).then((base64file) => {
+            let dto = {...values};
+            dto.file = base64file;
+            dto.employer = AuthenticationService.getCurrentUser();
+
+            return api.post("/offers", dto)
+        })
+    }
+
     return (
         <Grid
             container
@@ -83,36 +85,9 @@ export default function CreateStuff() {
         >
             <Grid item xs={3}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
-                    <Dialog open={errorModalOpen} onClose={() => {
-                        setErrorModalOpen(false);
-                    }}>
-                        <DialogTitle id="alert-dialog-title">Erreur réseau</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Erreur réseau: impossible de communiquer avec le serveur
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => {
-                                setErrorModalOpen(false);
-                            }} color="primary">
-                                J'ai compris
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
                     <Formik
-                        onSubmit={
-                            async (values) => {
-                                InternshipOfferService.sendOfferToBackEnd(values)
-                                    .then(() => {
-                                        history.push("/dashboard/listoffer")
-                                    })
-                                    .catch((e) => {
-                                        console.log(e)
-                                        setErrorModalOpen(true)
-                                    })
-                            }
-                        }
+                        onSubmit={async (values) => sendOfferToBackEnd(values)
+                            .then(() => history.push("/dashboard/listoffer"))}
 
                         validateOnBlur={false}
                         validateOnChange={false}
@@ -209,14 +184,14 @@ export default function CreateStuff() {
 
                                     <Grid item xs={12}>
                                         <Field
-                                            component={TextField}
+                                            component={DatePicker}
                                             name="limitDateToApply"
                                             id="limitDateToApply"
                                             variant="outlined"
                                             label="Date limite pour appliquer"
+                                            format="MM/dd/yyyy"
                                             required
                                             fullWidth
-                                            type={"date"}
                                         />
                                     </Grid>
                                     <input

@@ -17,7 +17,7 @@ public class StudentApplicationController {
         this.svc = svc;
     }
 
-    @PostMapping("/application/{offerId}/{resumeId}")
+    @PostMapping("/api/application/{offerId}/{resumeId}")
     public ResponseEntity<StudentApplication> createStudentApplication(
             @PathVariable long offerId, @PathVariable long resumeId) {
         return svc.createAndSaveNewApplication(offerId, resumeId)

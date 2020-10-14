@@ -32,7 +32,7 @@ public class TestsWithSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
 
-                .antMatchers("/auth/user").authenticated()
+                .antMatchers("/api/auth/user").authenticated()
                 .anyRequest().permitAll()
 
                 .and()
