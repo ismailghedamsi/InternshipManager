@@ -180,7 +180,7 @@ export default function OfferApprobation() {
                                     <Typography color={"textSecondary"}
                                                 variant={"body1"}
                                                 display={"block"}>
-                                        {`Date de fin du stage : 
+                                        {`Fin du stage : 
                                      ${parseDate(item.internshipEndDate)}`}
                                     </Typography>
                                     <Typography color={"textSecondary"}
