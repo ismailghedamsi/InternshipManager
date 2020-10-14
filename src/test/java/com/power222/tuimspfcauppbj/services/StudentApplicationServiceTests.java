@@ -109,4 +109,23 @@ class StudentApplicationServiceTests {
 
         assertThat(actual).isEmpty();
     }
+
+    @Test
+    void updateStudentApplication() {
+        var actual = appliSvc.updateStudentApplication(expectedAppli.getId(), expectedAppli);
+        assertThat(actual).isEqualTo(expectedAppli);
+    }
+
+    @Test
+    void updateStudentApplicationWithModifiedId() {
+        var idToPersistTo = expectedAppli.getId();
+        var idToBeOverwritten = 50L;
+        var studentApplicationWithIdToIgnore = expectedAppli.toBuilder().id(idToBeOverwritten).build();
+        when(appliRepo.findById(idToPersistTo)).thenReturn(Optional.of(expectedAppli));
+        when(appliRepo.saveAndFlush(expectedAppli)).thenReturn(expectedAppli);
+
+        var actual = appliSvc.updateStudentApplication(idToPersistTo, studentApplicationWithIdToIgnore);
+
+        assertThat(actual).isEqualTo(expectedAppli);
+    }
 }
