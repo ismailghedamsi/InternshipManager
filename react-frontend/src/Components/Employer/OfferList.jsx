@@ -16,11 +16,20 @@ export default function OfferList() {
     const [offers, setOffers] = useState([]);
 
     useEffect(() => {
-        api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
-            .then(r => {
-                console.log(r.data)
-                setOffers(r ? r.data : [])
-            })
+        if (AuthenticationService.getCurrentUserRole() == "employer") {
+            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
+                .then(r => {
+                    console.log(r.data)
+                    setOffers(r ? r.data : [])
+                })
+        } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+            api.get("/offers/approved")
+                .then(r => {
+                    console.log(r.data)
+                    setOffers(r ? r.data : [])
+                })
+        }
+
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function deleteOffer(index) {
@@ -68,7 +77,15 @@ export default function OfferList() {
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                         {offers[i].applications.length !== 0 &&
                         <Link variant={"body1"}
-                              onClick={() => history.push("/dashboard/applications", {offerId: offers[i].id})}
+                              onClick={() => {
+                                  if (AuthenticationService.getCurrentUserRole() == "employer") {
+                                      history.push("/dashboard/applications", {offerId: offers[i].id})
+                                  } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+                                      history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
+                                  }
+
+                              }
+                              }
                         >
                             Voir les applications
                         </Link>
