@@ -80,7 +80,7 @@ export default function OfferApprobation() {
                 isOpen={isReasonModalOpen}
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentOfferIndex, "DENIED", values.reasonForRejection)}
+                onSubmit={async (values) => sendDecision(currentOfferIndex, "DENIED", values.message)}
             />
         </div>
     )
