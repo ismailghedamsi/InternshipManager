@@ -15,12 +15,12 @@ export default function ApplicationList() {
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
-    })
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer documents={offer.applications.map(o => o.resume.file)}
-                                title={(<span>Application<br/>{offer.title}</span>)}>
+                                title={(<span>Applications {offer.title}</span>)}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button

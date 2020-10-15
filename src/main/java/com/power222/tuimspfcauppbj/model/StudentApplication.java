@@ -18,7 +18,7 @@ public class StudentApplication {
     private long id;
 
     @ManyToOne
-    @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})
+    @JsonIgnoreProperties({"file", "allowedStudents", "applications"})
     private InternshipOffer offer;
 
     @ManyToOne

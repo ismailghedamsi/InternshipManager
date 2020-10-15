@@ -18,7 +18,6 @@ export default function OfferList() {
     useEffect(() => {
         api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
             .then(r => {
-                console.log(r.data)
                 setOffers(r ? r.data : [])
             })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -34,6 +33,16 @@ export default function OfferList() {
 
                 setOffers(nextState)
             })
+    }
+
+    function getOfferState(offer) {
+        if (!offer.reviewState === "PENDING")
+            return <span style={{color: "blue"}}>En attente</span>;
+        else if (!offer.reviewState === "REJECTED")
+            return (<span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>);
+        else
+            return <span style={{color: "green"}}>Approuvé</span>;
     }
 
     return (
@@ -63,6 +72,10 @@ export default function OfferList() {
                             </Typography>
                             <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
                                 {offers[i].employer.companyName} {offers[i].employer.contactName}
+                            </Typography>
+                            <Typography
+                                variant={"body2"}>
+                                État : {getOfferState(offers[i])}
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}

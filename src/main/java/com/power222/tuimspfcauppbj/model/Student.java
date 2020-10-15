@@ -27,14 +27,14 @@ public class Student extends User {
     private String address;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"file", "owner"})
+    @JsonIgnoreProperties("owner")
     private List<Resume> resumes;
 
     @ManyToMany(mappedBy = "allowedStudents")
-    @JsonIgnoreProperties({"file", "employer", "appliedStudents", "allowedStudents"})
+    @JsonIgnoreProperties({"employer", "appliedStudents", "allowedStudents"})
     private List<InternshipOffer> allowedOffers;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"student", "file"})
+    @JsonIgnoreProperties("student")
     private List<StudentApplication> applications;
 }
