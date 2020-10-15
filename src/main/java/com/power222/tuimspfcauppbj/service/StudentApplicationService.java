@@ -8,6 +8,7 @@ import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +24,10 @@ public class StudentApplicationService {
         this.offerRepo = offerRepo;
         this.resumeRepo = resumeRepo;
         this.authSvc = authSvc;
+    }
+
+    public List<StudentApplication> getAllApplication() {
+        return appliRepo.findAll();
     }
 
     public Optional<StudentApplication> createAndSaveNewApplication(long offerId, long resumeId) {

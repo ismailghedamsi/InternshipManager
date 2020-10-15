@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class StudentApplicationController {
 
@@ -13,6 +15,11 @@ public class StudentApplicationController {
 
     public StudentApplicationController(StudentApplicationService svc) {
         this.svc = svc;
+    }
+
+    @GetMapping("/api/applications")
+    public List<StudentApplication> getAllApplications() {
+        return svc.getAllApplication();
     }
 
     @PostMapping("/api/application/{offerId}/{resumeId}")
