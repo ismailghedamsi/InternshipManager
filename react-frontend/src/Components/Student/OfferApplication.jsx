@@ -16,6 +16,7 @@ import {useApi, useModal} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import MenuItem from "@material-ui/core/MenuItem";
 import OfferDetails from "../Utils/OfferDetails";
+import TextboxModal from "../Utils/TextboxModal";
 
 export default function OfferApplication() {
     const classes = useStyles();
@@ -23,20 +24,39 @@ export default function OfferApplication() {
     const [offers, setOffers] = useState([]);
     const [resumes, setResumes] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isResumeModalOpen, openReasonModal, closeResumeModal] = useModal();
+    const [isResumeModalOpen, openResumeModal, closeResumeModal] = useModal();
+    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
+
+    function sendDecision(index, hasStudentAccepted, reason = "") {
+        const nextState = [...offers];
+        const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
+        application.hasStudentAccepted = hasStudentAccepted;
+        application.reasonForRejection = reason;
+        return api.put("/application/" + application.id, application)
+            .then(r => {
+                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, r.data);
+                setOffers(nextState);
+                closeReasonModal()
+            })
+    }
 
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setResumes(result.data))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+            .then(result => setResumes(result ? result.data : []))
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setOffers(result.data))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+            .then(result => setOffers(result ? result.data : []))
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
+    }
+
+    function hasEmployeurAcceptedStudentOnOffer(offer, student) {
+        // return offer.applications.find(a => a.student.id === student.id && a.isHired === true) !== undefined && offer.applications.length !== 0;
+        return true;
     }
 
     function generateMenuItems() {
@@ -64,7 +84,7 @@ export default function OfferApplication() {
                                 style={{marginRight: 5}}
                                 onClick={() => {
                                     setCurrentIndex(i);
-                                    openReasonModal();
+                                    openResumeModal();
                                 }}
                             ><i className="fa fa-share-square-o"/></button>
                         </div>
@@ -83,7 +103,6 @@ export default function OfferApplication() {
                                 setCurrent(i)
                             }}
                         >
-
                             <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                 {offers[i].title + " "}
                             </Typography>
@@ -92,6 +111,26 @@ export default function OfferApplication() {
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
+                        {hasEmployeurAcceptedStudentOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
+                        <div className={classes.buttonDiv} style={{display: "block"}}>
+                            Acceptez l'offre
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton].join(' ')}
+                                onClick={() => sendDecision(i, true)}
+                                style={{marginRight: 5}}
+                            ><i className="fa fa-check-square" style={{color: "green"}}/></button>
+                            Refusez l'offre
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton].join(' ')}
+                                onClick={() => {
+                                    setCurrentIndex(i)
+                                    openReasonModal()
+                                }}
+                            ><i className="fa fa-ban" style={{color: "red"}}/></button>
+                        </div>
+                        }
                         <hr/>
                     </div>
                 )}
@@ -105,7 +144,7 @@ export default function OfferApplication() {
                                 return api.post("/application/" + offers[currentIndex].id + "/" + values.resumeId, {})
                                     .then((r) => {
                                         const nextState = [...offers];
-                                        nextState[currentIndex].applications.push(r.data)
+                                        nextState[currentIndex].applications.push(r.data);
                                         setOffers(nextState);
                                         closeResumeModal();
                                     })
@@ -157,6 +196,12 @@ export default function OfferApplication() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <TextboxModal
+                isOpen={isReasonModalOpen}
+                hide={closeReasonModal}
+                title={"Justifiez le refus"}
+                onSubmit={async (values) => sendDecision(currentIndex, false, values.message)}
+            />
         </div>
     );
 }

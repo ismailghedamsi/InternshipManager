@@ -89,14 +89,6 @@ export default function ApplyStage() {
         applications: [{id: -1, isHired: false, student: {id: null}}]
     }]);
     const [resumes, setResumes] = useState([{id: -1, name: '', file: '', approuved: false, owner: {}}]);
-    const [application, setApplication] = useState([{
-        id: -1,
-        hasStudentAccepted: false,
-        reasonForRejection: '',
-        offer: {},
-        student: {},
-        resume: {}
-    }])
     const [numPages, setNumPages] = useState(null);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
     const [reasonModalOpen, setReasonModalOpen] = useState(false);
@@ -105,16 +97,16 @@ export default function ApplyStage() {
     const [refusalIndex, setRefusalIndex] = useState(-1);
 
     function sendDecision(index, hasStudentAccepted, reason = "") {
-        const nextState = [...application];
-        nextState[index].hasStudentAccepted = hasStudentAccepted;
-        nextState[index].reasonForRejection = reason;
-        return axios.put("http://localhost:8080/application/" + application.id, nextState[index])
-            .then(() => {
-                nextState.splice(index, 1)
-                setApplication(nextState)
-                setReasonModalOpen(false)
+        const nextState = [...offers];
+        const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
+        application.hasStudentAccepted = hasStudentAccepted;
+        application.reasonForRejection = reason;
+        return api.put("/application/" + application.id, application)
+            .then(a => {
+                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, a);
+                setOffers(nextState);
+                setReasonModalOpen(false);
             })
-            .catch(() => setErrorModalOpen(true))
     }
 
 
@@ -157,15 +149,15 @@ export default function ApplyStage() {
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
     }
 
+    function hasEmployeurAcceptedStudentOnOffer(offer, student) {
+        return offer.applications.find(a => a.student.id === student.id && a.isHired === true) !== undefined && offer.applications.length !== 0;
+        //return true;
+    }
+
     function parseDate(date) {
         const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
         const d = new Date(date);
         return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
-    }
-
-    function hasEmployeurAcceptedStudentOnOffer(offer, student) {
-        //return offer.applications.find(a => a.student.id === student.id && a.isHired === true) !== undefined && offer.applications.length !== 0;
-        return true;
     }
 
     return (
@@ -253,7 +245,7 @@ export default function ApplyStage() {
                                         type={"button"}
                                         className={[classes.linkButton].join(' ')}
                                         onClick={() => {
-                                            setRefusalIndex(i)
+                                            setCurrentIndex(i)
                                             setReasonModalOpen(true)
                                         }}
                                     ><i className="fa fa-ban" style={{color: "red"}}/></button>
@@ -366,7 +358,7 @@ export default function ApplyStage() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) => sendDecision(refusalIndex, false, values.reasonForRejection)}
+                            onSubmit={async (values) => sendDecision(currentIndex, false, values.reasonForRejection)}
 
                             validationSchema={yup.object()
                                 .shape({

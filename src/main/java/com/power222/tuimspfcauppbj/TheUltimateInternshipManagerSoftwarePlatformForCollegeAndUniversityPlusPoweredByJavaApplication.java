@@ -93,6 +93,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 resumeRepo.saveAndFlush(Resume.builder()
                         .name("testResumeFileName " + i)
                         .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .approuved(i == 3)
                         .reviewed(i == 4)
                         .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
                                 "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +

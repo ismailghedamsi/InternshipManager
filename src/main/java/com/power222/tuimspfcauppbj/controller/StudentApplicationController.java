@@ -23,7 +23,7 @@ public class StudentApplicationController {
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/application/{id}")
+    @PutMapping("/api/application/{id}")
     public StudentApplication updateStudentApplication(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
         return svc.updateStudentApplication(id, studentApplication);
     }
