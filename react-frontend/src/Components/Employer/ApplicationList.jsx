@@ -4,18 +4,22 @@ import {useLocation} from "react-router-dom";
 import {useStyles} from "../Utils/useStyles";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
+import AuthenticationService from "../../Services/AuthenticationService";
+import {Checkbox} from "@material-ui/core";
 
 export default function ApplicationList() {
     const classes = useStyles();
     const location = useLocation();
     const api = useApi();
     const [offer, setOffer] = useState({applications: [{resume: {}, student: {}}]});
+    const [applicationCheckbox, setApplicationCheckbox] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
+        console.log("/offers/" + location.state.offerId)
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
-    })
+    }, [])
 
     return (
         <div style={{height: "100%"}}>
@@ -43,12 +47,27 @@ export default function ApplicationList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 {offer.applications[i].student.address}
                             </Typography>
+                            <Typography>
+                                {
+                                    AuthenticationService.getCurrentUserRole() == "admin" ?
+                                        <Checkbox
+                                            value="isHired"
+                                            checked={applicationCheckbox}
+                                            onChange={() => setApplicationCheckbox(!applicationCheckbox)}
+                                            inputProps={{'aria-label': 'isHired'}}
+                                        /> :
+                                        ""
+                                }
+                            </Typography>
                         </div>
                         }
                         <hr/>
                     </div>
                 )}
+
             </PdfSelectionViewer>
+
         </div>
+
     )
 }
