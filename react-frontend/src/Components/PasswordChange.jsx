@@ -1,17 +1,11 @@
-import React, {useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import AuthenticationService from "../js/AuthenticationService";
+import React, {useContext} from "react";
+import AuthenticationService from "../Services/AuthenticationService";
 import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import {Field, Form, Formik} from "formik";
 import * as yup from "yup";
@@ -19,48 +13,17 @@ import {TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Link from "@material-ui/core/Link";
 import axios from 'axios';
+import {useStyles} from "./Utils/useStyles";
+import {ModalContext} from "../App";
 
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(2),
-    },
-    submit: {
-        margin: theme.spacing(1, 0, 2),
-    },
-    logo: {
-        margin: theme.spacing(6, 0, 0.5),
-        fontSize: "2em",
-        textAlign: "center"
-    },
-    subtitle: {
-        fontSize: "1em",
-        textAlign: "center",
-        margin: theme.spacing(1, 0, 2)
-    },
-    paper: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    link: {
-        padding: theme.spacing(0, 0, 2)
-    },
-    divider: {
-        height: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-    },
-    container: {
-        backgroundColor: "#fff",
-        borderRadius: theme.spacing(2),
-    }
-}));
-
+const HTTP_UNAUTHORIZED = 401;
+const HTTP_NOT_FOUND = 404;
+const HTTP_CONFLICT = 409;
 const requiredFieldMsg = "Ce champs est requis";
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 
 export default function PasswordChange() {
-    const [errorModalOpen, setErrorModalOpen] = useState(false);
+    const {open} = useContext(ModalContext);
     const history = useHistory();
     const location = useLocation();
     const classes = useStyles();
@@ -73,18 +36,17 @@ export default function PasswordChange() {
 
     const handleHttpError = (error, setFieldError) => {
         if (error.response) {
-            if (error.response.status === 401)
+            if (error.response.status === HTTP_UNAUTHORIZED)
                 setFieldError("oldPassword", "Le  mot de passe est erroné")
-            else if (error.response.status === 409)
+            else if (error.response.status === HTTP_CONFLICT)
                 setFieldError("newPassword", "L'ancien et le nouveau mot de passe ne doivent pas êtres identiques")
-            else if (error.response.status === 404)
+            else if (error.response.status === HTTP_NOT_FOUND)
                 setFieldError("username", "Le nom d'utilisateur n'est pas valide")
             else
-                setErrorModalOpen(true);
+                open();
         } else
-            setErrorModalOpen(true);
+            open();
     };
-
 
     if (AuthenticationService.isUserLoggedIn())
         return <Redirect to="/dashboard/"/>
@@ -112,7 +74,7 @@ export default function PasswordChange() {
                         <Divider className={classes.divider}/>
                         <Formik
                             onSubmit={async (values, {setFieldError}) =>
-                                axios.put("http://localhost:8080/auth/password", values)
+                                axios.put("http://localhost:8080/api/auth/password", values)
                                     .then(() => history.push("/"))
                                     .catch((error) => handleHttpError(error, setFieldError))
                             }
@@ -206,23 +168,6 @@ export default function PasswordChange() {
                         </Grid>
                     </Container>
                 </Grid>
-                <Dialog open={errorModalOpen} onClose={() => {
-                    setErrorModalOpen(false)
-                }}>
-                    <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Erreur réseau: impossible de communiquer avec le serveur
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => {
-                            setErrorModalOpen(false)
-                        }} color="primary">
-                            J'ai compris
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </Grid>
         );
 }

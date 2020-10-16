@@ -23,7 +23,7 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
 
     @Test
     void helloWorldTest() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/hello", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/hello", String.class);
 		assertThat(response, is(notNullValue()));
 		assertThat(response.getStatusCode(), is (equalTo(HttpStatus.OK)));
 		assertThat(response.getBody(), is(equalTo("Hello, world!")));
@@ -31,15 +31,15 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
 
     @Test
     void unauthenticatedPrivateHelloWorldTest() {
-		ResponseEntity<String> response = restTemplate.getForEntity("/hello/private", String.class);
-		assertThat(response, is(notNullValue()));
-		assertThat(response.getStatusCode(), is (equalTo(HttpStatus.UNAUTHORIZED)));
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/hello/private", String.class);
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.UNAUTHORIZED)));
     }
 
     @Test
     void authenticatedPrivateHelloWorldTest() {
         ResponseEntity<String> response = restTemplate.withBasicAuth("employeur", "password")
-                .getForEntity("/hello/private", String.class);
+                .getForEntity("/api/hello/private", String.class);
         assertThat(response, is(notNullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
         assertThat(response.getBody(), is(equalTo("Hello, private world!")));
@@ -48,7 +48,7 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
     @Test
     void wrongUserPrivateHelloWorldTest() {
         ResponseEntity<String> response = restTemplate.withBasicAuth("totolehacker", "password")
-                .getForEntity("/hello/private", String.class);
+                .getForEntity("/api/hello/private", String.class);
         assertThat(response, is(notNullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.UNAUTHORIZED)));
     }

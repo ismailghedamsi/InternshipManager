@@ -9,7 +9,10 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         paddingBottom: theme.spacing(1),
         backgroundColor: theme.palette.primary.main,
-        maxHeight: "3vh"
+        minHeight: "3vh",
+        maxHeight: "3vh",
+        lineHeight: "3vh",
+        color: theme.palette.primary.contrastText
     }
 }));
 

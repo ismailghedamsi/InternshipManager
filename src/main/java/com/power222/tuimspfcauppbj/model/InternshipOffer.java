@@ -14,23 +14,24 @@ import java.util.List;
 @Builder(toBuilder = true)
 @EqualsAndHashCode
 public class InternshipOffer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String title;
     private String description;
-    private int nbOfWeeks;
     private double salary;
-    private int beginHour;
-    private int endHour;
     private Date creationDate;
     private Date limitDateToApply;
+    private Date internshipStartDate;
+    private Date internshipEndDate;
+    private int nbStudentToHire;
     private ReviewState reviewState;
     private String reasonForRejection;
 
     @Lob
-    private String joinedFile;
+    private String file;
 
     @ManyToOne(optional = false)
     @JsonIgnoreProperties("offers")

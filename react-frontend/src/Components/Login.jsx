@@ -1,63 +1,26 @@
+import React, {useContext} from 'react';
 import {Field, Form, Formik} from 'formik';
-import React, {useState} from 'react';
-import AuthenticationService from '../js/AuthenticationService';
+import AuthenticationService from '../Services/AuthenticationService';
 import Grid from "@material-ui/core/Grid";
 import {TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
-import {makeStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import * as yup from "yup";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
+import {useStyles} from "./Utils/useStyles";
+import {ModalContext} from "../App";
 
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(2),
-    },
-    submit: {
-        margin: theme.spacing(1, 0, 2),
-    },
-    logo: {
-        margin: theme.spacing(6, 0, 0.5),
-        fontSize: "3em",
-    },
-    subtitle: {
-        fontSize: "1em",
-        textAlign: "center",
-        margin: theme.spacing(0, 0, 6)
-    },
-    paper: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    link: {
-        padding: theme.spacing(0, 0, 2)
-    },
-    divider: {
-        height: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-    },
-    container: {
-        backgroundColor: "#fff",
-        borderRadius: theme.spacing(2),
-    }
-}));
-
+const HTTP_UNAUTHORIZED = 401;
+const HTTP_TOKEN_EXPIRED = 498;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function Login() {
-    const [open, setOpen] = useState(false);
+    const {open} = useContext(ModalContext);
     const history = useHistory();
     const classes = useStyles();
     const initialValues = {
@@ -67,18 +30,18 @@ export default function Login() {
 
     const handleHttpError = (error, setFieldError, username) => {
         if (error.response) {
-            if (error.response.status === 401) {
+            if (error.response.status === HTTP_UNAUTHORIZED) {
                 setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
                 setFieldError("password", "   ")
-            } else if (error.response.status === 498) {
+            } else if (error.response.status === HTTP_TOKEN_EXPIRED) {
                 history.push("/passwordChange", {username: username})
             } else
-                setOpen(true);
-        } else
-            setOpen(true);
-
+                open();
+        } else {
+            open();
+            console.error("Axios error: " + error)
+        }
     };
-
 
     if (AuthenticationService.isUserLoggedIn())
         return <Redirect to="/dashboard/"/>
@@ -108,23 +71,6 @@ export default function Login() {
                             </Typography>
                         </div>
                         <Divider className={classes.divider}/>
-                        <Dialog open={open} onClose={() => {
-                            setOpen(false)
-                        }}>
-                            <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    Erreur réseau: impossible de communiquer avec le serveur
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={() => {
-                                    setOpen(false)
-                                }} color="primary">
-                                    J'ai compris
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
                         <Formik
                             onSubmit={async (values, {setFieldError}) =>
                                 AuthenticationService.authenticate(values)

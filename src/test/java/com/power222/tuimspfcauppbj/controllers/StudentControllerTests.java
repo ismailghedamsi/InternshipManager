@@ -60,7 +60,7 @@ public class StudentControllerTests {
     void getStudentByIdTest() throws Exception {
         when(studentService.getStudentById(4L)).thenReturn(Optional.of(expected));
 
-        MvcResult result = mvc.perform(get("/students/4").contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = mvc.perform(get("/api/students/4").contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Student actual = objectMapper.readValue(result.getResponse().getContentAsString(), Student.class);
 
@@ -78,7 +78,7 @@ public class StudentControllerTests {
 
         when(studentService.getAllStudents()).thenReturn(studentList);
 
-        MvcResult result = mvc.perform(get("/students")).andReturn();
+        MvcResult result = mvc.perform(get("/api/students")).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
@@ -89,7 +89,7 @@ public class StudentControllerTests {
     void createStudentTest() throws Exception {
         when(studentService.persistNewStudent(expected)).thenReturn(Optional.of(expected));
 
-        MvcResult result = mvc.perform(post("/students")
+        MvcResult result = mvc.perform(post("/api/students")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
@@ -102,7 +102,7 @@ public class StudentControllerTests {
     @Test
     void updateResumeTest() throws Exception {
         expected.setPassword(null);
-        MvcResult result = mvc.perform(put("/students/" + expected.getId())
+        MvcResult result = mvc.perform(put("/api/students/" + expected.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
@@ -113,7 +113,7 @@ public class StudentControllerTests {
 
     @Test
     void deleteResumeTest() throws Exception {
-        MvcResult result = mvc.perform(delete("/students/1")).andReturn();
+        MvcResult result = mvc.perform(delete("/api/students/1")).andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(studentService, times(1)).deleteStudentById(1);
