@@ -33,8 +33,8 @@ export default function OfferApplication() {
         application.hasStudentAccepted = hasStudentAccepted;
         application.reasonForRejection = reason;
         return api.put("/application/" + application.id, application)
-            .then(r => {
-                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, r.data);
+            .then(result => {
+                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
                 setOffers(nextState);
                 closeReasonModal()
             })
@@ -73,7 +73,7 @@ export default function OfferApplication() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"En attente d'approbation"}>
+            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Liste des offres"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         {!hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&

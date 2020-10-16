@@ -41,7 +41,7 @@ export default function ResumeList() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"En attente d'approbation"}>
+            <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Liste des CV"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <div className={classes.buttonDiv}>
