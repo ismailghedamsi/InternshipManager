@@ -8,8 +8,6 @@ import AuthenticationService from '../Services/AuthenticationService';
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
-import ApplyStage from "./ApplyStage";
-import AuthenticationService from '../js/AuthenticationService';
 import Interview from "./Interview";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
