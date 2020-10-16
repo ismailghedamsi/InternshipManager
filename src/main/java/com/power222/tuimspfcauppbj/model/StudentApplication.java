@@ -1,7 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,7 +23,6 @@ public class StudentApplication {
     private String reasonForRejection;
 
     @ManyToOne
-    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})
     private InternshipOffer offer;
 
