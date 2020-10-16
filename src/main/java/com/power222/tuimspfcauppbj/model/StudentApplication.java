@@ -17,10 +17,10 @@ public class StudentApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private boolean isHired;
+    private boolean hasHired;
     private boolean hasStudentAccepted;
     private String reasonForRejection;
-    private boolean isDecided;
+    private boolean hasDecided;
 
     @ManyToOne
     @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})
