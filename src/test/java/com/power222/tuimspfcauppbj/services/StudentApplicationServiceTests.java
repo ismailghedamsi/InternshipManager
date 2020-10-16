@@ -63,6 +63,7 @@ class StudentApplicationServiceTests {
                 .resume(expectedResume)
                 .isHired(false)
                 .hasStudentAccepted(false)
+                .isDecided(false)
                 .reasonForRejection("")
                 .build();
     }
@@ -151,4 +152,24 @@ class StudentApplicationServiceTests {
 
         assertThat(actual).hasSize(0);
     }
+
+    @Test
+    void updateStudentApplicationDecision() {
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.of(expectedAppli));
+        when(appliRepo.saveAndFlush(expectedAppli)).thenReturn(expectedAppli);
+
+        var actual = appliSvc.updateStudentApplicationStudentDecision(expectedAppli.getId(), expectedAppli);
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).contains(expectedAppli);
+    }
+
+    @Test
+    void updateStudentApplicationIsHiredWithNoneExistentId() {
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.empty());
+
+        var actual = appliSvc.updateStudentApplicationStudentDecision(expectedAppli.getId(), expectedAppli);
+        assertThat(actual).isEmpty();
+    }
+
+
 }

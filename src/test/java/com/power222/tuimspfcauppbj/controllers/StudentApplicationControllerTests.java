@@ -26,7 +26,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
@@ -54,6 +54,7 @@ class StudentApplicationControllerTests {
                 .resume(new Resume())
                 .isHired(false)
                 .hasStudentAccepted(false)
+                .isDecided(false)
                 .reasonForRejection("")
                 .build();
     }
@@ -106,5 +107,29 @@ class StudentApplicationControllerTests {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         assertEquals(actuals.size(), nbStudent);
+    }
+
+    @Test
+    void updateAppliDecision() throws Exception {
+        when(svc.updateStudentApplicationStudentDecision(expected.getId(), expected)).thenReturn(Optional.of(expected));
+
+        MvcResult result = mvc.perform(put("/api/applications/decision/" + expected.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(svc, times(1)).updateStudentApplicationStudentDecision(expected.getId(), expected);
+    }
+
+    @Test
+    void updateAppliDecisionBadId() throws Exception {
+        var id = 100L;
+        when(svc.updateStudentApplicationStudentDecision(id, expected)).thenReturn(Optional.empty());
+
+        MvcResult result = mvc.perform(put("/api/applications/decision/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expected))).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
     }
 }

@@ -20,6 +20,7 @@ public class StudentApplication {
     private boolean isHired;
     private boolean hasStudentAccepted;
     private String reasonForRejection;
+    private boolean isDecided;
 
     @ManyToOne
     @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})

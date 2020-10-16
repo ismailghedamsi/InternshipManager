@@ -41,6 +41,7 @@ public class StudentApplicationService {
                     .resume(resume.get())
                     .isHired(false)
                     .hasStudentAccepted(false)
+                    .isDecided(false)
                     .reasonForRejection("")
                     .build()));
         } else
@@ -64,13 +65,13 @@ public class StudentApplicationService {
                 .orElse(application);
     }
 
-    public StudentApplication updateStudentApplicationStudentDecision(long id, StudentApplication application) {
+    public Optional<StudentApplication> updateStudentApplicationStudentDecision(long id, StudentApplication application) {
         return appliRepo.findById(id)
                 .map(oldApplication -> {
+                    oldApplication.setDecided(application.isDecided());
                     oldApplication.setHasStudentAccepted(application.isHasStudentAccepted());
                     oldApplication.setReasonForRejection(application.getReasonForRejection());
                     return appliRepo.saveAndFlush(oldApplication);
-                })
-                .orElse(application);
+                });
     }
 }

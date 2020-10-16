@@ -37,7 +37,8 @@ public class StudentApplicationController {
     }
 
     @PutMapping("/decision/{id}")
-    public StudentApplication updateStudentApplicatioDecision(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
-        return svc.updateStudentApplicationStudentDecision(id, studentApplication);
+    public ResponseEntity<StudentApplication> updateStudentApplicatioDecision(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
+        return svc.updateStudentApplicationStudentDecision(id, studentApplication).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
