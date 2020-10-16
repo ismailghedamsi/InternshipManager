@@ -16,19 +16,19 @@ export default function OfferList() {
     const [offers, setOffers] = useState([]);
 
     useEffect(() => {
-        if (AuthenticationService.getCurrentUserRole() == "employer") {
-            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
-                .then(r => {
-                    console.log(r.data)
-                    setOffers(r ? r.data : [])
-                })
-        } else if (AuthenticationService.getCurrentUserRole() == "admin") {
-            api.get("/offers/approved")
-                .then(r => {
-                    console.log(r.data)
-                    setOffers(r ? r.data : [])
-                })
-        }
+       if (AuthenticationService.getCurrentUserRole() == "employer") {
+           api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
+               .then(r => {
+                   console.log(r.data)
+                   setOffers(r ? r.data : [])
+               })
+       } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+           api.get("/offers/approved")
+               .then(r => {
+                   console.log(r.data)
+                   setOffers(r ? r.data : [])
+               })
+       }
 
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -11,20 +11,40 @@ export default function ApplicationList() {
     const classes = useStyles();
     const location = useLocation();
     const api = useApi();
-    const [offer, setOffer] = useState({applications: [{resume: {}, student: {}}]});
-    const [applicationCheckbox, setApplicationCheckbox] = useState(false)
+    const [offer, setOffer] = useState({});
+    const [applicationCheckboxs, setApplicationsCheckbox] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0);
+    const hirementState = [];
+    useEffect(() => {
+        api.get("/offers/" + location.state.offerId)
+            .then((r) => {
+                    setOffer(r.data);
+                }
+            )
+    }, [])
 
     useEffect(() => {
-        console.log("/offers/" + location.state.offerId)
-        api.get("/offers/" + location.state.offerId)
-            .then((r) => setOffer(r.data))
-    }, [])
+        if (!offer.applications)
+            return;
+
+        offer.applications.forEach(application => {
+            hirementState.push(application.hired)
+        })
+        setApplicationsCheckbox(hirementState)
+    }, [offer])
+
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offer.applications.map(o => o.resume.file)}
+            <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
                                 title={(<span>Application<br/>{offer.title}</span>)}>
+
+                {/* {
+                    offer.applications.map(element => {
+                        
+                    });
+                } */}
+
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
@@ -51,10 +71,16 @@ export default function ApplicationList() {
                                 {
                                     AuthenticationService.getCurrentUserRole() == "admin" ?
                                         <Checkbox
-                                            value="isHired"
-                                            checked={applicationCheckbox}
-                                            onChange={() => setApplicationCheckbox(!applicationCheckbox)}
-                                            inputProps={{'aria-label': 'isHired'}}
+                                            value="hired"
+                                            checked={offer.applications[i].hired}
+                                            onChange={
+                                                () => {
+                                                    var copy = {...offer}
+                                                    copy.applications[i].hired = !copy.applications[i].hired;
+                                                    setOffer(copy)
+                                                    api.put(`application/hire/${offer.applications[i].id}`)
+                                                }}
+                                            inputProps={{'aria-label': 'hired'}}
                                         /> :
                                         ""
                                 }
