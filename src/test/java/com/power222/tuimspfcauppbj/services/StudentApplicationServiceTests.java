@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -127,5 +129,26 @@ class StudentApplicationServiceTests {
         var actual = appliSvc.updateStudentApplication(idToPersistTo, studentApplicationWithIdToIgnore);
 
         assertThat(actual).isEqualTo(expectedAppli);
+    }
+
+    @Test
+    void getAllStudentsApplicationTest() {
+        var s1 = StudentApplication.builder().id(1L).build();
+        var s2 = StudentApplication.builder().id(2L).build();
+        var s3 = StudentApplication.builder().id(3L).build();
+        when(appliRepo.findAll()).thenReturn(Arrays.asList(s1, s2, s3));
+
+        var actual = appliSvc.getAllApplication();
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
+    void getNoStudentsApplicationTest() {
+        when(appliRepo.findAll()).thenReturn(Collections.emptyList());
+
+        var actual = appliSvc.getAllApplication();
+
+        assertThat(actual).hasSize(0);
     }
 }
