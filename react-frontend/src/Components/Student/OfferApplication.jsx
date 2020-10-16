@@ -32,6 +32,7 @@ export default function OfferApplication() {
         const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
         application.hasStudentAccepted = hasStudentAccepted;
         application.reasonForRejection = reason;
+        application.isDecided = true;
         return api.put("/applications/decision/" + application.id, application)
             .then(result => {
                 nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
@@ -57,7 +58,10 @@ export default function OfferApplication() {
     function hasEmployeurAcceptedStudentOnOffer(offer, student) {
         // return offer.applications.find(a => a.student.id === student.id && a.isHired === true) !== undefined && offer.applications.length !== 0;
         //return true;
-        return offer.applications.find(a => a.student.id === student.id && a.hasStudentAccepted === false) !== undefined && offer.applications.length !== 0;
+        console.log(offer)
+        console.log(offer.applications.find(a => a.isDecided == true) !== undefined && offer.applications.length !== 0)
+        console.log(offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0)
+        return offer.applications.find(a => a.student.id === student.id && a.isDecided === true) !== undefined && offer.applications.length !== 0;
     }
 
     function generateMenuItems() {

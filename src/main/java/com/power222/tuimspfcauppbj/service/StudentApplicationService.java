@@ -41,7 +41,7 @@ public class StudentApplicationService {
                     .resume(resume.get())
                     .isHired(false)
                     .hasStudentAccepted(false)
-                    .isDecided(false)
+                    .isDecided(true)
                     .reasonForRejection("")
                     .build()));
         } else
