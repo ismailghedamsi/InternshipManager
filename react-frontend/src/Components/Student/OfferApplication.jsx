@@ -27,12 +27,12 @@ export default function OfferApplication() {
 
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setResumes(result.data))
+            .then(result => setResumes(result ? result.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setOffers(result.data))
+            .then(result => setOffers(result ? result.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {

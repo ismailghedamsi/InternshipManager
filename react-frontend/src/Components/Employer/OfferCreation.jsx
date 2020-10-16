@@ -23,7 +23,6 @@ export default function OfferCreation() {
     const validationSchema = yup.object().shape({
         title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
         description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-        nbOfWeeks: yup.number().min(1, tooLittleError).required(requiredFieldMsg),
         salary: yup.number().min(0, tooLittleError).required(requiredFieldMsg),
         nbStudentToHire: yup.number().min(0, tooLittleError).required(
             requiredFieldMsg),
@@ -41,7 +40,7 @@ export default function OfferCreation() {
                 "internshipStartDate",
                 (internshipStartDate, schema) => internshipStartDate && schema.min(
                     internshipStartDate,
-                    "La date de fin doit être avant la date de debut"))
+                    "La date de début doit être avant la date de fin"))
     });
     const initialValues = {
         title: '',
@@ -87,7 +86,8 @@ export default function OfferCreation() {
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <Formik
                         onSubmit={async (values) => sendOfferToBackEnd(values)
-                            .then(() => history.push("/dashboard/listoffer"))}
+                            .then(() => history.push("/dashboard/listoffer"))
+                        }
 
                         validateOnBlur={false}
                         validateOnChange={false}

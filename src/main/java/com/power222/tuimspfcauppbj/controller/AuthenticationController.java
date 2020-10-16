@@ -1,7 +1,7 @@
 package com.power222.tuimspfcauppbj.controller;
 
+import com.power222.tuimspfcauppbj.model.AuthenticationDTO;
 import com.power222.tuimspfcauppbj.model.PasswordDTO;
-import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -20,8 +20,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/user")
-    public User getCurrentUser() {
-        return authSvc.getCurrentUser();
+    public AuthenticationDTO getCurrentUser() {
+        return AuthenticationDTO.fromUser(authSvc.getCurrentUser());
     }
 
     @PutMapping("/password")

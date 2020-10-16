@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {Document, Page} from "react-pdf";
 import Grid from "@material-ui/core/Grid";
 import {Typography} from "@material-ui/core";
 import {useStyles} from "./useStyles";
+import PdfDocument from "./PdfDocument";
 
 export default function PdfSelectionViewer(props) {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState(null);
-    const [numPages, setNumPages] = useState(0);
 
     useEffect(() => {
         if (props.documents) {
@@ -39,22 +38,7 @@ export default function PdfSelectionViewer(props) {
                 {props.documents.map((item, i) => props.children(i, setCurrent))}
             </Grid>
             <Grid item xs={7} className={classes.viewbox} align="center">
-                <Document
-                    onLoadSuccess={async ({numPages}) => await setNumPages(numPages)}
-                    error={"Impossible d'afficher"}
-                    file={props.documents[getCurrentDoc()]}>
-                    {Array.from(
-                        new Array(numPages),
-                        (el, index) => (
-                            <Page
-                                key={`page_${index + 1}`}
-                                pageNumber={index + 1}
-                                renderTextLayer={false}
-                                className={classes.page}
-                            />
-                        ),
-                    )}
-                </Document>
+                <PdfDocument document={props.documents[getCurrentDoc()]}/>
             </Grid>
         </Grid>
     )
