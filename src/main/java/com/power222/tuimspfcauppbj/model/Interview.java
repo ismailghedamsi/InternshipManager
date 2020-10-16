@@ -18,8 +18,6 @@ public class Interview {
     private long id;
 
     private Date date;
-    private long time;
-    private boolean hasStudentAccepted;
 
     @OneToOne
     private StudentApplication studentApplication;
