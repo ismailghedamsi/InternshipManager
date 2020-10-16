@@ -52,7 +52,6 @@ export default function OfferApplication() {
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {
-        console.log(offer)
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
     }
 
