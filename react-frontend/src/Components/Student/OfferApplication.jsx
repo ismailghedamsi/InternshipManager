@@ -48,7 +48,7 @@ export default function OfferApplication() {
 
     useEffect(() => {
         api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setOffers(result ? result.data : []))
+            .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.limitDateToApply) >= new Date()) : []))
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {

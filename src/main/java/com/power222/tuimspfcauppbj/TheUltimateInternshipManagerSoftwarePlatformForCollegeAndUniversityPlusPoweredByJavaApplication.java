@@ -126,7 +126,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .description("Some basic description " + i)
                         .salary(15.98)
                         .creationDate(Date.from(Instant.now()))
-                        .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
+                        .limitDateToApply(i == 6 ? Date.valueOf(LocalDate.now().minusDays(5)) : Date.valueOf(LocalDate.now().plusWeeks(1)))
                         .internshipStartDate(Date.valueOf(LocalDate.now().plusWeeks(2)))
                         .internshipEndDate(Date.valueOf(LocalDate.now().plusWeeks(9)))
                         .nbStudentToHire(25)
