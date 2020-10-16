@@ -32,10 +32,22 @@ export default function OfferList() {
         return api.delete("/offers/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)
+
                 if (currentIndex >= nextState.length)
                     setCurrentIndex(0)
+
                 setOffers(nextState)
             })
+    }
+
+    function getOfferState(offer) {
+        if (!offer.reviewState === "PENDING")
+            return <span style={{color: "blue"}}>En attente</span>;
+        else if (!offer.reviewState === "REJECTED")
+            return (<span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>);
+        else
+            return <span style={{color: "green"}}>Approuvé</span>;
     }
 
     return (
@@ -65,6 +77,10 @@ export default function OfferList() {
                             </Typography>
                             <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
                                 {offers[i].employer.companyName} {offers[i].employer.contactName}
+                            </Typography>
+                            <Typography
+                                variant={"body2"}>
+                                État : {getOfferState(offers[i])}
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}

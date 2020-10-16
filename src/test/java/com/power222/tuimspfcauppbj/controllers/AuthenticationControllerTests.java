@@ -67,8 +67,7 @@ public class AuthenticationControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.username").value("etudiant"))
-                .andExpect(jsonPath("$.role").value("student"))
-                .andExpect(jsonPath("$.passwordExpired").value(false));
+                .andExpect(jsonPath("$.role").value("student"));
     }
 
     @Test
