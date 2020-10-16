@@ -61,9 +61,9 @@ class StudentApplicationServiceTests {
                 .offer(expectedOffer)
                 .student(expectedUser)
                 .resume(expectedResume)
-                .hasHired(false)
+                .hired(false)
                 .hasStudentAccepted(false)
-                .hasDecided(false)
+                .decided(false)
                 .reasonForRejection("")
                 .build();
     }

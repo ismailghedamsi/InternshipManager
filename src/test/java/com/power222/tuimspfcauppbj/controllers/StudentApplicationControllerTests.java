@@ -52,9 +52,9 @@ class StudentApplicationControllerTests {
                 .offer(new InternshipOffer())
                 .student(new Student())
                 .resume(new Resume())
-                .hasHired(false)
+                .hired(false)
                 .hasStudentAccepted(false)
-                .hasDecided(false)
+                .decided(false)
                 .reasonForRejection("")
                 .build();
     }

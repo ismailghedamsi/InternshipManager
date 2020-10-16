@@ -32,7 +32,7 @@ export default function OfferApplication() {
         const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
         application.hasStudentAccepted = hasStudentAccepted;
         application.reasonForRejection = reason;
-        application.hasDecided = true;
+        application.decided = true;
         return api.put("/applications/decision/" + application.id, application)
             .then(result => {
                 nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
@@ -52,17 +52,22 @@ export default function OfferApplication() {
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {
+        console.log(offer)
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
     }
 
     function hasEmployeurAcceptedStudentOnOffer(offer, student) {
-        // return offer.applications.find(a => a.student.id === student.id && a.isHired === true) !== undefined && offer.applications.length !== 0;
-        //return true;
-        console.log(offer)
-        console.log(JSON.stringify(offer.applications))
-        console.log(offer.applications.find(a => a.hasHired === true) !== undefined && offer.applications.length !== 0)
-        console.log(offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0)
-        return offer.applications.find(a => a.student.id === student.id && a.hasHired === true && a.hasDecided === false) !== undefined && offer.applications.length !== 0;
+        return offer.applications.find(a => a.student.id === student.id && a.hired === false && a.decided === false) !== undefined && offer.applications.length !== 0;
+    }
+
+    function hasStudentDecided(offer, student) {
+        if (offer.applications.find(a => a.student.id === student.id && a.decided === true && a.hasStudentAccepted === true)) {
+            return (<Typography color={"textPrimary"} variant={"body1"} display={"block"}>Vous avez accepté cettre
+                offre</Typography>);
+        } else if (offer.applications.find(a => a.student.id === student.id && a.decided === true && a.hasStudentAccepted === false)) {
+            return (<Typography color={"textPrimary"} variant={"body1"} display={"block"}>Vous avez refusé cettre
+                offre</Typography>);
+        }
     }
 
     function generateMenuItems() {
@@ -137,6 +142,7 @@ export default function OfferApplication() {
                             ><i className="fa fa-ban" style={{color: "red"}}/></button>
                         </div>
                         }
+                        {hasStudentDecided(offers[i], AuthenticationService.getCurrentUser())}
                         <hr/>
                     </div>
                 )}
