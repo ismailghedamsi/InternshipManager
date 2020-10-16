@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +32,6 @@ class InterviewServiceTest {
     private InterviewService interviewSvc;
 
     private Interview expectedInterview;
-    private StudentApplication expectedStudentApplication;
     private Employer expectedEmployer;
 
     @BeforeEach
@@ -42,7 +40,7 @@ class InterviewServiceTest {
                 .id(1L)
                 .build();
 
-        expectedStudentApplication = StudentApplication.builder()
+        StudentApplication expectedStudentApplication = StudentApplication.builder()
                 .id(1L)
                 .build();
 
@@ -86,5 +84,21 @@ class InterviewServiceTest {
 
     @Test
     void updateInterview() {
+        var initialId = expectedInterview.getId();
+        var alteredId = 123L;
+        var alteredInterview = expectedInterview.toBuilder().id(alteredId).build();
+        when(interviewRepo.findById(initialId)).thenReturn(Optional.of(expectedInterview));
+        when(interviewRepo.saveAndFlush(alteredInterview)).thenReturn(expectedInterview);
+
+        var actual = interviewSvc.updateInterview(initialId, alteredInterview);
+
+        assertThat(actual).contains(expectedInterview);
+    }
+
+    @Test
+    void updateInterviewWithNonexistentId() {
+        var actual = interviewSvc.updateInterview(expectedInterview.getId(), expectedInterview);
+
+        assertThat(actual).isEmpty();
     }
 }
