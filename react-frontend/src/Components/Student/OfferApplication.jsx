@@ -29,7 +29,6 @@ export default function OfferApplication() {
 
     function sendDecision(index, hasStudentAccepted, reason = "") {
         const nextState = [...offers];
-        console.log("Muhaah");
         const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
         application.hasStudentAccepted = hasStudentAccepted;
         application.reasonForRejection = reason;
@@ -57,7 +56,8 @@ export default function OfferApplication() {
 
     function hasEmployeurAcceptedStudentOnOffer(offer, student) {
         // return offer.applications.find(a => a.student.id === student.id && a.isHired === true) !== undefined && offer.applications.length !== 0;
-        return true;
+        //return true;
+        return offer.applications.find(a => a.student.id === student.id && a.hasStudentAccepted === false) !== undefined && offer.applications.length !== 0;
     }
 
     function generateMenuItems() {
