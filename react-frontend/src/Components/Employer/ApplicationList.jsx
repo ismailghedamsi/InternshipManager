@@ -12,39 +12,17 @@ export default function ApplicationList() {
     const location = useLocation();
     const api = useApi();
     const [offer, setOffer] = useState({});
-    const [applicationCheckboxs, setApplicationsCheckbox] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0);
-    const hirementState = [];
+    const noContent = ""
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
-            .then((r) => {
-                    setOffer(r.data);
-                }
-            )
+            .then((r) => setOffer(r.data))
     }, [])
-
-    useEffect(() => {
-        if (!offer.applications)
-            return;
-
-        offer.applications.forEach(application => {
-            hirementState.push(application.hired)
-        })
-        setApplicationsCheckbox(hirementState)
-    }, [offer])
-
 
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
                                 title={(<span>Application<br/>{offer.title}</span>)}>
-
-                {/* {
-                    offer.applications.map(element => {
-                        
-                    });
-                } */}
-
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
@@ -82,7 +60,7 @@ export default function ApplicationList() {
                                                 }}
                                             inputProps={{'aria-label': 'hired'}}
                                         /> :
-                                        ""
+                                        noContent
                                 }
                             </Typography>
                         </div>
@@ -90,10 +68,7 @@ export default function ApplicationList() {
                         <hr/>
                     </div>
                 )}
-
             </PdfSelectionViewer>
-
         </div>
-
     )
 }

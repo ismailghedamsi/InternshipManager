@@ -16,31 +16,24 @@ export default function OfferList() {
     const [offers, setOffers] = useState([]);
 
     useEffect(() => {
-       if (AuthenticationService.getCurrentUserRole() == "employer") {
-           api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
-               .then(r => {
-                   console.log(r.data)
-                   setOffers(r ? r.data : [])
-               })
-       } else if (AuthenticationService.getCurrentUserRole() == "admin") {
-           api.get("/offers/approved")
-               .then(r => {
-                   console.log(r.data)
-                   setOffers(r ? r.data : [])
-               })
-       }
-
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        if (AuthenticationService.getCurrentUserRole() == "employer") {
+            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
+                .then(r => setOffers(r ? r.data : []))
+        } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+            api.get("/offers/approved")
+                .then(r => {
+                    setOffers(r ? r.data : [])
+                })
+        }
+    }, [])
 
     function deleteOffer(index) {
         const nextState = [...offers];
         return api.delete("/offers/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)
-
                 if (currentIndex >= nextState.length)
                     setCurrentIndex(0)
-
                 setOffers(nextState)
             })
     }
@@ -83,7 +76,6 @@ export default function OfferList() {
                                   } else if (AuthenticationService.getCurrentUserRole() == "admin") {
                                       history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
                                   }
-
                               }
                               }
                         >
