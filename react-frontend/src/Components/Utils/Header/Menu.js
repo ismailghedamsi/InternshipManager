@@ -19,11 +19,6 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Liste d\'applications',
-        url: '/dashboard/applicationList',
-        role: 'admin'
-    },
-    {
         title: 'Statut',
         url: "/dashboard/status",
         role: 'admin'
