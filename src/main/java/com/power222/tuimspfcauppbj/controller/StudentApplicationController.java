@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/applications")
 public class StudentApplicationController {
 
     private final StudentApplicationService svc;
@@ -17,12 +18,12 @@ public class StudentApplicationController {
         this.svc = svc;
     }
 
-    @GetMapping("/api/applications")
+    @GetMapping
     public List<StudentApplication> getAllApplications() {
         return svc.getAllApplication();
     }
 
-    @PostMapping("/api/application/{offerId}/{resumeId}")
+    @PostMapping("/{offerId}/{resumeId}")
     public ResponseEntity<StudentApplication> createStudentApplication(
             @PathVariable long offerId, @PathVariable long resumeId) {
         return svc.createAndSaveNewApplication(offerId, resumeId)
@@ -30,8 +31,13 @@ public class StudentApplicationController {
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/api/application/{id}")
+    @PutMapping("/{id}")
     public StudentApplication updateStudentApplication(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
         return svc.updateStudentApplication(id, studentApplication);
+    }
+
+    @PutMapping("/decision/{id}")
+    public StudentApplication updateStudentApplicatioDecision(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
+        return svc.updateStudentApplicationStudentDecision(id, studentApplication);
     }
 }

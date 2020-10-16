@@ -29,10 +29,11 @@ export default function OfferApplication() {
 
     function sendDecision(index, hasStudentAccepted, reason = "") {
         const nextState = [...offers];
+        console.log("Muhaah");
         const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
         application.hasStudentAccepted = hasStudentAccepted;
         application.reasonForRejection = reason;
-        return api.put("/application/" + application.id, application)
+        return api.put("/applications/decision/" + application.id, application)
             .then(result => {
                 nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
                 setOffers(nextState);
@@ -141,7 +142,7 @@ export default function OfferApplication() {
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
                             onSubmit={async (values) => {
-                                return api.post("/application/" + offers[currentIndex].id + "/" + values.resumeId, {})
+                                return api.post("/applications/" + offers[currentIndex].id + "/" + values.resumeId, {})
                                     .then((r) => {
                                         const nextState = [...offers];
                                         nextState[currentIndex].applications.push(r.data);
