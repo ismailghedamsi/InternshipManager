@@ -1,8 +1,10 @@
-import {Grid, Typography} from "@material-ui/core";
+import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {useApi} from "../Utils/Hooks";
+import {useApi, useModal} from "../Utils/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
+import PdfDocument from "../Utils/PdfDocument";
 import {useStyles} from "../Utils/useStyles";
+import DialogActions from "@material-ui/core/DialogActions";
 
 
 export default function StudentStatus() {
@@ -12,14 +14,15 @@ export default function StudentStatus() {
     const [currentEmployer, setCurrentEmployer] = useState({});
     const [currentEmployerOffers, setCurrentEmployerOffers] = useState([{}]);
     const [currentOffer, setCurrentOffer] = useState({});
-    const [currentIndex, setCurrentIndex] = useState(0);
-
+    const [currentIndex, setCurrentIndex] = useState(-1);
+    const [isPdfOpen, openPdf, closePdf] = useModal();
+    const [currentDoc, setCurrentDoc] = useState('');
     useEffect(() => {
         api.get("employers").then(resp => {
             setEmployers(resp ? resp.data : [])
             setCurrentEmployer(employers[0])
         })
-    }, [currentEmployer]);
+    }, []);
 
     useEffect(() => {
         api.get("/offers/employer/" + currentEmployer.username)
@@ -59,18 +62,59 @@ export default function StudentStatus() {
             </Grid>
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
                 <h1>Detaille des l'offres</h1>
-                {/* {currentEmployerOffers && currentEmployerOffers[0]  ?  <OfferDetails offer={currentEmployerOffers[0]}/>  : ""} */}
 
                 {
                     currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                            console.log(o.salary);
-                            return <OfferDetails key={k} offer={o}/>
+                            return <div>
+                                <Typography>
+                                    <button type={"button"} className={[classes.linkButton].join(" ")}
+                                            onClick={() => {
+                                                setCurrentDoc(o.file);
+                                                openPdf();
+                                            }}
+                                    >
+                                        {o.title}
+                                    </button>
+                                </Typography>
+                                <OfferDetails key={k} offer={o}/>
+                                {printOfferStatus(o)}
+                                {/* {listOfHiredStudentsCurrentOffer(o)} */}
+                                <hr/>
+                            </div>
+
                         })
                         : "L'employeur n'a aucune offre"
                 }
             </Grid>
+            <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
+                <DialogContent className={classes.viewbox}>
+                    <PdfDocument document={currentDoc}/>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closePdf} color="primary">
+                        Fermer
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Grid>
     );
 
+    function printOfferStatus(offer) {
+
+
+        if (offer.reviewState == "PENDING")
+            return <span style={{color: "blue"}}>En attente</span>;
+        else if (offer.reviewState == "DENIED")
+            return (<span style={{color: "red"}}>Rejeté</span>);
+        else
+            return <span style={{color: "green"}}>Approuvé</span>;
+    }
+
+    function listOfHiredStudentsCurrentOffer(offer) {
+        if (offer.reviewState == "APPROVED") {
+            return <h1>Show hired students</h1>
+        }
+        return "No one is hired"
+    }
 
 }
