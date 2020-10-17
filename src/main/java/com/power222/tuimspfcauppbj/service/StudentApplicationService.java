@@ -33,9 +33,18 @@ public class StudentApplicationService {
             return Optional.of(appliRepo.saveAndFlush(StudentApplication.builder()
                     .student((Student) currentUser)
                     .offer(offer.get())
+                    .isHired(false)
                     .resume(resume.get())
                     .build()));
         } else
             return Optional.empty();
+    }
+
+    public Optional<StudentApplication> updateStudentApplicationIsHired(long id) {
+        return appliRepo.findById(id)
+                .map(oldAppli -> {
+                    oldAppli.setHired(!oldAppli.isHired());
+                    return appliRepo.saveAndFlush(oldAppli);
+                });
     }
 }
