@@ -9,14 +9,16 @@ export default function StudentStatus() {
     const classes = useStyles();
     const api = useApi();
     const [employers, setEmployers] = useState([{}]);
-    const [currentEmployer, setCurrentEmployer] = useState([{}]);
+    const [currentEmployer, setCurrentEmployer] = useState({});
     const [currentEmployerOffers, setCurrentEmployerOffers] = useState([{}]);
     const [currentOffer, setCurrentOffer] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
-        api.get("employers").then(resp => setEmployers(resp ? resp.data : []))
-            .then(setCurrentEmployer(employers[0]))
+        api.get("employers").then(resp => {
+            setEmployers(resp ? resp.data : [])
+            setCurrentEmployer(employers[0])
+        })
     }, [currentEmployer]);
 
     useEffect(() => {
@@ -41,7 +43,7 @@ export default function StudentStatus() {
                 {employers.map((item, i) =>
                     <div key={i}>
                         <button type={"button"}
-                                className={[classes.linkButton, , i === currentIndex ? classes.fileButton : null].join(' ')}
+                                className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                                 onClick={() => {
                                     setCurrentIndex(i);
                                     setCurrentEmployer(employers[i]);
@@ -55,14 +57,6 @@ export default function StudentStatus() {
                     </div>
                 )}
             </Grid>
-            {
-                currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                        {
-                            currentEmployerOffers && currentEmployerOffers[0] ? <OfferDetails key={k} offer={o}/> : ""
-                        }
-                    })
-                    : "L'employeur n'a aucune offre"
-            }
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
                 <h1>Detaille des l'offres</h1>
                 {/* {currentEmployerOffers && currentEmployerOffers[0]  ?  <OfferDetails offer={currentEmployerOffers[0]}/>  : ""} */}
@@ -70,7 +64,7 @@ export default function StudentStatus() {
                 {
                     currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
                             console.log(o.salary);
-                            <OfferDetails key={k} offer={o}/>
+                            return <OfferDetails key={k} offer={o}/>
                         })
                         : "L'employeur n'a aucune offre"
                 }
