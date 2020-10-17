@@ -4,6 +4,7 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import org.springframework.stereotype.Service;
@@ -40,20 +41,11 @@ public class StudentApplicationService {
                     .offer(offer.get())
                     .resume(resume.get())
                     .hired(false)
-                    .hasStudentAccepted(false)
-                    .decided(false)
+                    .reviewState(ReviewState.PENDING)
                     .reasonForRejection("")
                     .build()));
         } else
             return Optional.empty();
-    }
-
-    public Optional<StudentApplication> updateStudentApplicationHasStudentAccepted(long idStudentApplication) {
-        return appliRepo.findById(idStudentApplication)
-                .map(oldAppli -> {
-                    oldAppli.setHasStudentAccepted(true);
-                    return appliRepo.saveAndFlush(oldAppli);
-                });
     }
 
     public StudentApplication updateStudentApplication(long id, StudentApplication application) {
@@ -68,8 +60,7 @@ public class StudentApplicationService {
     public Optional<StudentApplication> updateStudentApplicationStudentDecision(long id, StudentApplication application) {
         return appliRepo.findById(id)
                 .map(oldApplication -> {
-                    oldApplication.setDecided(application.isDecided());
-                    oldApplication.setHasStudentAccepted(application.isHasStudentAccepted());
+                    oldApplication.setReviewState(application.getReviewState());
                     oldApplication.setReasonForRejection(application.getReasonForRejection());
                     return appliRepo.saveAndFlush(oldApplication);
                 });

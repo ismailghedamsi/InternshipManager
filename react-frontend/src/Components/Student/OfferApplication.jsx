@@ -27,12 +27,11 @@ export default function OfferApplication() {
     const [isResumeModalOpen, openResumeModal, closeResumeModal] = useModal();
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
 
-    function sendDecision(index, hasStudentAccepted, reason = "") {
+    function sendDecision(index, studentDecision, reason = "") {
         const nextState = [...offers];
         const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
-        application.hasStudentAccepted = hasStudentAccepted;
         application.reasonForRejection = reason;
-        application.decided = true;
+        application.reviewState = studentDecision;
         return api.put("/applications/decision/" + application.id, application)
             .then(result => {
                 nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
@@ -56,16 +55,16 @@ export default function OfferApplication() {
     }
 
     function hasEmployeurAcceptedStudentOnOffer(offer, student) {
-        return offer.applications.find(a => a.student.id === student.id && a.hired === false && a.decided === false) !== undefined && offer.applications.length !== 0;
+        return offer.applications.find(a => a.student.id === student.id && a.hired === true && a.reviewState === "PENDING") !== undefined && offer.applications.length !== 0;
     }
 
-    function hasStudentDecided(offer, student) {
-        if (offer.applications.find(a => a.student.id === student.id && a.decided === true && a.hasStudentAccepted === true)) {
-            return (<Typography color={"textPrimary"} variant={"body1"} display={"block"}>Vous avez accepté cettre
-                offre</Typography>);
-        } else if (offer.applications.find(a => a.student.id === student.id && a.decided === true && a.hasStudentAccepted === false)) {
-            return (<Typography color={"textPrimary"} variant={"body1"} display={"block"}>Vous avez refusé cettre
-                offre</Typography>);
+    function getStudentDecision(offer, student) {
+        if (offer.applications.find(a => a.student.id === student.id && a.reviewState === "APPROVED")) {
+            return " Vous avez accepté cette offre";
+
+        } else if (offer.applications.find(a => a.student.id === student.id && a.reviewState === "DENIED")) {
+            return " Vous avez refusé cette offre";
+
         }
     }
 
@@ -127,7 +126,7 @@ export default function OfferApplication() {
                             <button
                                 type={"button"}
                                 className={[classes.linkButton].join(' ')}
-                                onClick={() => sendDecision(i, true)}
+                                onClick={() => sendDecision(i, "APPROVED")}
                                 style={{marginRight: 5}}
                             ><i className="fa fa-check-square" style={{color: "green"}}/></button>
                             Refusez l'offre
@@ -141,7 +140,10 @@ export default function OfferApplication() {
                             ><i className="fa fa-ban" style={{color: "red"}}/></button>
                         </div>
                         }
-                        {hasStudentDecided(offers[i], AuthenticationService.getCurrentUser())}
+
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                            {getStudentDecision(offers[i], AuthenticationService.getCurrentUser())}
+                        </Typography>
                         <hr/>
                     </div>
                 )}
@@ -211,7 +213,7 @@ export default function OfferApplication() {
                 isOpen={isReasonModalOpen}
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, false, values.message)}
+                onSubmit={async (values) => sendDecision(currentIndex, "DENIED", values.message)}
             />
         </div>
     );

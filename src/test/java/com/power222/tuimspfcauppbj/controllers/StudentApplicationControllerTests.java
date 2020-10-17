@@ -3,10 +3,7 @@ package com.power222.tuimspfcauppbj.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.StudentApplicationController;
-import com.power222.tuimspfcauppbj.model.InternshipOffer;
-import com.power222.tuimspfcauppbj.model.Resume;
-import com.power222.tuimspfcauppbj.model.Student;
-import com.power222.tuimspfcauppbj.model.StudentApplication;
+import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,8 +50,7 @@ class StudentApplicationControllerTests {
                 .student(new Student())
                 .resume(new Resume())
                 .hired(false)
-                .hasStudentAccepted(false)
-                .decided(false)
+                .reviewState(ReviewState.PENDING)
                 .reasonForRejection("")
                 .build();
     }

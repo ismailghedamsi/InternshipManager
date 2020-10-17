@@ -62,8 +62,7 @@ class StudentApplicationServiceTests {
                 .student(expectedUser)
                 .resume(expectedResume)
                 .hired(false)
-                .hasStudentAccepted(false)
-                .decided(false)
+                .reviewState(ReviewState.PENDING)
                 .reasonForRejection("")
                 .build();
     }

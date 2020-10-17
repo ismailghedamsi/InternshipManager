@@ -18,9 +18,8 @@ public class StudentApplication {
     private long id;
 
     private boolean hired;
-    private boolean hasStudentAccepted;
-    private boolean decided;
     private String reasonForRejection;
+    private ReviewState reviewState;
 
     @ManyToOne
     @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})
