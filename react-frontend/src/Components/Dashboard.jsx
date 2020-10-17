@@ -16,7 +16,8 @@ import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
-
+import Employerstatus from './Manager/EmployerStatus';
+//test
 const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
@@ -64,6 +65,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/status"
                                         component={StudentStatus}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/employersStatus"
+                                        component={Employerstatus}
                                         role={"admin"}/>
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}

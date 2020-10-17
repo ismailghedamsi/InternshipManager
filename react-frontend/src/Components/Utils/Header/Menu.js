@@ -1,4 +1,6 @@
+
 export const Menu = [
+    // a comment
     {
         title: 'Accueil',
         url: '/dashboard'
@@ -19,13 +21,13 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Liste d\'applications',
-        url: '/dashboard/applicationList',
+        title: 'Statut',
+        url: "/dashboard/status",
         role: 'admin'
     },
     {
-        title: 'Statut',
-        url: "/dashboard/status",
+        title: 'Statut employé',
+        url: "/dashboard/employersStatus",
         role: 'admin'
     },
     {
