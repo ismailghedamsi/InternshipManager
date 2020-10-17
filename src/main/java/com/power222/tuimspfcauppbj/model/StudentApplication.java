@@ -22,7 +22,7 @@ public class StudentApplication {
     private ReviewState reviewState;
 
     @ManyToOne
-    @JsonIgnoreProperties({"joinedFile", "allowedStudents", "applications"})
+    @JsonIgnoreProperties({"file", "allowedStudents", "applications"})
     private InternshipOffer offer;
 
     @ManyToOne

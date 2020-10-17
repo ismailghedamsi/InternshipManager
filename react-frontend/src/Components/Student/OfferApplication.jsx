@@ -112,6 +112,7 @@ export default function OfferApplication() {
                                 setCurrent(i)
                             }}
                         >
+
                             <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                 {offers[i].title + " "}
                             </Typography>

@@ -48,6 +48,14 @@ public class StudentApplicationService {
             return Optional.empty();
     }
 
+    public Optional<StudentApplication> updateStudentApplicationIsHired(long id) {
+        return appliRepo.findById(id)
+                .map(oldAppli -> {
+                    oldAppli.setHired(!oldAppli.isHired());
+                    return appliRepo.saveAndFlush(oldAppli);
+                });
+    }
+
     public StudentApplication updateStudentApplication(long id, StudentApplication application) {
         return appliRepo.findById(id)
                 .map(oldApplication -> {

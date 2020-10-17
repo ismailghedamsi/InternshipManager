@@ -91,12 +91,10 @@ public class InternshipOfferService {
         internshipOfferRepository.deleteById(id);
     }
 
+    @SuppressWarnings("SimplifiableConditionalExpression")
     private boolean isOfferStateValid(InternshipOffer offer) {
-        if (offer.getReviewState() == InternshipOffer.ReviewState.DENIED) {
-            if (offer.getReasonForRejection() == null)
-                return false;
-            return !offer.getReasonForRejection().isBlank();
-        }
+        if (offer.getReviewState() == InternshipOffer.ReviewState.DENIED)
+            return offer.getReasonForRejection() == null ? false : !offer.getReasonForRejection().isBlank();
 
         return true;
     }

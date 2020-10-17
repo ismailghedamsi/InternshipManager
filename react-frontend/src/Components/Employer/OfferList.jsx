@@ -16,12 +16,16 @@ export default function OfferList() {
     const [offers, setOffers] = useState([]);
 
     useEffect(() => {
-        api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
-            .then(r => {
-                console.log(r.data)
-                setOffers(r ? r.data : [])
-            })
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        if (AuthenticationService.getCurrentUserRole() == "employer") {
+            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
+                .then(r => setOffers(r ? r.data : []))
+        } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+            api.get("/offers/approved")
+                .then(r => {
+                    setOffers(r ? r.data : [])
+                })
+        }
+    }, [])
 
     function deleteOffer(index) {
         const nextState = [...offers];
@@ -34,6 +38,16 @@ export default function OfferList() {
 
                 setOffers(nextState)
             })
+    }
+
+    function getOfferState(offer) {
+        if (!offer.reviewState === "PENDING")
+            return <span style={{color: "blue"}}>En attente</span>;
+        else if (!offer.reviewState === "REJECTED")
+            return (<span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>);
+        else
+            return <span style={{color: "green"}}>Approuvé</span>;
     }
 
     return (
@@ -64,11 +78,22 @@ export default function OfferList() {
                             <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
                                 {offers[i].employer.companyName} {offers[i].employer.contactName}
                             </Typography>
+                            <Typography
+                                variant={"body2"}>
+                                État : {getOfferState(offers[i])}
+                            </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                         {offers[i].applications.length !== 0 &&
                         <Link variant={"body1"}
-                              onClick={() => history.push("/dashboard/applications", {offerId: offers[i].id})}
+                              onClick={() => {
+                                  if (AuthenticationService.getCurrentUserRole() == "employer") {
+                                      history.push("/dashboard/applications", {offerId: offers[i].id})
+                                  } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+                                      history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
+                                  }
+                              }
+                              }
                         >
                             Voir les applications
                         </Link>

@@ -72,7 +72,6 @@ export default function ResumeList() {
                             </Typography>
                         </button>
                         <Typography
-                            className={classes.resumeState}
                             variant={"body2"}>
                             État : {getResumeState(resumes[i])}
                         </Typography>
