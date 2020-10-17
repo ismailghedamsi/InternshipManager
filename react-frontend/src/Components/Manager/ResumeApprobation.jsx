@@ -79,7 +79,7 @@ export default function ResumeApprobation() {
                 isOpen={isReasonModalOpen}
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, false, values.reasonForRejection)}
+                onSubmit={async (values) => sendDecision(currentIndex, false, values.message)}
             />
         </div>
     )
