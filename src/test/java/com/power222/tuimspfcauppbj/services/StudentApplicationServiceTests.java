@@ -56,6 +56,7 @@ class StudentApplicationServiceTests {
                 .build();
 
         expectedAppli = StudentApplication.builder()
+                .isHired(false)
                 .offer(expectedOffer)
                 .student(expectedUser)
                 .resume(expectedResume)
@@ -104,6 +105,23 @@ class StudentApplicationServiceTests {
 
         var actual = appliSvc.createAndSaveNewApplication(expectedOffer.getId(), expectedResume.getId());
 
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void updateStudentApplicationIsHired() {
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.of(expectedAppli));
+        when(appliRepo.saveAndFlush(expectedAppli)).thenReturn(expectedAppli);
+
+        var actual = appliSvc.updateStudentApplicationIsHired(expectedAppli.getId());
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).contains(expectedAppli);
+    }
+
+    @Test
+    void updateStudentApplicationIsHiredWithNoneExistentId() {
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.empty());
+        var actual = appliSvc.updateStudentApplicationIsHired(expectedAppli.getId());
         assertThat(actual).isEmpty();
     }
 }

@@ -19,13 +19,13 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Liste d\'applications',
-        url: '/dashboard/applicationList',
+        title: 'Statut',
+        url: "/dashboard/status",
         role: 'admin'
     },
     {
-        title: 'Statut',
-        url: "/dashboard/status",
+        title: 'Liste des offres',
+        url: '/dashboard/offerList',
         role: 'admin'
     },
     {
@@ -51,6 +51,22 @@ export const Menu = [
     {
         title: 'Liste des offres',
         url: '/dashboard/listoffer',
+        role: 'employer'
+    }
+    ,
+    {
+        title: 'Assignation Offres',
+        url: '/dashboard/assignement/cv',
+        role: 'admin'
+    },
+    {
+        title: 'Offre de stages',
+        url: '/dashboard/stagelist',
+        role: 'student'
+    },
+    {
+        title: 'Liste d\'applications',
+        url: '/dashboard/applications',
         role: 'employer'
     },
 ]
