@@ -14,7 +14,6 @@ import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
-import Interview from "./Interview";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -81,10 +80,6 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
                                         component={OfferApplication}
-                                        role={"student"}/>
-                    <RoleProtectedRoute exact={true}
-                                        path="/dashboard/entrevue"
-                                        component={Interview}
                                         role={"student"}/>
                 </Switch>
             </Container>

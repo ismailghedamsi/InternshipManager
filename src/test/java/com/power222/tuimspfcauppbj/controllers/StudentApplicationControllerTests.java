@@ -83,9 +83,8 @@ class StudentApplicationControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
-
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        //verify(svc, times(1)).updateStudentApplication(expected.getId(), expected);
+        verify(svc, times(1)).updateStudentApplication(expected.getId(), expected);
     }
 
     @Test
