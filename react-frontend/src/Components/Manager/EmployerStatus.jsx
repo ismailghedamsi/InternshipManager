@@ -77,8 +77,11 @@ export default function StudentStatus() {
                                     </button>
                                 </Typography>
                                 <OfferDetails key={k} offer={o}/>
+                                <Typography>
+                                    <span>Liste des étudiants selectionnés</span>
+                                </Typography>
+                                {hiredStudentsNames(o)}
                                 {printOfferStatus(o)}
-                                {/* {listOfHiredStudentsCurrentOffer(o)} */}
                                 <hr/>
                             </div>
 
@@ -99,6 +102,15 @@ export default function StudentStatus() {
         </Grid>
     );
 
+    function hiredStudentsNames(o) {
+        return o.reviewState == "APPROVED" ?
+            o.applications.map((elem) =>
+                <Typography
+                    style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
+            )
+            : "Aucun étudiant n'a été selectionné pour l'offre";
+    }
+
     function printOfferStatus(offer) {
 
 
@@ -110,11 +122,5 @@ export default function StudentStatus() {
             return <span style={{color: "green"}}>Approuvé</span>;
     }
 
-    function listOfHiredStudentsCurrentOffer(offer) {
-        if (offer.reviewState == "APPROVED") {
-            return <h1>Show hired students</h1>
-        }
-        return "No one is hired"
-    }
 
 }
