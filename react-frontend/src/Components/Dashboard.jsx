@@ -17,7 +17,6 @@ import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 
-
 const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
@@ -33,7 +32,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Dashboard(props) {
     const classes = useStyles();
-
+    
     return (
         <div className={classes.root}>
             <Navbar {...props}/>
@@ -82,6 +81,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/listoffer"
                                         component={OfferList}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/applications"
+                                        component={ApplicationList}
                                         role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}

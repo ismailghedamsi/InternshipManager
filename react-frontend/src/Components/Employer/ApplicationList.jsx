@@ -4,7 +4,6 @@ import {useLocation} from "react-router-dom";
 import {useStyles} from "../Utils/useStyles";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import AuthenticationService from "../../Services/AuthenticationService";
 import {Checkbox} from "@material-ui/core";
 
 export default function ApplicationList() {
@@ -47,7 +46,6 @@ export default function ApplicationList() {
                             </Typography>
                             <Typography>
                                 {
-                                    AuthenticationService.getCurrentUserRole() == "admin" ?
                                         <Checkbox
                                             value="hired"
                                             checked={offer.applications[i].hired}
@@ -59,8 +57,7 @@ export default function ApplicationList() {
                                                     api.put(`applications/hire/${offer.applications[i].id}`)
                                                 }}
                                             inputProps={{'aria-label': 'hired'}}
-                                        /> :
-                                        noContent
+                                        />
                                 }
                             </Typography>
                         </div>
