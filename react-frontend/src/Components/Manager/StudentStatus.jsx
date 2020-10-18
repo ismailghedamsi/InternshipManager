@@ -104,7 +104,6 @@ export default function StudentStatus() {
         api.get("students").then(resp => setStudents(resp ? resp.data : []))
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-
     return (
         <Grid
             container
