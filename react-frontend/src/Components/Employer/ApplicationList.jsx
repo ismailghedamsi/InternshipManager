@@ -46,7 +46,6 @@ export default function ApplicationList() {
                             </Typography>
                             <Typography>
                                 {
-                                    AuthenticationService.getCurrentUserRole() == "admin" ?
                                         <Checkbox
                                             value="hired"
                                             checked={offer.applications[i].hired}
@@ -58,8 +57,7 @@ export default function ApplicationList() {
                                                     api.put(`applications/hire/${offer.applications[i].id}`)
                                                 }}
                                             inputProps={{'aria-label': 'hired'}}
-                                        /> :
-                                        noContent
+                                        />
                                 }
                             </Typography>
                         </div>
