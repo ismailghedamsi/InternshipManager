@@ -10,7 +10,7 @@ import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
-import ApplicationList from "./Employer/ApplicationList";
+import ApplicationList from "./Employer/ApplicationList"
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
@@ -41,9 +41,9 @@ export default function Dashboard(props) {
                     <Route exact={true} path={"/dashboard"}>
                         <Redirect to={function () {
                             if (AuthenticationService.getCurrentUserRole() === "student")
-                                return "/dashboard/stagelist"
+                                return "/dashboard/stagelist";
                             else if (AuthenticationService.getCurrentUserRole() === "employer")
-                                return "/dashboard/listoffer"
+                                return "/dashboard/listoffer";
                             else
                                 return "/dashboard/approbation/offres"
                         }()}/>
@@ -81,10 +81,6 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/listoffer"
                                         component={OfferList}
-                                        role={"employer"}/>
-                    <RoleProtectedRoute exact={true}
-                                        path="/dashboard/applications"
-                                        component={ApplicationList}
                                         role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}

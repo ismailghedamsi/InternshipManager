@@ -45,18 +45,22 @@ export default function ApplicationList() {
                                 {offer.applications[i].student.address}
                             </Typography>
                             <Typography>
-                            <Checkbox
-                                value="hired"
-                                checked={offer.applications[i].hired}
-                                onChange={
-                                    () => {
-                                        var copy = {...offer}
-                                        copy.applications[i].hired = !copy.applications[i].hired;
-                                        setOffer(copy)
-                                        api.put(`application/hire/${offer.applications[i].id}`)
-                                    }}
-                                inputProps={{'aria-label': 'hired'}}
-                            />
+                                {
+                                    AuthenticationService.getCurrentUserRole() == "admin" ?
+                                        <Checkbox
+                                            value="hired"
+                                            checked={offer.applications[i].hired}
+                                            onChange={
+                                                () => {
+                                                    var copy = {...offer}
+                                                    copy.applications[i].hired = !copy.applications[i].hired;
+                                                    setOffer(copy)
+                                                    api.put(`applications/hire/${offer.applications[i].id}`)
+                                                }}
+                                            inputProps={{'aria-label': 'hired'}}
+                                        /> :
+                                        noContent
+                                }
                             </Typography>
                         </div>
                         }

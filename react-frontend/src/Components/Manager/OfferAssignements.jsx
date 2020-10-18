@@ -52,20 +52,20 @@ export default function OfferAssignements() {
                         >
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 {offers[i].title}
-                                </Typography>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    {offers[i].employer.companyName}
-                                </Typography>
-                            </button>
-                            {currentOfferIndex === i &&
-                            students.map((student, j) => (
-                                <div key={j}>
-                                    <Formik
-                                        initialValues={{
-                                            offerId: offers[i].id,
-                                            studentId: student.id,
-                                            allowed: false
-                                        }}
+                            </Typography>
+                            <Typography color={"textSecondary"} variant={"body2"}>
+                                {offers[i].employer.companyName}
+                            </Typography>
+                        </button>
+                        {currentOfferIndex === i &&
+                        students.map((student, j) => (
+                            <div key={j}>
+                                <Formik
+                                    initialValues={{
+                                        offerId: offers[i].id,
+                                        studentId: student.id,
+                                        allowed: false
+                                    }}
                                         onSubmit={(values) => {
                                             return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
                                                 .then((r) => {
@@ -85,9 +85,9 @@ export default function OfferAssignements() {
                                                        checked={isStudentAllowedInOffer(offers[i], student)}/>
                                                 {isSubmitting && <CircularProgress size={18}/>}
                                             </Form>)}
-                                    </Formik>
-                                </div>
-                            ))}
+                                </Formik>
+                            </div>
+                        ))}
                     </div>
                 )}
             </PdfSelectionViewer>
