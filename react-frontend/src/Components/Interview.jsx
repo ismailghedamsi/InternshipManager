@@ -107,6 +107,7 @@ export default function Interview() {
 
     return (
         <Container component="main" className={classes.main}>
+            {console.log("test")}
             <Grid
                 container
                 spacing={0}
