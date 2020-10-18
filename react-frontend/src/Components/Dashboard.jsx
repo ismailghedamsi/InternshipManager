@@ -10,13 +10,14 @@ import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
-import ApplicationList from "./Employer/ApplicationList"
+import ApplicationList from "./Employer/ApplicationList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
-
+import Employerstatus from './Manager/EmployerStatus';
+//test
 const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
@@ -32,7 +33,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Dashboard(props) {
     const classes = useStyles();
-    
+
     return (
         <div className={classes.root}>
             <Navbar {...props}/>
@@ -41,9 +42,9 @@ export default function Dashboard(props) {
                     <Route exact={true} path={"/dashboard"}>
                         <Redirect to={function () {
                             if (AuthenticationService.getCurrentUserRole() === "student")
-                                return "/dashboard/stagelist";
+                                return "/dashboard/stagelist"
                             else if (AuthenticationService.getCurrentUserRole() === "employer")
-                                return "/dashboard/listoffer";
+                                return "/dashboard/listoffer"
                             else
                                 return "/dashboard/approbation/offres"
                         }()}/>
@@ -73,6 +74,12 @@ export default function Dashboard(props) {
                                         path="/dashboard/applicationsAdmin"
                                         component={ApplicationList}
                                         role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/employersStatus"
+                                        component={Employerstatus}
+                                        role={"admin"}/>
+
+
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
