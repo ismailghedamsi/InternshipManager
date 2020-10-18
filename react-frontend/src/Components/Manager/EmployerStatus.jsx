@@ -108,7 +108,7 @@ export default function StudentStatus() {
                 <Typography
                     style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
             )
-            : "Aucun étudiant n'a été selectionné pour l'offre";
+            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>;
     }
 
     function printOfferStatus(offer) {
