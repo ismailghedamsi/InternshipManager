@@ -28,7 +28,6 @@ export default function StudentStatus() {
         api.get("/offers/employer/" + currentEmployer.username)
             .then(r => {
                 setCurrentEmployerOffers(r.data);
-                console.log("Current Employer updated ")
             })
     }, [currentEmployer]);
 
