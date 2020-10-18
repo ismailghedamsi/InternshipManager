@@ -93,6 +93,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 resumeRepo.saveAndFlush(Resume.builder()
                         .name("testResumeFileName " + i)
                         .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
+                        .approuved(i == 3)
                         .reviewed(i == 4)
                         .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
                                 "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +
@@ -125,7 +126,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .description("Some basic description " + i)
                         .salary(15.98)
                         .creationDate(Date.from(Instant.now()))
-                        .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
+                        .limitDateToApply(i == 6 ? Date.valueOf(LocalDate.now().minusDays(5)) : Date.valueOf(LocalDate.now().plusWeeks(1)))
                         .internshipStartDate(Date.valueOf(LocalDate.now().plusWeeks(2)))
                         .internshipEndDate(Date.valueOf(LocalDate.now().plusWeeks(9)))
                         .nbStudentToHire(25)
