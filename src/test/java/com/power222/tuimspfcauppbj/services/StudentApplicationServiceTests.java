@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,10 +58,12 @@ class StudentApplicationServiceTests {
                 .build();
 
         expectedAppli = StudentApplication.builder()
-                .isHired(false)
                 .offer(expectedOffer)
                 .student(expectedUser)
                 .resume(expectedResume)
+                .hired(false)
+                .reviewState(ReviewState.PENDING)
+                .reasonForRejection("")
                 .build();
     }
 
@@ -124,4 +128,64 @@ class StudentApplicationServiceTests {
         var actual = appliSvc.updateStudentApplicationIsHired(expectedAppli.getId());
         assertThat(actual).isEmpty();
     }
+
+    @Test
+    void updateStudentApplication() {
+        var actual = appliSvc.updateStudentApplication(expectedAppli.getId(), expectedAppli);
+        assertThat(actual).isEqualTo(expectedAppli);
+    }
+
+    @Test
+    void updateStudentApplicationWithModifiedId() {
+        var idToPersistTo = expectedAppli.getId();
+        var idToBeOverwritten = 50L;
+        var studentApplicationWithIdToIgnore = expectedAppli.toBuilder().id(idToBeOverwritten).build();
+        when(appliRepo.findById(idToPersistTo)).thenReturn(Optional.of(expectedAppli));
+        when(appliRepo.saveAndFlush(expectedAppli)).thenReturn(expectedAppli);
+
+        var actual = appliSvc.updateStudentApplication(idToPersistTo, studentApplicationWithIdToIgnore);
+
+        assertThat(actual).isEqualTo(expectedAppli);
+    }
+
+    @Test
+    void getAllStudentsApplicationTest() {
+        var s1 = StudentApplication.builder().id(1L).build();
+        var s2 = StudentApplication.builder().id(2L).build();
+        var s3 = StudentApplication.builder().id(3L).build();
+        when(appliRepo.findAll()).thenReturn(Arrays.asList(s1, s2, s3));
+
+        var actual = appliSvc.getAllApplication();
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
+    void getNoStudentsApplicationTest() {
+        when(appliRepo.findAll()).thenReturn(Collections.emptyList());
+
+        var actual = appliSvc.getAllApplication();
+
+        assertThat(actual).hasSize(0);
+    }
+
+    @Test
+    void updateStudentApplicationDecision() {
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.of(expectedAppli));
+        when(appliRepo.saveAndFlush(expectedAppli)).thenReturn(expectedAppli);
+
+        var actual = appliSvc.updateStudentApplicationStudentDecision(expectedAppli.getId(), expectedAppli);
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).contains(expectedAppli);
+    }
+
+    @Test
+    void updateStudentApplicationDecisionNoneExistentId() {
+        when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.empty());
+
+        var actual = appliSvc.updateStudentApplicationStudentDecision(expectedAppli.getId(), expectedAppli);
+        assertThat(actual).isEmpty();
+    }
+
+
 }

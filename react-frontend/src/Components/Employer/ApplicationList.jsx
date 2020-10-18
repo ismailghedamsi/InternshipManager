@@ -56,7 +56,7 @@ export default function ApplicationList() {
                                                     var copy = {...offer}
                                                     copy.applications[i].hired = !copy.applications[i].hired;
                                                     setOffer(copy)
-                                                    api.put(`application/hire/${offer.applications[i].id}`)
+                                                    api.put(`applications/hire/${offer.applications[i].id}`)
                                                 }}
                                             inputProps={{'aria-label': 'hired'}}
                                         /> :

@@ -69,4 +69,10 @@ export const Menu = [
         url: '/dashboard/applications',
         role: 'employer'
     },
+    {
+        title: 'Liste d\'applications',
+        url: '/dashboard/applicationList',
+        role: 'admin'
+    }
+
 ]
