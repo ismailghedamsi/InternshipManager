@@ -65,14 +65,8 @@ export const Menu = [
         role: 'student'
     },
     {
-        title: 'Liste d\'applications',
-        url: '/dashboard/applications',
-        role: 'employer'
-    },
-    {
-        title: 'Liste d\'applications',
-        url: '/dashboard/applicationList',
-        role: 'admin'
+        title: 'Entrevue',
+        url: '/dashboard/entrevue',
+        role: 'student'
     }
-
 ]

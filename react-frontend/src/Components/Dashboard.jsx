@@ -8,6 +8,7 @@ import AuthenticationService from '../Services/AuthenticationService';
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
+import Interview from "./Interview";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
 import ApplicationList from "./Employer/ApplicationList"
@@ -32,7 +33,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Dashboard(props) {
     const classes = useStyles();
-    
+
     return (
         <div className={classes.root}>
             <Navbar {...props}/>
@@ -41,9 +42,9 @@ export default function Dashboard(props) {
                     <Route exact={true} path={"/dashboard"}>
                         <Redirect to={function () {
                             if (AuthenticationService.getCurrentUserRole() === "student")
-                                return "/dashboard/stagelist";
+                                return "/dashboard/stagelist"
                             else if (AuthenticationService.getCurrentUserRole() === "employer")
-                                return "/dashboard/listoffer";
+                                return "/dashboard/listoffer"
                             else
                                 return "/dashboard/approbation/offres"
                         }()}/>
@@ -98,6 +99,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
                                         component={OfferApplication}
+                                        role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/entrevue"
+                                        component={Interview}
                                         role={"student"}/>
                 </Switch>
             </Container>
