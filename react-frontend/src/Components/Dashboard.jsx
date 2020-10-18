@@ -10,6 +10,7 @@ import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
+import ApplicationList from "./Employer/ApplicationList"
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";

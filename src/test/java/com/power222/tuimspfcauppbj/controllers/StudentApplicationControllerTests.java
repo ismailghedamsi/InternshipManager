@@ -1,11 +1,9 @@
 package com.power222.tuimspfcauppbj.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.StudentApplicationController;
-import com.power222.tuimspfcauppbj.model.InternshipOffer;
-import com.power222.tuimspfcauppbj.model.Resume;
-import com.power222.tuimspfcauppbj.model.Student;
-import com.power222.tuimspfcauppbj.model.StudentApplication;
+import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,7 +81,7 @@ class StudentApplicationControllerTests {
     void updateAppliIsHired() throws Exception {
         when(svc.updateStudentApplicationIsHired((expected.getId()))).thenReturn(Optional.of(expected));
 
-        MvcResult result = mvc.perform(put("/api/application/hire/" + expected.getId())
+        MvcResult result = mvc.perform(put("/api/applications/hire/" + expected.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
@@ -96,7 +94,7 @@ class StudentApplicationControllerTests {
         var id = 100L;
         when(svc.updateStudentApplicationIsHired(id)).thenReturn(Optional.empty());
 
-        MvcResult result = mvc.perform(put("/api/application/hire/" + id)
+        MvcResult result = mvc.perform(put("/api/applications/hire/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 

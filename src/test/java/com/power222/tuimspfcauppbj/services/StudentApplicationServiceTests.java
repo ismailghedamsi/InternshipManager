@@ -180,7 +180,7 @@ class StudentApplicationServiceTests {
     }
 
     @Test
-    void updateStudentApplicationIsHiredWithNoneExistentId() {
+    void updateStudentApplicationDecisionNoneExistentId() {
         when(appliRepo.findById(expectedAppli.getId())).thenReturn(Optional.empty());
 
         var actual = appliSvc.updateStudentApplicationStudentDecision(expectedAppli.getId(), expectedAppli);

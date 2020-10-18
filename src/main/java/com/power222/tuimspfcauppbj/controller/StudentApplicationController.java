@@ -4,9 +4,9 @@ import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/applications")
@@ -31,7 +31,7 @@ public class StudentApplicationController {
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/api/application/hire/{id}")
+    @PutMapping("/hire/{id}")
     public ResponseEntity<StudentApplication> updateStudentApplicationIsHired(@PathVariable long id) {
         return svc.updateStudentApplicationIsHired(id)
                 .map(ResponseEntity::ok)
