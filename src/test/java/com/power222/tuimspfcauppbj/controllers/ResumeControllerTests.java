@@ -142,10 +142,10 @@ class ResumeControllerTests {
 
     @Test
     void getAllResumes() throws Exception {
-        final int nbStudent = 3;
+        final int nbResumes = 3;
 
         List<Resume> list = new ArrayList<>();
-        for (int i = 0; i < nbStudent; i++)
+        for (int i = 0; i < nbResumes; i++)
             list.add(new Resume());
 
         when(svc.getAllResumes()).thenReturn(list);
@@ -154,7 +154,7 @@ class ResumeControllerTests {
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        assertEquals(actuals.size(), nbStudent);
+        assertEquals(actuals.size(), nbResumes);
     }
 
 
