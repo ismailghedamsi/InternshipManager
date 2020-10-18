@@ -33,5 +33,3 @@ build/
 .vscode/
 /src/main/resources/static/
 
-### NodeJS modules ###
-react-frontend/node_modules
