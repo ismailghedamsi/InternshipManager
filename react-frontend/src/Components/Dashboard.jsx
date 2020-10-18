@@ -11,12 +11,13 @@ import OfferAssignements from "./Manager/OfferAssignements";
 import Interview from "./Interview";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
-import ApplicationList from "./Employer/ApplicationList"
+import ApplicationList from "./Employer/ApplicationList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
+import Employerstatus from './Manager/EmployerStatus';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -74,6 +75,12 @@ export default function Dashboard(props) {
                                         path="/dashboard/applicationsAdmin"
                                         component={ApplicationList}
                                         role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/employersStatus"
+                                        component={Employerstatus}
+                                        role={"admin"}/>
+
+
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
