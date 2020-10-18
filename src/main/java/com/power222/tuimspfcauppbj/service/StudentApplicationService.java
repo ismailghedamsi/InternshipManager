@@ -4,10 +4,12 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,10 @@ public class StudentApplicationService {
         this.authSvc = authSvc;
     }
 
+    public List<StudentApplication> getAllApplication() {
+        return appliRepo.findAll();
+    }
+
     public Optional<StudentApplication> createAndSaveNewApplication(long offerId, long resumeId) {
         var currentUser = authSvc.getCurrentUser();
         var offer = offerRepo.findById(offerId);
@@ -34,8 +40,37 @@ public class StudentApplicationService {
                     .student((Student) currentUser)
                     .offer(offer.get())
                     .resume(resume.get())
+                    .hired(false)
+                    .reviewState(ReviewState.PENDING)
+                    .reasonForRejection("")
                     .build()));
         } else
             return Optional.empty();
+    }
+
+    public Optional<StudentApplication> updateStudentApplicationIsHired(long id) {
+        return appliRepo.findById(id)
+                .map(oldAppli -> {
+                    oldAppli.setHired(!oldAppli.isHired());
+                    return appliRepo.saveAndFlush(oldAppli);
+                });
+    }
+
+    public StudentApplication updateStudentApplication(long id, StudentApplication application) {
+        return appliRepo.findById(id)
+                .map(oldApplication -> {
+                    application.setId(oldApplication.getId());
+                    return appliRepo.saveAndFlush(application);
+                })
+                .orElse(application);
+    }
+
+    public Optional<StudentApplication> updateStudentApplicationStudentDecision(long id, StudentApplication application) {
+        return appliRepo.findById(id)
+                .map(oldApplication -> {
+                    oldApplication.setReviewState(application.getReviewState());
+                    oldApplication.setReasonForRejection(application.getReasonForRejection());
+                    return appliRepo.saveAndFlush(oldApplication);
+                });
     }
 }

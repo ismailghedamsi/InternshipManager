@@ -19,13 +19,18 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Liste d\'applications',
-        url: '/dashboard/applicationList',
+        title: 'Statut des étudiants ',
+        url: "/dashboard/status",
         role: 'admin'
     },
     {
-        title: 'Statut',
-        url: "/dashboard/status",
+        title: 'Statut des employés',
+        url: "/dashboard/employersStatus",
+        role: 'admin'
+    },
+    {
+        title: 'Liste des offres',
+        url: '/dashboard/offerList',
         role: 'admin'
     },
     {

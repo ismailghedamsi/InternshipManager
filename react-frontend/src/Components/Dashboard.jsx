@@ -17,6 +17,7 @@ import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
+import Employerstatus from './Manager/EmployerStatus';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -66,6 +67,20 @@ export default function Dashboard(props) {
                                         path="/dashboard/status"
                                         component={StudentStatus}
                                         role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/OfferList"
+                                        component={OfferList}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/applicationsAdmin"
+                                        component={ApplicationList}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/employersStatus"
+                                        component={Employerstatus}
+                                        role={"admin"}/>
+
+
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
@@ -91,10 +106,6 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
                                         component={OfferApplication}
-                                        role={"student"}/>
-                    <RoleProtectedRoute exact={true}
-                                        path="/dashboard/entrevue"
-                                        component={Interview}
                                         role={"student"}/>
                 </Switch>
             </Container>

@@ -58,8 +58,7 @@ class InternshipOfferServiceTests {
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/11/2020"))
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/04/2021"))
                     .salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -71,8 +70,7 @@ class InternshipOfferServiceTests {
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2021"))
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2021"))
                     .salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
