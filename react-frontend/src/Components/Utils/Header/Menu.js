@@ -58,15 +58,15 @@ export const Menu = [
         url: '/dashboard/listoffer',
         role: 'employer'
     }
+    , {
+        title: 'Liste des entrevues',
+        url: '/dashboard/listInterview',
+        role: 'employer'
+    }
     ,
     {
         title: 'Assignation Offres',
         url: '/dashboard/assignement/cv',
         role: 'admin'
-    },
-    {
-        title: 'Entrevue',
-        url: '/dashboard/entrevue',
-        role: 'student'
     }
 ]

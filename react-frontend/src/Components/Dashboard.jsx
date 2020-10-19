@@ -8,7 +8,6 @@ import AuthenticationService from '../Services/AuthenticationService';
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
-import Interview from "./Interview";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
 import ApplicationList from "./Employer/ApplicationList";
@@ -18,6 +17,9 @@ import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
+import InterviewConvocation from './Interview/InterviewConvocation';
+import Interviewlist from './Interview/InterviewList';
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -94,6 +96,14 @@ export default function Dashboard(props) {
                                         path="/dashboard/applications"
                                         component={ApplicationList}
                                         role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/interviewConvocation"
+                                        component={InterviewConvocation}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/listInterview"
+                                        component={Interviewlist}
+                                        role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/upload"
@@ -106,10 +116,6 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
                                         component={OfferApplication}
-                                        role={"student"}/>
-                    <RoleProtectedRoute exact={true}
-                                        path="/dashboard/entrevue"
-                                        component={Interview}
                                         role={"student"}/>
                 </Switch>
             </Container>
