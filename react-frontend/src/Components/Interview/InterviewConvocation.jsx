@@ -59,7 +59,6 @@ export default function InterviewConvocation() {
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <Formik
                         onSubmit={async (values) => createInterview(values)
-                            // .then(() => history.push("/dashboard/listoffer",{tabId: 1}))
                         }
 
                         validateOnBlur={false}
