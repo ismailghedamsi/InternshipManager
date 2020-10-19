@@ -19,6 +19,7 @@ import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
 import InterviewConvocation from './Interview/InterviewConvocation';
 import Interviewlist from './Interview/InterviewList';
+import {Rescheduleinterview} from './Interview/RescheduleInterview';
 
 
 const useStyles = makeStyles(() => ({
@@ -103,6 +104,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/listInterview"
                                         component={Interviewlist}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/rescheduleInterview"
+                                        component={Rescheduleinterview}
                                         role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}
