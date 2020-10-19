@@ -1,10 +1,12 @@
-import {Button, ButtonGroup, Container, makeStyles, Typography} from '@material-ui/core'
+import {Button, Container, makeStyles, Typography} from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import {useApi, useDateParser} from '../Utils/Hooks'
 
 export default function Interviewlist(props) {
     const [interviews, setInterviews] = useState([{}])
     const api = useApi()
+    const history = useHistory()
     const parseDate = useDateParser()
 
     const useStyles = makeStyles(() => ({
@@ -32,6 +34,10 @@ export default function Interviewlist(props) {
             .then((r) => setInterviews(r.data))
     }, [])
 
+    function redirectEditFormInterview(interview) {
+        console.log("redired reschedule")
+        history.push("/dashboard/rescheduleInterview", {...interview})
+    }
 
     return (
         <div className={classes.viewbox}>
@@ -48,11 +54,10 @@ export default function Interviewlist(props) {
                             : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
                         {<Typography>Etudiant a entrevoir
                             : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
-                        <ButtonGroup>
-                            <Button>Supprimer</Button>
-                            <Button>Reprogrammer</Button>
-
-                        </ButtonGroup>
+                        <Button>Supprimer</Button>
+                        <Button onClick={() => {
+                            redirectEditFormInterview(interview);
+                        }}>Reprogrammer</Button>
                         <hr/>
                     </div>)
                 }
