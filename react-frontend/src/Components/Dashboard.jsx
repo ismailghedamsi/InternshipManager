@@ -14,7 +14,7 @@ import ApplicationList from "./Employer/ApplicationList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
-import InterviewConfirmation from "./Student/InterviewConfirmation"
+import InterviewConfirmation from "./Interview/InterviewConfirmation"
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
