@@ -18,7 +18,6 @@ public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String title;
     private String description;
     private double salary;
