@@ -52,7 +52,7 @@ export default function OfferList() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Mes offres"}>
+            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <div className={classes.buttonDiv}>
