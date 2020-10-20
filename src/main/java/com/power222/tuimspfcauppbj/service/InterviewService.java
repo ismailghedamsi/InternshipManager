@@ -3,11 +3,13 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.InterviewRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Interview;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.DoubleStream;
 
 @Service
 public class InterviewService {
@@ -21,6 +23,10 @@ public class InterviewService {
 
     public List<Interview> getAllInterviews() {
         return interviewRepo.findAll();
+    }
+
+    public List<Interview> getAllInterviewByEmployerId(long id) {
+        return interviewRepo.findAllByEmployer_id(id);
     }
 
     public Optional<Interview> getInterviewById(long id) {
@@ -39,5 +45,11 @@ public class InterviewService {
         return interviewRepo.findById(id)
                 .map(oldInterview -> interview.toBuilder().id(oldInterview.getId()).build())
                 .map(newInterview -> interviewRepo.saveAndFlush(interview));
+    }
+
+    public Optional<Interview> updateInterviewState(long id, ReviewState newState) {
+        return interviewRepo.findById(id)
+                .map(interview -> interview.toBuilder().reviewState(newState).build())
+                .map(interviewRepo::saveAndFlush);
     }
 }

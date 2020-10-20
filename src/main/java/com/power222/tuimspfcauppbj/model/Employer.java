@@ -28,4 +28,7 @@ public class Employer extends User {
     @JsonIgnore
     private List<InternshipOffer> offers;
 
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Interview> interviews;
 }

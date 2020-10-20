@@ -51,7 +51,7 @@ class InterviewServiceTest {
     }
 
     @Test
-    void getAllInterviews() {
+    void getAllInterviewsTest() {
         var i1 = Interview.builder().id(1L).build();
         var i2 = Interview.builder().id(2L).build();
         var i3 = Interview.builder().id(3L).build();
@@ -64,7 +64,7 @@ class InterviewServiceTest {
     }
 
     @Test
-    void getInterviewById() {
+    void getInterviewByIdTest() {
         when(interviewRepo.findById(1L)).thenReturn(Optional.of(expectedInterview));
 
         var actual = interviewSvc.getInterviewById(1L);
@@ -73,7 +73,7 @@ class InterviewServiceTest {
     }
 
     @Test
-    void persistNewInterview() {
+    void persistNewInterviewTest() {
         when(authSvc.getCurrentUser()).thenReturn(expectedEmployer);
         when(interviewRepo.saveAndFlush(expectedInterview)).thenReturn(expectedInterview);
 
@@ -83,7 +83,7 @@ class InterviewServiceTest {
     }
 
     @Test
-    void updateInterview() {
+    void updateInterviewTest() {
         var initialId = expectedInterview.getId();
         var alteredId = 123L;
         var alteredInterview = expectedInterview.toBuilder().id(alteredId).build();
@@ -96,9 +96,14 @@ class InterviewServiceTest {
     }
 
     @Test
-    void updateInterviewWithNonexistentId() {
+    void updateInterviewWithNonexistentIdTest() {
         var actual = interviewSvc.updateInterview(expectedInterview.getId(), expectedInterview);
 
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void toggleHasStudentAcceptedTest() {
+
     }
 }

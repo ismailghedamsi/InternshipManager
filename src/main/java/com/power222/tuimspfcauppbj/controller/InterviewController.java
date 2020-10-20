@@ -23,22 +23,29 @@ public class InterviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Interview> getResume(@PathVariable long id) {
+    public ResponseEntity<Interview> getInterview(@PathVariable long id) {
         return svc.getInterviewById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Interview> createResume(@RequestBody Interview newInterview) {
+    public ResponseEntity<Interview> createInterview(@RequestBody Interview newInterview) {
         return svc.persistNewInterview(newInterview)
                 .map(resume -> ResponseEntity.status(HttpStatus.CREATED).body(resume))
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Interview> updateResume(@RequestBody Interview requestBody, @PathVariable long id) {
+    public ResponseEntity<Interview> updateInterview(@RequestBody Interview requestBody, @PathVariable long id) {
         return svc.updateInterview(id, requestBody)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
+    }
+
+    @PutMapping("/toggleAccepted/{id}")
+    public ResponseEntity<Interview> updateStudentAgreementToInterview(@PathVariable long id) {
+        return svc.updateInterviewState(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
     }

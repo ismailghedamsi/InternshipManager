@@ -46,8 +46,4 @@ public class InternshipOffer {
     @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"offer"})
     private List<StudentApplication> applications;
-
-    public enum ReviewState {
-        PENDING, APPROVED, DENIED
-    }
 }
