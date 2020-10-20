@@ -11,18 +11,19 @@ export default function OfferApplication() {
     const classes = useStyles();
     const api = useApi();
     const [offers, setOffers] = useState([]);
+    const [interviews, setInterview] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
 
     function sendDecision(index, studentDecision, reason = "") {
-        const nextState = [...offers];
-        const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
-        application.reasonForRejection = reason;
+        const nextState = [...interviews];
+        const application = nextState[index].studentApplication.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
         application.reviewState = studentDecision;
-        return api.put("/applications/interviews/" + application.id, application)
+        application.reasonForRejection = reason;
+        return api.put("/interviews/updateAccepted/" + application.id, application)
             .then(result => {
-                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
-                setOffers(nextState);
+                nextState[index].studentApplication.splice(nextState[index].studentApplication.indexOf(application), 1, result.data);
+                setInterview(nextState);
                 closeReasonModal()
             })
     }
@@ -32,8 +33,19 @@ export default function OfferApplication() {
             .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.limitDateToApply) >= new Date()) : []))
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        api.get("/interviews/student/" +)
+            .then(result => setInterview(result ? result.data : []))
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+
     function hasEmployeurAcceptedStudentToInterview(offer, student) {
         return offer.applications.find(a => a.student.id === student.id && a.hasEmployerAccepted === true && a.reviewState === "PENDING") !== undefined && offer.applications.length !== 0;
+    }
+
+    function test(i) {
+        const nextState = [...interviews];
+        const application = nextState[i].studentApplication.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
     }
 
     function getStudentDecision(offer, student) {
