@@ -65,11 +65,6 @@ export default function ApplicationList() {
                             </Typography>
 
                             <Link variant={"body1"}
-                                //   onClick={() => {
-                                //       console.log("passed value " + JSON.stringify(offer.applications[i]))
-                                //       history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
-                                //   }
-                                //   }
                                   to={{
                                       pathname: "/dashboard/interviewConvocation",
                                       state: {...offer.applications[i]}

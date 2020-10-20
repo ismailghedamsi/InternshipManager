@@ -12,8 +12,6 @@ import Button from "@material-ui/core/Button";
 import {useStyles} from "../Utils/useStyles";
 import AuthenticationService from '../../Services/AuthenticationService';
 
-const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
-const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function InterviewConvocation() {
@@ -21,38 +19,29 @@ export default function InterviewConvocation() {
     const api = useApi();
     const location = useLocation();
     const history = useHistory();
-    const [applicationInterview, setApplicationInterview] = useState()
+    const [applicationInterview, setApplicationInterview] = useState("")
     const [applications, setApplications] = useState([{}]);
-
     useEffect(() => {
-        console.log("dddd" + JSON.stringify(location.state))
         setApplicationInterview(location.state)
         api.get("/applications").then((r) => setApplications(r.data))
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const validationSchema = yup.object().shape({
-        studentFirstName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
-        studentLastName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
         interviewDate: yup.date().required(),
         email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
     });
     const initialValues = {
-        studentFirstName: '',
-        studentLastName: '',
         interviewDate: new Date(),
         email: ''
     }
 
     function createInterview(values) {
-        // applications.filter(elem => elem.student.firstName == values.studentName)[0]
         let dto = {...values};
         dto.date = values.interviewDate
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = applicationInterview
-        //dto.studentApplication = applications.filter(elem => elem.student.firstName == values.studentFirstName
-        //)[0];
-        api.post("/interviews", dto)
+        api.post("/interviews", dto).then(history.push("/dashboard/listInterview"))
     }
 
     return (
@@ -69,12 +58,9 @@ export default function InterviewConvocation() {
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <Formik
                         onSubmit={async (values) => {
-                            console.log("rrrr" + JSON.stringify(applicationInterview))
                             createInterview(values)
-                            history.push("/dashboard/listInterview")
                         }
                         }
-
                         validateOnBlur={false}
                         validateOnChange={false}
                         enableReinitialize={true}
@@ -84,33 +70,9 @@ export default function InterviewConvocation() {
                             const errors = {};
                         }}
                     >
-                        {({isSubmitting, setFieldValue}) => (
+                        {({isSubmitting}) => (
                             <Form className={classes.form}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Field
-                                            component={TextField}
-                                            name="studentFirstName"
-                                            id="studentFirstName"
-                                            variant="outlined"
-                                            label="Nom de l'étudiant"
-                                            required
-                                            fullWidth
-                                            autoFocus
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Field
-                                            component={TextField}
-                                            name="studentLastName"
-                                            id="studentLastName"
-                                            variant="outlined"
-                                            label="Prenom de l'étudiant"
-                                            required
-                                            fullWidth
-                                            autoFocus
-                                        />
-                                    </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Field
                                             component={DateTimePicker}
