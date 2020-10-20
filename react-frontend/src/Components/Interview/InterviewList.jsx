@@ -54,6 +54,7 @@ export default function Interviewlist(props) {
                         {<Typography>Etudiant a entrevoir
                             : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
                         <Button onClick={() => {
+                            console.log("interview id" + interview.id)
                             api.delete("/interviews/" + interview.id)
                         }}>Supprimer</Button>
                         <Button onClick={() => {

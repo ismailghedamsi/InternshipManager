@@ -150,7 +150,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                             .student(s)
                             .build())).build());
 
-            appliRepo.saveAndFlush(StudentApplication.builder()
+           /* appliRepo.saveAndFlush(StudentApplication.builder()
                     .student(s)
                     .build()
             );
@@ -158,6 +158,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
             interviewRepo.saveAndFlush(Interview.builder()
                     .date(new java.util.Date())
                     .build());
+
+            */
         }
     }
 }

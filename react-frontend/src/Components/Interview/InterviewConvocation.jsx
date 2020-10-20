@@ -10,6 +10,7 @@ import {DatePicker} from 'formik-material-ui-pickers';
 import {useApi} from "../Utils/Hooks";
 import Button from "@material-ui/core/Button";
 import {useStyles} from "../Utils/useStyles";
+import AuthenticationService from '../../Services/AuthenticationService';
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
@@ -23,7 +24,7 @@ export default function InterviewConvocation() {
     const [applications, setApplications] = useState([{}]);
 
     useEffect(() => {
-        console.log(location.state)
+        console.log("dddd" + JSON.stringify(location.state))
         api.get("/applications").then((r) => setApplications(r.data))
     }, [])
 
@@ -44,6 +45,8 @@ export default function InterviewConvocation() {
         // applications.filter(elem => elem.student.firstName == values.studentName)[0]
         let dto = {...values};
         dto.date = values.interviewDate
+        dto.employer = AuthenticationService.getCurrentUser()
+        dto.reviewState = "PENDING"
         dto.studentApplication = applications.filter(elem => elem.student.firstName == values.studentFirstName
         )[0];
         api.post("/interviews", dto)
