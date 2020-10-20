@@ -5,6 +5,7 @@ import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.InternshipOfferController;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,7 +76,7 @@ public class InternshipOfferControllerTests {
                 .file("alalalala")
                 .file("alalalala")
                 .salary(15.87)
-                .reviewState(InternshipOffer.ReviewState.APPROVED)
+                .reviewState(ReviewState.APPROVED)
                 .title("Titre")
                 .employer(expectedEmployer)
                 .allowedStudents(Collections.singletonList(expectedStudent))
@@ -89,7 +90,7 @@ public class InternshipOfferControllerTests {
                 .description("desc")
                 .file("alalalala")
                 .salary(15.87)
-                .reviewState(InternshipOffer.ReviewState.APPROVED)
+                .reviewState(ReviewState.APPROVED)
                 .title("Titre")
                 .employer(expectedEmployer)
                 .allowedStudents(Collections.singletonList(expectedStudent))

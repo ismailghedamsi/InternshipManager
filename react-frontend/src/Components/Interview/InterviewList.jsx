@@ -35,7 +35,6 @@ export default function Interviewlist(props) {
     }, [])
 
     function redirectEditFormInterview(interview) {
-        console.log("redired reschedule")
         history.push("/dashboard/rescheduleInterview", {...interview})
     }
 
@@ -49,12 +48,14 @@ export default function Interviewlist(props) {
                         <Typography>Date de l'entrevue
                             : {interview.date ? new Date(interview.date).toLocaleDateString() : ""}</Typography>
                         <Typography>L'heure de l'entrevue
-                            : {interview.date ? parseDate(interview.date) : ""}</Typography>
+                            : {interview.date ? new Date(interview.date).toLocaleTimeString() : ""}</Typography>
                         <Typography>Titre de l'offre
                             : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
                         {<Typography>Etudiant a entrevoir
                             : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
-                        <Button>Supprimer</Button>
+                        <Button onClick={() => {
+                            api.delete("/interviews/" + interview.id)
+                        }}>Supprimer</Button>
                         <Button onClick={() => {
                             redirectEditFormInterview(interview);
                         }}>Reprogrammer</Button>
