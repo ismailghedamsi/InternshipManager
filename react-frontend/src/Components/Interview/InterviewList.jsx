@@ -1,6 +1,7 @@
 import {Button, Container, makeStyles, Typography} from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
+import AuthenticationService from '../../Services/AuthenticationService'
 import {useApi, useDateParser} from '../Utils/Hooks'
 
 export default function Interviewlist(props) {
@@ -30,7 +31,7 @@ export default function Interviewlist(props) {
     const classes = useStyles();
 
     useEffect(() => {
-        api.get("/interviews")
+        api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
             .then((r) => setInterviews(r.data))
     }, [])
 
@@ -54,8 +55,14 @@ export default function Interviewlist(props) {
                         {<Typography>Etudiant a entrevoir
                             : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
                         <Button onClick={() => {
-                            console.log("interview id" + interview.id)
+                            const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
+                            console.log("interviewToDeleteIndex " + interviewToDeleteIndex)
+                            const copyInterviews = [...interviews]
                             api.delete("/interviews/" + interview.id)
+                                .then(() => {
+                                    copyInterviews.splice(interviewToDeleteIndex, 1)
+                                    setInterviews(copyInterviews)
+                                })
                         }}>Supprimer</Button>
                         <Button onClick={() => {
                             redirectEditFormInterview(interview);
