@@ -5,7 +5,6 @@ import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
-import * as yup from "yup";
 import {DateTimePicker} from 'formik-material-ui-pickers';
 import Button from "@material-ui/core/Button";
 import {makeStyles} from '@material-ui/core';
@@ -16,7 +15,7 @@ export function Rescheduleinterview(props) {
     const location = useLocation()
     const history = useHistory()
     const api = useApi()
-    const [interview, setInterview] = useState([]);
+    const [interview, setInterview] = useState({});
 
     const useStyles = makeStyles(() => ({
         root: {
@@ -40,18 +39,8 @@ export function Rescheduleinterview(props) {
 
     useEffect(() => {
         setInterview(location.state)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
-    const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
-    const requiredFieldMsg = "Ce champs est requis";
-
-    const validationSchema = yup.object().shape({
-        // studentFirstName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
-        // studentLastName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
-        // interviewDate: yup.date().required(),
-        // email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg)
-    });
     const initialValues = {
         studentFirstName: location.state.studentApplication.student.firstName,
         studentLastName: location.state.studentApplication.student.lastName,
@@ -63,10 +52,9 @@ export function Rescheduleinterview(props) {
         const nextState = {...interview};
         nextState.date = values.interviewDate;
         setInterview(nextState)
-        console.log(nextState.date)
         api.put("/interviews/" + nextState.id, nextState)
+            .then(history.push("/dashboard/listInterview"))
     }
-
 
     return (
         <Grid
@@ -83,20 +71,14 @@ export function Rescheduleinterview(props) {
                     <Formik
                         onSubmit={async (values) => {
                             updateInterview(values)
-                            history.push("/dashboard/listInterview")
                         }
                         }
-
                         validateOnBlur={false}
                         validateOnChange={false}
                         enableReinitialize={true}
-                        validationSchema={validationSchema}
                         initialValues={initialValues}
-                        validate={(values) => {
-                            const errors = {};
-                        }}
                     >
-                        {({isSubmitting, setFieldValue}) => (
+                        {({isSubmitting}) => (
                             <Form className={classes.form}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
