@@ -99,19 +99,4 @@ class InterviewControllerTests {
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateInterview(expectedInterview.getId(), expectedInterview);
     }
-
-    @Test
-    void toggleHasStudentAcceptedTest() throws Exception {
-        var expectedInterview = Interview.builder().build();
-
-        when(svc.toggleHasStudentAccepted(expectedInterview.getId())).thenReturn(Optional.of(expectedInterview));
-
-        MvcResult result = mvc.perform(put("/api/interviews/toggleAccepted/" + expectedInterview.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedInterview))).andReturn();
-
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        verify(svc, times(1)).toggleHasStudentAccepted(expectedInterview.getId());
-    }
 }
