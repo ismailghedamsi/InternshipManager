@@ -20,7 +20,7 @@ export default function OfferApplication() {
         const application = nextState[index].studentApplication.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
         application.reviewState = studentDecision;
         application.reasonForRejection = reason;
-        return api.put("/interviews/updateAccepted/" + application.id, application)
+        return api.put("/interviews/" + application.id, application)
             .then(result => {
                 nextState[index].studentApplication.splice(nextState[index].studentApplication.indexOf(application), 1, result.data);
                 setInterview(nextState);
@@ -34,18 +34,18 @@ export default function OfferApplication() {
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        api.get("/interviews/student/" +)
+        api.get("/interviews/student/" + AuthenticationService.getCurrentUser().id)
             .then(result => setInterview(result ? result.data : []))
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // function hasEmployeurAcceptedStudentToInterview(offer, student) {
+    //     return offer.applications.find(a => a.student.id === student.id && a.hasEmployerAccepted === true && a.reviewState === "PENDING") !== undefined && offer.applications.length !== 0;
+    // }
 
-    function hasEmployeurAcceptedStudentToInterview(offer, student) {
-        return offer.applications.find(a => a.student.id === student.id && a.hasEmployerAccepted === true && a.reviewState === "PENDING") !== undefined && offer.applications.length !== 0;
-    }
-
-    function test(i) {
+    function hasEmployeurAcceptedStudentToInterview(i) {
         const nextState = [...interviews];
-        const application = nextState[i].studentApplication.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
+        return nextState[i].studentApplication.find(a => a.student.id === AuthenticationService.getCurrentUser().id)
+            !== undefined && nextState[i].studentApplication.length !== 0;
     }
 
     function getStudentDecision(offer, student) {
@@ -83,7 +83,8 @@ export default function OfferApplication() {
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                        {hasEmployeurAcceptedStudentToInterview(offers[i], AuthenticationService.getCurrentUser()) &&
+                        {/*{hasEmployeurAcceptedStudentToInterview(offers[i], AuthenticationService.getCurrentUser())*/}
+                        {hasEmployeurAcceptedStudentToInterview(i) &&
                         <div className={classes.buttonDiv} style={{display: "block"}}>
                             Date de l'entretien : {getDateEntretien(i)}
                             Acceptez l'entrevue
