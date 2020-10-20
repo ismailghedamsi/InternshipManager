@@ -49,6 +49,11 @@ export const Menu = [
         role: 'student'
     },
     {
+        title: 'Interview',
+        url: '/dashboard/entrevue',
+        role: 'student'
+    },
+    {
         title: 'Créer une offre',
         url: '/dashboard/createstage',
         role: 'employer'
@@ -59,8 +64,14 @@ export const Menu = [
         role: 'employer'
     },
     {
-        title: 'Entrevue',
-        url: '/dashboard/entrevue',
-        role: 'student'
+        title: 'Liste des entrevues',
+        url: '/dashboard/listInterview',
+        role: 'employer'
+    }
+    ,
+    {
+        title: 'Assignation Offres',
+        url: '/dashboard/assignement/cv',
+        role: 'admin'
     }
 ]

@@ -8,16 +8,20 @@ import AuthenticationService from '../Services/AuthenticationService';
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
-import Interview from "./Interview";
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
 import ApplicationList from "./Employer/ApplicationList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
+import InterviewConfirmation from "./Interview/InterviewConfirmation"
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
+import InterviewConvocation from './Interview/InterviewConvocation';
+import Interviewlist from './Interview/InterviewList';
+import {Rescheduleinterview} from './Interview/RescheduleInterview';
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -94,6 +98,18 @@ export default function Dashboard(props) {
                                         path="/dashboard/applications"
                                         component={ApplicationList}
                                         role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/interviewConvocation"
+                                        component={InterviewConvocation}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/listInterview"
+                                        component={Interviewlist}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/rescheduleInterview"
+                                        component={Rescheduleinterview}
+                                        role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/upload"
@@ -106,6 +122,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
                                         component={OfferApplication}
+                                        role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/entrevue"
+                                        component={InterviewConfirmation}
                                         role={"student"}/>
                 </Switch>
             </Container>
