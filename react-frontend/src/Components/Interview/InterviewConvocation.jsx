@@ -6,7 +6,7 @@ import {TextField} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
-import {DatePicker} from 'formik-material-ui-pickers';
+import {DateTimePicker} from 'formik-material-ui-pickers';
 import {useApi} from "../Utils/Hooks";
 import Button from "@material-ui/core/Button";
 import {useStyles} from "../Utils/useStyles";
@@ -109,7 +109,7 @@ export default function InterviewConvocation() {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Field
-                                            component={DatePicker}
+                                            component={DateTimePicker}
                                             name="interviewDate"
                                             variant="outlined"
                                             label="Date et heure de l'entrevue "
