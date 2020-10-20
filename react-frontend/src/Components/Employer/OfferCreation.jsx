@@ -2,7 +2,7 @@ import Container from '@material-ui/core/Container';
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React from "react";
 import {useHistory} from 'react-router-dom';
 import * as yup from "yup";
@@ -11,6 +11,7 @@ import {useApi} from "../Utils/Hooks";
 import AuthenticationService from "../../Services/AuthenticationService";
 import Button from "@material-ui/core/Button";
 import {useStyles} from "../Utils/useStyles";
+import {Typography} from "@material-ui/core";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
@@ -105,9 +106,15 @@ export default function OfferCreation() {
                             return errors;
                         }}
                     >
-                        {({isSubmitting, setFieldValue}) => (
+                        {({isSubmitting}) => (
                             <Form className={classes.form}>
-                                <Grid container spacing={2}>
+                                <Grid container
+                                      alignItems="start"
+                                      justify="center"
+                                      spacing={2}>
+                                    <Typography variant={"h1"} className={classes.formTitle}>
+                                        Nouvelle offre de stage
+                                    </Typography>
                                     <Grid item xs={12}>
                                         <Field
                                             component={TextField}
@@ -131,7 +138,7 @@ export default function OfferCreation() {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} sm={6}>
                                         <Field
                                             component={TextField}
                                             name="nbStudentToHire"
@@ -194,19 +201,18 @@ export default function OfferCreation() {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <input
-                                        name="file"
-                                        id="file"
-                                        accept="application/pdf"
-                                        type="file"
-                                        className="file"
-                                        onChange={(e) => {
-                                            const {target} = e
-                                            if (target.value.length > 0) {
-                                                setFieldValue("file", e.currentTarget.files[0])
-                                            }
-                                        }}
-                                    />
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={SimpleFileUpload}
+                                            type={"file"}
+                                            name="file"
+                                            id="file"
+                                            variant="outlined"
+                                            label="Fichier PDF"
+                                            fullwidth
+                                            required
+                                        />
+                                    </Grid>
                                     <ErrorMessage name={"file"}>
                                         {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
                                         </p>}

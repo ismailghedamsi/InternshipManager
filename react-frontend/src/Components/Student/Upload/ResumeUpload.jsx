@@ -4,7 +4,7 @@ import Container from "@material-ui/core/Container";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import {TextField} from "formik-material-ui";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
 import './ResumeUpload.css'
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
@@ -32,17 +32,14 @@ export default function ResumeUpload() {
     return (
         <Grid
             container
-            spacing={0}
+            spacing={2}
             direction="column"
             alignItems="center"
             justify="center"
             style={{minHeight: '100vh'}}
         >
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
-                    <Typography variant="h5" id="title">
-                        Télécharger un nouveau CV
-                    </Typography>
                     <Formik
                         onSubmit={async (values) => readFileAsync(values.file).then((file) => {
                             let dto = {...values};
@@ -73,41 +70,53 @@ export default function ResumeUpload() {
                     >
                         {({submitForm, isSubmitting, setFieldValue}) => (
                             <Form>
-                                <Field
-                                    component={TextField}
-                                    name="name"
-                                    id="name"
-                                    variant="outlined"
-                                    label="Nom du fichier"
-                                    fullWidth
-                                />
-
-                                <input
-                                    name="file"
-                                    id="file"
-                                    type="file"
-                                    className="file"
-                                    onChange={(e) => {
-                                        setFieldValue("file", e.currentTarget.files[0])
-                                    }}
-                                />
-                                <ErrorMessage name={"file"}>
-                                    {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span>
-                                    </p>}
-                                </ErrorMessage>
-                                {isSubmitting && <LinearProgress/>}
-                                <Button
-                                    id="buttonSubmit"
-                                    type={"submit"}
-                                    variant="contained"
-                                    fullWidth
-                                    size={"large"}
-                                    color="primary"
-                                    disabled={isSubmitting}
-                                    onClick={submitForm}
-                                >
-                                    Téléverser le CV
-                                </Button>
+                                <Grid container
+                                      alignItems="start"
+                                      justify="center"
+                                      spacing={2}>
+                                    <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
+                                        Télécharger un nouveau CV
+                                    </Typography>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="name"
+                                            id="name"
+                                            variant="outlined"
+                                            label="Nom du fichier"
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={SimpleFileUpload}
+                                            type={"file"}
+                                            name="file"
+                                            id="file"
+                                            variant="outlined"
+                                            label="Fichier PDF"
+                                            fullwidth
+                                            required
+                                        />
+                                        <ErrorMessage name={"file"}>
+                                            {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span>
+                                            </p>}
+                                        </ErrorMessage>
+                                    </Grid>
+                                    {isSubmitting && <LinearProgress/>}
+                                    <Button
+                                        id="buttonSubmit"
+                                        type={"submit"}
+                                        variant="contained"
+                                        fullWidth
+                                        size={"large"}
+                                        color="primary"
+                                        disabled={isSubmitting}
+                                        onClick={submitForm}
+                                    >
+                                        Téléverser le CV
+                                    </Button>
+                                </Grid>
                             </Form>
                         )}
                     </Formik>
