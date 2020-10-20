@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.model.Interview;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.service.InterviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +38,21 @@ public class InterviewController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Interview> updateInterview(@RequestBody Interview requestBody, @PathVariable long id) {
+    public ResponseEntity<Interview> updateInterview(@PathVariable long id, @RequestBody Interview requestBody) {
         return svc.updateInterview(id, requestBody)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
-    @PutMapping("/toggleAccepted/{id}")
-    public ResponseEntity<Interview> updateStudentAgreementToInterview(@PathVariable long id) {
-        return svc.updateInterviewState(id)
+    @PutMapping("/updateAccepted/{id}")
+    public ResponseEntity<Interview> updateStudentAgreementToInterview(@PathVariable long id, @RequestBody ReviewState requestBody) {
+        return svc.updateInterviewState(id, requestBody)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteInterview(@PathVariable long id) {
+        svc.deleteInterviewById(id);
     }
 }

@@ -94,7 +94,7 @@ public class InternshipOfferService {
 
     @SuppressWarnings("SimplifiableConditionalExpression")
     private boolean isOfferStateValid(InternshipOffer offer) {
-        if (offer.getReviewState() == ReviewState.DENIED)
+        if (offer.getReviewState() ==ReviewState.DENIED)
             return offer.getReasonForRejection() == null ? false : !offer.getReasonForRejection().isBlank();
 
         return true;

@@ -7,6 +7,7 @@ import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.model.User;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.DoubleStream;
@@ -51,5 +52,10 @@ public class InterviewService {
         return interviewRepo.findById(id)
                 .map(interview -> interview.toBuilder().reviewState(newState).build())
                 .map(interviewRepo::saveAndFlush);
+    }
+
+    @Transactional
+    public void deleteInterviewById(long id) {
+        interviewRepo.deleteById(id);
     }
 }
