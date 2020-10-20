@@ -4,12 +4,13 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
-import {useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import {DatePicker} from 'formik-material-ui-pickers';
 import {useApi} from "../Utils/Hooks";
 import Button from "@material-ui/core/Button";
 import {useStyles} from "../Utils/useStyles";
+import AuthenticationService from '../../Services/AuthenticationService';
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
@@ -19,10 +20,11 @@ export default function InterviewConvocation() {
     const classes = useStyles();
     const api = useApi();
     const location = useLocation();
+    const history = useHistory();
     const [applications, setApplications] = useState([{}]);
 
     useEffect(() => {
-        console.log(location.state)
+        console.log("dddd" + JSON.stringify(location.state))
         api.get("/applications").then((r) => setApplications(r.data))
     }, [])
 
@@ -43,12 +45,15 @@ export default function InterviewConvocation() {
         // applications.filter(elem => elem.student.firstName == values.studentName)[0]
         let dto = {...values};
         dto.date = values.interviewDate
+        dto.employer = AuthenticationService.getCurrentUser()
+        dto.reviewState = "PENDING"
         dto.studentApplication = applications.filter(elem => elem.student.firstName == values.studentFirstName
         )[0];
         api.post("/interviews", dto)
     }
 
     return (
+
         <Grid
             container
             spacing={0}
@@ -60,7 +65,10 @@ export default function InterviewConvocation() {
             <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <Formik
-                        onSubmit={async (values) => createInterview(values)
+                        onSubmit={async (values) => {
+                            createInterview(values)
+                            history.push("/dashboard/listInterview")
+                        }
                         }
 
                         validateOnBlur={false}

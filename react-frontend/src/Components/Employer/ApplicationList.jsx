@@ -12,6 +12,7 @@ export default function ApplicationList() {
     const history = useHistory();
     const api = useApi();
     const [offer, setOffer] = useState({});
+    const [currentApplication, setCurrentApplication] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
     const noContent = ""
     useEffect(() => {
@@ -32,6 +33,7 @@ export default function ApplicationList() {
                             onClick={() => {
                                 setCurrent(i)
                                 setCurrentIndex(i)
+                                setCurrentApplication(offer.applications[i])
                             }}>
                             <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
                                 {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
@@ -64,7 +66,8 @@ export default function ApplicationList() {
 
                             <Link variant={"body1"}
                                   onClick={() => {
-                                      history.push("/dashboard/interviewConvocation", {app: 0})
+                                      console.log("passed value " + JSON.stringify(offer.applications[i]))
+                                      history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
                                   }
                                   }
                             >
