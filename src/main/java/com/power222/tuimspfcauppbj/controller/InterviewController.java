@@ -24,8 +24,13 @@ public class InterviewController {
     }
 
     @GetMapping("/employer/{id}")
-    public List<Interview> getInterviewByEmployerId(@PathVariable long id) {
-        return svc.getAllInterviewByEmployerId(id);
+    public List<Interview> getInterviewsByEmployerId(@PathVariable long id) {
+        return svc.getAllInterviewsByEmployerId(id);
+    }
+
+    @GetMapping("/student/{id}")
+    public List<Interview> getInterviewsByStudentId(@PathVariable long id) {
+        return svc.getAllInterviewsByStudentId(id);
     }
 
     @GetMapping("/{id}")
