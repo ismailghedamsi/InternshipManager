@@ -150,6 +150,11 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                             .student(s)
                             .build())).build());
 
+            appliRepo.saveAndFlush(StudentApplication.builder()
+                    .student(s)
+                    .build()
+            );
+
             interviewRepo.saveAndFlush(Interview.builder()
                     .date(new java.util.Date())
                     .build());
