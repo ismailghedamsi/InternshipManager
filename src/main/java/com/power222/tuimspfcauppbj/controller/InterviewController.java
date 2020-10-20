@@ -23,6 +23,11 @@ public class InterviewController {
         return svc.getAllInterviews();
     }
 
+    @GetMapping("/employer/{id}")
+    public List<Interview> getInterviewByEmployerId(@PathVariable long id) {
+        return svc.getAllInterviewByEmployerId(id);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Interview> getInterview(@PathVariable long id) {
         return svc.getInterviewById(id)
