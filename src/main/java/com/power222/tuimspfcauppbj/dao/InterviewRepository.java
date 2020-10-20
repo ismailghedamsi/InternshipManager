@@ -11,4 +11,5 @@ import java.util.List;
 public interface InterviewRepository extends JpaRepository<Interview, Long> {
     List<Interview> findAllByReviewState(ReviewState reviewState);
     List<Interview> findAllByEmployer_id(long id);
+    List<Interview> findAllByStudentApplication_Student_Id(long id);
 }
