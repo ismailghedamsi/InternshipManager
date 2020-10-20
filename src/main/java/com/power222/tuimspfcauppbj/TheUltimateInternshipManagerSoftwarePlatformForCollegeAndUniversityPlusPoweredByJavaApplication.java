@@ -155,9 +155,9 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build()
             );
 
-            interviewRepo.saveAndFlush(Interview.builder()
-                    .date(new java.util.Date())
-                    .build());
+//            interviewRepo.saveAndFlush(Interview.builder()
+//                    .date(new java.util.Date())
+//                    .build());
         }
     }
 }

@@ -103,7 +103,7 @@ class InterviewServiceTest {
     }
 
     @Test
-    void toggleHasStudentAcceptedTest() {
+    void updateInterviewStateTest() {
 
     }
 }
