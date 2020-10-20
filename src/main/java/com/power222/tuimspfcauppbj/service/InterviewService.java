@@ -52,12 +52,6 @@ public class InterviewService {
                 .map(newInterview -> interviewRepo.saveAndFlush(interview));
     }
 
-    public Optional<Interview> updateInterviewState(long id, ReviewState newState) {
-        return interviewRepo.findById(id)
-                .map(interview -> interview.toBuilder().reviewState(newState).build())
-                .map(interviewRepo::saveAndFlush);
-    }
-
     @Transactional
     public void deleteInterviewById(long id) {
         interviewRepo.deleteById(id);

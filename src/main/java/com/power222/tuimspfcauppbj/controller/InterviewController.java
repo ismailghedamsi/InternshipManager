@@ -54,13 +54,6 @@ public class InterviewController {
                 .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
-    @PutMapping("/updateAccepted/{id}")
-    public ResponseEntity<Interview> updateStudentAgreementToInterview(@PathVariable long id, @RequestBody ReviewState requestBody) {
-        return svc.updateInterviewState(id, requestBody)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
-    }
-
     @DeleteMapping("/{id}")
     public void deleteInterview(@PathVariable long id) {
         svc.deleteInterviewById(id);
