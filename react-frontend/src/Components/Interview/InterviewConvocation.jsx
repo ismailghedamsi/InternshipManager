@@ -21,10 +21,12 @@ export default function InterviewConvocation() {
     const api = useApi();
     const location = useLocation();
     const history = useHistory();
+    const [applicationInterview, setApplicationInterview] = useState()
     const [applications, setApplications] = useState([{}]);
 
     useEffect(() => {
         console.log("dddd" + JSON.stringify(location.state))
+        setApplicationInterview(location.state)
         api.get("/applications").then((r) => setApplications(r.data))
     }, [])
 
@@ -47,8 +49,9 @@ export default function InterviewConvocation() {
         dto.date = values.interviewDate
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
-        dto.studentApplication = applications.filter(elem => elem.student.firstName == values.studentFirstName
-        )[0];
+        dto.studentApplication = applicationInterview
+        //dto.studentApplication = applications.filter(elem => elem.student.firstName == values.studentFirstName
+        //)[0];
         api.post("/interviews", dto)
     }
 
@@ -66,6 +69,7 @@ export default function InterviewConvocation() {
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <Formik
                         onSubmit={async (values) => {
+                            console.log("rrrr" + JSON.stringify(applicationInterview))
                             createInterview(values)
                             history.push("/dashboard/listInterview")
                         }

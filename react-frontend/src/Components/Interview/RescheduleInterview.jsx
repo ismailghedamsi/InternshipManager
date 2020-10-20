@@ -16,7 +16,7 @@ export function Rescheduleinterview(props) {
     const location = useLocation()
     const history = useHistory()
     const api = useApi()
-    const [interview, setInterview] = useState([]);
+    const [interview, setInterview] = useState({});
 
     const useStyles = makeStyles(() => ({
         root: {
@@ -47,10 +47,7 @@ export function Rescheduleinterview(props) {
     const requiredFieldMsg = "Ce champs est requis";
 
     const validationSchema = yup.object().shape({
-        // studentFirstName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
-        // studentLastName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
         // interviewDate: yup.date().required(),
-        // email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg)
     });
     const initialValues = {
         studentFirstName: location.state.studentApplication.student.firstName,

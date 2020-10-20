@@ -2,13 +2,12 @@ import {Button, Container, makeStyles, Typography} from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import AuthenticationService from '../../Services/AuthenticationService'
-import {useApi, useDateParser} from '../Utils/Hooks'
+import {useApi} from '../Utils/Hooks'
 
 export default function Interviewlist(props) {
     const [interviews, setInterviews] = useState([{}])
     const api = useApi()
     const history = useHistory()
-    const parseDate = useDateParser()
 
     const useStyles = makeStyles(() => ({
         root: {
