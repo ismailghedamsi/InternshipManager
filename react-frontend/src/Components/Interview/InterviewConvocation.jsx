@@ -27,12 +27,14 @@ export default function InterviewConvocation() {
     }, [])
 
     const validationSchema = yup.object().shape({
-        studentName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
+        studentFirstName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
+        studentLastName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
         interviewDate: yup.date().required(),
         email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
     });
     const initialValues = {
-        studentName: '',
+        studentFirstName: '',
+        studentLastName: '',
         interviewDate: new Date(),
         email: ''
     }
@@ -41,8 +43,8 @@ export default function InterviewConvocation() {
         // applications.filter(elem => elem.student.firstName == values.studentName)[0]
         let dto = {...values};
         dto.date = values.interviewDate
-        console.log(values.interviewDate)
-        dto.studentApplication = applications.filter(elem => elem.student.firstName == values.studentName)[0];
+        dto.studentApplication = applications.filter(elem => elem.student.firstName == values.studentFirstName
+        )[0];
         api.post("/interviews", dto)
     }
 
@@ -76,10 +78,22 @@ export default function InterviewConvocation() {
                                     <Grid item xs={12}>
                                         <Field
                                             component={TextField}
-                                            name="studentName"
-                                            id="studentName"
+                                            name="studentFirstName"
+                                            id="studentFirstName"
                                             variant="outlined"
                                             label="Nom de l'étudiant"
+                                            required
+                                            fullWidth
+                                            autoFocus
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            component={TextField}
+                                            name="studentLastName"
+                                            id="studentLastName"
+                                            variant="outlined"
+                                            label="Prenom de l'étudiant"
                                             required
                                             fullWidth
                                             autoFocus
