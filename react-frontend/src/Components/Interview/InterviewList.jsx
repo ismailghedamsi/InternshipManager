@@ -36,17 +36,17 @@ export default function Interviewlist(props) {
         <div className={classes.viewbox}>
             <Container className={classes.container}>
                 {
-
-                    interviews.map((interview, key) => <div key={key}>
-                        <Typography>Date de l'entrevue
-                            : {interview.date ? new Date(interview.date).toLocaleDateString() : ""}</Typography>
-                        <Typography>L'heure de l'entrevue
-                            : {interview.date ? new Date(interview.date).toLocaleTimeString() : ""}</Typography>
-                        <Typography>Titre de l'offre
-                            : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
-                        {<Typography>Etudiant à entrevoir
-                            : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
-                        <Button onClick={() => {
+                    interviews.length > 0 ?
+                        interviews.map((interview, key) => <div key={key}>
+                            <Typography>Date de l'entrevue
+                                : {interview.date ? new Date(interview.date).toLocaleDateString() : ""}</Typography>
+                            <Typography>L'heure de l'entrevue
+                                : {interview.date ? new Date(interview.date).toLocaleTimeString() : ""}</Typography>
+                            <Typography>Titre de l'offre
+                                : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
+                            {<Typography>Etudiant à entrevoir
+                                : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
+                            <Button onClick={() => {
                             const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
                             const copyInterviews = [...interviews]
                             api.delete("/interviews/" + interview.id)
@@ -54,12 +54,13 @@ export default function Interviewlist(props) {
                                     copyInterviews.splice(interviewToDeleteIndex, 1)
                                     setInterviews(copyInterviews)
                                 })
-                        }}>Supprimer</Button>
-                        <Button onClick={() => {
-                            redirectEditFormInterview(interview);
-                        }}>Reprogrammer</Button>
-                        <hr/>
-                    </div>)
+                            }}>Supprimer</Button>
+                            <Button onClick={() => {
+                                redirectEditFormInterview(interview);
+                            }}>Reprogrammer</Button>
+                            <hr/>
+                        </div>)
+                        : "Aucune entrevue a été crée"
                 }
             </Container>
 
