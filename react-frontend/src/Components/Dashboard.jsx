@@ -14,7 +14,6 @@ import ApplicationList from "./Employer/ApplicationList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import ResumeList from "./Student/ResumeList";
 import OfferApplication from "./Student/OfferApplication";
-import InterviewConfirmation from "./Interview/InterviewConfirmation"
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
@@ -122,10 +121,6 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/stagelist"
                                         component={OfferApplication}
-                                        role={"student"}/>
-                    <RoleProtectedRoute exact={true}
-                                        path="/dashboard/entrevue"
-                                        component={InterviewConfirmation}
                                         role={"student"}/>
                 </Switch>
             </Container>

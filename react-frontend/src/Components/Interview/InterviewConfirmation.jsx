@@ -7,15 +7,15 @@ import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import OfferDetails from "../Utils/OfferDetails";
 import TextboxModal from "../Utils/TextboxModal";
 
-export default function OfferApplication() {
+export default function InterviewConfirmation() {
     const classes = useStyles();
     const api = useApi();
     const [offers, setOffers] = useState([]);
     const [interviews, setInterviews] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
+    const [isReasonOfInterviewModalOpen, openReasonOfInterviewModal, closeReasonOfInterviewModal] = useModal();
 
-    function sendDecision(index, studentDecision, reason = "") {
+    function sendInterviewDecision(index, studentDecision, reason = "") {
         const nextState = [...interviews];
         const interview = nextState[index];
         interview.reviewState = studentDecision;
@@ -25,7 +25,7 @@ export default function OfferApplication() {
                 if (result)
                     nextState[index] = result.data;
                 setInterviews(nextState);
-                closeReasonModal()
+                closeReasonOfInterviewModal()
             })
     }
 
@@ -46,7 +46,7 @@ export default function OfferApplication() {
         return false;
     }
 
-    function getStudentDecision(i) {
+    function getStudentDecisionForInterview(i) {
         if (interviews[i]) {
             if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "APPROVED") {
                 return " Vous avez accepté l'entrevue";
@@ -68,60 +68,62 @@ export default function OfferApplication() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Entrevues"}>
-                {(i, setCurrent) => (
-                    <div key={i}>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
-                            onClick={() => {
-                                setCurrentIndex(i);
-                                setCurrent(i)
-                            }}
-                        >
-                            <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                                {offers[i].title + " "}
-                            </Typography>
-                            <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                                {offers[i].employer.companyName}
-                            </Typography>
-                        </button>
-                        {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            Date de l'entretien : {getDateEntretien(i)}
-                        </Typography>
-                        {hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
-                        <div className={classes.buttonDiv} style={{display: "block"}}>
-                            Acceptez l'entrevue
+            <div>
+                <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Entrevues"}>
+                    {(i, setCurrent) => (
+                        <div key={i}>
                             <button
                                 type={"button"}
-                                className={[classes.linkButton].join(' ')}
-                                onClick={() => sendDecision(i, "APPROVED")}
-                                style={{marginRight: 5}}
-                            ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                            Refusez l'entrevue
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton].join(' ')}
+                                className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                                 onClick={() => {
-                                    setCurrentIndex(i)
-                                    openReasonModal()
+                                    setCurrentIndex(i);
+                                    setCurrent(i)
                                 }}
-                            ><i className="fa fa-ban" style={{color: "red"}}/></button>
+                            >
+                                <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                    {offers[i].title + " "}
+                                </Typography>
+                                <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                                    {offers[i].employer.companyName}
+                                </Typography>
+                            </button>
+                            {currentIndex === i && <OfferDetails offer={offers[i]}/>}
+                            <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                                Date de l'entretien : {getDateEntretien(i)}
+                            </Typography>
+                            {hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
+                            <div className={classes.buttonDiv} style={{display: "block"}}>
+                                Acceptez l'entrevue
+                                <button
+                                    type={"button"}
+                                    className={[classes.linkButton].join(' ')}
+                                    onClick={() => sendInterviewDecision(i, "APPROVED")}
+                                    style={{marginRight: 5}}
+                                ><i className="fa fa-check-square" style={{color: "green"}}/></button>
+                                Refusez l'entrevue
+                                <button
+                                    type={"button"}
+                                    className={[classes.linkButton].join(' ')}
+                                    onClick={() => {
+                                        setCurrentIndex(i)
+                                        openReasonOfInterviewModal()
+                                    }}
+                                ><i className="fa fa-ban" style={{color: "red"}}/></button>
+                            </div>
+                            }
+                            <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                                {getStudentDecisionForInterview(i)}
+                            </Typography>
+                            <hr/>
                         </div>
-                        }
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {getStudentDecision(i)}
-                        </Typography>
-                        <hr/>
-                    </div>
-                )}
-            </PdfSelectionViewer>
+                    )}
+                </PdfSelectionViewer>
+            </div>
             <TextboxModal
-                isOpen={isReasonModalOpen}
-                hide={closeReasonModal}
+                isOpen={isReasonOfInterviewModalOpen}
+                hide={closeReasonOfInterviewModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, "DENIED", values.message)}
+                onSubmit={async (values) => sendInterviewDecision(currentIndex, "DENIED", values.message)}
             />
         </div>
     );
