@@ -14,6 +14,26 @@ export const Menu = [
         role: 'admin'
     },
     {
+        title: 'Assignation Offres',
+        url: '/dashboard/assignement/cv',
+        role: 'admin'
+    },
+    {
+        title: 'Statut des étudiants ',
+        url: "/dashboard/status",
+        role: 'admin'
+    },
+    {
+        title: 'Statut des employés',
+        url: "/dashboard/employersStatus",
+        role: 'admin'
+    },
+    {
+        title: 'Liste des offres',
+        url: '/dashboard/offerList',
+        role: 'admin'
+    },
+    {
         title: 'Téléverser un CV',
         url: '/dashboard/upload',
         role: 'student'
@@ -21,6 +41,11 @@ export const Menu = [
     {
         title: 'Mes CV',
         url: '/dashboard/listcv',
+        role: 'student'
+    },
+    {
+        title: 'Offre de stages',
+        url: '/dashboard/stagelist',
         role: 'student'
     },
     {
@@ -32,16 +57,10 @@ export const Menu = [
         title: 'Liste des offres',
         url: '/dashboard/listoffer',
         role: 'employer'
-    }
-    ,
-    {
-        title: 'Assignation Offres',
-        url: '/dashboard/assignement/cv',
-        role: 'admin'
     },
     {
-        title: 'Offre de stages',
-        url: '/dashboard/stagelist',
-        role: 'student'
+        title: 'Liste des entrevues',
+        url: '/dashboard/listInterview',
+        role: 'employer'
     }
 ]

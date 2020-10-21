@@ -1,6 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -25,7 +25,10 @@ public class Employer extends User {
     private String email;
 
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("employer")
+    @JsonIgnore
     private List<InternshipOffer> offers;
 
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Interview> interviews;
 }

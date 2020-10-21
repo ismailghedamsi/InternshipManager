@@ -73,7 +73,7 @@ class ResumeControllerTests {
     void getResumeFound() throws Exception {
         when(svc.getResumeById(anyLong())).thenReturn(Optional.of(new Resume()));
 
-        var actual = mvc.perform(get("/resumes/5")).andReturn();
+        var actual = mvc.perform(get("/api/resumes/5")).andReturn();
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
     }
@@ -82,7 +82,7 @@ class ResumeControllerTests {
     void getResumeNotFound() throws Exception {
         when(svc.getResumeById(anyInt())).thenReturn(Optional.empty());
 
-        var actual = mvc.perform(get("/resumes/5")).andReturn();
+        var actual = mvc.perform(get("/api/resumes/5")).andReturn();
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
@@ -91,7 +91,7 @@ class ResumeControllerTests {
     void createResume() throws Exception {
         when(svc.persistNewResume(any())).thenReturn(Optional.of(new Resume()));
 
-        var actual = mvc.perform(post("/resumes").contentType(MediaType.APPLICATION_JSON).content("{}")).andReturn();
+        var actual = mvc.perform(post("/api/resumes").contentType(MediaType.APPLICATION_JSON).content("{}")).andReturn();
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.CREATED.value());
     }
@@ -100,7 +100,7 @@ class ResumeControllerTests {
     void createResumeNotStudent() throws Exception {
         when(svc.persistNewResume(any())).thenReturn(Optional.empty());
 
-        var actual = mvc.perform(post("/resumes")).andReturn();
+        var actual = mvc.perform(post("/api/resumes")).andReturn();
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
@@ -110,7 +110,7 @@ class ResumeControllerTests {
         expectedStudent.setPassword(null);
         when(svc.updateResume(expectedResume.getId(), expectedResume)).thenReturn(Optional.of(expectedResume));
 
-        MvcResult result = mvc.perform(put("/resumes/" + expectedResume.getId())
+        MvcResult result = mvc.perform(put("/api/resumes/" + expectedResume.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedResume))).andReturn();
 
@@ -122,7 +122,7 @@ class ResumeControllerTests {
 
     @Test
     void deleteResumeTest() throws Exception {
-        MvcResult result = mvc.perform(delete("/resumes/1")).andReturn();
+        MvcResult result = mvc.perform(delete("/api/resumes/1")).andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).deleteResumeById(1);
@@ -133,7 +133,7 @@ class ResumeControllerTests {
         var list = Arrays.asList(new Resume(), new Resume());
         when(svc.getResumesByOwnerId(expectedStudent.getId())).thenReturn(list);
 
-        MvcResult result = mvc.perform(get("/resumes/student/" + expectedStudent.getId())).andReturn();
+        MvcResult result = mvc.perform(get("/api/resumes/student/" + expectedStudent.getId())).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
@@ -142,19 +142,19 @@ class ResumeControllerTests {
 
     @Test
     void getAllResumes() throws Exception {
-        final int nbStudent = 3;
+        final int nbResumes = 3;
 
         List<Resume> list = new ArrayList<>();
-        for (int i = 0; i < nbStudent; i++)
+        for (int i = 0; i < nbResumes; i++)
             list.add(new Resume());
 
         when(svc.getAllResumes()).thenReturn(list);
 
-        MvcResult result = mvc.perform(get("/resumes")).andReturn();
+        MvcResult result = mvc.perform(get("/api/resumes")).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        assertEquals(actuals.size(), nbStudent);
+        assertEquals(actuals.size(), nbResumes);
     }
 
 
@@ -168,7 +168,7 @@ class ResumeControllerTests {
 
         when(svc.getResumeWithPendingApprouval()).thenReturn(list);
 
-        MvcResult result = mvc.perform(get("/resumes/pending")).andReturn();
+        MvcResult result = mvc.perform(get("/api/resumes/pending")).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
@@ -179,7 +179,7 @@ class ResumeControllerTests {
     void errorOnUpdateTest() throws Exception {
         when(svc.updateResume(expectedResume.getId(), expectedResume)).thenReturn(Optional.empty());
 
-        MvcResult result = mvc.perform(put("/resumes/" + expectedResume.getId())
+        MvcResult result = mvc.perform(put("/api/resumes/" + expectedResume.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedResume)))
                 .andReturn();

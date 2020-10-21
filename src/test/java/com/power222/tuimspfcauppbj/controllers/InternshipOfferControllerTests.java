@@ -5,6 +5,7 @@ import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.InternshipOfferController;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,15 +70,13 @@ public class InternshipOfferControllerTests {
 
         expectedOffer = InternshipOffer.builder()
                 .id(1)
-                .beginHour(1)
-                .endHour(15)
                 .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("1/08/2020"))
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
                 .description("desc")
-                .joinedFile("alalalala")
-                .nbOfWeeks(15)
+                .file("alalalala")
+                .file("alalalala")
                 .salary(15.87)
-                .reviewState(InternshipOffer.ReviewState.APPROVED)
+                .reviewState(ReviewState.APPROVED)
                 .title("Titre")
                 .employer(expectedEmployer)
                 .allowedStudents(Collections.singletonList(expectedStudent))
@@ -86,15 +85,12 @@ public class InternshipOfferControllerTests {
 
         expectedOffer2 = InternshipOffer.builder()
                 .id(1)
-                .beginHour(1)
-                .endHour(15)
                 .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("1/08/2020"))
                 .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
                 .description("desc")
-                .joinedFile("alalalala")
-                .nbOfWeeks(15)
+                .file("alalalala")
                 .salary(15.87)
-                .reviewState(InternshipOffer.ReviewState.APPROVED)
+                .reviewState(ReviewState.APPROVED)
                 .title("Titre")
                 .employer(expectedEmployer)
                 .allowedStudents(Collections.singletonList(expectedStudent))
@@ -106,7 +102,7 @@ public class InternshipOfferControllerTests {
     void getAllOffers() throws Exception {
         when(svc.getAllInternshipOffers()).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
-        mvc.perform(get("/offers"))
+        mvc.perform(get("/api/offers"))
                 .andExpect(status().isOk());
     }
 
@@ -114,7 +110,7 @@ public class InternshipOfferControllerTests {
     void getAllOffersByStudentID() throws Exception {
         when(svc.getOfferByAllowedStudentId(expectedStudent.getId())).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
-        mvc.perform(get("/offers/student/" + expectedStudent.getId()))
+        mvc.perform(get("/api/offers/student/" + expectedStudent.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -122,7 +118,7 @@ public class InternshipOfferControllerTests {
     void getAllOffersWithPendingApproval() throws Exception {
         when(svc.getInternshipOffersWithPendingApproval()).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
-        mvc.perform(get("/offers/pending"))
+        mvc.perform(get("/api/offers/pending"))
                 .andExpect(status().isOk());
     }
 
@@ -130,7 +126,7 @@ public class InternshipOfferControllerTests {
     void getAllOffersApproved() throws Exception {
         when(svc.getApprovedInternshipOffers()).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
-        mvc.perform(get("/offers/approved"))
+        mvc.perform(get("/api/offers/approved"))
                 .andExpect(status().isOk());
     }
 
@@ -138,7 +134,7 @@ public class InternshipOfferControllerTests {
     void getOffeById() throws Exception {
         when(svc.getInternshipOfferById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
 
-        mvc.perform(get("/offers/" + expectedOffer.getId()))
+        mvc.perform(get("/api/offers/" + expectedOffer.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -146,7 +142,7 @@ public class InternshipOfferControllerTests {
     void getOffeByInvalidId() throws Exception {
         when(svc.getInternshipOfferById(expectedOffer.getId())).thenReturn(Optional.empty());
 
-        mvc.perform(get("/offers/" + expectedOffer.getId()))
+        mvc.perform(get("/api/offers/" + expectedOffer.getId()))
                 .andExpect(status().isNotFound());
     }
 
@@ -154,7 +150,7 @@ public class InternshipOfferControllerTests {
     void getOfferByEmployerId() throws Exception {
         when(svc.getInternshipOffersOfEmployer(expectedEmployer.getUsername())).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
-        mvc.perform(get("/offers/employer/" + expectedEmployer.getUsername()))
+        mvc.perform(get("/api/offers/employer/" + expectedEmployer.getUsername()))
                 .andExpect(status().isOk());
     }
 
@@ -162,7 +158,7 @@ public class InternshipOfferControllerTests {
     void createOffer() throws Exception {
         when(svc.uploadInternshipOffer(expectedOffer)).thenReturn(Optional.of(expectedOffer));
 
-        mvc.perform(post("/offers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
+        mvc.perform(post("/api/offers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
                 .andExpect(status().isCreated());
     }
 
@@ -170,7 +166,7 @@ public class InternshipOfferControllerTests {
     void createInvalidOffer() throws Exception {
         when(svc.uploadInternshipOffer(expectedOffer)).thenReturn(Optional.empty());
 
-        mvc.perform(post("/offers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
+        mvc.perform(post("/api/offers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -180,7 +176,7 @@ public class InternshipOfferControllerTests {
         System.err.println(expectedOffer);
         System.err.println(mapper.readValue(mapper.writeValueAsString(expectedOffer), InternshipOffer.class));
 
-        mvc.perform(put("/offers/" + expectedOffer.getId())
+        mvc.perform(put("/api/offers/" + expectedOffer.getId())
                 .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
                 .andExpect(status().isOk());
     }
@@ -189,7 +185,7 @@ public class InternshipOfferControllerTests {
     void updateInvalidStateOffer() throws Exception {
         when(svc.updateInternshipOffer(expectedOffer.getId(), expectedOffer)).thenReturn(Optional.empty());
 
-        mvc.perform(put("/offers/" + expectedOffer.getId()).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
+        mvc.perform(put("/api/offers/" + expectedOffer.getId()).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
                 .andExpect(status().isConflict());
     }
 
@@ -197,7 +193,7 @@ public class InternshipOfferControllerTests {
     void addStudentToOffer() throws Exception {
         when(svc.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId())).thenReturn(Optional.of(expectedOffer));
 
-        mvc.perform(put("/offers/" + expectedOffer.getId() + "/addRemoveStudent/" + expectedStudent.getId()).
+        mvc.perform(put("/api/offers/" + expectedOffer.getId() + "/addRemoveStudent/" + expectedStudent.getId()).
                 contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(status().isOk());
     }
@@ -206,14 +202,14 @@ public class InternshipOfferControllerTests {
     void addStudentToOfferWithError() throws Exception {
         when(svc.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId())).thenReturn(Optional.empty());
 
-        mvc.perform(put("/offers/" + expectedOffer.getId() + "/addRemoveStudent/" + expectedStudent.getId()).
+        mvc.perform(put("/api/offers/" + expectedOffer.getId() + "/addRemoveStudent/" + expectedStudent.getId()).
                 contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void deleteOfferTest() throws Exception {
-        mvc.perform(delete("/offers/" + expectedOffer.getId()))
+        mvc.perform(delete("/api/offers/" + expectedOffer.getId()))
                 .andExpect(status().isOk());
 
         verify(svc, times(1)).deleteOfferById(expectedOffer.getId());

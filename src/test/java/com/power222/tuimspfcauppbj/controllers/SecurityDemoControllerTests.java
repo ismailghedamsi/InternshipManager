@@ -33,7 +33,7 @@ public class SecurityDemoControllerTests {
 
     @Test
     void helloWorldTest() throws Exception {
-        mvc.perform(get("/hello").contentType(MediaType.TEXT_PLAIN))
+        mvc.perform(get("/api/hello").contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Hello, world!")));
     }
@@ -42,7 +42,7 @@ public class SecurityDemoControllerTests {
     void unauthenticatedPrivateHelloWorldTest() throws Exception {
         when(userRepo.findByUsername(any())).thenReturn(Optional.empty());
 
-        mvc.perform(get("/hello/private").contentType(MediaType.TEXT_PLAIN))
+        mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -55,7 +55,7 @@ public class SecurityDemoControllerTests {
                 .password("password")
                 .build()));
 
-        mvc.perform(get("/hello/private").contentType(MediaType.TEXT_PLAIN))
+        mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Hello, private world!")));
     }

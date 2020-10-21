@@ -4,6 +4,7 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class InternshipOfferService {
         }
         employer.getOffers().add(offer);
         offer.setEmployer(employer);
-        offer.setReviewState(InternshipOffer.ReviewState.PENDING);
+        offer.setReviewState(ReviewState.PENDING);
         offer.setAllowedStudents(Collections.emptyList());
         return Optional.of(internshipOfferRepository.saveAndFlush(offer));
     }
@@ -91,12 +92,10 @@ public class InternshipOfferService {
         internshipOfferRepository.deleteById(id);
     }
 
+    @SuppressWarnings("SimplifiableConditionalExpression")
     private boolean isOfferStateValid(InternshipOffer offer) {
-        if (offer.getReviewState() == InternshipOffer.ReviewState.DENIED) {
-            if (offer.getReasonForRejection() == null)
-                return false;
-            return !offer.getReasonForRejection().isBlank();
-        }
+        if (offer.getReviewState() ==ReviewState.DENIED)
+            return offer.getReasonForRejection() == null ? false : !offer.getReasonForRejection().isBlank();
 
         return true;
     }
