@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
-import {Link, useHistory, useLocation} from "react-router-dom";
-import {useStyles} from "../Utils/useStyles";
+import {Link, useLocation} from "react-router-dom";
+import useStyles from "../Utils/useStyles";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import {Checkbox} from "@material-ui/core";
@@ -9,16 +9,14 @@ import {Checkbox} from "@material-ui/core";
 export default function ApplicationList() {
     const classes = useStyles();
     const location = useLocation();
-    const history = useHistory();
     const api = useApi();
     const [offer, setOffer] = useState({});
-    const [currentApplication, setCurrentApplication] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
-    const noContent = ""
+
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
-    }, [])
+    }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div style={{height: "100%"}}>
@@ -33,7 +31,6 @@ export default function ApplicationList() {
                             onClick={() => {
                                 setCurrent(i)
                                 setCurrentIndex(i)
-                                setCurrentApplication(offer.applications[i])
                             }}>
                             <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
                                 {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {useApi, useModal} from "../Utils/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PdfDocument";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import DialogActions from "@material-ui/core/DialogActions";
 
 
@@ -11,26 +11,40 @@ export default function StudentStatus() {
     const classes = useStyles();
     const api = useApi();
     const [employers, setEmployers] = useState([{}]);
-    const [currentEmployer, setCurrentEmployer] = useState({});
     const [currentEmployerOffers, setCurrentEmployerOffers] = useState([{}]);
-    const [currentOffer, setCurrentOffer] = useState({});
-    const [currentIndex, setCurrentIndex] = useState(-1);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [isPdfOpen, openPdf, closePdf] = useModal();
     const [currentDoc, setCurrentDoc] = useState('');
     useEffect(() => {
         api.get("employers").then(resp => {
             setEmployers(resp ? resp.data : [])
-            setCurrentEmployer(employers[0])
         })
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        api.get("/offers/employer/" + currentEmployer.username)
+        api.get("/offers/employer/" + employers[currentIndex].username)
             .then(r => {
                 setCurrentEmployerOffers(r.data);
             })
-    }, [currentEmployer]);
+    }, [currentIndex, employers]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    function hiredStudentsNames(o) {
+        return o.reviewState === "APPROVED" ?
+            o.applications.map((elem) =>
+                <Typography
+                    style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
+            )
+            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>;
+    }
+
+    function printOfferStatus(offer) {
+        if (offer.reviewState === "PENDING")
+            return <span style={{color: "blue"}}>En attente</span>;
+        else if (offer.reviewState === "DENIED")
+            return (<span style={{color: "red"}}>Rejeté</span>);
+        else
+            return <span style={{color: "green"}}>Approuvé</span>;
+    }
 
     return (
         <Grid
@@ -40,7 +54,7 @@ export default function StudentStatus() {
         >
             <Grid item xs={5} className={classes.list}>
                 <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                    Employés
+                    État des employeurs
                 </Typography>
                 {employers.map((item, i) =>
                     <div key={i}>
@@ -48,7 +62,6 @@ export default function StudentStatus() {
                                 className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                                 onClick={() => {
                                     setCurrentIndex(i);
-                                    setCurrentEmployer(employers[i]);
                                 }}
                         >
                             <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
@@ -60,8 +73,7 @@ export default function StudentStatus() {
                 )}
             </Grid>
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                <h1>Detaille des l'offres</h1>
-
+                <h1>Détails des offres</h1>
                 {
                     currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
                             return <div>
@@ -100,26 +112,4 @@ export default function StudentStatus() {
             </Dialog>
         </Grid>
     );
-
-    function hiredStudentsNames(o) {
-        return o.reviewState == "APPROVED" ?
-            o.applications.map((elem) =>
-                <Typography
-                    style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
-            )
-            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>;
-    }
-
-    function printOfferStatus(offer) {
-
-
-        if (offer.reviewState == "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
-        else if (offer.reviewState == "DENIED")
-            return (<span style={{color: "red"}}>Rejeté</span>);
-        else
-            return <span style={{color: "green"}}>Approuvé</span>;
-    }
-
-
 }

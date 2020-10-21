@@ -10,7 +10,7 @@ import {DatePicker} from 'formik-material-ui-pickers';
 import {useApi} from "../Utils/Hooks";
 import AuthenticationService from "../../Services/AuthenticationService";
 import Button from "@material-ui/core/Button";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import {Typography} from "@material-ui/core";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";

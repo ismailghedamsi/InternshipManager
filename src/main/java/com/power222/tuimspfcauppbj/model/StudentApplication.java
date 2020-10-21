@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.power222.tuimspfcauppbj.util.ReviewState;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,8 +19,8 @@ public class StudentApplication {
     private long id;
 
     private boolean hired;
-    private String reasonForRejection;
     private ReviewState reviewState;
+    private String reasonForRejection;
 
     @ManyToOne
     @JsonIgnoreProperties({"file", "allowedStudents", "applications"})
@@ -32,4 +33,8 @@ public class StudentApplication {
     @ManyToOne
     @JsonIgnoreProperties({"owner", "applications"})
     private Resume resume;
+
+    @OneToOne(mappedBy = "studentApplication")
+    @JsonIgnoreProperties(value = "studentApplication", allowSetters = true)
+    private Interview interview;
 }

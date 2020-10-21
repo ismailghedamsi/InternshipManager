@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {useApi, useModal} from "../Utils/Hooks";
-import {useStyles} from "../Utils/useStyles";
+import {useApi, useDateParser, useModal} from "../Utils/Hooks";
+import useStyles from "../Utils/useStyles";
 import {Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -44,14 +44,16 @@ ResumeStatus.propTypes = {
 };
 
 function OfferStatus(props) {
-    function getOfferState(offer) {
-        if (!offer.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
-        else if (!offer.reviewState === "REJECTED")
-            return (<span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>);
+    const parseDate = useDateParser();
+    const application = props.offer.applications.find(a => a.student.id === props.currentStudent.id);
+
+    function parseState(interview) {
+        if (interview.reviewState === "ACCEPTED")
+            return "acceptée par l'étudiant"
+        else if (interview.reviewState === "DENIED")
+            return "refusée par l'étudiant. Raison: " + interview.reasonForRejection
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return "en attente de réponse de l'étudiant"
     }
 
     return <div>
@@ -65,7 +67,23 @@ function OfferStatus(props) {
         <OfferDetails offer={props.offer}/>
         <Typography
             variant={"body2"}>
-            État : {getOfferState(props.offer)}
+            À appliqué: {application ? "Oui" : "Non"} &emsp;
+            {application && <span>
+            {
+                application.interview ?
+                    <span>
+                   Entrevue: {parseDate(application.interview.date)}, {parseState(application.interview)}
+                </span>
+                    :
+                    <span>
+                   Entrevue: Pas planifiée
+                </span>
+            }
+                <br/>
+                &emsp;À été sélectionné: {application.hired ? "Oui" : "Non"}
+                &emsp;À accepté l'offre: {parseState(application)}
+                </span>
+            }
         </Typography>
         <hr/>
     </div>;
@@ -74,22 +92,10 @@ function OfferStatus(props) {
 OfferStatus.propTypes = {
     classes: PropTypes.any,
     onClick: PropTypes.func,
-    offer: PropTypes.any
+    offer: PropTypes.any,
+    currentStudent: PropTypes.any,
 };
 
-function ApplicationStatus(props) {
-    console.log(props.application)
-    return <div>
-        <Typography>
-            Application sur l'offre {props.application.offer.title} avec le CV {props.application.resume.name}
-        </Typography>
-        <hr/>
-    </div>;
-}
-
-ApplicationStatus.propTypes = {
-    application: PropTypes.any
-};
 
 export default function StudentStatus() {
     const classes = useStyles();
@@ -111,7 +117,7 @@ export default function StudentStatus() {
             className={classes.main}>
             <Grid item xs={5} className={classes.list}>
                 <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                    Étudiants
+                    État des étudiants
                 </Typography>
                 {students.map((item, i) =>
                     <div key={i}>
@@ -140,15 +146,7 @@ export default function StudentStatus() {
                                 className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
                                 onClick={() => setCurrentSubtab(1)}>
                                 <Typography color={"textSecondary"} variant={"body2"}>
-                                    Offres permise
-                                </Typography>
-                            </button>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton, currentSubtab === 2 ? classes.fileButton : null].join(' ')}
-                                onClick={() => setCurrentSubtab(2)}>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    Applications
+                                    Offres de stage
                                 </Typography>
                             </button>
                         </div>
@@ -158,7 +156,7 @@ export default function StudentStatus() {
                 )}
             </Grid>
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                {currentSubtab === 0 && (students[currentIndex].resumes ? students[currentIndex].resumes : []).map((resume, index) => //todo: check for student[index] too
+                {currentSubtab === 0 && students[currentIndex].resumes && (students[currentIndex].resumes.length > 0 ? students[currentIndex].resumes.map((resume, index) =>
                     <ResumeStatus key={index}
                                   classes={classes}
                                   resume={resume}
@@ -166,20 +164,17 @@ export default function StudentStatus() {
                                       setCurrentDoc(resume.file);
                                       openPdf();
                                   }}/>
-                )}
-                {currentSubtab === 1 && (students[currentIndex].allowedOffers ? students[currentIndex].allowedOffers : []).map((offer, index) =>
+                ) : "L'étudiant n'a téléversé aucun CV")}
+                {currentSubtab === 1 && students[currentIndex].allowedOffers && (students[currentIndex].allowedOffers.length > 0 ? students[currentIndex].allowedOffers.map((offer, index) =>
                     <OfferStatus key={index}
                                  classes={classes}
                                  offer={offer}
+                                 currentStudent={students[currentIndex]}
                                  onClick={() => {
                                      setCurrentDoc(offer.file);
                                      openPdf();
                                  }}/>
-                )}
-                {currentSubtab === 2 && (students[currentIndex].applications ? students[currentIndex].applications : []).map((appl, index) =>
-                    <ApplicationStatus key={index}
-                                       application={appl}/>
-                )}
+                ) : "L'étudiant n'a accès à aucune offre de stage")}
             </Grid>
             <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
                 <DialogContent className={classes.viewbox}>

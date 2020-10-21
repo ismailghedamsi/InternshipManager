@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.power222.tuimspfcauppbj.util.ReviewState;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,5 +27,6 @@ public class Interview {
     private Employer employer;
 
     @OneToOne
+    @JsonIgnoreProperties("interview")
     private StudentApplication studentApplication;
 }

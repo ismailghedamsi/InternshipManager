@@ -5,6 +5,7 @@ import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.*;
+import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -139,10 +140,23 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             userRepo.saveAndFlush(s.toBuilder()
                     .applications(Collections.singletonList(StudentApplication.builder()
+                            .reviewState(ReviewState.PENDING)
+                            .reasonForRejection("")
                             .resume(s.getResumes().get(0))
                             .offer(o)
                             .student(s)
                             .build())).build());
+
+            userRepo.saveAndFlush(Employer.builder()
+                    .companyName("Desjardins")
+                    .contactName("Robert Lafondue")
+                    .username("employeur2")
+                    .phoneNumber("5144317713")
+                    .address("1300 rue ducas")
+                    .email("employer@gmail.com")
+                    .role("employer")
+                    .password(passwordEncoder.encode("password"))
+                    .build());
 
         }
     }

@@ -1,9 +1,9 @@
 package com.power222.tuimspfcauppbj.services;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.PasswordDTO;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
+import com.power222.tuimspfcauppbj.util.PasswordDTO;
 import com.power222.tuimspfcauppbj.util.PasswordUpdateStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

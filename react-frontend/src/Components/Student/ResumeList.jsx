@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../Services/AuthenticationService';
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import {useApi} from "../Utils/Hooks";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 
 export default function ResumeList() {
     const classes = useStyles();
@@ -41,7 +41,7 @@ export default function ResumeList() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Liste des CV"}>
+            <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Liste des CVs"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <div className={classes.buttonDiv}>

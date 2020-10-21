@@ -1,26 +1,14 @@
-import {Button, Container, makeStyles, Typography} from '@material-ui/core'
+import {Button, Container, Typography} from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import AuthenticationService from '../../Services/AuthenticationService'
-import {useApi} from '../Utils/Hooks'
+import AuthenticationService from '../../../Services/AuthenticationService'
+import {useApi} from '../../Utils/Hooks'
+import useStyles from "../../Utils/useStyles";
 
-export default function Interviewlist(props) {
+export default function Interviewlist() {
     const [interviews, setInterviews] = useState([{}])
     const api = useApi()
-    const history = useHistory()
-    const useStyles = makeStyles(() => ({
-        container: {
-            flex: 1,
-            height: "90vh",
-            overflow: "hidden"
-        },
-        viewbox: {
-            height: "90vh",
-            overflow: "auto",
-            backgroundColor: "#fff",
-        }
-    }));
-
+    const history = useHistory();
     const classes = useStyles();
 
     useEffect(() => {
@@ -33,9 +21,9 @@ export default function Interviewlist(props) {
     }
 
     function isInterviewAccepted(interview) {
-        if (interview.reviewState == "APPROVED") {
+        if (interview.reviewState === "APPROVED") {
             return "L'étudiant a accepté l'entrevue"
-        } else if (interview.reviewState == "DENIED") {
+        } else if (interview.reviewState === "DENIED") {
             return "L'étudiant a refusé  l'entrevue"
         }
         return "En attente d'approbation"

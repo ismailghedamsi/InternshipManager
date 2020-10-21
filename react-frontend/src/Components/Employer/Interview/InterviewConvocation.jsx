@@ -6,10 +6,10 @@ import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import {DateTimePicker} from 'formik-material-ui-pickers';
-import {useApi} from "../Utils/Hooks";
+import {useApi} from "../../Utils/Hooks";
 import Button from "@material-ui/core/Button";
-import {useStyles} from "../Utils/useStyles";
-import AuthenticationService from '../../Services/AuthenticationService';
+import useStyles from "../../Utils/useStyles";
+import AuthenticationService from '../../../Services/AuthenticationService';
 import {Typography} from '@material-ui/core';
 
 const requiredFieldMsg = "Ce champs est requis";
@@ -19,19 +19,11 @@ export default function InterviewConvocation() {
     const api = useApi();
     const location = useLocation();
     const history = useHistory();
-    const [applicationInterview, setApplicationInterview] = useState("")
-    const [applications, setApplications] = useState([{}]);
+    const [applicationInterview, setApplicationInterview] = useState({});
+
     useEffect(() => {
         setApplicationInterview(location.state)
-        api.get("/applications").then((r) => setApplications(r.data))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-    const validationSchema = yup.object().shape({
-        interviewDate: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
-    });
-    const initialValues = {
-        interviewDate: new Date()
-    }
+    }, [location.state])
 
     function createInterview(values) {
         let dto = {...values};
@@ -39,11 +31,10 @@ export default function InterviewConvocation() {
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = applicationInterview
-        api.post("/interviews", dto).then(() => history.push("/dashboard/listInterview"))
+        return api.post("/interviews", dto).then(() => history.push("/dashboard/listInterview"))
     }
 
     return (
-
         <Grid
             container
             spacing={0}
@@ -55,25 +46,22 @@ export default function InterviewConvocation() {
             <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <Formik
-                        onSubmit={async (values) => {
-                            createInterview(values)
-                        }
-                        }
+                        onSubmit={async (values) => createInterview(values)}
                         validateOnBlur={false}
                         validateOnChange={false}
                         enableReinitialize={true}
-                        validationSchema={validationSchema}
-                        initialValues={initialValues}
-                        validate={(values) => {
-                            const errors = {};
-                        }}
-                    >
+                        validationSchema={yup.object().shape({
+                            interviewDate: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas etre dans le passé")
+                        })}
+                        initialValues={{
+                            interviewDate: new Date()
+                        }}>
                         {({isSubmitting}) => (
                             <Form className={classes.form}>
-                                <Grid>
-                                    <Typography> Étudiant à
-                                        entrevoir {applicationInterview ? applicationInterview.student.firstName + " " + applicationInterview.student.lastName : ""}</Typography>
-                                </Grid>
+                                <Typography>
+                                    Étudiants à
+                                    rencontrer {applicationInterview && applicationInterview.student ? applicationInterview.student.firstName + " " + applicationInterview.student.lastName : ""}
+                                </Typography>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Field

@@ -11,7 +11,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Select} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import {useApi, useModal} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -77,7 +77,7 @@ export default function OfferApplication() {
 
     function hasEmployeurAcceptedStudentToInterview(i) {
         if (interviews[i]) {
-            return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id !== undefined;
+            return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id;
         }
         return false;
     }
@@ -122,8 +122,9 @@ export default function OfferApplication() {
         if (filteredResumes.length !== 0) {
             filteredResumes = filteredResumes.map((item, i) => (
                 <MenuItem key={i} value={item.id}>{item.name}</MenuItem>));
-            filteredResumes.push(<MenuItem key={filteredResumes.length} value={-1} disabled>Veuillez choisir un
-                CV</MenuItem>);
+            filteredResumes.push(
+                <MenuItem key={filteredResumes.length} value={-1} disabled>Veuillez choisir un CV</MenuItem>
+            );
             return filteredResumes;
         } else
             return <MenuItem value={-1} disabled>Aucun CV n'a été approuvé</MenuItem>;
@@ -131,7 +132,7 @@ export default function OfferApplication() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Liste des offres"}>
+            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage disponibles"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         {!hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
@@ -144,7 +145,9 @@ export default function OfferApplication() {
                                     setCurrentIndex(i);
                                     openResumeModal();
                                 }}
-                            ><i className="fa fa-share-square-o"/></button>
+                            >
+                                <i className="fa fa-share-square-o"/>
+                            </button>
                         </div>
                         }
                         {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
@@ -171,7 +174,7 @@ export default function OfferApplication() {
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                         {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) &&
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            Date de l'entretien : {getDateEntretien(i)}
+                            Date de l'entrevue : {getDateEntretien(i)}
                         </Typography>
                         }
                         {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
