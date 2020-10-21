@@ -64,6 +64,19 @@ class InterviewServiceTest {
     }
 
     @Test
+    void getAllInterviewsByEmployerIdTest() {
+        var i1 = Interview.builder().id(1L).build();
+        var i2 = Interview.builder().id(2L).build();
+        var i3 = Interview.builder().id(3L).build();
+
+        when(interviewRepo.findAllByEmployer_id(1L)).thenReturn(Arrays.asList(i1, i2, i3));
+
+        var actual = interviewSvc.getAllInterviewsByEmployerId(1L);
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
     void getInterviewByIdTest() {
         when(interviewRepo.findById(1L)).thenReturn(Optional.of(expectedInterview));
 
