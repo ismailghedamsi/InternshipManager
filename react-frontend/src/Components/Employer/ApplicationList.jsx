@@ -22,7 +22,7 @@ export default function ApplicationList() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={(offer ? offer.applications : []).map(o => o.resume.file)}
+            <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
                                 title={(<span>Application<br/>{offer.title}</span>)}>
                 {(i, setCurrent) => (
                     <div key={i}>
