@@ -158,7 +158,7 @@ export default function StudentStatus() {
                 )}
             </Grid>
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                {currentSubtab === 0 && (students[currentIndex] ? students[currentIndex].resumes : []).map((resume, index) =>
+                {currentSubtab === 0 && (students[currentIndex].resumes ? students[currentIndex].resumes : []).map((resume, index) => //todo: check for student[index] too
                     <ResumeStatus key={index}
                                   classes={classes}
                                   resume={resume}
@@ -167,7 +167,7 @@ export default function StudentStatus() {
                                       openPdf();
                                   }}/>
                 )}
-                {currentSubtab === 1 && (students[currentIndex] ? students[currentIndex].allowedOffers : []).map((offer, index) =>
+                {currentSubtab === 1 && (students[currentIndex].allowedOffers ? students[currentIndex].allowedOffers : []).map((offer, index) =>
                     <OfferStatus key={index}
                                  classes={classes}
                                  offer={offer}
@@ -176,7 +176,7 @@ export default function StudentStatus() {
                                      openPdf();
                                  }}/>
                 )}
-                {currentSubtab === 2 && (students[currentIndex] ? students[currentIndex].applications : []).map((appl, index) =>
+                {currentSubtab === 2 && (students[currentIndex].applications ? students[currentIndex].applications : []).map((appl, index) =>
                     <ApplicationStatus key={index}
                                        application={appl}/>
                 )}
