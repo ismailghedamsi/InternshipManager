@@ -48,20 +48,19 @@ export default function ApplicationList() {
                                 {offer.applications[i].student.address}
                             </Typography>
                             <Typography>
-                                {
-                                        <Checkbox
-                                            value="hired"
-                                            checked={offer.applications[i].hired}
-                                            onChange={
-                                                () => {
-                                                    var copy = {...offer}
-                                                    copy.applications[i].hired = !copy.applications[i].hired;
-                                                    setOffer(copy)
-                                                    api.put(`applications/hire/${offer.applications[i].id}`)
-                                                }}
-                                            inputProps={{'aria-label': 'hired'}}
-                                        />
-                                }
+                                Application acceptée:
+                                <Checkbox
+                                    value="hired"
+                                    checked={offer.applications[i].hired}
+                                    onChange={
+                                        () => {
+                                            var copy = {...offer}
+                                            copy.applications[i].hired = !copy.applications[i].hired;
+                                            setOffer(copy)
+                                            api.put(`applications/hire/${offer.applications[i].id}`)
+                                        }}
+                                    inputProps={{'aria-label': 'hired'}}
+                                />
                             </Typography>
 
                             <Link variant={"body1"}

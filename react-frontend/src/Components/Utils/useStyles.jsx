@@ -54,7 +54,7 @@ export const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
     },
     submit: {
-        margin: theme.spacing(1, 0, 1),
+        margin: theme.spacing(1, 0, 2),
     },
     container: {
         backgroundColor: "#fff",
@@ -71,6 +71,10 @@ export const useStyles = makeStyles((theme) => ({
     },
     logo: {
         margin: theme.spacing(6, 0, 0.5),
+        fontSize: "3em",
+    },
+    formTitle: {
+        margin: theme.spacing(2, 0, 1),
         fontSize: "3em",
     },
     subtitle: {
