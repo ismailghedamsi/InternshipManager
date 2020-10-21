@@ -169,12 +169,12 @@ export default function OfferApplication() {
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                        {hasEmployeurAcceptedStudentToInterview(i) &&
+                        {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) &&
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                             Date de l'entretien : {getDateEntretien(i)}
                         </Typography>
                         }
-                        {hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
+                        {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
                         <div className={classes.buttonDiv} style={{display: "block"}}>
                             Acceptez l'entrevue
                             <button

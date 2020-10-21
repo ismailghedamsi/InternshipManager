@@ -82,8 +82,6 @@ export default function Dashboard(props) {
                                         path="/dashboard/employersStatus"
                                         component={Employerstatus}
                                         role={"admin"}/>
-
-
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"

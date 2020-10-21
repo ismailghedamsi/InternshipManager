@@ -63,10 +63,4 @@ export const Menu = [
         url: '/dashboard/listInterview',
         role: 'employer'
     }
-    ,
-    {
-        title: 'Assignation Offres',
-        url: '/dashboard/assignement/cv',
-        role: 'admin'
-    }
 ]
