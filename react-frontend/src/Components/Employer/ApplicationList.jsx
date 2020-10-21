@@ -22,7 +22,7 @@ export default function ApplicationList() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
+            <PdfSelectionViewer documents={(offer ? offer.applications : []).map(o => o.resume.file)}
                                 title={(<span>Application<br/>{offer.title}</span>)}>
                 {(i, setCurrent) => (
                     <div key={i}>
@@ -55,9 +55,12 @@ export default function ApplicationList() {
                                     onChange={
                                         () => {
                                             var copy = {...offer}
-                                            copy.applications[i].hired = !copy.applications[i].hired;
-                                            setOffer(copy)
                                             api.put(`applications/hire/${offer.applications[i].id}`)
+                                                .then(r => {
+                                                    if (r)
+                                                        copy.applications[i].hired = r.data.hired;
+                                                    setOffer(copy)
+                                                });
                                         }}
                                     inputProps={{'aria-label': 'hired'}}
                                 />
