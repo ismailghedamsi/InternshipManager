@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,6 +78,15 @@ class InterviewServiceTest {
     }
 
     @Test
+    void getAllInterviewsByEmployerIdWithNonexistentIdTest() {
+        when(interviewRepo.findAllByEmployer_id(1L)).thenReturn(Collections.emptyList());
+
+        var actual = interviewSvc.getAllInterviewsByEmployerId(1L);
+
+        assertThat(actual).hasSize(0);
+    }
+
+    @Test
     void getAllInterviewsByStudentIdTest() {
         var i1 = Interview.builder().id(1L).build();
         var i2 = Interview.builder().id(2L).build();
@@ -90,6 +100,15 @@ class InterviewServiceTest {
     }
 
     @Test
+    void getAllInterviewsByStudentIdWithNonexistentIdTest() {
+        when(interviewRepo.findAllByStudentApplication_Student_Id(1L)).thenReturn(Collections.emptyList());
+
+        var actual = interviewSvc.getAllInterviewsByStudentId(1L);
+
+        assertThat(actual).hasSize(0);
+    }
+
+    @Test
     void getInterviewByIdTest() {
         when(interviewRepo.findById(1L)).thenReturn(Optional.of(expectedInterview));
 
@@ -98,7 +117,14 @@ class InterviewServiceTest {
         assertThat(actual).contains(expectedInterview);
     }
 
-    // get by id with invalid id (byId, byStudentId, byEmployerId)
+    @Test
+    void getInterviewByIdWithNonexistentIdTest() {
+        when(interviewRepo.findById(1L)).thenReturn(Optional.empty());
+
+        var actual = interviewSvc.getInterviewById(1L);
+
+        assertThat(actual).isEmpty();
+    }
 
     @Test
     void persistNewInterviewTest() {

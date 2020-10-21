@@ -3,8 +3,10 @@ package com.power222.tuimspfcauppbj.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.InterviewController;
+import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Interview;
 import com.power222.tuimspfcauppbj.service.InterviewService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +42,17 @@ class InterviewControllerTests {
 
     @MockBean
     private InterviewService svc;
+
+    private Interview expectedInterview;
+
+    @BeforeEach
+    void setUp() {
+        expectedInterview = Interview.builder()
+                .id(1L)
+                .date(new Date())
+                .employer(Employer.builder().build())
+                .build();
+    }
 
     @Test
     void getInterviewFound() throws Exception {
@@ -87,20 +101,36 @@ class InterviewControllerTests {
 
     @Test
     void updateInterviewTest() throws Exception {
-        var expectedInterview = Interview.builder().build();
-
         when(svc.updateInterview(expectedInterview.getId(), expectedInterview)).thenReturn(Optional.of(expectedInterview));
 
         MvcResult result = mvc.perform(put("/api/interviews/" + expectedInterview.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedInterview))).andReturn();
+                .content(objectMapper.writeValueAsString(expectedInterview)))
+                .andReturn();
 
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateInterview(expectedInterview.getId(), expectedInterview);
     }
 
-    // Test update fail
+    @Test
+    void errorOnUpdateTest() throws Exception {
+        when(svc.updateInterview(expectedInterview.getId(), expectedInterview)).thenReturn(Optional.empty());
 
-    // Test delete
+        MvcResult result = mvc.perform(put("/api/interviews/" + expectedInterview.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expectedInterview)))
+                .andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        verify(svc, times(1)).updateInterview(expectedInterview.getId(), expectedInterview);
+    }
+
+    @Test
+    void deleteInterviewTest() throws Exception {
+        MvcResult result = mvc.perform(delete("/api/interviews/1")).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(svc, times(1)).deleteInterviewById(1);
+    }
 }
