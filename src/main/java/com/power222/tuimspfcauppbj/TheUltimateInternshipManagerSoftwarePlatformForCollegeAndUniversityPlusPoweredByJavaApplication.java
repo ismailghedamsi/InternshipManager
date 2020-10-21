@@ -1,6 +1,9 @@
 package com.power222.tuimspfcauppbj;
 
-import com.power222.tuimspfcauppbj.dao.*;
+import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
+import com.power222.tuimspfcauppbj.dao.ResumeRepository;
+import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
+import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
@@ -16,9 +19,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
@@ -35,16 +36,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
         private final InternshipOfferRepository internshipRepo;
-        private final StudentApplicationRepository appliRepo;
-        private final InterviewRepository interviewRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo, InterviewRepository interviewRepo) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
             this.internshipRepo = internshipRepo;
-            this.appliRepo = appliRepo;
-            this.interviewRepo = interviewRepo;
         }
 
         @Override
@@ -106,10 +103,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
             }
 
             //Generating students for offer assignement live testing
-            List<Student> students = new ArrayList<>();
-
             for (int i = 0; i < 7; i++) {
-                students.add(userRepo.saveAndFlush(Student.builder()
+                userRepo.saveAndFlush(Student.builder()
                         .username("etudiant" + i)
                         .password(passwordEncoder.encode("password"))
                         .role("student")
@@ -119,15 +114,14 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .email("power@gmail.ca")
                         .phoneNumber("911")
                         .address("9310 Lasalle")
-                        .build()));
+                        .build());
 
             }
 
-//            Generating offers for offer assignement live testing
-
-            List<InternshipOffer> offers = new ArrayList<>();
+            InternshipOffer o = null;
+            //Generating offers for offer assignement live testing
             for (int i = 1; i < 14; i++) {
-                offers.add(internshipRepo.saveAndFlush(InternshipOffer.builder()
+                o = internshipRepo.saveAndFlush(InternshipOffer.builder()
                         .title("testInternship " + i)
                         .description("Some basic description " + i)
                         .salary(15.98)
@@ -140,26 +134,16 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .employer(e)
                         .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
                         .reviewState(i == 5 || i == 2 ? ReviewState.APPROVED : ReviewState.PENDING)
-                        .build()));
+                        .build());
             }
 
             userRepo.saveAndFlush(s.toBuilder()
                     .applications(Collections.singletonList(StudentApplication.builder()
                             .resume(s.getResumes().get(0))
-                            .offer(offers.get(0))
+                            .offer(o)
                             .student(s)
                             .build())).build());
 
-           /* appliRepo.saveAndFlush(StudentApplication.builder()
-                    .student(s)
-                    .build()
-            );
-
-            interviewRepo.saveAndFlush(Interview.builder()
-                    .date(new java.util.Date())
-                    .build());
-
-            */
         }
     }
 }

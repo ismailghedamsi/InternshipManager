@@ -2,7 +2,6 @@ import Container from '@material-ui/core/Container';
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
@@ -11,6 +10,7 @@ import {useApi} from "../Utils/Hooks";
 import Button from "@material-ui/core/Button";
 import {useStyles} from "../Utils/useStyles";
 import AuthenticationService from '../../Services/AuthenticationService';
+import {Typography} from '@material-ui/core';
 
 const requiredFieldMsg = "Ce champs est requis";
 
@@ -27,12 +27,10 @@ export default function InterviewConvocation() {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const validationSchema = yup.object().shape({
-        interviewDate: yup.date().required(),
-        email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
+        interviewDate: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
     });
     const initialValues = {
-        interviewDate: new Date(),
-        email: ''
+        interviewDate: new Date()
     }
 
     function createInterview(values) {
@@ -41,7 +39,7 @@ export default function InterviewConvocation() {
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = applicationInterview
-        api.post("/interviews", dto).then(history.push("/dashboard/listInterview"))
+        api.post("/interviews", dto).then(() => history.push("/dashboard/listInterview"))
     }
 
     return (
@@ -72,6 +70,10 @@ export default function InterviewConvocation() {
                     >
                         {({isSubmitting}) => (
                             <Form className={classes.form}>
+                                <Grid>
+                                    <Typography> Étudiant à
+                                        entrevoir {applicationInterview ? applicationInterview.student.firstName + " " + applicationInterview.student.lastName : ""}</Typography>
+                                </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Field
@@ -82,18 +84,6 @@ export default function InterviewConvocation() {
                                             required
                                             fullWidth
                                             format="MM/dd/yyyy"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Field
-                                            component={TextField}
-                                            name="email"
-                                            id="email"
-                                            variant="outlined"
-                                            label="Addresse courriel"
-                                            type={"email"}
-                                            required
-                                            fullWidth
                                         />
                                     </Grid>
                                     <ErrorMessage name={"file"}>

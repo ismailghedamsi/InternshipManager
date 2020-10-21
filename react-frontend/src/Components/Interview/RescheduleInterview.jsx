@@ -9,6 +9,7 @@ import {DateTimePicker} from 'formik-material-ui-pickers';
 import Button from "@material-ui/core/Button";
 import {makeStyles} from '@material-ui/core';
 import {useApi} from '../Utils/Hooks';
+import * as yup from 'yup';
 
 
 export function Rescheduleinterview(props) {
@@ -53,8 +54,12 @@ export function Rescheduleinterview(props) {
         nextState.date = values.interviewDate;
         setInterview(nextState)
         api.put("/interviews/" + nextState.id, nextState)
-            .then(history.push("/dashboard/listInterview"))
+            .then(() => history.push("/dashboard/listInterview"))
     }
+
+    const validationSchema = yup.object().shape({
+        interviewDate: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
+    });
 
     return (
         <Grid
@@ -76,6 +81,7 @@ export function Rescheduleinterview(props) {
                         validateOnBlur={false}
                         validateOnChange={false}
                         enableReinitialize={true}
+                        validationSchema={validationSchema}
                         initialValues={initialValues}
                     >
                         {({isSubmitting}) => (
