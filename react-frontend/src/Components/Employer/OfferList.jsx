@@ -25,7 +25,7 @@ export default function OfferList() {
                     setOffers(r ? r.data : [])
                 })
         }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function deleteOffer(index) {
         const nextState = [...offers];

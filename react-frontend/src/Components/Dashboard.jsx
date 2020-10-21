@@ -17,7 +17,11 @@ import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
-//test
+import InterviewConvocation from './Interview/InterviewConvocation';
+import Interviewlist from './Interview/InterviewList';
+import {Rescheduleinterview} from './Interview/RescheduleInterview';
+
+
 const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
@@ -78,8 +82,6 @@ export default function Dashboard(props) {
                                         path="/dashboard/employersStatus"
                                         component={Employerstatus}
                                         role={"admin"}/>
-
-
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
@@ -92,6 +94,18 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/applications"
                                         component={ApplicationList}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/interviewConvocation"
+                                        component={InterviewConvocation}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/listInterview"
+                                        component={Interviewlist}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/rescheduleInterview"
+                                        component={Rescheduleinterview}
                                         role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
-import {useLocation} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import {useStyles} from "../Utils/useStyles";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
@@ -9,8 +9,10 @@ import {Checkbox} from "@material-ui/core";
 export default function ApplicationList() {
     const classes = useStyles();
     const location = useLocation();
+    const history = useHistory();
     const api = useApi();
     const [offer, setOffer] = useState({});
+    const [currentApplication, setCurrentApplication] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
     const noContent = ""
     useEffect(() => {
@@ -31,6 +33,7 @@ export default function ApplicationList() {
                             onClick={() => {
                                 setCurrent(i)
                                 setCurrentIndex(i)
+                                setCurrentApplication(offer.applications[i])
                             }}>
                             <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
                                 {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
@@ -59,6 +62,15 @@ export default function ApplicationList() {
                                     inputProps={{'aria-label': 'hired'}}
                                 />
                             </Typography>
+
+                            <Link variant={"body1"}
+                                  to={{
+                                      pathname: "/dashboard/interviewConvocation",
+                                      state: {...offer.applications[i]}
+                                  }}
+                            >
+                                Convoquer l'étudiant pour un entrevue
+                            </Link>
                         </div>
                         }
                         <hr/>

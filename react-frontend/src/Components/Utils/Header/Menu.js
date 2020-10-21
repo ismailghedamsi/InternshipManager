@@ -57,12 +57,10 @@ export const Menu = [
         title: 'Liste des offres',
         url: '/dashboard/listoffer',
         role: 'employer'
-    }
-    ,
+    },
     {
-        title: 'Offre de stages',
-        url: '/dashboard/stagelist',
-        role: 'student'
+        title: 'Liste des entrevues',
+        url: '/dashboard/listInterview',
+        role: 'employer'
     }
-
 ]

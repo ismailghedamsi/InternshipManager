@@ -18,7 +18,6 @@ public class InternshipOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String title;
     private String description;
     private double salary;
@@ -46,8 +45,4 @@ public class InternshipOffer {
     @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"offer"})
     private List<StudentApplication> applications;
-
-    public enum ReviewState {
-        PENDING, APPROVED, DENIED
-    }
 }

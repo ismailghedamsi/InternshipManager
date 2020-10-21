@@ -23,9 +23,25 @@ export default function OfferApplication() {
     const api = useApi();
     const [offers, setOffers] = useState([]);
     const [resumes, setResumes] = useState([]);
+    const [interviews, setInterviews] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isResumeModalOpen, openResumeModal, closeResumeModal] = useModal();
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
+    const [isReasonOfInterviewModalOpen, openReasonOfInterviewModal, closeReasonOfInterviewModal] = useModal();
+
+    function sendInterviewDecision(index, studentDecision, reason = "") {
+        const nextState = [...interviews];
+        const interview = nextState[index];
+        interview.reviewState = studentDecision;
+        interview.reasonForRejection = reason;
+        return api.put("/interviews/" + nextState[index].id, nextState[index])
+            .then(result => {
+                if (result)
+                    nextState[index] = result.data;
+                setInterviews(nextState);
+                closeReasonOfInterviewModal()
+            })
+    }
 
     function sendDecision(index, studentDecision, reason = "") {
         const nextState = [...offers];
@@ -50,8 +66,20 @@ export default function OfferApplication() {
             .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.limitDateToApply) >= new Date()) : []))
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        api.get("/interviews/student/" + AuthenticationService.getCurrentUser().id)
+            .then(result => setInterviews(result ? result.data : []))
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     function hasStudentAppliedOnOffer(offer, student) {
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
+    }
+
+    function hasEmployeurAcceptedStudentToInterview(i) {
+        if (interviews[i]) {
+            return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id !== undefined;
+        }
+        return false;
     }
 
     function hasEmployeurAcceptedStudentOnOffer(offer, student) {
@@ -66,6 +94,27 @@ export default function OfferApplication() {
             return " Vous avez refusé cette offre";
 
         }
+        return "";
+    }
+
+    function getStudentDecisionForInterview(i) {
+        if (interviews[i]) {
+            if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "APPROVED") {
+                return " Vous avez accepté l'entrevue";
+            } else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "DENIED") {
+                return " Vous avez refusé l'entrevue";
+            }
+        }
+        return ""
+    }
+
+    function getDateEntretien(i) {
+        if (interviews[i]) {
+            if (hasEmployeurAcceptedStudentToInterview(i)) {
+                return new Date(interviews[i].date).toLocaleString()
+            }
+        }
+        return ""
     }
 
     function generateMenuItems() {
@@ -112,7 +161,6 @@ export default function OfferApplication() {
                                 setCurrent(i)
                             }}
                         >
-
                             <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                 {offers[i].title + " "}
                             </Typography>
@@ -121,6 +169,34 @@ export default function OfferApplication() {
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
+                        {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) &&
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                            Date de l'entretien : {getDateEntretien(i)}
+                        </Typography>
+                        }
+                        {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
+                        <div className={classes.buttonDiv} style={{display: "block"}}>
+                            Acceptez l'entrevue
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton].join(' ')}
+                                onClick={() => sendInterviewDecision(i, "APPROVED")}
+                                style={{marginRight: 5}}
+                            ><i className="fa fa-check-square" style={{color: "green"}}/></button>
+                            Refusez l'entrevue
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton].join(' ')}
+                                onClick={() => {
+                                    setCurrentIndex(i)
+                                    openReasonOfInterviewModal()
+                                }}
+                            ><i className="fa fa-ban" style={{color: "red"}}/></button>
+                        </div>
+                        }
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                            {getStudentDecisionForInterview(i)}
+                        </Typography>
                         {hasEmployeurAcceptedStudentOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
                         <div className={classes.buttonDiv} style={{display: "block"}}>
                             Acceptez l'offre
@@ -215,6 +291,12 @@ export default function OfferApplication() {
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
                 onSubmit={async (values) => sendDecision(currentIndex, "DENIED", values.message)}
+            />
+            <TextboxModal
+                isOpen={isReasonOfInterviewModalOpen}
+                hide={closeReasonOfInterviewModal}
+                title={"Justifiez le refus"}
+                onSubmit={async (values) => sendInterviewDecision(currentIndex, "DENIED", values.message)}
             />
         </div>
     );

@@ -48,10 +48,10 @@ export default function OfferCreation() {
         description: '',
         salary: '',
         creationDate: new Date(),
-        internshipStartDate: new Date(),
-        internshipEndDate: new Date(),
+        internshipStartDate: new Date("2001-01-01"),
+        internshipEndDate: new Date("2001-01-01"),
         nbStudentToHire: '',
-        limitDateToApply: new Date(),
+        limitDateToApply: new Date("2001-01-01"),
         file: ""
     }
 

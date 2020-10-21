@@ -4,6 +4,7 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
@@ -57,7 +58,7 @@ class InternshipOfferServiceTests {
                     .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/11/2020"))
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/04/2021"))
-                    .salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
+                    .salary(20).title("Title").reviewState(ReviewState.PENDING).build();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -69,7 +70,7 @@ class InternshipOfferServiceTests {
                     .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2021"))
                     .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2021"))
-                    .salary(20).title("Title").reviewState(InternshipOffer.ReviewState.PENDING).build();
+                    .salary(20).title("Title").reviewState(ReviewState.PENDING).build();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -259,7 +260,7 @@ class InternshipOfferServiceTests {
 
     @Test
     void updateOfferWithInvalidStateNullMessage() {
-        var updatedOffer = expectedOffer.toBuilder().reviewState(InternshipOffer.ReviewState.DENIED).build();
+        var updatedOffer = expectedOffer.toBuilder().reviewState(ReviewState.DENIED).build();
         when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
 
         var actual = service.updateInternshipOffer(expectedOffer.getId(), updatedOffer);
@@ -270,7 +271,7 @@ class InternshipOfferServiceTests {
     @Test
     void updateOfferWithInvalidStateBlankMessage() {
         var updatedOffer = expectedOffer.toBuilder()
-                .reviewState(InternshipOffer.ReviewState.DENIED)
+                .reviewState(ReviewState.DENIED)
                 .reasonForRejection(" ")
                 .build();
         when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
