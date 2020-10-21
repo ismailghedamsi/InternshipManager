@@ -18,7 +18,7 @@ public class Interview {
     private long id;
 
     private Date date;
-    private ReviewState reviewState;
+    private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
 
     @ManyToOne(optional = false)
