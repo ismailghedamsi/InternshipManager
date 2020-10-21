@@ -119,7 +119,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .email("power@gmail.ca")
                         .phoneNumber("911")
                         .address("9310 Lasalle")
-                        .build()));
+                        .build());
 
             }
 
@@ -139,8 +139,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + (i > 6 ? i / 2 : i) + ".pdf")).readAllBytes())))
                         .employer(e)
                         .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
-                        .reviewState(i == 5 ? ReviewState.APPROVED : ReviewState.PENDING)
-                        .build()));
+                        .reviewState(i == 5 || i == 2 ? InternshipOffer.ReviewState.APPROVED : InternshipOffer.ReviewState.PENDING)
+                        .build());
             }
 
             userRepo.saveAndFlush(s.toBuilder()
