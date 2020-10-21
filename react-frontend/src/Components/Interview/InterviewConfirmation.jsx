@@ -11,19 +11,20 @@ export default function OfferApplication() {
     const classes = useStyles();
     const api = useApi();
     const [offers, setOffers] = useState([]);
-    const [interviews, setInterview] = useState([]);
+    const [interviews, setInterviews] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
 
     function sendDecision(index, studentDecision, reason = "") {
         const nextState = [...interviews];
-        const application = nextState[index].studentApplication.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
-        application.reviewState = studentDecision;
-        application.reasonForRejection = reason;
-        return api.put("/interviews/" + application.id, application)
+        const interview = nextState[index];
+        interview.reviewState = studentDecision;
+        interview.reasonForRejection = reason;
+        return api.put("/interviews/" + nextState[index].id, nextState[index])
             .then(result => {
-                nextState[index].studentApplication.splice(nextState[index].studentApplication.indexOf(application), 1, result.data);
-                setInterview(nextState);
+                if (result)
+                    nextState[index] = result.data;
+                setInterviews(nextState);
                 closeReasonModal()
             })
     }
@@ -35,36 +36,39 @@ export default function OfferApplication() {
 
     useEffect(() => {
         api.get("/interviews/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setInterview(result ? result.data : []))
+            .then(result => setInterviews(result ? result.data : []))
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // function hasEmployeurAcceptedStudentToInterview(offer, student) {
-    //     return offer.applications.find(a => a.student.id === student.id && a.hasEmployerAccepted === true && a.reviewState === "PENDING") !== undefined && offer.applications.length !== 0;
-    // }
-
     function hasEmployeurAcceptedStudentToInterview(i) {
-        const nextState = [...interviews];
-        return nextState[i].studentApplication.find(a => a.student.id === AuthenticationService.getCurrentUser().id)
-            !== undefined && nextState[i].studentApplication.length !== 0;
+        if (interviews[i]) {
+            return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id !== undefined;
+        }
+        return false;
     }
 
-    function getStudentDecision(offer, student) {
-        if (offer.applications.find(a => a.student.id === student.id && a.reviewState === "APPROVED")) {
-            return " Vous avez accepté l'entrevue";
-        } else if (offer.applications.find(a => a.student.id === student.id && a.reviewState === "DENIED")) {
-            return " Vous avez refusé l'entrevue";
+    function getStudentDecision(i) {
+        if (interviews[i]) {
+            if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "APPROVED") {
+                return " Vous avez accepté l'entrevue";
+            } else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "DENIED") {
+                return " Vous avez refusé l'entrevue";
+            }
         }
+        return ""
     }
 
     function getDateEntretien(i) {
-        const nextState = [...offers];
-        const application = nextState[i].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
-        return new Date(application.date);
+        if (interviews[i]) {
+            if (hasEmployeurAcceptedStudentToInterview(i)) {
+                return new Date(interviews[i].date).toLocaleString()
+            }
+        }
+        return ""
     }
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Les entrevues"}>
+            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Entrevues"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
@@ -83,10 +87,11 @@ export default function OfferApplication() {
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                        {/*{hasEmployeurAcceptedStudentToInterview(offers[i], AuthenticationService.getCurrentUser())*/}
-                        {hasEmployeurAcceptedStudentToInterview(i) &&
-                        <div className={classes.buttonDiv} style={{display: "block"}}>
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                             Date de l'entretien : {getDateEntretien(i)}
+                        </Typography>
+                        {hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
+                        <div className={classes.buttonDiv} style={{display: "block"}}>
                             Acceptez l'entrevue
                             <button
                                 type={"button"}
@@ -106,7 +111,7 @@ export default function OfferApplication() {
                         </div>
                         }
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {getStudentDecision(offers[i], AuthenticationService.getCurrentUser())}
+                            {getStudentDecision(i)}
                         </Typography>
                         <hr/>
                     </div>
