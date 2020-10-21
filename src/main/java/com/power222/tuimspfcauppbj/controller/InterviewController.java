@@ -1,7 +1,6 @@
 package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.model.Interview;
-import com.power222.tuimspfcauppbj.model.ReviewState;
 import com.power222.tuimspfcauppbj.service.InterviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +50,7 @@ public class InterviewController {
     public ResponseEntity<Interview> updateInterview(@PathVariable long id, @RequestBody Interview requestBody) {
         return svc.updateInterview(id, requestBody)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")

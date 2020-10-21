@@ -99,4 +99,8 @@ class InterviewControllerTests {
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateInterview(expectedInterview.getId(), expectedInterview);
     }
+
+    // Test update fail
+
+    // Test delete
 }

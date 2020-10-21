@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class InterviewServiceTest {
@@ -77,6 +77,19 @@ class InterviewServiceTest {
     }
 
     @Test
+    void getAllInterviewsByStudentIdTest() {
+        var i1 = Interview.builder().id(1L).build();
+        var i2 = Interview.builder().id(2L).build();
+        var i3 = Interview.builder().id(3L).build();
+
+        when(interviewRepo.findAllByStudentApplication_Student_Id(1L)).thenReturn(Arrays.asList(i1, i2, i3));
+
+        var actual = interviewSvc.getAllInterviewsByStudentId(1L);
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
     void getInterviewByIdTest() {
         when(interviewRepo.findById(1L)).thenReturn(Optional.of(expectedInterview));
 
@@ -84,6 +97,8 @@ class InterviewServiceTest {
 
         assertThat(actual).contains(expectedInterview);
     }
+
+    // get by id with invalid id (byId, byStudentId, byEmployerId)
 
     @Test
     void persistNewInterviewTest() {
@@ -116,7 +131,11 @@ class InterviewServiceTest {
     }
 
     @Test
-    void updateInterviewStateTest() {
+    void deleteInterviewByIdTest() {
+        var idToDelete = expectedInterview.getId();
 
+        interviewSvc.deleteInterviewById(idToDelete);
+
+        verify(interviewRepo, times(1)).deleteById(idToDelete);
     }
 }
