@@ -11,18 +11,20 @@ export default function OfferApplication() {
     const classes = useStyles();
     const api = useApi();
     const [offers, setOffers] = useState([]);
+    const [interviews, setInterviews] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
 
     function sendDecision(index, studentDecision, reason = "") {
-        const nextState = [...offers];
-        const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
-        application.reasonForRejection = reason;
-        application.reviewState = studentDecision;
-        return api.put("/applications/interviews/" + application.id, application)
+        const nextState = [...interviews];
+        const interview = nextState[index];
+        interview.reviewState = studentDecision;
+        interview.reasonForRejection = reason;
+        return api.put("/interviews/" + nextState[index].id, nextState[index])
             .then(result => {
-                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
-                setOffers(nextState);
+                if (result)
+                    nextState[index] = result.data;
+                setInterviews(nextState);
                 closeReasonModal()
             })
     }
@@ -32,27 +34,41 @@ export default function OfferApplication() {
             .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.limitDateToApply) >= new Date()) : []))
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
-    function hasEmployeurAcceptedStudentToInterview(offer, student) {
-        return offer.applications.find(a => a.student.id === student.id && a.hasEmployerAccepted === true && a.reviewState === "PENDING") !== undefined && offer.applications.length !== 0;
+    useEffect(() => {
+        api.get("/interviews/student/" + AuthenticationService.getCurrentUser().id)
+            .then(result => setInterviews(result ? result.data : []))
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    function hasEmployeurAcceptedStudentToInterview(i) {
+        if (interviews[i]) {
+            return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id !== undefined;
+        }
+        return false;
     }
 
-    function getStudentDecision(offer, student) {
-        if (offer.applications.find(a => a.student.id === student.id && a.reviewState === "APPROVED")) {
-            return " Vous avez accepté l'entrevue";
-        } else if (offer.applications.find(a => a.student.id === student.id && a.reviewState === "DENIED")) {
-            return " Vous avez refusé l'entrevue";
+    function getStudentDecision(i) {
+        if (interviews[i]) {
+            if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "APPROVED") {
+                return " Vous avez accepté l'entrevue";
+            } else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "DENIED") {
+                return " Vous avez refusé l'entrevue";
+            }
         }
+        return ""
     }
 
     function getDateEntretien(i) {
-        const nextState = [...offers];
-        const application = nextState[i].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
-        return new Date(application.date);
+        if (interviews[i]) {
+            if (hasEmployeurAcceptedStudentToInterview(i)) {
+                return new Date(interviews[i].date).toLocaleString()
+            }
+        }
+        return ""
     }
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Les entrevues"}>
+            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Entrevues"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
@@ -71,9 +87,11 @@ export default function OfferApplication() {
                             </Typography>
                         </button>
                         {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                        {hasEmployeurAcceptedStudentToInterview(offers[i], AuthenticationService.getCurrentUser()) &&
-                        <div className={classes.buttonDiv} style={{display: "block"}}>
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                             Date de l'entretien : {getDateEntretien(i)}
+                        </Typography>
+                        {hasEmployeurAcceptedStudentToInterview(i) && interviews[i].reviewState === "PENDING" &&
+                        <div className={classes.buttonDiv} style={{display: "block"}}>
                             Acceptez l'entrevue
                             <button
                                 type={"button"}
@@ -93,7 +111,7 @@ export default function OfferApplication() {
                         </div>
                         }
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {getStudentDecision(offers[i], AuthenticationService.getCurrentUser())}
+                            {getStudentDecision(i)}
                         </Typography>
                         <hr/>
                     </div>
