@@ -41,7 +41,8 @@ export default function StudentStatus() {
         if (offer.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>;
         else if (offer.reviewState === "DENIED")
-            return (<span style={{color: "red"}}>Rejeté</span>);
+            return (<span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>);
         else
             return <span style={{color: "green"}}>Approuvé</span>;
     }
