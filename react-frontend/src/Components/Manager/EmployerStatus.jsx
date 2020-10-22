@@ -1,20 +1,25 @@
 import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {useApi, useModal} from "../Utils/Hooks";
+import {useApi, useDateParser, useModal} from "../Utils/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PdfDocument";
 import useStyles from "../Utils/useStyles";
 import DialogActions from "@material-ui/core/DialogActions";
 
 
+const offersTabIndex = 0;
+const interviewsTabIndex = 1;
 export default function StudentStatus() {
     const classes = useStyles();
     const api = useApi();
+    const parseDate = useDateParser();
     const [employers, setEmployers] = useState([{}]);
     const [currentEmployerOffers, setCurrentEmployerOffers] = useState([{}]);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([{}]);
+    const [currentEmployerIndex, setCurrentEmployerIndex] = useState(0);
     const [isPdfOpen, openPdf, closePdf] = useModal();
     const [currentDoc, setCurrentDoc] = useState('');
+    const [currentSubtab, setCurrentSubtab] = useState(0);
     useEffect(() => {
         api.get("employers").then(resp => {
             setEmployers(resp ? resp.data : [])
@@ -22,11 +27,32 @@ export default function StudentStatus() {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        api.get("/offers/employer/" + employers[currentIndex].username)
+        api.get("/offers/employer/" + employers[currentEmployerIndex].username)
             .then(r => {
                 setCurrentEmployerOffers(r.data);
             })
-    }, [currentIndex, employers]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [currentEmployerIndex, employers]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        console.log("state updated")
+        if (typeof employers[currentEmployerIndex].id !== "undefined") {
+            api.get("/interviews/employer/" + employers[currentEmployerIndex].id)
+                .then(r => {
+                    setCurrentEmployerInterviews(r ? r.data : []);
+                })
+        } else {
+            console.log("employee indefni")
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+
+    function getCurrentEmployerInterviews(index) {
+        api.get("/interviews/employer/" + employers[index].id)
+            .then(r => {
+                setCurrentEmployerInterviews(r ? r.data : []);
+            })
+
+    }
 
     function hiredStudentsNames(o) {
         return o.reviewState === "APPROVED" ?
@@ -47,6 +73,40 @@ export default function StudentStatus() {
             return <span style={{color: "green"}}>Approuvé</span>;
     }
 
+    function InterviewStatus(props) {
+        function getInterviewState(interview) {
+            if (interview.reviewState == "PENDING")
+                return <span style={{color: "blue"}}>En attente</span>;
+            else if (interview.reviewState === "DENIED")
+                return (<span style={{color: "red"}}>Rejeté<span
+                    style={{color: "black"}}> : {interview.reasonForRejection} </span></span>);
+            else
+                return <span style={{color: "green"}}>Approuvé</span>;
+        }
+
+        return <div>
+            <Typography>
+                Entrevue pour
+                l'étudiant {props.interview.studentApplication ? props.interview.studentApplication.student.firstName + " " + props.interview.studentApplication.student.lastName : ""}
+            </Typography>
+            <Typography>
+                Date : {props.interview ? parseDate(props.interview.date) : ""}
+            </Typography>
+            <Typography>
+                Heure : {props.interview ? new Date(props.interview.date).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : ""}
+            </Typography>
+            <Typography>Titre de l'offre :
+                {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
+            <Typography>
+                État : {getInterviewState(props.interview)}
+            </Typography>
+            <hr/>
+        </div>;
+    }
+
     return (
         <Grid
             container
@@ -60,45 +120,84 @@ export default function StudentStatus() {
                 {employers.map((item, i) =>
                     <div key={i}>
                         <button type={"button"}
-                                className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                                className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(' ')}
                                 onClick={() => {
-                                    setCurrentIndex(i);
+                                    setCurrentEmployerIndex(i);
                                 }}
                         >
                             <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                                 {employers[i].companyName}
                             </Typography>
                         </button>
+                        {currentEmployerIndex === i &&
+                        <div>
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
+                                onClick={() => setCurrentSubtab(0)}>
+                                <Typography color={"textSecondary"} variant={"body2"}>
+                                    Offers
+                                </Typography>
+                            </button>
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
+                                onClick={() => {
+                                    setCurrentSubtab(1)
+                                    getCurrentEmployerInterviews(currentEmployerIndex)
+                                }
+                                }>
+                                <Typography color={"textSecondary"} variant={"body2"}>
+                                    Inteviews
+                                </Typography>
+                            </button>
+                        </div>
+                        }
 
                     </div>
                 )}
             </Grid>
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                <h1>Détails des offres</h1>
+                {currentSubtab === 0 ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
                 {
-                    currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                            return <div>
-                                <Typography>
-                                    <button type={"button"} className={[classes.linkButton].join(" ")}
-                                            onClick={() => {
-                                                setCurrentDoc(o.file);
-                                                openPdf();
-                                            }}
-                                    >
-                                        {o.title}
-                                    </button>
-                                </Typography>
-                                <OfferDetails key={k} offer={o}/>
-                                <Typography>
-                                    <span>Liste des étudiants selectionnés</span>
-                                </Typography>
-                                {hiredStudentsNames(o)}
-                                {printOfferStatus(o)}
-                                <hr/>
-                            </div>
+                    currentSubtab === 0 ?
+                        currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
+                                return <div>
+                                    <Typography>
+                                        <button type={"button"} className={[classes.linkButton].join(" ")}
+                                                onClick={() => {
+                                                    setCurrentDoc(o.file);
+                                                    openPdf();
+                                                }}
+                                        >
+                                            {o.title}
+                                        </button>
+                                    </Typography>
+                                    <OfferDetails key={k} offer={o}/>
+                                    <Typography>
+                                        <span>Liste des étudiants selectionnés</span>
+                                    </Typography>
+                                    {hiredStudentsNames(o)}
+                                    {printOfferStatus(o)}
+                                    <hr/>
+                                </div>
 
-                        })
-                        : "L'employeur n'a aucune offre"
+                            })
+                            : "L'employeur n'a aucune offre"
+                        : ""
+                }
+
+                {
+                    currentSubtab === 1 ?
+                        currentSubtab === 1 && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
+                                return <div>
+                                    <InterviewStatus key={index} classes={classes} interview={interview}/>
+                                    <hr/>
+                                </div>
+
+                            })
+                            : "L'employeur n'a programmer aucun interview"
+                        : ""
                 }
             </Grid>
             <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
