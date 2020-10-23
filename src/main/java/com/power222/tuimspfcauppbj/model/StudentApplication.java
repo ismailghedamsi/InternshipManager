@@ -32,4 +32,7 @@ public class StudentApplication {
     @ManyToOne
     @JsonIgnoreProperties({"owner", "applications"})
     private Resume resume;
+
+    //@OneToOne
+    //private Contract contract;
 }
