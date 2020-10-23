@@ -1,18 +1,18 @@
 import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal} from "../Utils/Hooks";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PdfDocument";
 import useStyles from "../Utils/useStyles";
 import DialogActions from "@material-ui/core/DialogActions";
 
-
-const offersTabIndex = 0;
-const interviewsTabIndex = 1;
 export default function StudentStatus() {
+    const offersTabIndex = 0;
+    const interviewsTabIndex = 1;
     const classes = useStyles();
     const api = useApi();
     const parseDate = useDateParser();
+    const parseTimeFromDate = useTimeParserFromDate();
     const [employers, setEmployers] = useState([{}]);
     const [currentEmployerOffers, setCurrentEmployerOffers] = useState([{}]);
     const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([{}]);
@@ -20,6 +20,7 @@ export default function StudentStatus() {
     const [isPdfOpen, openPdf, closePdf] = useModal();
     const [currentDoc, setCurrentDoc] = useState('');
     const [currentSubtab, setCurrentSubtab] = useState(0);
+
     useEffect(() => {
         api.get("employers").then(resp => {
             setEmployers(resp ? resp.data : [])
@@ -51,7 +52,6 @@ export default function StudentStatus() {
             .then(r => {
                 setCurrentEmployerInterviews(r ? r.data : []);
             })
-
     }
 
     function hiredStudentsNames(o) {
@@ -93,17 +93,13 @@ export default function StudentStatus() {
                 Date : {props.interview ? parseDate(props.interview.date) : ""}
             </Typography>
             <Typography>
-                Heure : {props.interview ? new Date(props.interview.date).toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit'
-            }) : ""}
+                Heure : {props.interview ? parseTimeFromDate(props.interview.date) : ""}
             </Typography>
             <Typography>Titre de l'offre :
                 {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
             <Typography>
                 État : {getInterviewState(props.interview)}
             </Typography>
-            <hr/>
         </div>;
     }
 
@@ -153,14 +149,13 @@ export default function StudentStatus() {
                             </button>
                         </div>
                         }
-
                     </div>
                 )}
             </Grid>
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                {currentSubtab === 0 ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
+                {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
                 {
-                    currentSubtab === 0 ?
+                    currentSubtab === offersTabIndex ?
                         currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
                                 return <div>
                                     <Typography>
@@ -181,20 +176,17 @@ export default function StudentStatus() {
                                     {printOfferStatus(o)}
                                     <hr/>
                                 </div>
-
                             })
                             : "L'employeur n'a aucune offre"
                         : ""
                 }
-
                 {
-                    currentSubtab === 1 ?
-                        currentSubtab === 1 && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
+                    currentSubtab === interviewsTabIndex ?
+                        currentSubtab === interviewsTabIndex && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
                                 return <div>
                                     <InterviewStatus key={index} classes={classes} interview={interview}/>
                                     <hr/>
                                 </div>
-
                             })
                             : "L'employeur n'a programmer aucun interview"
                         : ""
