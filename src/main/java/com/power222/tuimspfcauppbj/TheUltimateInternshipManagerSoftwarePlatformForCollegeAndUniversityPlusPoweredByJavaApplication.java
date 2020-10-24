@@ -140,8 +140,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             userRepo.saveAndFlush(s.toBuilder()
                     .applications(Collections.singletonList(StudentApplication.builder()
-                            .reviewState(ReviewState.PENDING)
-                            .reasonForRejection("")
                             .resume(s.getResumes().get(0))
                             .offer(o)
                             .student(s)

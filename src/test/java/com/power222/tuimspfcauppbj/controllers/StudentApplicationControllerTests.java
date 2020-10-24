@@ -9,6 +9,7 @@ import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import com.power222.tuimspfcauppbj.util.ReviewState;
+import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +54,6 @@ class StudentApplicationControllerTests {
                 .offer(new InternshipOffer())
                 .student(new Student())
                 .resume(new Resume())
-                .hired(false)
-                .reviewState(ReviewState.PENDING)
-                .reasonForRejection("")
                 .build();
     }
 
@@ -82,21 +80,23 @@ class StudentApplicationControllerTests {
     }
 
     @Test
-    void updateAppliIsHired() throws Exception {
-        when(svc.updateStudentApplicationIsHired((expected.getId()))).thenReturn(Optional.of(expected));
+    void updateAppliState() throws Exception {
+        var modifiedApplication = expected.toBuilder().state(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT).build();
+
+        when(svc.updateStudentApplicationState(expected.getId(), modifiedApplication)).thenReturn(Optional.of(expected));
 
         MvcResult result = mvc.perform(put("/api/applications/hire/" + expected.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        verify(svc, times(1)).updateStudentApplicationIsHired(expected.getId());
+        verify(svc, times(1)).updateStudentApplicationState(expected.getId(), modifiedApplication);
     }
 
     @Test
-    void updateAppliIsHiredBadId() throws Exception {
+    void updateAppliStateBadId() throws Exception {
         var id = 100L;
-        when(svc.updateStudentApplicationIsHired(id)).thenReturn(Optional.empty());
+        when(svc.updateStudentApplicationState(id, expected)).thenReturn(Optional.empty());
 
         MvcResult result = mvc.perform(put("/api/applications/hire/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -130,29 +130,5 @@ class StudentApplicationControllerTests {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         assertEquals(actuals.size(), nbStudent);
-    }
-
-    @Test
-    void updateAppliDecision() throws Exception {
-        when(svc.updateStudentApplicationStudentDecision(expected.getId(), expected)).thenReturn(Optional.of(expected));
-
-        MvcResult result = mvc.perform(put("/api/applications/decision/" + expected.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expected))).andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        verify(svc, times(1)).updateStudentApplicationStudentDecision(expected.getId(), expected);
-    }
-
-    @Test
-    void updateAppliDecisionBadId() throws Exception {
-        var id = 100L;
-        when(svc.updateStudentApplicationStudentDecision(id, expected)).thenReturn(Optional.empty());
-
-        MvcResult result = mvc.perform(put("/api/applications/decision/" + id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expected))).andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
     }
 }

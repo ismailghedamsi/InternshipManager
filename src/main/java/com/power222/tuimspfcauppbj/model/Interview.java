@@ -1,7 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.power222.tuimspfcauppbj.util.ReviewState;
+import com.power222.tuimspfcauppbj.util.InterviewState;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,8 +19,8 @@ public class Interview {
     private long id;
 
     private Date date;
-    private ReviewState reviewState = ReviewState.PENDING;
-    private String reasonForRejection;
+    private InterviewState studentAcceptanceState = InterviewState.INTERVIEW_WAITING_FOR_STUDENT_DECISION;
+    private String reasonForRejectionByStudent;
 
     @ManyToOne(optional = false)
     @JsonIgnoreProperties("offers")

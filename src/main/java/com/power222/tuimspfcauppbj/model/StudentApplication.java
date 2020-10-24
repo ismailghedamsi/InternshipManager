@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.power222.tuimspfcauppbj.util.ReviewState;
+import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,9 +19,8 @@ public class StudentApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private boolean hired;
-    private ReviewState reviewState;
-    private String reasonForRejection;
+    private StudentApplicationState state = StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW;
+    private String reasonForRejection = "";
 
     @ManyToOne
     @JsonIgnoreProperties({"file", "allowedStudents", "applications"})
@@ -37,4 +37,10 @@ public class StudentApplication {
     @OneToOne(mappedBy = "studentApplication")
     @JsonIgnoreProperties(value = "studentApplication", allowSetters = true)
     private Interview interview;
+
+    public static void main(String[] args) {
+        var application = StudentApplication.builder().build();
+        System.out.println(application.getState() + "---" + application.getReasonForRejection());
+    }
+
 }
