@@ -12,7 +12,6 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
 import com.power222.tuimspfcauppbj.model.Contract;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
@@ -21,10 +20,8 @@ import java.io.OutputStream;
 
 @Service
 public class ContractGenerationService {
-    @Autowired
-    public Contract contract;
 
-    public void generateContract() throws FileNotFoundException {
+    public void generateContract(Contract contract) throws FileNotFoundException {
         //ByteArrayOutputStream stream = new ByteArrayOutputStream();
         //PdfWriter writer = new PdfWriter(stream);
         OutputStream fos = new FileOutputStream("contract.pdf");
@@ -45,12 +42,12 @@ public class ContractGenerationService {
                 .add(new Text("L'étudiant(e),[nom_etudiant,]\n\n"))
                 .add(new Text("Conviennent des conditions de stage suivantes : "));
         document.add(paragraph.setTextAlignment(TextAlignment.CENTER));
-        addIntershipInfoTable(document);
+        addIntershipInfoTable(contract, document);
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n")));
         float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
         document.add(new Table(1).addCell(new Paragraph("[Offre description]").setWidth(documentWidth)));
-        internshipPartiesResponsabilities(document);
+        internshipPartiesResponsabilities(contract, document);
         document.add(new Div().add(
                 new Paragraph("SIGNATURES\n").setBold())
                 .setBackgroundColor(WebColors.getRGBColor("#DCDCDC")).setWidth(documentWidth).setHeight(40f));
@@ -82,7 +79,7 @@ public class ContractGenerationService {
     }
 
 
-    private void internshipPartiesResponsabilities(Document document) {
+    private void internshipPartiesResponsabilities(Contract contract, Document document) {
         document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold().setTextAlignment(TextAlignment.CENTER))
                 .add(new Text("Le Collège s’engage à :\n").setBold())
                 .add(new Paragraph(contract.getEngagementCollege()))
@@ -93,7 +90,7 @@ public class ContractGenerationService {
         );
     }
 
-    private void addIntershipInfoTable(Document document) {
+    private void addIntershipInfoTable(Contract contract, Document document) {
         Table internshipInfoTable = new Table(1).setWidth(500f);
         internshipInfoTable.setBorder(new SolidBorder(1f));
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
