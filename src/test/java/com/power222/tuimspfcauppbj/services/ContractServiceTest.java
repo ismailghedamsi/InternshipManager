@@ -8,9 +8,15 @@ import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 public class ContractServiceTest {
 
     @Mock
@@ -44,11 +50,10 @@ public class ContractServiceTest {
 
     @Test
     void createAndSaveNewContractTest() {
-        // when(authSvc.getCurrentUser()).thenReturn(expectedUser);
-        //  when(contractRepo.saveAndFlush(expectedContract)).thenReturn(expectedContract);
-        //  var actual = contractSvc.createAndSaveNewContract(expectedContract);
 
-        //  assertThat(actual).isNotNull();
+        when(contractRepo.saveAndFlush(expectedContract)).thenReturn(expectedContract);
+        var actual = contractSvc.createAndSaveNewContract(expectedContract);
+        assertThat(actual).isNotNull();
     }
 
 }

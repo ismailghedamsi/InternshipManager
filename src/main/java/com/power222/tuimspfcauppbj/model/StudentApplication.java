@@ -33,6 +33,6 @@ public class StudentApplication {
     @JsonIgnoreProperties({"owner", "applications"})
     private Resume resume;
 
-    //@OneToOne
-    //private Contract contract;
+    @OneToOne(mappedBy = "studentApplication")
+    private Contract contract;
 }
