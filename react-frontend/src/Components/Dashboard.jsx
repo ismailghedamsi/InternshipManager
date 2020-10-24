@@ -17,6 +17,7 @@ import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
+import ContractList from './Manager/ContractList';
 import InterviewConvocation from './Interview/InterviewConvocation';
 import Interviewlist from './Interview/InterviewList';
 import {Rescheduleinterview} from './Interview/RescheduleInterview';
@@ -81,6 +82,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/employersStatus"
                                         component={Employerstatus}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/contractList"
+                                        component={ContractList}
                                         role={"admin"}/>
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}

@@ -34,6 +34,11 @@ export const Menu = [
         role: 'admin'
     },
     {
+        title: 'Liste de contrats',
+        url: '/dashboard/contractList',
+        role: 'admin'
+    },
+    {
         title: 'Téléverser un CV',
         url: '/dashboard/upload',
         role: 'student'
