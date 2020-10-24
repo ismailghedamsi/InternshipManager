@@ -11,6 +11,8 @@ import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
+import com.power222.tuimspfcauppbj.model.Contract;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
@@ -19,6 +21,8 @@ import java.io.OutputStream;
 
 @Service
 public class ContractGenerationService {
+    @Autowired
+    public Contract contract;
 
     public void generateContract() throws FileNotFoundException {
         //ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -27,7 +31,7 @@ public class ContractGenerationService {
         PdfWriter writer = new PdfWriter(fos);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
-        document.add(new Paragraph("CONTRAT DE STAGE").setBold()
+        document.add(new Paragraph("CONTRAT DE STAGE").setBold().setFontSize(13)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setMarginTop(document.getPageEffectiveArea(PageSize.A4).getHeight() / 2));
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
@@ -51,7 +55,7 @@ public class ContractGenerationService {
                 new Paragraph("SIGNATURES\n").setBold())
                 .setBackgroundColor(WebColors.getRGBColor("#DCDCDC")).setWidth(documentWidth).setHeight(40f));
         document.add(new Paragraph(new Text("Les parties s’engagent à respecter cette entente de stage\n").setBold().setTextAlignment(TextAlignment.CENTER))
-                .add(new Text("En foi de quoi les parties ont signé,\n\n"))
+                .add(new Text("En foi de quoi les parties ont signé,\n\n").setBold())
                 .add(new Text("L’étudiant(e) :\n").setBold())
                 .add(new Paragraph(new Text("[signature_etudiant]")).setMarginRight(120f).setMarginBottom(0))
                 .add(new Text("[date_signature_etudiant]"))
@@ -81,11 +85,11 @@ public class ContractGenerationService {
     private void internshipPartiesResponsabilities(Document document) {
         document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold().setTextAlignment(TextAlignment.CENTER))
                 .add(new Text("Le Collège s’engage à :\n").setBold())
-                .add("...\n")
+                .add(new Paragraph(contract.getEngagementCollege()))
                 .add(new Text("L'entreprise s’engage à :\n").setBold())
-                .add("...\n")
+                .add(new Paragraph(contract.getEngagementCompany()))
                 .add(new Text("L'étudiant s’engage à :\n").setBold())
-                .add("...\n")
+                .add(new Paragraph(contract.getEngagementStudent()))
         );
     }
 
