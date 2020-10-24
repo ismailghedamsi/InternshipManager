@@ -17,7 +17,7 @@ public class Contract {
     private long id;
 
     // @Lob
-    //private String file;
+    private String file;
 
     private String engagementCollege;
     private String engagementCompany;
