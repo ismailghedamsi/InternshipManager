@@ -2,7 +2,7 @@ import {Button, Container, Typography} from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import AuthenticationService from '../../../Services/AuthenticationService'
-import {useApi} from '../../Utils/Hooks'
+import {useApi, useTimeParserFromDate} from '../../Utils/Hooks'
 import useStyles from "../../Utils/useStyles";
 
 export default function Interviewlist() {
@@ -10,6 +10,7 @@ export default function Interviewlist() {
     const api = useApi()
     const history = useHistory();
     const classes = useStyles();
+    const parseTimeFromDate = useTimeParserFromDate();
 
     useEffect(() => {
         api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
@@ -24,7 +25,8 @@ export default function Interviewlist() {
         if (interview.reviewState === "APPROVED") {
             return "L'étudiant a accepté l'entrevue"
         } else if (interview.reviewState === "DENIED") {
-            return "L'étudiant a refusé  l'entrevue"
+            return (<span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {interview.reasonForRejection} </span></span>);
         }
         return "En attente d'approbation"
     }
@@ -38,10 +40,10 @@ export default function Interviewlist() {
                             <Typography>Date de l'entrevue
                                 : {interview.date ? new Date(interview.date).toLocaleDateString() : ""}</Typography>
                             <Typography>L'heure de l'entrevue
-                                : {interview.date ? new Date(interview.date).toLocaleTimeString() : ""}</Typography>
+                                : {interview.date ? parseTimeFromDate(interview.date) : ""}</Typography>
                             <Typography>Titre de l'offre
                                 : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
-                            {<Typography>Etudiant à entrevoir
+                            {<Typography> Étudiants à rencontrer
                                 : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
                             <Typography>{isInterviewAccepted(interview)}</Typography>
                             <Button onClick={() => {
@@ -61,8 +63,6 @@ export default function Interviewlist() {
                         : "Aucune entrevue a été crée"
                 }
             </Container>
-
         </div>
-
     )
 }

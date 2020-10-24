@@ -27,6 +27,6 @@ public class Interview {
     private Employer employer;
 
     @OneToOne
-    @JsonIgnoreProperties("interview")
+    @JsonIgnoreProperties(value = "interview", allowSetters = true)
     private StudentApplication studentApplication;
 }
