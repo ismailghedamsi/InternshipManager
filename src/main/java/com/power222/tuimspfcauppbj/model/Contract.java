@@ -16,7 +16,7 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    // @Lob
+    @Lob
     private String file;
 
     private String engagementCollege;
