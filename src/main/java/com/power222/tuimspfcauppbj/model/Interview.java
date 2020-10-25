@@ -18,6 +18,7 @@ public class Interview {
     private long id;
 
     private Date date;
+    @Builder.Default
     private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
 

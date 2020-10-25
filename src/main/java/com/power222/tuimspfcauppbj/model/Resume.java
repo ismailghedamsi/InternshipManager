@@ -2,19 +2,21 @@ package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Builder(toBuilder = true)
-public class Resume {
+public class Resume extends SemesterDiscriminatedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
