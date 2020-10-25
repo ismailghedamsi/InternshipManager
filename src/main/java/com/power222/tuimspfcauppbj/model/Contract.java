@@ -9,7 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@EqualsAndHashCode
+@EqualsAndHashCode // je sais pas si j'en est besoin
 public class Contract {
 
     @Id
@@ -24,6 +24,7 @@ public class Contract {
     private String engagementStudent;
     private String adminName;
     private int horaire;
+    private int totalHoursPerWeek;
 
     @OneToOne
     private StudentApplication studentApplication;
