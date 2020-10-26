@@ -24,8 +24,8 @@ public class ResumeService {
         return resumeRepo.findAll();
     }
 
-    public List<Resume> getResumeWithPendingApprouval() {
-        return resumeRepo.findByReviewedFalse();
+    public List<Resume> getResumeWithPendingApproval() {
+        return resumeRepo.findAllByReviewStatePending();
     }
 
     public Optional<Resume> getResumeById(long id) {
@@ -48,20 +48,11 @@ public class ResumeService {
     public Optional<Resume> updateResume(long id, Resume resume) {
         return resumeRepo.findById(id)
                 .map(oldResume -> resume.toBuilder().id(oldResume.getId()).build())
-                .filter(this::isResumeStateValid)
                 .map(newResume -> resumeRepo.saveAndFlush(resume));
     }
 
     @Transactional
     public void deleteResumeById(long id) {
         resumeRepo.deleteById(id);
-    }
-
-    private boolean isResumeStateValid(Resume resume) {
-        return (resume.isReviewed() || !resume.isApprouved()) //Not approuved while not reviewed
-                &&
-                ((resume.isReviewed() && resume.isApprouved()) //Reviewed and approuved
-                        || (resume.isReviewed() && resume.getReasonForRejection() != null) //Reviewed and justification is present
-                        || !resume.isReviewed()); //Not review
     }
 }
