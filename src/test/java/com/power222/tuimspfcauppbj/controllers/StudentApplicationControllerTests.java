@@ -8,7 +8,6 @@ import com.power222.tuimspfcauppbj.model.Resume;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
-import com.power222.tuimspfcauppbj.util.ReviewState;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,11 +82,11 @@ class StudentApplicationControllerTests {
     void updateAppliState() throws Exception {
         var modifiedApplication = expected.toBuilder().state(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT).build();
 
-        when(svc.updateStudentApplicationState(expected.getId(), modifiedApplication)).thenReturn(Optional.of(expected));
+        when(svc.updateStudentApplicationState(expected.getId(), modifiedApplication)).thenReturn(Optional.of(modifiedApplication));
 
-        MvcResult result = mvc.perform(put("/api/applications/hire/" + expected.getId())
+        MvcResult result = mvc.perform(put("/api/applications/state/" + expected.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expected))).andReturn();
+                .content(objectMapper.writeValueAsString(modifiedApplication))).andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateStudentApplicationState(expected.getId(), modifiedApplication);
@@ -98,7 +97,7 @@ class StudentApplicationControllerTests {
         var id = 100L;
         when(svc.updateStudentApplicationState(id, expected)).thenReturn(Optional.empty());
 
-        MvcResult result = mvc.perform(put("/api/applications/hire/" + id)
+        MvcResult result = mvc.perform(put("/api/applications/state/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected))).andReturn();
 

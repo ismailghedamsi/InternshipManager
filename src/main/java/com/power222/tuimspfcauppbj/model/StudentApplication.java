@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Builder(toBuilder = true)
 @EqualsAndHashCode
 public class StudentApplication {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -37,10 +36,4 @@ public class StudentApplication {
     @OneToOne(mappedBy = "studentApplication")
     @JsonIgnoreProperties(value = "studentApplication", allowSetters = true)
     private Interview interview;
-
-    public static void main(String[] args) {
-        var application = StudentApplication.builder().build();
-        System.out.println(application.getState() + "---" + application.getReasonForRejection());
-    }
-
 }

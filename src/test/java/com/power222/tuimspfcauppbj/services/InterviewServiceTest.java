@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.services;
 import com.power222.tuimspfcauppbj.dao.InterviewRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Interview;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.InterviewService;
@@ -70,7 +71,7 @@ class InterviewServiceTest {
         var i2 = Interview.builder().id(2L).build();
         var i3 = Interview.builder().id(3L).build();
 
-        when(interviewRepo.findAllByEmployer_id(1L)).thenReturn(Arrays.asList(i1, i2, i3));
+        when(interviewRepo.findAllByStudentApplication_Offer_Employer_Id(1L)).thenReturn(Arrays.asList(i1, i2, i3));
 
         var actual = interviewSvc.getAllInterviewsByEmployerId(1L);
 
@@ -79,8 +80,6 @@ class InterviewServiceTest {
 
     @Test
     void getAllInterviewsByEmployerIdWithNonexistentIdTest() {
-        when(interviewRepo.findAllByEmployer_id(1L)).thenReturn(Collections.emptyList());
-
         var actual = interviewSvc.getAllInterviewsByEmployerId(1L);
 
         assertThat(actual).hasSize(0);
@@ -101,8 +100,6 @@ class InterviewServiceTest {
 
     @Test
     void getAllInterviewsByStudentIdWithNonexistentIdTest() {
-        when(interviewRepo.findAllByStudentApplication_Student_Id(1L)).thenReturn(Collections.emptyList());
-
         var actual = interviewSvc.getAllInterviewsByStudentId(1L);
 
         assertThat(actual).hasSize(0);
@@ -119,21 +116,30 @@ class InterviewServiceTest {
 
     @Test
     void getInterviewByIdWithNonexistentIdTest() {
-        when(interviewRepo.findById(1L)).thenReturn(Optional.empty());
-
         var actual = interviewSvc.getInterviewById(1L);
 
         assertThat(actual).isEmpty();
     }
 
     @Test
-    void persistNewInterviewTest() {
+    void persistNewInterviewTestAsEmployer() {
         when(authSvc.getCurrentUser()).thenReturn(expectedEmployer);
         when(interviewRepo.saveAndFlush(expectedInterview)).thenReturn(expectedInterview);
 
         var actual = interviewSvc.persistNewInterview(expectedInterview);
 
         assertThat(actual).contains(expectedInterview);
+    }
+
+    @Test
+    void persistNewInterviewTestAsNotEmployer() {
+        var student = Student.builder().id(1L).build();
+
+        when(authSvc.getCurrentUser()).thenReturn(student);
+
+        var actual = interviewSvc.persistNewInterview(expectedInterview);
+
+        assertThat(actual).isEmpty();
     }
 
     @Test

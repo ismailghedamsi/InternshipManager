@@ -22,10 +22,6 @@ public class Interview {
     private InterviewState studentAcceptanceState = InterviewState.INTERVIEW_WAITING_FOR_STUDENT_DECISION;
     private String reasonForRejectionByStudent;
 
-    @ManyToOne(optional = false)
-    @JsonIgnoreProperties("offers")
-    private Employer employer;
-
     @OneToOne
     @JsonIgnoreProperties(value = "interview", allowSetters = true)
     private StudentApplication studentApplication;

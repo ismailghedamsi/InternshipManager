@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
-
     List<Resume> findByReviewedFalse();
     List<Resume> findAllByOwner_Id(long owner_id);
 }
