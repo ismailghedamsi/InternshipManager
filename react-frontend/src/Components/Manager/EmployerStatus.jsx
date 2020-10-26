@@ -35,14 +35,11 @@ export default function StudentStatus() {
     }, [currentEmployerIndex, employers]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        console.log("state updated")
         if (typeof employers[currentEmployerIndex].id !== "undefined") {
             api.get("/interviews/employer/" + employers[currentEmployerIndex].id)
                 .then(r => {
                     setCurrentEmployerInterviews(r ? r.data : []);
                 })
-        } else {
-            console.log("employee indefni")
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
