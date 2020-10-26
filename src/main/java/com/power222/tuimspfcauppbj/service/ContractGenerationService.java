@@ -1,6 +1,9 @@
 package com.power222.tuimspfcauppbj.service;
 
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.WebColors;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -17,8 +20,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Weeks;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +29,7 @@ import java.util.Date;
 @Service
 public class ContractGenerationService {
 
-    public void generateContract(Contract contract) throws FileNotFoundException {
+    public void generateContract(Contract contract) throws IOException {
         //ByteArrayOutputStream stream = new ByteArrayOutputStream();
         //PdfWriter writer = new PdfWriter(stream);
         OutputStream fos = new FileOutputStream("contract.pdf");
@@ -38,61 +41,65 @@ public class ContractGenerationService {
                 .setMarginTop(document.getPageEffectiveArea(PageSize.A4).getHeight() / 2));
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         Paragraph paragraph = new Paragraph(new Text("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES \n\n").setBold()
-        ).setPaddingTop(10f)
+        ).setPaddingTop(30f)
                 .add(new Text("Dans le cadre de la formule ATE, les parties citées ci-dessous:\n\n"))
                 .add("Le gestionnaire de stage, " + contract.getAdminName() + "\n\n")
-                .add(new Text("et\n\n").setBold())
+                .add(new Text("et\n\n\n").setBold())
                 .add(new Text("L'employeur, " + contract.getStudentApplication().getOffer().getEmployer().getCompanyName() + "\n\n"))
-                .add(new Text("et\n\n").setBold())
+                .add(new Text("et\n\n\n").setBold())
                 .add(new Text("L'étudiant(e), " + contract.getStudentApplication().getStudent().getFirstName() + " " + contract.getStudentApplication().getStudent().getLastName() + "\n\n"))
                 .add(new Text("Conviennent des conditions de stage suivantes : "));
         document.add(paragraph.setTextAlignment(TextAlignment.CENTER));
         addIntershipInfoTable(contract, document);
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n")));
+        document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
         float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
-        document.add(new Table(1).addCell(new Paragraph("[Offre description]").setWidth(documentWidth)));
+        document.add(new Table(1).addCell(new Paragraph(contract.getStudentApplication().getOffer().getDescription()).setWidth(documentWidth)));
         internshipPartiesResponsabilities(contract, document);
-        document.add(new Div().add(
+        signaturesSection(document, documentWidth);
+        document.close();
+        //System.out.println( java.util.Base64.getEncoder().encodeToString(stream.toByteArray()));
+    }
+
+    private void signaturesSection(Document document, float documentWidth) {
+        document.add(new Div().setTextAlignment(TextAlignment.JUSTIFIED).add(
                 new Paragraph("SIGNATURES\n").setBold())
                 .setBackgroundColor(WebColors.getRGBColor("#DCDCDC")).setWidth(documentWidth).setHeight(40f));
-        document.add(new Paragraph(new Text("Les parties s’engagent à respecter cette entente de stage\n").setBold().setTextAlignment(TextAlignment.CENTER))
-                .add(new Text("En foi de quoi les parties ont signé,\n\n").setBold())
-                .add(new Text("L’étudiant(e) :\n").setBold())
+        document.add(new Paragraph(new Text(" Les parties s’engagent à respecter cette entente de stage\nEn foi de quoi les parties ont signé,").setBold().setTextAlignment(TextAlignment.CENTER))
+                .setFirstLineIndent(15f)
+                .add(new Text("\nL’étudiant(e) :\n").setBold())
                 .add(new Paragraph(new Text("[signature_etudiant]")).setMarginRight(120f).setMarginBottom(0))
                 .add(new Text("[date_signature_etudiant]"))
                 .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)
                 ));
         document.add(new LineSeparator(new SolidLine(1)).setMarginTop(-4));
-
         document.add(new Paragraph(new Text("[nom_etudiant]")).setMarginRight(120f).setMarginBottom(0)
                 .add(new Paragraph("[Date]\n").setMarginLeft(145f)).add(new Text("\n\nL'employeur : ").setBold()));
-
         document.add(new Paragraph(new Text("[signature_employeur]"))
-                .add(new Paragraph("[date_signature_employeur]").setMarginLeft(145f)))
+                .add(new Paragraph("[date_signature_employeur]").setMarginLeft(105f)))
                 .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                 .add(new Paragraph(new Text("[nom_employeur]"))
                         .add(new Paragraph("[Date]").setMarginLeft(145f)));
-
         document.add(new Paragraph("Le gestionnaire de stage :").setBold()).add(new Paragraph(new Text("[signature_gestionnaire]"))
-                .add(new Paragraph("[date_signature_gestionnaire]").setMarginLeft(145f)))
+                .add(new Paragraph("[date_signature_gestionnaire]").setMarginLeft(105f)))
                 .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                 .add(new Paragraph(new Text("[nom_gestionnaire]"))
                         .add(new Paragraph("[Date]").setMarginLeft(145f)));
-        document.close();
-        //System.out.println( java.util.Base64.getEncoder().encodeToString(stream.toByteArray()));
     }
 
 
-    private void internshipPartiesResponsabilities(Contract contract, Document document) {
-        document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold().setTextAlignment(TextAlignment.CENTER))
-                .add(new Text("Le Collège s’engage à :\n").setBold())
-                .add(new Paragraph(contract.getEngagementCollege()))
-                .add(new Text("L'entreprise s’engage à :\n").setBold())
+    private void internshipPartiesResponsabilities(Contract contract, Document document) throws IOException {
+        PdfFont font = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
+        document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold()).setTextAlignment(TextAlignment.CENTER));
+
+        document.add(new Paragraph(new Text("Le Collège s’engage à :\n").setBold())
+                .add(new Paragraph(contract.getEngagementCollege())).setFont(font)
+                .add(new Text("\nL'entreprise s’engage à :\n").setBold())
                 .add(new Paragraph(contract.getEngagementCompany()))
-                .add(new Text("L'étudiant s’engage à :\n").setBold())
+                .add(new Text("\nL'étudiant s’engage à :\n").setBold())
                 .add(new Paragraph(contract.getEngagementStudent()))
         );
+
     }
 
     public String parseDate(Date date) {
@@ -119,11 +126,10 @@ public class ContractGenerationService {
                         "\nDate de fin: " + parseDate(offer.getInternshipEndDate())
                         + "\nNombre total de semaines: " + dateInteravalToWeeks(offer.getInternshipEndDate(), offer.getInternshipStartDate()) + "\n").setMultipliedLeading(1.2f)));
 
-
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
                 .add(new Paragraph("HORAIRE DE TRAVAIL").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Horaire de travail: " + contract.getHoraire() + "\nNombre total d’heures par semaine: xxh\n").setMultipliedLeading(1.2f)));
+                .add(new Paragraph("Horaire de travail: " + contract.getHoraire() + "\nNombre total d’heures par semaine: " + contract.getTotalHoursPerWeek() + "h\n").setMultipliedLeading(1.2f)));
 
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
                 .add(new Paragraph("SALAIRE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
