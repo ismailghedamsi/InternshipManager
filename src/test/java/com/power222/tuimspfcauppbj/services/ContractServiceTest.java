@@ -13,8 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ContractServiceTest {
@@ -50,10 +53,71 @@ public class ContractServiceTest {
 
     @Test
     void createAndSaveNewContractTest() {
-
         when(contractRepo.saveAndFlush(expectedContract)).thenReturn(expectedContract);
         var actual = contractSvc.createAndSaveNewContract(expectedContract);
         assertThat(actual).isNotNull();
+        assertThat(actual).isNotEmpty();
+        assertThat(actual).isEqualTo(actual);
+    }
+
+    @Test
+    void getAllContractTest() {
+        var i1 = Contract.builder().id(1L).build();
+        var i2 = Contract.builder().id(2L).build();
+        var i3 = Contract.builder().id(3L).build();
+
+        when(contractRepo.findAll()).thenReturn(Arrays.asList(i1, i2, i3));
+
+        var actual = contractSvc.getAllContract();
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
+    void getContractIdTest() {
+        when(contractRepo.findById(1L)).thenReturn(Optional.of(expectedContract));
+
+        var actual = contractSvc.getContractById(1L);
+
+        assertThat(actual).contains(expectedContract);
+    }
+
+    @Test
+    void getContractWithNoneExistentIdTest() {
+        when(contractRepo.findById(1L)).thenReturn(Optional.empty());
+
+        var actual = contractSvc.getContractById(1L);
+
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void updateInterviewTest() {
+        var initialId = expectedContract.getId();
+        var alteredId = 123L;
+        var alteredInterview = expectedContract.toBuilder().id(alteredId).build();
+        when(contractRepo.findById(initialId)).thenReturn(Optional.of(expectedContract));
+        when(contractRepo.saveAndFlush(alteredInterview)).thenReturn(expectedContract);
+
+        var actual = contractSvc.updateContract(initialId, alteredInterview);
+
+        assertThat(actual).isEqualTo(expectedContract);
+    }
+
+    @Test
+    void updateContracWithNonexistentIdTest() {
+        var actual = contractSvc.updateContract(100, expectedContract);
+
+        assertThat(actual).isNotNull();
+    }
+
+    @Test
+    void deleteInterviewByIdTest() {
+        var idToDelete = expectedContract.getId();
+
+        contractSvc.deleteContractById(idToDelete);
+
+        verify(contractRepo, times(1)).deleteById(idToDelete);
     }
 
 }

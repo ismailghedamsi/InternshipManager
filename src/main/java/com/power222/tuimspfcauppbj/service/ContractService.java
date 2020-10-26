@@ -4,6 +4,8 @@ import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,5 +21,28 @@ public class ContractService {
 
     public Optional<Contract> createAndSaveNewContract(Contract contract) {
         return Optional.of(contractRepo.saveAndFlush(contract));
+    }
+
+    public List<Contract> getAllContract() {
+        return contractRepo.findAll();
+    }
+
+    public Optional<Contract> getContractById(long id) {
+        return contractRepo.findById(id);
+    }
+
+    public Contract updateContract(long id, Contract contract) {
+        return contractRepo.findById(id)
+                .map(oldStudent -> {
+                    contract.setId(oldStudent.getId());
+                    return contractRepo.saveAndFlush(contract);
+                })
+                .orElse(contract);
+    }
+
+
+    @Transactional
+    public void deleteContractById(long id) {
+        contractRepo.deleteById(id);
     }
 }
