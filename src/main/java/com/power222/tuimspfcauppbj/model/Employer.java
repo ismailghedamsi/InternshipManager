@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Filter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,9 +27,11 @@ public class Employer extends User {
 
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
     @JsonIgnore
+    @Filter(name = "semesterFilter", condition = "semester = :semester")
     private List<InternshipOffer> offers;
 
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
     @JsonIgnore
+    @Filter(name = "semesterFilter", condition = "semester = :semester")
     private List<Interview> interviews;
 }
