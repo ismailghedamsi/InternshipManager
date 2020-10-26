@@ -1,5 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 
 @Data
 @SuperBuilder(toBuilder = true)
@@ -19,5 +22,12 @@ import javax.persistence.MappedSuperclass;
 @Filter(name = "semesterFilter", condition = "semester = :semester")
 public abstract class SemesterDiscriminatedEntity {
 
+    @JsonIgnore
     private String semester;
+
+    @PrePersist
+    public void onPrePersist() {
+        if (semester == null || semester.isBlank())
+            semester = SemesterContext.isSet() ? SemesterContext.getCurrent() : SemesterContext.getPresentSemester();
+    }
 }
