@@ -33,15 +33,15 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
     @Component
     public static class BootstrapConfig implements CommandLineRunner {
 
-        private final UserRepository userRepo;
         private final PasswordEncoder passwordEncoder;
+        private final UserRepository userRepo;
         private final ResumeRepository resumeRepo;
         private final InternshipOfferRepository internshipRepo;
         private final StudentApplicationRepository appliRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo) {
-            this.userRepo = userRepo;
+        public BootstrapConfig(PasswordEncoder passwordEncoder, UserRepository userRepo, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo) {
             this.passwordEncoder = passwordEncoder;
+            this.userRepo = userRepo;
             this.resumeRepo = resumeRepo;
             this.internshipRepo = internshipRepo;
             this.appliRepo = appliRepo;
@@ -50,13 +50,13 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         @Override
         @Transactional
         public void run(String... args) throws IOException {
-            userRepo.saveAndFlush(User.builder()
+            userRepo.save(User.builder()
                     .username("admin")
                     .role("admin")
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            var employer = userRepo.saveAndFlush(Employer.builder()
+            var employer = userRepo.save(Employer.builder()
                     .companyName("Dacima")
                     .contactName("Zack")
                     .username("employeur")
@@ -67,7 +67,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            var student = userRepo.saveAndFlush(Student.builder()
+            var student = userRepo.save(Student.builder()
                     .username("etudiant")
                     .role("student")
                     .password(passwordEncoder.encode("password"))
@@ -79,16 +79,25 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .address("9310 Lasalle")
                     .build());
 
-            var resume = resumeRepo.saveAndFlush(Resume.builder()
+            var resume = resumeRepo.save(Resume.builder()
+                    .owner(student)
                     .name("Bootstrapped Resume")
                     .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/1.pdf")).readAllBytes())))
                     .reviewed(true)
                     .approuved(true)
+                    .build());
+
+            var resume2 = resumeRepo.save(Resume.builder()
                     .owner(student)
+                    .semester("a2021h2022")
+                    .name("Bootstrapped Resume with diff. Semester")
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/2.pdf")).readAllBytes())))
+                    .reviewed(true)
+                    .approuved(true)
                     .build());
 
 
-            var offer = internshipRepo.saveAndFlush(InternshipOffer.builder()
+            var offer = internshipRepo.save(InternshipOffer.builder()
                     .title("Bootstrapped Internship")
                     .description("Some basic description ")
                     .salary(15.98)
@@ -104,18 +113,18 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
 
-            var application = appliRepo.saveAndFlush(StudentApplication.builder()
+            var application = appliRepo.save(StudentApplication.builder()
                     .reviewState(ReviewState.APPROVED)
                     .offer(offer)
                     .student(student)
                     .resume(resume)
                     .build());
 
-            resumeRepo.findById(1L);
-            resumeRepo.findAll();
-            resumeRepo.findByReviewedFalse();
-            resumeRepo.findAllByOwner_Id(1L);
 
+            userRepo.flush();
+            resumeRepo.flush();
+            internshipRepo.flush();
+            appliRepo.flush();
         }
     }
 }
