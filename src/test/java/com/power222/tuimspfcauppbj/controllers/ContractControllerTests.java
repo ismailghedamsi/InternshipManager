@@ -128,6 +128,4 @@ public class ContractControllerTests {
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).deleteContractById(1);
     }
-
-
 }
