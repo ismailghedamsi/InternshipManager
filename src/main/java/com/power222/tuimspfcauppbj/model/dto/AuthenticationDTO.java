@@ -1,5 +1,6 @@
-package com.power222.tuimspfcauppbj.model;
+package com.power222.tuimspfcauppbj.model.dto;
 
+import com.power222.tuimspfcauppbj.model.User;
 import lombok.Data;
 
 @Data

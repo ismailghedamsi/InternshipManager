@@ -1,8 +1,8 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.PasswordDTO;
 import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.model.dto.PasswordDTO;
 import com.power222.tuimspfcauppbj.util.PasswordUpdateStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
