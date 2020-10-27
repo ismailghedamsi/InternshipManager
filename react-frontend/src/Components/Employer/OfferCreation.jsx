@@ -15,6 +15,7 @@ import {Typography} from "@material-ui/core";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
+const tooBigError = (valueNumber) => "Doit être un nombre plus petit que ou égal à " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function OfferCreation() {
@@ -41,7 +42,9 @@ export default function OfferCreation() {
                 "internshipStartDate",
                 (internshipStartDate, schema) => internshipStartDate && schema.min(
                     internshipStartDate,
-                    "La date de début doit être avant la date de fin"))
+                    "La date de début doit être avant la date de fin")),
+        startTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
+        endTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg)
     });
     const initialValues = {
         title: '',
@@ -52,7 +55,9 @@ export default function OfferCreation() {
         internshipEndDate: new Date("2001-01-01"),
         nbStudentToHire: '',
         limitDateToApply: new Date("2001-01-01"),
-        file: ""
+        file: "",
+        startTime: '',
+        endTime: ''
     }
 
     function readFileAsync(file) {
@@ -158,6 +163,32 @@ export default function OfferCreation() {
                                             id="salary"
                                             variant="outlined"
                                             label="Salaire"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                            InputProps={{inputProps: {min: 0}}}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="startTime"
+                                            id="startTime"
+                                            variant="outlined"
+                                            label="Horaire de début"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                            InputProps={{inputProps: {min: 0}}}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="endTime"
+                                            id="endTime"
+                                            variant="outlined"
+                                            label="Horaire de fin"
                                             required
                                             fullWidth
                                             type={"number"}

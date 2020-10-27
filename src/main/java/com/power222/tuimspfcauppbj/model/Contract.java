@@ -23,7 +23,6 @@ public class Contract {
     private String engagementCompany;
     private String engagementStudent;
     private String adminName;
-    private int horaire;
     private int totalHoursPerWeek;
 
     @OneToOne

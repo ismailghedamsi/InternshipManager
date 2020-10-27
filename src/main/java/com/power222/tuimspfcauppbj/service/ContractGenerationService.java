@@ -134,7 +134,7 @@ public class ContractGenerationService {
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
                 .add(new Paragraph("HORAIRE DE TRAVAIL").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Horaire de travail : " + contract.getHoraire() + "\nNombre total d’heures par semaine: " + contract.getTotalHoursPerWeek() + "h\n").setMultipliedLeading(1.2f)));
+                .add(new Paragraph("Horaire de travail : " + /**contract.getHoraire() + **/"\nNombre total d’heures par semaine: " + contract.getTotalHoursPerWeek() + "h\n").setMultipliedLeading(1.2f)));
 
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
                 .add(new Paragraph("SALAIRE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));

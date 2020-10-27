@@ -28,6 +28,8 @@ public class InternshipOffer {
     private int nbStudentToHire;
     private ReviewState reviewState;
     private String reasonForRejection;
+    private int startTime;
+    private int endTime;
 
     @Lob
     private String file;
