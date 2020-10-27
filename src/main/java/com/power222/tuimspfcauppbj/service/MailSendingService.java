@@ -1,5 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
+import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -37,7 +39,14 @@ public class MailSendingService {
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("ismailghedamsi@gmail.com", "Idarnastsrias1");
+                if (user instanceof Employer) {
+                    Employer employer = (Employer) user;
+                    return new PasswordAuthentication(employer.getEmail(), employer.getPassword());
+                } else if (user instanceof Student) {
+                    Student student = (Student) user;
+                    return new PasswordAuthentication(student.getEmail(), student.getPassword());
+                }
+                return null;
             }
         });
         return session;
@@ -49,7 +58,10 @@ public class MailSendingService {
         Map<String, Object> map = new HashMap<>();
         try {
             helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
-            String sendTo = "ismailghedamsi@gmail.com";
+            String sendTo = "projetemployeur@gmail.com";
+            if (user instanceof Employer) {
+                sendTo = ((Employer) user).getEmail();
+            }
             String htmlMsg = "<h1> This is your contract </h1>";
 
             // add attachment encode in base64
