@@ -13,10 +13,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.transaction.Transactional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("noBootstrappingTests")
 @SpringBootTest
+@Transactional
 public class AuthenticationServiceTests {
 
     @Autowired
