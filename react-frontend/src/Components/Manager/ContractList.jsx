@@ -89,7 +89,7 @@ export default function ContractList() {
                                 // todo envoyer le id de apllication
                                 // dto.studentApplication.id =
                                 {
-                                    console.log(dto.studentApplication)
+                                    console.log(dto)
                                 }
                                 return api.post("/contract", dto)
                                     .then(() => {
