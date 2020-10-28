@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,20 +21,17 @@ import java.util.Properties;
 
 @Service
 public class MailSendingService {
+    @Autowired
     private JavaMailSender javaMailSender;
 
-    public MailSendingService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
-
-    public Properties setEmailProperties() {
+ /*   public Properties setEmailProperties() {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "mail.smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
         return properties;
-    }
+    }*/
 
     public Session setMailSession(Properties properties, User user) {
         Session session = Session.getInstance(properties, new Authenticator() {
@@ -46,7 +44,7 @@ public class MailSendingService {
                     Student student = (Student) user;
                     return new PasswordAuthentication(student.getEmail(), student.getPassword());
                 }
-                return null;
+                return new PasswordAuthentication("projetemployeur@gmail.com", "Projet_employeur1");
             }
         });
         return session;
