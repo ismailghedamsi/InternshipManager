@@ -1,7 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.power222.tuimspfcauppbj.util.ReviewState;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import lombok.*;
 
@@ -35,7 +34,8 @@ public class StudentApplication {
 
     @OneToOne(mappedBy = "studentApplication")
     private Contract contract;
-    
+
     @JsonIgnoreProperties(value = "studentApplication", allowSetters = true)
+    @OneToOne(mappedBy = "studentApplication")
     private Interview interview;
 }
