@@ -12,11 +12,7 @@ export default function ApplicationList() {
     const api = useApi();
     const [offer, setOffer] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
-    // const applicationEmployerStates = [
-    //     "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION",
-    //     "STUDENT_HIRED_BY_EMPLOYER",
-    //     "STUDENT_REJECTED_BY_EMPLOYER"
-    // ]
+    
     const applicationStudentStates = [
         "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION",
         "JOB_OFFER_ACCEPTED_BY_STUDENT",
