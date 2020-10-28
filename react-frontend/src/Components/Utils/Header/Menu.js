@@ -24,7 +24,7 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Statut des employés',
+        title: 'Statut des employeurs',
         url: "/dashboard/employersStatus",
         role: 'admin'
     },

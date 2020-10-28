@@ -25,7 +25,7 @@ public class InterviewService {
     }
 
     public List<Interview> getAllInterviewsByEmployerId(long id) {
-        return interviewRepo.findAllByEmployer_id(id);
+        return interviewRepo.findAllByStudentApplication_Offer_Employer_Id(id);
     }
 
     public List<Interview> getAllInterviewsByStudentId(long id) {

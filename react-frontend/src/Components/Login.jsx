@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import * as yup from "yup";
-import {useStyles} from "./Utils/useStyles";
+import useStyles from "./Utils/useStyles";
 import {ModalContext} from "../App";
 
 const HTTP_UNAUTHORIZED = 401;

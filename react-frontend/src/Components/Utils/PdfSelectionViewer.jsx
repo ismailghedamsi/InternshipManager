@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {Typography} from "@material-ui/core";
-import {useStyles} from "./useStyles";
+import useStyles from "./useStyles";
 import PdfDocument from "./PdfDocument";
 
 export default function PdfSelectionViewer(props) {
     const classes = useStyles();
     const [currentDoc, setCurrentDoc] = useState(null);
+    const [childs, setChilds] = useState([]);
 
     useEffect(() => {
         if (props.documents) {
@@ -17,6 +18,8 @@ export default function PdfSelectionViewer(props) {
         } else
             setCurrentDoc(null)
     }, [props.documents, currentDoc])
+
+    useEffect(() => setChilds(props.documents.map((item, i) => props.children(i, setCurrent))), [props])
 
     function setCurrent(index) {
         setCurrentDoc(index)
@@ -35,10 +38,10 @@ export default function PdfSelectionViewer(props) {
                 <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                     {props.title}
                 </Typography>
-                {props.documents.map((item, i) => props.children(i, setCurrent))}
+                {childs.length > 0 ? childs : "Aucun élément à afficher"}
             </Grid>
             <Grid item xs={7} className={classes.viewbox} align="center">
-                <PdfDocument document={props.documents[getCurrentDoc()]}/>
+                <PdfDocument document={props.documents[getCurrentDoc()] ? props.documents[getCurrentDoc()] : ""}/>
             </Grid>
         </Grid>
     )
