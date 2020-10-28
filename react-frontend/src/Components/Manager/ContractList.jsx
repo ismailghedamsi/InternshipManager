@@ -31,7 +31,19 @@ export default function ContractList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 {contracts[i].adminName}
                             </Typography>
-
+                            {currentIndex === i &&
+                            <div>
+                                <Typography color={"textPrimary"} variant={"body1"}>
+                                    {contracts[i].engagementCollege}
+                                </Typography>
+                                <Typography color={"textPrimary"} variant={"body1"}>
+                                    {contracts[i].engagementCompany}
+                                </Typography>
+                                <Typography color={"textPrimary"} variant={"body1"}>
+                                    {contracts[i].engagementStudent}
+                                </Typography>
+                            </div>
+                            }
                             <hr style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}/>
                         </button>
                     </div>
