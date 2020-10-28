@@ -185,7 +185,7 @@ export default function StudentStatus() {
                                     <hr/>
                                 </div>
                             })
-                            : "L'employeur n'a programmer aucun interview"
+                            : "L'employeur n'a programmé aucune entrevue"
                         : ""
                 }
             </Grid>

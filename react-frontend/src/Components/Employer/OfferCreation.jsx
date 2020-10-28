@@ -33,10 +33,10 @@ export default function OfferCreation() {
                 "La date de fin doit être dans le futur")),
         internshipStartDate: yup.date().required().min(
             yup.ref("limitDateToApply"),
-            "La date du début ne peut pas être avant la date limite pour appliquer "),
+            "La date de début de stage ne peut pas être avant la date limite pour appliquer "),
         internshipEndDate: yup.date().required().min(
             yup.ref("internshipStartDate"),
-            "La date de fin du stage ne peut pas être avant la date du début")
+            "La date de fin de stage ne peut pas être avant la date de début")
             .when(
                 "internshipStartDate",
                 (internshipStartDate, schema) => internshipStartDate && schema.min(
@@ -170,7 +170,7 @@ export default function OfferCreation() {
                                             name="internshipStartDate"
                                             id="internshipStartDate"
                                             variant="outlined"
-                                            label="Début du stage"
+                                            label="Début de stage"
                                             required
                                             fullWidth
                                             format="MM/dd/yyyy"
@@ -182,7 +182,7 @@ export default function OfferCreation() {
                                             name="internshipEndDate"
                                             id="internshipEndDate"
                                             variant="outlined"
-                                            label="Fin du stage"
+                                            label="Fin de stage"
                                             required
                                             fullWidth
                                             format="MM/dd/yyyy"

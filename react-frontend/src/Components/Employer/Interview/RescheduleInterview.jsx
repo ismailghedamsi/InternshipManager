@@ -106,7 +106,7 @@ export function Rescheduleinterview(props) {
                                             name="studentLastName"
                                             id="studentLastName"
                                             variant="outlined"
-                                            label="Prenom de l'étudiant"
+                                            label="Prénom de l'étudiant"
                                             disabled
                                             required
                                             fullWidth

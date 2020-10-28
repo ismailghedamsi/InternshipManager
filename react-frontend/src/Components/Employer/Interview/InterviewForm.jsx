@@ -16,7 +16,7 @@ export default function InterviewForm(props) {
     const validationSchema = yup.object().shape({
         studentName: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
         interviewDate: yup.date().required(),
-        email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
+        email: yup.string().trim().email("L'adresse courriel n'a pas un format valide").required(requiredFieldMsg),
     });
 
     const initialValues = {

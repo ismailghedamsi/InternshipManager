@@ -51,7 +51,7 @@ export default function InterviewConvocation() {
                         validateOnChange={false}
                         enableReinitialize={true}
                         validationSchema={yup.object().shape({
-                            interviewDate: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas etre dans le passé")
+                            interviewDate: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
                         })}
                         initialValues={{
                             interviewDate: new Date()
