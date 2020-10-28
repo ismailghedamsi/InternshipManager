@@ -42,3 +42,9 @@ export function useDateParser() {
         return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
     }
 }
+
+export function useTimeParserFromDate() {
+    return (date) => {
+        return new Date(date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+    }
+}

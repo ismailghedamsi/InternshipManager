@@ -166,7 +166,7 @@ class ResumeControllerTests {
         for (int i = 0; i < nbStudent; i++)
             list.add(new Resume());
 
-        when(svc.getResumeWithPendingApprouval()).thenReturn(list);
+        when(svc.getResumeWithPendingApproval()).thenReturn(list);
 
         MvcResult result = mvc.perform(get("/api/resumes/pending")).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);

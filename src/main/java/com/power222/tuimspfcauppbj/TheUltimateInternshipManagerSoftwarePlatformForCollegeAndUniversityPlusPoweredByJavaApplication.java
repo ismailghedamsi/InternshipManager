@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.service.MailSendingService;
+import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -74,8 +75,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .resumes(Collections.singletonList(Resume.builder()
                             .name("testResumeFileName XX")
                             .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/1.pdf")).readAllBytes())))
-                            .reviewed(true)
-                            .approuved(true)
+                            .reviewState(ReviewState.APPROVED)
                             .build()))
                     .build());
 
@@ -90,13 +90,11 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .build());
 
-            //Generating resumes for live testing of resume services
             for (int i = 1; i < 7; i++) {
                 resumeRepo.saveAndFlush(Resume.builder()
                         .name("testResumeFileName " + i)
                         .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
-                        .approuved(i == 3)
-                        .reviewed(i == 4)
+                        .reviewState(i == 3 ? ReviewState.APPROVED : i == 4 ? ReviewState.DENIED : ReviewState.PENDING)
                         .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
                                 "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +
                                 "nunc bibendum vel. Nulla facilisi. Donec aliquet fringilla ante sit amet pretium. " : null)
@@ -104,7 +102,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .build());
             }
 
-            //Generating students for offer assignement live testing
             for (int i = 0; i < 7; i++) {
                 userRepo.saveAndFlush(Student.builder()
                         .username("etudiant" + i)
@@ -117,11 +114,9 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .phoneNumber("911")
                         .address("9310 Lasalle")
                         .build());
-
             }
 
             InternshipOffer o = null;
-            //Generating offers for offer assignement live testing
             for (int i = 1; i < 14; i++) {
                 o = internshipRepo.saveAndFlush(InternshipOffer.builder()
                         .title("testInternship " + i)
@@ -145,7 +140,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                             .offer(o)
                             .student(s)
                             .build())).build());
-
 
             var employerToSendMail = userRepo.saveAndFlush(Employer.builder()
                     .companyName("Ubisoft")
@@ -213,6 +207,16 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     "NjZmNjZlN2JhNGRlOGRiZjdjZWY4ZmExYmFmPl0vSW5mbyAzIDAgUi9Sb290IDEgMCBSL1NpemUg" +
                     "MTI+PgolaVRleHQtNy4xLjEzCnN0YXJ0eHJlZgoyNjU5CiUlRU9GCg==");
 
+            userRepo.saveAndFlush(Employer.builder()
+                    .companyName("Desjardins")
+                    .contactName("Robert Lafondue")
+                    .username("employeur2")
+                    .phoneNumber("5144317713")
+                    .address("1300 rue ducas")
+                    .email("employer@gmail.com")
+                    .role("employer")
+                    .password(passwordEncoder.encode("password"))
+                    .build());
         }
     }
 }

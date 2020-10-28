@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface InterviewRepository extends JpaRepository<Interview, Long> {
-    List<Interview> findAllByEmployer_id(long id);
+    List<Interview> findAllByStudentApplication_Offer_Employer_Id(long id);
     List<Interview> findAllByStudentApplication_Student_Id(long id);
 }

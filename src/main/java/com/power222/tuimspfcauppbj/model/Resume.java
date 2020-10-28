@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.power222.tuimspfcauppbj.util.ReviewState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,8 +24,7 @@ public class Resume {
     private String file;
 
     private String name;
-    private boolean reviewed;
-    private boolean approuved;
+    private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
 
     @ManyToOne

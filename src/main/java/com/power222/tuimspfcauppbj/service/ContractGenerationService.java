@@ -28,7 +28,7 @@ import java.util.Date;
 @Service
 public class ContractGenerationService {
 
-    private ContractService contractService;
+    private final ContractService contractService;
 
     public ContractGenerationService(ContractService contractService) {
         this.contractService = contractService;

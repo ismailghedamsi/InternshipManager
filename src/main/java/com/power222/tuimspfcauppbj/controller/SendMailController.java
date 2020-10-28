@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/sendMail")
 public class SendMailController {
-    private MailSendingService mailService;
+    private final MailSendingService mailService;
     private ContractService contractService;
 
     public SendMailController(MailSendingService mailService, ContractService contractService) {

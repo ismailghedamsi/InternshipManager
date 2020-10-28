@@ -1,27 +1,16 @@
-import {Button, Container, makeStyles, Typography} from '@material-ui/core'
+import {Button, Container, Typography} from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import AuthenticationService from '../../Services/AuthenticationService'
-import {useApi} from '../Utils/Hooks'
+import AuthenticationService from '../../../Services/AuthenticationService'
+import {useApi, useTimeParserFromDate} from '../../Utils/Hooks'
+import useStyles from "../../Utils/useStyles";
 
-export default function Interviewlist(props) {
+export default function Interviewlist() {
     const [interviews, setInterviews] = useState([{}])
     const api = useApi()
-    const history = useHistory()
-    const useStyles = makeStyles(() => ({
-        container: {
-            flex: 1,
-            height: "90vh",
-            overflow: "hidden"
-        },
-        viewbox: {
-            height: "90vh",
-            overflow: "auto",
-            backgroundColor: "#fff",
-        }
-    }));
-
+    const history = useHistory();
     const classes = useStyles();
+    const parseTimeFromDate = useTimeParserFromDate();
 
     useEffect(() => {
         api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
@@ -33,10 +22,11 @@ export default function Interviewlist(props) {
     }
 
     function isInterviewAccepted(interview) {
-        if (interview.reviewState == "APPROVED") {
+        if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT") {
             return "L'étudiant a accepté l'entrevue"
-        } else if (interview.reviewState == "DENIED") {
-            return "L'étudiant a refusé  l'entrevue"
+        } else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
+            return (<span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>);
         }
         return "En attente d'approbation"
     }
@@ -50,10 +40,10 @@ export default function Interviewlist(props) {
                             <Typography>Date de l'entrevue
                                 : {interview.date ? new Date(interview.date).toLocaleDateString() : ""}</Typography>
                             <Typography>L'heure de l'entrevue
-                                : {interview.date ? new Date(interview.date).toLocaleTimeString() : ""}</Typography>
+                                : {interview.date ? parseTimeFromDate(interview.date) : ""}</Typography>
                             <Typography>Titre de l'offre
                                 : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
-                            {<Typography>Etudiant à entrevoir
+                            {<Typography> Étudiants à rencontrer
                                 : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
                             <Typography>{isInterviewAccepted(interview)}</Typography>
                             <Button onClick={() => {
@@ -70,11 +60,9 @@ export default function Interviewlist(props) {
                             }}>Reprogrammer</Button>
                             <hr/>
                         </div>)
-                        : "Aucune entrevue a été crée"
+                        : "Aucune entrevue n'a été créée"
                 }
             </Container>
-
         </div>
-
     )
 }

@@ -4,7 +4,7 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
-import com.power222.tuimspfcauppbj.model.ReviewState;
+import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;

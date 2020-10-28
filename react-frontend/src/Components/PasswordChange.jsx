@@ -13,7 +13,7 @@ import {TextField} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Link from "@material-ui/core/Link";
 import axios from 'axios';
-import {useStyles} from "./Utils/useStyles";
+import useStyles from "./Utils/useStyles";
 import {ModalContext} from "../App";
 
 const HTTP_UNAUTHORIZED = 401;
