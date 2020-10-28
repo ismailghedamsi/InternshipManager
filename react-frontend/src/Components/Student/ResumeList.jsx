@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../Services/AuthenticationService';
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import {useApi} from "../Utils/Hooks";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 
 export default function ResumeList() {
     const classes = useStyles();
@@ -30,9 +30,9 @@ export default function ResumeList() {
     }
 
     function getResumeState(resume) {
-        if (!resume.reviewed)
+        if (resume.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>;
-        else if (!resume.approuved)
+        else if (resume.reviewState === "DENIED")
             return (<span style={{color: "red"}}>Rejeté<span
                 style={{color: "black"}}> : {resume.reasonForRejection} </span></span>);
         else
@@ -41,7 +41,7 @@ export default function ResumeList() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Liste des CV"}>
+            <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Liste des CVs"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <div className={classes.buttonDiv}>

@@ -8,7 +8,7 @@ import {SimpleFileUpload, TextField} from "formik-material-ui";
 import './ResumeUpload.css'
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
-import {useStyles} from "../../Utils/useStyles";
+import useStyles from "../../Utils/useStyles";
 import {useApi} from "../../Utils/Hooks";
 import {useHistory} from "react-router-dom";
 

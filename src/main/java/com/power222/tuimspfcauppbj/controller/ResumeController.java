@@ -24,7 +24,7 @@ public class ResumeController {
 
     @GetMapping("/pending")
     public List<Resume> getResumesWithPendingApproval() {
-        return svc.getResumeWithPendingApprouval();
+        return svc.getResumeWithPendingApproval();
     }
 
     @GetMapping("/{id}")
