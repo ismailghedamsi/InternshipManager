@@ -1,6 +1,6 @@
 package com.power222.tuimspfcauppbj.controller;
 
-import com.power222.tuimspfcauppbj.model.Contract;
+import com.power222.tuimspfcauppbj.model.ContractDto;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +20,7 @@ public class ContractGenerationController {
     }
 
     @PostMapping
-    public void generateContract(@RequestBody Contract contract) {
+    public void generateContract(@RequestBody ContractDto contract) {
         try {
             service.generateContract(contract);
         } catch (FileNotFoundException e) {
