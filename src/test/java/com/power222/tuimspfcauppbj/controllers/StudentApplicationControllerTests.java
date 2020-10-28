@@ -53,6 +53,7 @@ class StudentApplicationControllerTests {
                 .offer(new InternshipOffer())
                 .student(new Student())
                 .resume(new Resume())
+                .reasonForRejection("")
                 .build();
     }
 

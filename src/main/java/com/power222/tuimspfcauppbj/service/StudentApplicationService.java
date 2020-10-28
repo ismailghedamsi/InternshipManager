@@ -40,6 +40,7 @@ public class StudentApplicationService {
                     .student((Student) currentUser)
                     .offer(offer.get())
                     .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
+                    .reasonForRejection("")
                     .resume(resume.get())
                     .build()));
         } else

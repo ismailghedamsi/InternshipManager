@@ -82,16 +82,13 @@ export default function ApplicationList() {
                                                 .then(r => {
                                                     if (r) {
                                                         copy.applications[i].state = r.data.state;
-                                                        console.log(copy.applications[i].state)
                                                     }
                                                     setOffer(copy)
                                                 });
                                         }}
                                     inputProps={{'aria-label': 'state'}}
                                 />
-                            </Typography>
-
-                            }
+                            </Typography>}
 
                             <Link variant={"body1"}
                                   to={{

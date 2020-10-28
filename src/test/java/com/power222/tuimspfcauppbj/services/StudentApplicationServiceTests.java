@@ -64,6 +64,7 @@ class StudentApplicationServiceTests {
                 .student(expectedUser)
                 .resume(expectedResume)
                 .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
+                .reasonForRejection("")
                 .build();
     }
 
