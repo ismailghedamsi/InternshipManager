@@ -20,7 +20,7 @@ import java.util.Properties;
 
 @Service
 public class MailSendingService {
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
     public MailSendingService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -36,7 +36,7 @@ public class MailSendingService {
     }
 
     public Session setMailSession(Properties properties, User user) {
-        Session session = Session.getInstance(properties, new Authenticator() {
+        return Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 if (user instanceof Employer) {
@@ -49,7 +49,6 @@ public class MailSendingService {
                 return null;
             }
         });
-        return session;
     }
 
     public void sendEmail(User user, final String fileName, final String fileContent) throws MessagingException {

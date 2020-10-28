@@ -13,7 +13,7 @@ import javax.mail.MessagingException;
 @RestController
 @RequestMapping("/api/sendMail")
 public class SendMailController {
-    private MailSendingService mailService;
+    private final MailSendingService mailService;
     private ContractService contractService;
 
     public SendMailController(MailSendingService mailService, ContractService contractService) {

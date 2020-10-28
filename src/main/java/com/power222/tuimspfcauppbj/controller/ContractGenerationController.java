@@ -13,7 +13,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/contractGeneration")
 public class ContractGenerationController {
-    private ContractGenerationService service;
+    private final ContractGenerationService service;
 
     public ContractGenerationController(ContractGenerationService service) {
         this.service = service;
@@ -23,8 +23,6 @@ public class ContractGenerationController {
     public void generateContract(@RequestBody Contract contract) {
         try {
             service.generateContract(contract);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
