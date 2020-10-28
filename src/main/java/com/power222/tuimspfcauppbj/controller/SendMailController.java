@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.mail.MessagingException;
-
 @RestController
 @RequestMapping("/api/sendMail")
 public class SendMailController {
@@ -23,11 +21,7 @@ public class SendMailController {
 
     @PostMapping("/contract")
     public void SendContractByMail(@RequestBody Contract contract) {
-        try {
-            mailService.sendEmail(contract.getStudentApplication().getOffer().getEmployer(), "contract.pdf", contract.getFile());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        mailService.sendEmail(contract.getStudentApplication().getOffer().getEmployer(), "contract.pdf", contract.getFile());
     }
 
 

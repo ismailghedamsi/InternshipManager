@@ -15,23 +15,12 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 @Service
 public class MailSendingService {
     @Autowired
     private JavaMailSender javaMailSender;
-
- /*   public Properties setEmailProperties() {
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "mail.smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-        return properties;
-    }*/
 
     public Session setMailSession(Properties properties, User user) {
         Session session = Session.getInstance(properties, new Authenticator() {
@@ -50,10 +39,9 @@ public class MailSendingService {
         return session;
     }
 
-    public void sendEmail(User user, final String fileName, final String fileContent) throws MessagingException {
+    public void sendEmail(User user, final String fileName, final String fileContent) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper;
-        Map<String, Object> map = new HashMap<>();
         try {
             helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
             String sendTo = "projetemployeur@gmail.com";
@@ -64,11 +52,10 @@ public class MailSendingService {
 
             // add attachment encode in base64
             byte[] decodedPdfContent = Base64.getDecoder().decode(fileContent);
-            helper.addAttachment("contract.pdf", new ByteArrayResource(decodedPdfContent));
-
+            helper.addAttachment(fileName, new ByteArrayResource(decodedPdfContent));
             helper.setTo(sendTo);
-            helper.setSubject("Subject");
-            helper.setText("", true);
+            helper.setSubject("Internship contract");
+            helper.setText(htmlMsg, true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
             e.printStackTrace();
