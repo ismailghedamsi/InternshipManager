@@ -24,7 +24,7 @@ public class Resume {
     private String file;
 
     private String name;
-    private ReviewState reviewState;
+    private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
 
     @ManyToOne

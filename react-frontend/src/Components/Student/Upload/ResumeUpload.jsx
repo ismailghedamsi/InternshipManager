@@ -44,7 +44,7 @@ export default function ResumeUpload() {
                         onSubmit={async (values) => readFileAsync(values.file).then((file) => {
                             let dto = {...values};
                             dto.file = file;
-                            return api.post("/resumes", dto)
+                            return api.post("/api/resumes", dto)
                                 .then(() => history.push("/dashboard/listcv"))
                         })
                         }

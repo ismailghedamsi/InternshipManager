@@ -11,11 +11,18 @@ import PdfDocument from "../Utils/PdfDocument";
 import * as PropTypes from "prop-types";
 import OfferDetails from "../Utils/OfferDetails";
 
+const applicationAcceptedStates = [
+    "STUDENT_HIRED_BY_EMPLOYER",
+    "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION",
+    "JOB_OFFER_ACCEPTED_BY_STUDENT",
+    "JOB_OFFER_DENIED_BY_STUDENT"
+]
+
 function ResumeStatus(props) {
     function getResumeState(resume) {
-        if (!resume.reviewed)
+        if (!resume.reviewState === "APPROVED")
             return <span style={{color: "blue"}}>En attente</span>;
-        else if (!resume.approuved)
+        else if (!resume.reviewState === "DENIED")
             return (<span style={{color: "red"}}>Rejeté<span
                 style={{color: "black"}}> : {resume.reasonForRejection} </span></span>);
         else
@@ -44,16 +51,25 @@ ResumeStatus.propTypes = {
 };
 
 function OfferStatus(props) {
-    const parseDate = useDateParser();
+    const parseInterviewDate = useDateParser();
     const application = props.offer.applications.find(a => a.student.id === props.currentStudent.id);
 
-    function parseState(interview) {
-        if (interview.reviewState === "ACCEPTED")
+    function parseInterviewState(interview) {
+        if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
             return "acceptée par l'étudiant"
-        else if (interview.reviewState === "DENIED")
-            return "refusée par l'étudiant. Raison: " + interview.reasonForRejection
+        else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
+            return "refusée par l'étudiant. Raison: " + interview.reasonForRejectionByStudent
         else
             return "en attente de réponse de l'étudiant"
+    }
+
+    function parseApplicationState(application) {
+        if (application.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")
+            return "Acceptée par l'étudiant"
+        else if (application.state === "JOB_OFFER_DENIED_BY_STUDENT")
+            return "Refusée par l'étudiant. Raison: " + application.reasonForRejection
+        else
+            return "En attente de réponse de l'étudiant"
     }
 
     return <div>
@@ -67,12 +83,12 @@ function OfferStatus(props) {
         <OfferDetails offer={props.offer}/>
         <Typography
             variant={"body2"}>
-            À appliqué: {application ? "Oui" : "Non"} &emsp;
+            A appliqué: {application ? "Oui" : "Non"} &emsp;
             {application && <span>
             {
                 application.interview ?
                     <span>
-                   Entrevue: {parseDate(application.interview.date)}, {parseState(application.interview)}
+                   Entrevue: {parseInterviewDate(application.interview.date)}, {parseInterviewState(application.interview)}
                 </span>
                     :
                     <span>
@@ -80,8 +96,8 @@ function OfferStatus(props) {
                 </span>
             }
                 <br/>
-                &emsp;À été sélectionné: {application.hired ? "Oui" : "Non"}
-                &emsp;À accepté l'offre: {parseState(application)}
+                &emsp;A été sélectionné: {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
+                &emsp;Offre: {parseApplicationState(application)}
                 </span>
             }
         </Typography>

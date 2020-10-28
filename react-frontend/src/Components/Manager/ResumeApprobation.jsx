@@ -17,10 +17,9 @@ export default function ResumeApprobation() {
             .then(r => setResumes(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    function sendDecision(index, approuved, reason = "") {
+    function sendDecision(index, reviewState, reason = "") {
         const nextState = [...resumes];
-        nextState[index].approuved = approuved;
-        nextState[index].reviewed = true;
+        nextState[index].reviewState = reviewState;
         nextState[index].reasonForRejection = reason;
         return api.put("/resumes/" + nextState[index].id, nextState[index])
             .then(() => {
@@ -43,7 +42,7 @@ export default function ResumeApprobation() {
                             <button
                                 type={"button"}
                                 className={[classes.linkButton].join(' ')}
-                                onClick={() => sendDecision(i, true)}
+                                onClick={() => sendDecision(i, "APPROVED")}
                                 style={{marginRight: 5}}
                             ><i className="fa fa-check-square" style={{color: "green"}}/></button>
                             <button
@@ -79,7 +78,7 @@ export default function ResumeApprobation() {
                 isOpen={isReasonModalOpen}
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, false, values.message)}
+                onSubmit={async (values) => sendDecision(currentIndex, "DENIED", values.message)}
             />
         </div>
     )

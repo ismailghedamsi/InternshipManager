@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
+import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class StudentApplicationService {
             return Optional.of(appliRepo.saveAndFlush(StudentApplication.builder()
                     .student((Student) currentUser)
                     .offer(offer.get())
+                    .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
                     .resume(resume.get())
                     .build()));
         } else
@@ -47,6 +49,8 @@ public class StudentApplicationService {
     public Optional<StudentApplication> updateStudentApplicationState(long id, StudentApplication transitionalApplication) {
         return appliRepo.findById(id)
                 .map(application -> {
+                    System.out.println(application.getState());
+                    System.out.println(transitionalApplication.getState());
                     application.setState(transitionalApplication.getState());
                     application.setReasonForRejection(transitionalApplication.getReasonForRejection());
                     return appliRepo.saveAndFlush(application);

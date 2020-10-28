@@ -30,9 +30,9 @@ export default function ResumeList() {
     }
 
     function getResumeState(resume) {
-        if (!resume.reviewed)
+        if (resume.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>;
-        else if (!resume.approuved)
+        else if (resume.reviewState === "DENIED")
             return (<span style={{color: "red"}}>Rejeté<span
                 style={{color: "black"}}> : {resume.reasonForRejection} </span></span>);
         else

@@ -27,7 +27,7 @@ public class InternshipOffer {
     private Date internshipStartDate;
     private Date internshipEndDate;
     private int nbStudentToHire;
-    private ReviewState reviewState;
+    private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
 
     @Lob

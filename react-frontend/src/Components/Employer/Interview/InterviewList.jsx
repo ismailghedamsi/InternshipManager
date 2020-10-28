@@ -22,11 +22,11 @@ export default function Interviewlist() {
     }
 
     function isInterviewAccepted(interview) {
-        if (interview.reviewState === "APPROVED") {
+        if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT") {
             return "L'étudiant a accepté l'entrevue"
-        } else if (interview.reviewState === "DENIED") {
+        } else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
             return (<span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {interview.reasonForRejection} </span></span>);
+                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>);
         }
         return "En attente d'approbation"
     }
@@ -60,7 +60,7 @@ export default function Interviewlist() {
                             }}>Reprogrammer</Button>
                             <hr/>
                         </div>)
-                        : "Aucune entrevue a été crée"
+                        : "Aucune entrevue n'a été créée"
                 }
             </Container>
         </div>

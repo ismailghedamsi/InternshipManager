@@ -7,6 +7,7 @@ import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import com.power222.tuimspfcauppbj.util.ReviewState;
+import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,6 +63,7 @@ class StudentApplicationServiceTests {
                 .offer(expectedOffer)
                 .student(expectedUser)
                 .resume(expectedResume)
+                .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
                 .build();
     }
 
