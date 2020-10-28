@@ -1,8 +1,8 @@
 package com.power222.tuimspfcauppbj.controller;
 
-import com.power222.tuimspfcauppbj.model.AuthenticationDTO;
-import com.power222.tuimspfcauppbj.model.PasswordDTO;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
+import com.power222.tuimspfcauppbj.util.AuthenticationDTO;
+import com.power222.tuimspfcauppbj.util.PasswordDTO;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;

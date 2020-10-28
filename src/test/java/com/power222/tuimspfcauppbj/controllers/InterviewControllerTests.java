@@ -18,10 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,8 +47,71 @@ class InterviewControllerTests {
         expectedInterview = Interview.builder()
                 .id(1L)
                 .date(new Date())
-                .employer(Employer.builder().build())
                 .build();
+    }
+
+    @Test
+    void getAllInterviews() throws Exception {
+        var i1 = Interview.builder().id(1L).build();
+        var i2 = Interview.builder().id(2L).build();
+        var i3 = Interview.builder().id(3L).build();
+
+        when(svc.getAllInterviews()).thenReturn(Arrays.asList(i1, i2, i3));
+
+        MvcResult result = mvc.perform(get("/api/interviews")).andReturn();
+
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertEquals(actuals.size(), 3);
+    }
+
+    @Test
+    void getInterviewsByEmployerId() throws Exception {
+        var i1 = Interview.builder().id(1L).build();
+        var i2 = Interview.builder().id(2L).build();
+        var i3 = Interview.builder().id(3L).build();
+
+        when(svc.getAllInterviewsByEmployerId(1L)).thenReturn(Arrays.asList(i1, i2, i3));
+
+        var result = mvc.perform(get("/api/interviews/employer/1")).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertEquals(actuals.size(), 3);
+    }
+
+    @Test
+    void getInterviewsByEmployerIdWithBadId() throws Exception {
+        var result = mvc.perform(get("/api/interviews/employer/1")).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertEquals(actuals.size(), 0);
+    }
+
+    @Test
+    void getInterviewsByStudentId() throws Exception {
+        var i1 = Interview.builder().id(1L).build();
+        var i2 = Interview.builder().id(2L).build();
+        var i3 = Interview.builder().id(3L).build();
+
+        when(svc.getAllInterviewsByStudentId(1L)).thenReturn(Arrays.asList(i1, i2, i3));
+
+        var result = mvc.perform(get("/api/interviews/student/1")).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertEquals(actuals.size(), 3);
+    }
+
+    @Test
+    void getInterviewsByStudentIdWithBadId() throws Exception {
+        var result = mvc.perform(get("/api/interviews/student/1")).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertEquals(actuals.size(), 0);
     }
 
     @Test
@@ -70,24 +130,6 @@ class InterviewControllerTests {
         var actual = mvc.perform(get("/api/interviews/5")).andReturn();
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
-
-    @Test
-    void getAllInterviews() throws Exception {
-        final int nbInterviews = 3;
-
-        List<Interview> list = new ArrayList<>();
-        for (int i = 0; i < nbInterviews; i++)
-            list.add(new Interview());
-
-        when(svc.getAllInterviews()).thenReturn(list);
-
-        MvcResult result = mvc.perform(get("/api/interviews")).andReturn();
-
-        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        assertEquals(actuals.size(), nbInterviews);
     }
 
     @Test

@@ -31,9 +31,9 @@ public class StudentApplicationController {
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/hire/{id}")
-    public ResponseEntity<StudentApplication> updateStudentApplicationIsHired(@PathVariable long id) {
-        return svc.updateStudentApplicationIsHired(id)
+    @PutMapping("/state/{id}")
+    public ResponseEntity<StudentApplication> updateStudentApplicationState(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
+        return svc.updateStudentApplicationState(id, studentApplication)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 
@@ -42,11 +42,5 @@ public class StudentApplicationController {
     @PutMapping("/{id}")
     public StudentApplication updateStudentApplication(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
         return svc.updateStudentApplication(id, studentApplication);
-    }
-
-    @PutMapping("/decision/{id}")
-    public ResponseEntity<StudentApplication> updateStudentApplicatioDecision(@RequestBody StudentApplication studentApplication, @PathVariable long id) {
-        return svc.updateStudentApplicationStudentDecision(id, studentApplication).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
