@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,47 +39,55 @@ public class ContractGenerationService {
         this.applicationService = applicationService;
     }
 
-    public void generateContract(ContractDto contract) throws IOException {
-        StudentApplication application = getStudentApplication(contract);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        PdfWriter writer = new PdfWriter(stream);
+    public boolean generateContract(ContractDto contract) throws IOException {
+        Optional<StudentApplication> optionalApplication = getStudentApplication(contract);
+        ByteArrayOutputStream stream = null;
+        if (optionalApplication.isPresent()) {
+            StudentApplication studentApplication = optionalApplication.get();
+            stream = new ByteArrayOutputStream();
+            PdfWriter writer = new PdfWriter(stream);
        /* OutputStream fos = new FileOutputStream("contract.pdf");
         PdfWriter writer = new PdfWriter(fos);*/
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf, PageSize.A4);
-        document.add(new Paragraph("CONTRAT DE STAGE").setBold().setFontSize(20)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setMarginTop(document.getPageEffectiveArea(PageSize.A4).getHeight() / 2));
-        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        Paragraph paragraph = new Paragraph(new Text("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES \n\n").setBold()
-        ).setPaddingTop(30f)
-                .add(new Text("Dans le cadre de la formule ATE, les parties citées ci-dessous:\n\n"))
-                .add("Le gestionnaire de stage, " + contract.getAdminName() + "\n\n")
-                .add(new Text("et\n\n\n").setBold())
-                .add(new Text("L'employeur, " + application.getOffer().getEmployer().getCompanyName() + "\n\n"))
-                .add(new Text("et\n\n\n").setBold())
-                .add(new Text("L'étudiant(e), " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName() + "\n\n"))
-                .add(new Text("Conviennent des conditions de stage suivantes : "));
-        document.add(paragraph.setTextAlignment(TextAlignment.CENTER));
-        addInternshipInfoTable(contract, document);
-        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
-        float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
-        document.add(new Table(1).addCell(new Paragraph(application.getOffer().getDescription()).setWidth(documentWidth)));
-        internshipPartiesResponsabilities(contract, document);
-        signaturesSection(document, documentWidth);
-        document.close();
-        String fileBase64 = com.itextpdf.io.codec.Base64.encodeBytes(stream.toByteArray());
-        contract.setFile(fileBase64);
-        contractService.createAndSaveNewContract(ContractDto.toContract(contract, applicationService));
-        com.itextpdf.io.codec.Base64.decodeToFile(fileBase64, "test.pdf");
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf, PageSize.A4);
+            document.add(new Paragraph("CONTRAT DE STAGE").setBold().setFontSize(20)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginTop(document.getPageEffectiveArea(PageSize.A4).getHeight() / 2));
+            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+            Paragraph paragraph = new Paragraph(new Text("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES \n\n").setBold()
+            ).setPaddingTop(30f)
+                    .add(new Text("Dans le cadre de la formule ATE, les parties citées ci-dessous:\n\n"))
+                    .add("Le gestionnaire de stage, " + contract.getAdminName() + "\n\n")
+                    .add(new Text("et\n\n\n").setBold())
+                    .add(new Text("L'employeur, " + studentApplication.getOffer().getEmployer().getCompanyName() + "\n\n"))
+                    .add(new Text("et\n\n\n").setBold())
+                    .add(new Text("L'étudiant(e), " + studentApplication.getStudent().getFirstName() + " " + studentApplication.getStudent().getLastName() + "\n\n"))
+                    .add(new Text("Conviennent des conditions de stage suivantes : "));
+            document.add(paragraph.setTextAlignment(TextAlignment.CENTER));
+            addInternshipInfoTable(contract, document);
+            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+            document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
+            float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
+            document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDescription()).setWidth(documentWidth)));
+            internshipPartiesResponsabilities(contract, document);
+            signaturesSection(document, documentWidth);
+            document.close();
+            String fileBase64 = com.itextpdf.io.codec.Base64.encodeBytes(stream.toByteArray());
+            contract.setFile(fileBase64);
+            contractService.createAndSaveNewContract(ContractDto.toContract(contract, applicationService));
+            com.itextpdf.io.codec.Base64.decodeToFile(fileBase64, "test.pdf");
+        }
+        return stream == null;
     }
 
-    private StudentApplication getStudentApplication(ContractDto contract) {
-        StudentApplication application = applicationService.getAllApplication().stream()
+    public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
+        var applications = applicationService.getAllApplication().stream()
                 .filter(studentApplication -> studentApplication.getId() == contract.getStudentApplicationId())
-                .collect(Collectors.toList()).get(0);
-        return application;
+                .collect(Collectors.toList());
+        if (applications.size() > 0) {
+            return Optional.of(applications.get(0));
+        }
+        return Optional.empty();
     }
 
     private void signaturesSection(Document document, float documentWidth) {
@@ -128,33 +137,36 @@ public class ContractGenerationService {
     }
 
     private void addInternshipInfoTable(ContractDto contract, Document document) {
-        StudentApplication application = getStudentApplication(contract);
-        InternshipOffer offer = application.getOffer();
-        Table internshipInfoTable = new Table(1).setWidth(500f);
-        internshipInfoTable.setBorder(new SolidBorder(1f));
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("ENDROIT DU STAGE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Adresse : " + application.getOffer().getEmployer().getAddress()).setMultipliedLeading(1.2f)));
+        Optional<StudentApplication> optionalApplication = getStudentApplication(contract);
+        if (optionalApplication.isPresent()) {
+            StudentApplication application = optionalApplication.get();
+            InternshipOffer offer = application.getOffer();
+            Table internshipInfoTable = new Table(1).setWidth(500f);
+            internshipInfoTable.setBorder(new SolidBorder(1f));
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("ENDROIT DU STAGE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("Adresse : " + application.getOffer().getEmployer().getAddress()).setMultipliedLeading(1.2f)));
 
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("DUREE DU STAGE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Date de début : " + parseDate(offer.getInternshipStartDate()) +
-                        "\nDate de fin: " + parseDate(offer.getInternshipEndDate())
-                        + "\nNombre total de semaines : " + dateIntervalToWeeks(offer.getInternshipEndDate(), offer.getInternshipStartDate()) + "\n").setMultipliedLeading(1.2f)));
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("DUREE DU STAGE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("Date de début : " + parseDate(offer.getInternshipStartDate()) +
+                            "\nDate de fin: " + parseDate(offer.getInternshipEndDate())
+                            + "\nNombre total de semaines : " + dateIntervalToWeeks(offer.getInternshipEndDate(), offer.getInternshipStartDate()) + "\n").setMultipliedLeading(1.2f)));
 
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("HORAIRE DE TRAVAIL").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Horaire de travail : " + application.getOffer().getStartTime() +
-                        "-" + application.getOffer().getEndTime() +
-                        "\nNombre total d’heures par semaine: " + contract.getTotalHoursPerWeek() + "h\n").setMultipliedLeading(1.2f)));
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("HORAIRE DE TRAVAIL").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("Horaire de travail : " + application.getOffer().getStartTime() +
+                            "-" + application.getOffer().getEndTime() +
+                            "\nNombre total d’heures par semaine: " + contract.getTotalHoursPerWeek() + "h\n").setMultipliedLeading(1.2f)));
 
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("SALAIRE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
-        internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Salaire : " + offer.getSalary() + "$").setMultipliedLeading(1.2f)));
-        document.add(internshipInfoTable);
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("SALAIRE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
+            internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
+                    .add(new Paragraph("Salaire : " + offer.getSalary() + "$").setMultipliedLeading(1.2f)));
+            document.add(internshipInfoTable);
+        }
     }
 }
