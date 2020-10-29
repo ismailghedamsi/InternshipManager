@@ -26,7 +26,9 @@ public class ContractGenerationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         try {
-            service.generateContract(contract);
+            if (service.generateContract(contract)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
