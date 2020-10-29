@@ -41,6 +41,10 @@ export default function ApplicationList() {
         console.log(location.state.offerId)
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
+    function clickOnce() {
+        this.setAttribute("disabled", "disabled");
+    }
+
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
@@ -72,6 +76,7 @@ export default function ApplicationList() {
                                 offer.applications[i].state === "JOB_OFFER_ACCEPTED_BY_STUDENT" ?
                                 (<Typography variant={"body1"} style={{color: "blue"}}>
                                     L'étudiant a été embauché
+                                    {/*todo ajouter une boolean pour disabled le button, pour qu'il ne peut plus utiliser 2e fois*/}
                                     <button
                                         type={"button"}
                                         className={[classes.linkButton].join(' ')}
@@ -80,6 +85,7 @@ export default function ApplicationList() {
                                             openContractModal();
                                         }}
                                     ><i className="fa fa-envelope-square"/></button>
+
                                 </Typography>) :
                                 
                                 offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
