@@ -38,6 +38,7 @@ export default function ApplicationList() {
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
+        console.log(location.state.offerId)
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (

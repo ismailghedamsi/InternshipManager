@@ -17,7 +17,10 @@ export default function ContractList() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={contracts.map(o => o.file)} title={"Contracts"}>
+            <PdfSelectionViewer
+                documents={contracts ? contracts.map(c => c.file ? "data:application/pdf;base64," + c.file : "") : []}
+                title={"Contracts"}>
+                {/*{console.log(contracts[0].file)}*/}
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
@@ -29,21 +32,8 @@ export default function ContractList() {
                             }}
                         >
                             <Typography color={"textPrimary"} variant={"body1"}>
-                                {contracts[i].adminName}
+                                Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
-                            {currentIndex === i &&
-                            <div>
-                                <Typography color={"textPrimary"} variant={"body1"}>
-                                    {contracts[i].engagementCollege}
-                                </Typography>
-                                <Typography color={"textPrimary"} variant={"body1"}>
-                                    {contracts[i].engagementCompany}
-                                </Typography>
-                                <Typography color={"textPrimary"} variant={"body1"}>
-                                    {contracts[i].engagementStudent}
-                                </Typography>
-                            </div>
-                            }
                             <hr style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}/>
                         </button>
                     </div>
