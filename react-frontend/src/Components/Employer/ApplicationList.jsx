@@ -28,7 +28,6 @@ export default function ApplicationList() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentApplicationId, setCurrentApplicationId] = useState(0);
     const [isContractModalOpen, openContractModal, closeContractModal] = useModal();
-    const [application, setApplication] = useState({});
 
     const applicationStudentStates = [
         "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION",
@@ -40,10 +39,6 @@ export default function ApplicationList() {
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        setApplication(location.state)
-    }, [location.state])
 
     return (
         <div style={{height: "100%"}}>
@@ -80,12 +75,6 @@ export default function ApplicationList() {
                                         type={"button"}
                                         className={[classes.linkButton].join(' ')}
                                         onClick={() => {
-                                            {
-                                                console.log(offer.applications[i].id)
-                                            }
-                                            {
-                                                console.log(application)
-                                            }
                                             setCurrentApplicationId(offer.applications[i].id);
                                             openContractModal();
                                         }}
@@ -147,12 +136,8 @@ export default function ApplicationList() {
                         <Formik
                             onSubmit={async (values) => {
                                 let dto = {...values};
-                                // todo envoyer le id de apllication
-                                // dto.studentApplication.id = currentApplicationId;
-                                {
-                                    console.log(dto.studentApplication)
-                                }
-                                return api.post("/contract", dto)
+                                dto.studentApplicationId = currentApplicationId;
+                                return api.post("/contractGeneration", dto)
                                     .then(() => {
                                         closeContractModal();
                                     })
