@@ -12,13 +12,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@EqualsAndHashCode
-public class Interview {
+@EqualsAndHashCode(callSuper = true)
+public class Interview extends SemesterDiscriminatedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private Date date;
+    @Builder.Default
     private InterviewState studentAcceptanceState = InterviewState.INTERVIEW_WAITING_FOR_STUDENT_DECISION;
     private String reasonForRejectionByStudent;
 

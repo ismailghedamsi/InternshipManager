@@ -11,13 +11,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@EqualsAndHashCode
-public class StudentApplication {
+@EqualsAndHashCode(callSuper = true)
+public class StudentApplication extends SemesterDiscriminatedEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Builder.Default
     private StudentApplicationState state = StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW;
+
+    @Builder.Default
     private String reasonForRejection = "";
 
     @ManyToOne

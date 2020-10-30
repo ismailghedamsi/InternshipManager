@@ -3,7 +3,6 @@ package com.power222.tuimspfcauppbj.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.InterviewController;
-import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Interview;
 import com.power222.tuimspfcauppbj.service.InterviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

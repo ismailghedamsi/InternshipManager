@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,121 +38,94 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
         private final InternshipOfferRepository internshipRepo;
+        private final StudentApplicationRepository appliRepo;
 
         public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo, MailSendingService mailService) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
             this.internshipRepo = internshipRepo;
+            this.appliRepo = appliRepo;
             this.mailService = mailService;
         }
 
         @Override
-        public void run(String... args) throws IOException, MessagingException {
-            userRepo.saveAndFlush(User.builder()
+        @Transactional
+        public void run(String... args) throws IOException {
+            userRepo.save(User.builder()
                     .username("admin")
                     .role("admin")
                     .password(passwordEncoder.encode("password"))
-                    .passwordExpired(true)
                     .build());
 
-            userRepo.saveAndFlush(User.builder()
-                    .username("admin2")
-                    .role("admin")
+            var employer = userRepo.save(Employer.builder()
+                    .role("employer")
+                    .username("employeur")
                     .password(passwordEncoder.encode("password"))
+                    .companyName("Dacima")
+                    .contactName("Zack")
+                    .phoneNumber("5144317713")
+                    .address("1300 rue ducas")
+                    .email("projetemployeur@gmail.com")
                     .build());
 
-            var s = userRepo.saveAndFlush(Student.builder()
-                    .username("etudiant")
+            var student = userRepo.save(Student.builder()
                     .role("student")
+                    .username("etudiant")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Bob")
                     .lastName("Brutus")
                     .studentId("1234")
-                    .email("power@gmail.ca")
+                    .email("projetemployeur@gmail.com")
                     .phoneNumber("911")
                     .address("9310 Lasalle")
-                    .resumes(Collections.singletonList(Resume.builder()
-                            .name("testResumeFileName XX")
-                            .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/1.pdf")).readAllBytes())))
-                            .reviewState(ReviewState.APPROVED)
-                            .build()))
                     .build());
 
-            var e = userRepo.saveAndFlush(Employer.builder()
-                    .companyName("Dacima")
-                    .contactName("Zack")
-                    .username("employeur")
-                    .phoneNumber("5144317713")
-                    .address("1300 rue ducas")
-                    .email("employer@gmail.com")
-                    .role("employer")
-                    .password(passwordEncoder.encode("password"))
+            var resume = resumeRepo.save(Resume.builder()
+                    .name("Résumé bootstrappé")
+                    .reviewState(ReviewState.APPROVED)
+                    .owner(student)
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/1.pdf")).readAllBytes())))
                     .build());
 
-            for (int i = 1; i < 7; i++) {
-                resumeRepo.saveAndFlush(Resume.builder()
-                        .name("testResumeFileName " + i)
-                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + i + ".pdf")).readAllBytes())))
-                        .reviewState(i == 3 ? ReviewState.APPROVED : i == 4 ? ReviewState.DENIED : ReviewState.PENDING)
-                        .reasonForRejection(i == 4 ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in " +
-                                "faucibus tortor. Fusce vitae bibendum nibh. Nulla tristique sapien erat, nec tincidunt " +
-                                "nunc bibendum vel. Nulla facilisi. Donec aliquet fringilla ante sit amet pretium. " : null)
-                        .owner(s)
-                        .build());
-            }
-
-            for (int i = 0; i < 7; i++) {
-                userRepo.saveAndFlush(Student.builder()
-                        .username("etudiant" + i)
-                        .password(passwordEncoder.encode("password"))
-                        .role("student")
-                        .firstName("Bob " + i)
-                        .lastName("Brutus")
-                        .studentId("1234")
-                        .email("power@gmail.ca")
-                        .phoneNumber("911")
-                        .address("9310 Lasalle")
-                        .build());
-            }
-
-            InternshipOffer o = null;
-            for (int i = 1; i < 14; i++) {
-                o = internshipRepo.saveAndFlush(InternshipOffer.builder()
-                        .title("testInternship " + i)
-                        .description("Some basic description " + i)
-                        .salary(15.98)
-                        .creationDate(Date.from(Instant.now()))
-                        .limitDateToApply(i == 6 ? Date.valueOf(LocalDate.now().minusDays(5)) : Date.valueOf(LocalDate.now().plusWeeks(1)))
-                        .internshipStartDate(Date.valueOf(LocalDate.now().plusWeeks(2)))
-                        .internshipEndDate(Date.valueOf(LocalDate.now().plusWeeks(9)))
-                        .nbStudentToHire(25)
-                        .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/" + (i > 6 ? i / 2 : i) + ".pdf")).readAllBytes())))
-                        .employer(e)
-                        .allowedStudents(i % 2 == 0 ? Collections.singletonList(s) : Collections.emptyList())
-                        .reviewState(i == 5 || i == 2 ? ReviewState.APPROVED : ReviewState.PENDING)
-                        .build());
-            }
-
-            userRepo.saveAndFlush(s.toBuilder()
-                    .applications(Collections.singletonList(StudentApplication.builder()
-                            .resume(s.getResumes().get(0))
-                            .offer(o)
-                            .student(s)
-                            .build())).build());
-
-            var employerToSendMail = userRepo.saveAndFlush(Employer.builder()
-                    .companyName("Ubisoft")
-                    .contactName("Simon")
-                    .username("projetemployeur")
-                    .phoneNumber("5144317713")
-                    .address("1300 rue ducas")
-                    .email("projetemployeur@gmail.com")
-                    .role("employer")
-                    .password(passwordEncoder.encode("Projet_employeur1"))
+            var internshipOffer = internshipRepo.save(InternshipOffer.builder()
+                    .title("Offre de stage bootstrappée")
+                    .description("Description bootstrappée - Développement d'applications Web trois tiers.")
+                    .salary(15.98)
+                    .creationDate(Date.from(Instant.now()))
+                    .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
+                    .internshipStartDate(Date.valueOf(LocalDate.now().plusWeeks(2)))
+                    .internshipEndDate(Date.valueOf(LocalDate.now().plusWeeks(9)))
+                    .nbStudentToHire(25)
+                    .reviewState(ReviewState.APPROVED)
+                    .employer(employer)
+                    .allowedStudents(Collections.singletonList(student))
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/6.pdf")).readAllBytes())))
                     .build());
 
-            mailService.sendEmail(employerToSendMail, "contract.pdf", "JVBERi0xLjcKJeLjz9MKNSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDc5Pj5z" +
+            var internshipOffer2 = internshipRepo.save(InternshipOffer.builder()
+                    .semester("a2021h2022")
+                    .title("Offre de stage bootstrappée de l'an prochain")
+                    .description("Description bootstrappée - Écriture de scripts en Python.")
+                    .salary(18.98)
+                    .creationDate(Date.from(Instant.now()))
+                    .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
+                    .internshipStartDate(Date.valueOf(LocalDate.now().plusWeeks(4)))
+                    .internshipEndDate(Date.valueOf(LocalDate.now().plusWeeks(11)))
+                    .nbStudentToHire(15)
+                    .reviewState(ReviewState.APPROVED)
+                    .employer(employer)
+                    .allowedStudents(Collections.singletonList(student))
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/4.pdf")).readAllBytes())))
+                    .build());
+
+            var studentApplication = appliRepo.save(StudentApplication.builder()
+                    .offer(internshipOffer)
+                    .student(student)
+                    .resume(resume)
+                    .build());
+
+            mailService.sendEmail(employer, "contract.pdf", "JVBERi0xLjcKJeLjz9MKNSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDc5Pj5z" +
                     "dHJlYW0KeJwr5HIK4dJ3M1QwMlAISeMytDTVM7FUMLa01LOwUAhJ4TJSCCniMtAzAwJzhXIuDWd/" +
                     "v5AgxxAFF1eF4BBHd1fNkCwu1xCuQC4AR7gQRgplbmRzdHJlYW0KZW5kb2JqCjQgMCBvYmoKPDwv" +
                     "Q29udGVudHMgNSAwIFIvTWVkaWFCb3hbMCAwIDU5NSA4NDJdL1BhcmVudCAyIDAgUi9SZXNvdXJj" +
@@ -207,16 +180,11 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     "NjZmNjZlN2JhNGRlOGRiZjdjZWY4ZmExYmFmPl0vSW5mbyAzIDAgUi9Sb290IDEgMCBSL1NpemUg" +
                     "MTI+PgolaVRleHQtNy4xLjEzCnN0YXJ0eHJlZgoyNjU5CiUlRU9GCg==");
 
-            userRepo.saveAndFlush(Employer.builder()
-                    .companyName("Desjardins")
-                    .contactName("Robert Lafondue")
-                    .username("employeur2")
-                    .phoneNumber("5144317713")
-                    .address("1300 rue ducas")
-                    .email("employer@gmail.com")
-                    .role("employer")
-                    .password(passwordEncoder.encode("password"))
-                    .build());
+
+            userRepo.flush();
+            resumeRepo.flush();
+            internshipRepo.flush();
+            appliRepo.flush();
         }
     }
 }
