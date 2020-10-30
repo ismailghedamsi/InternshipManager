@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import useStyles from "../Utils/useStyles";
 import {useApi, useModal} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
@@ -23,6 +23,7 @@ const requiredFieldMsg = "Ce champs est requis";
 export default function ApplicationList() {
     const classes = useStyles();
     const location = useLocation();
+    const history = useHistory();
     const api = useApi();
     const [offer, setOffer] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -71,56 +72,52 @@ export default function ApplicationList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 {offer.applications[i].student.address}
                             </Typography>
-
                             {applicationStudentStates.indexOf(offer.applications[i].state) > -1 ? (
-                                offer.applications[i].state === "JOB_OFFER_ACCEPTED_BY_STUDENT" ?
-                                (<Typography variant={"body1"} style={{color: "blue"}}>
-                                    L'étudiant a été embauché
-                                    {/*todo ajouter une boolean pour disabled le button, pour qu'il ne peut plus utiliser 2e fois*/}
-                                    <button
-                                        type={"button"}
-                                        className={[classes.linkButton].join(' ')}
-                                        onClick={() => {
-                                            setCurrentApplicationId(offer.applications[i].id);
-                                            openContractModal();
-                                        }}
-                                    ><i className="fa fa-envelope-square"/></button>
+                                    offer.applications[i].state === "JOB_OFFER_ACCEPTED_BY_STUDENT" ?
+                                        (<Typography variant={"body1"} style={{color: "blue"}}>
+                                            L'étudiant a été embauché
+                                            {offer.applications[i].contract === null &&
+                                            <button
+                                                type={"button"}
+                                                className={[classes.linkButton].join(' ')}
+                                                onClick={() => {
+                                                    setCurrentApplicationId(offer.applications[i].id);
+                                                    openContractModal();
+                                                }}
+                                            ><i className="fa fa-envelope-square"/></button>
+                                            }
+                                        </Typography>) :
 
-                                </Typography>) :
-                                
-                                offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
-                                (<Typography variant={"body1"} style={{color: "red"}}>
-                                    L'étudiant a refusé l'offre de stage
-                                </Typography>) :
+                                        offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
+                                            (<Typography variant={"body1"} style={{color: "red"}}>
+                                                L'étudiant a refusé l'offre de stage
+                                            </Typography>) :
 
-                                (<Typography variant={"body1"}>
-                                    L'étudiant n'a pas encore décidé
-                                </Typography>)
-                            ) :
+                                            (<Typography variant={"body1"}>
+                                                L'étudiant n'a pas encore décidé
+                                            </Typography>)
+                                ) :
+                                <Typography>
+                                    Application acceptée:
+                                    <Checkbox
+                                        value="state"
+                                        checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
+                                        onChange={
+                                            () => {
+                                                var copy = {...offer}
+                                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ? "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
 
-                            <Typography>
-                                Application acceptée:
-
-                                <Checkbox
-                                    value="state"
-                                    checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
-                                    onChange={
-                                        () => {
-                                            var copy = {...offer}
-                                            copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ? "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-                                            
-                                            api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
-                                                .then(r => {
-                                                    if (r) {
-                                                        copy.applications[i].state = r.data.state;
-                                                    }
-                                                    setOffer(copy)
-                                                });
-                                        }}
-                                    inputProps={{'aria-label': 'state'}}
-                                />
-                            </Typography>}
-
+                                                api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
+                                                    .then(r => {
+                                                        if (r) {
+                                                            copy.applications[i].state = r.data.state;
+                                                        }
+                                                        setOffer(copy)
+                                                    });
+                                            }}
+                                        inputProps={{'aria-label': 'state'}}
+                                    />
+                                </Typography>}
                             <Link variant={"body1"}
                                   to={{
                                       pathname: "/dashboard/interviewConvocation",
@@ -146,8 +143,10 @@ export default function ApplicationList() {
                                 dto.studentApplicationId = currentApplicationId;
                                 return api.post("/contractGeneration", dto)
                                     .then(() => {
-                                        closeContractModal();
-                                    })
+                                            closeContractModal();
+                                            history.push("/dashboard/contractList")
+                                        }
+                                    )
                             }}
                             validateOnBlur={false}
                             validateOnChange={false}
