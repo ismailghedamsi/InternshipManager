@@ -9,15 +9,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
+
 @Service
 public class AuthenticationService {
 
     private final UserRepository userRepo;
     private final PasswordEncoder encoder;
+    private final List<Consumer<User>> eventListeners;
 
     public AuthenticationService(UserRepository userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
         this.encoder = encoder;
+        this.eventListeners = new LinkedList<>();
     }
 
     private UserDetails getPrincipal() {
@@ -26,7 +32,9 @@ public class AuthenticationService {
     }
 
     public User getCurrentUser() {
-        return userRepo.findByUsername(getPrincipal().getUsername()).orElse(new User());
+        final var user = userRepo.findByUsername(getPrincipal().getUsername()).orElse(null);
+        eventListeners.forEach(userConsumer -> userConsumer.accept(user));
+        return user;
     }
 
     public PasswordUpdateStatus updateUserPassword(PasswordDTO dto) {
@@ -44,5 +52,9 @@ public class AuthenticationService {
                         return PasswordUpdateStatus.OLD_WRONG;
 
                 }).orElse(PasswordUpdateStatus.USER_NOT_FOUND);
+    }
+
+    public void registerEventListeners(Consumer<User> userConsumer) {
+        eventListeners.add(userConsumer);
     }
 }

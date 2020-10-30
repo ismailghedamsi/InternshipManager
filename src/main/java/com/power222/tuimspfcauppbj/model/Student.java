@@ -5,10 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Filter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -27,9 +24,11 @@ public class Student extends User {
     private String phoneNumber;
     private String address;
 
+    @ElementCollection
+    private List<String> semesters;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("owner")
-    @Filter(name = "semesterFilter", condition = "semester = :semester")
     private List<Resume> resumes;
 
     @ManyToMany(mappedBy = "allowedStudents")

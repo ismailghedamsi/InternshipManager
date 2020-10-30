@@ -1,6 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.power222.tuimspfcauppbj.util.SemesterContext;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ import javax.persistence.PrePersist;
 @Filter(name = "semesterFilter", condition = "semester = :semester")
 public abstract class SemesterDiscriminatedEntity {
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String semester;
 
     @PrePersist

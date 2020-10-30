@@ -74,8 +74,9 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
     }
 
     @Test
-    void missingSemesterHeaderTest() {
+    void malformedSemesterHeaderTest() {
         headers = new LinkedMultiValueMap<>();
+        headers.add("X-Semester", "a2020d2021");
 
         ResponseEntity<String> response = restTemplate
                 .withBasicAuth("admin", "password")
@@ -83,38 +84,40 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
 
         assertThat(response, is(notNullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.BAD_REQUEST)));
-        assertThat(response.getBody(), is(equalTo("{\"error\": \"X-Semester header missing or malformed\"}")));
+        assertThat(response.getBody(), is(equalTo("{\"error\": \"Malformed X-Semester header\"}")));
     }
 
     @Test
-    void getResumeForFirstSemester() {
+    void getOfferForFirstSemester() {
         headers = new LinkedMultiValueMap<>();
         headers.add("X-Semester", "a2020h2021");
 
         ResponseEntity<List> response = restTemplate
                 .withBasicAuth("admin", "password")
-                .exchange("/api/resumes", HttpMethod.GET, new HttpEntity<Void>(headers), List.class);
+                .exchange("/api/offers", HttpMethod.GET, new HttpEntity<Void>(headers), List.class);
 
-        List<LinkedHashMap> resumes = response.getBody();
+        List<LinkedHashMap> offers = response.getBody();
 
         assertThat(response, is(notNullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
-        assertThat(resumes.get(0).get("name"), is(equalTo("Bootstrapped Resume")));
+        System.err.println(offers.get(0).keySet());
+        assertThat(offers.get(0).get("semester"), is(equalTo("a2020h2021")));
     }
 
     @Test
-    void getResumeForSecondSemester() {
+    void getOfferForSecondSemester() {
         headers = new LinkedMultiValueMap<>();
         headers.add("X-Semester", "a2021h2022");
 
         ResponseEntity<List> response = restTemplate
                 .withBasicAuth("admin", "password")
-                .exchange("/api/resumes", HttpMethod.GET, new HttpEntity<Void>(headers), List.class);
+                .exchange("/api/offers", HttpMethod.GET, new HttpEntity<Void>(headers), List.class);
 
-        List<LinkedHashMap> resumes = response.getBody();
+        List<LinkedHashMap> offers = response.getBody();
 
         assertThat(response, is(notNullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
-        assertThat(resumes.get(0).get("name"), is(equalTo("Bootstrapped Resume with diff. Semester")));
+        System.err.println(offers.get(0).keySet());
+        assertThat(offers.get(0).get("semester"), is(equalTo("a2021h2022")));
     }
 }

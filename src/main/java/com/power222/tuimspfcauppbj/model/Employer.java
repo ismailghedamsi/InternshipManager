@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Filter;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -24,6 +25,9 @@ public class Employer extends User {
     private String phoneNumber;
     private String address;
     private String email;
+
+    @ElementCollection
+    private List<String> semesters;
 
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
     @JsonIgnore

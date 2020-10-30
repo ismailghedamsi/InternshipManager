@@ -48,7 +48,7 @@ public class AuthenticationServiceTests {
     @Test
     @WithMockUser("fk_etudiant")
     void invalidUser() {
-        assertThat(authSvc.getCurrentUser()).isEqualTo(new User());
+        assertThat(authSvc.getCurrentUser()).isNull();
     }
 
     @Test

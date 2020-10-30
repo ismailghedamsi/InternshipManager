@@ -87,16 +87,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .approuved(true)
                     .build());
 
-            var resume2 = resumeRepo.save(Resume.builder()
-                    .owner(student)
-                    .semester("a2021h2022")
-                    .name("Bootstrapped Resume with diff. Semester")
-                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/2.pdf")).readAllBytes())))
-                    .reviewed(true)
-                    .approuved(true)
-                    .build());
-
-
             var offer = internshipRepo.save(InternshipOffer.builder()
                     .title("Bootstrapped Internship")
                     .description("Some basic description ")
@@ -107,6 +97,22 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .internshipEndDate(Date.valueOf(LocalDate.now().plusWeeks(9)))
                     .nbStudentToHire(5)
                     .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/6.pdf")).readAllBytes())))
+                    .employer(employer)
+                    .allowedStudents(Collections.singletonList(student))
+                    .reviewState(ReviewState.APPROVED)
+                    .build());
+
+            var offer2 = internshipRepo.save(InternshipOffer.builder()
+                    .semester("a2021h2022")
+                    .title("Bootstrapped Internship of next year")
+                    .description("Some basic description ")
+                    .salary(15.98)
+                    .creationDate(Date.from(Instant.now()))
+                    .limitDateToApply(Date.valueOf(LocalDate.now().plusWeeks(1)))
+                    .internshipStartDate(Date.valueOf(LocalDate.now().plusWeeks(2)))
+                    .internshipEndDate(Date.valueOf(LocalDate.now().plusWeeks(9)))
+                    .nbStudentToHire(5)
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/4.pdf")).readAllBytes())))
                     .employer(employer)
                     .allowedStudents(Collections.singletonList(student))
                     .reviewState(ReviewState.APPROVED)

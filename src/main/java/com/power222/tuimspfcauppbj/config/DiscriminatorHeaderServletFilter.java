@@ -15,7 +15,7 @@ public class DiscriminatorHeaderServletFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         final var servletPath = ((HttpServletRequest) request).getServletPath();
-        if (!servletPath.contains("/api/") || servletPath.contains("/api/auth")) {
+        if (!servletPath.contains("/api/") || servletPath.contains("/api/auth") || servletPath.contains("/api/semesters")) {
             chain.doFilter(request, response);
             return;
         }
@@ -24,12 +24,15 @@ public class DiscriminatorHeaderServletFilter implements Filter {
         if (semesterHeader != null && semesterHeader.matches("a[0-9]{4}h[0-9]{4}")) {
             SemesterContext.setCurrent(semesterHeader);
             chain.doFilter(request, response);
-        } else {
+        } else if (semesterHeader != null) {
             var httpResponse = (HttpServletResponse) response;
             httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             httpResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            httpResponse.getWriter().write("{\"error\": \"X-Semester header missing or malformed\"}");
+            httpResponse.getWriter().write("{\"error\": \"Malformed X-Semester header\"}");
             httpResponse.getWriter().flush();
+        } else {
+            SemesterContext.setCurrent(SemesterContext.getPresentSemester());
+            chain.doFilter(request, response);
         }
     }
 }
