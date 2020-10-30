@@ -6,7 +6,6 @@ import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
-import com.power222.tuimspfcauppbj.util.ReviewState;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,6 +77,24 @@ class StudentApplicationServiceTests {
         var actual = appliSvc.createAndSaveNewApplication(expectedOffer.getId(), expectedResume.getId());
 
         assertThat(actual).contains(expectedAppli);
+    }
+
+    @Test
+    void getApplicationById() {
+        when(appliRepo.findById(1L)).thenReturn(Optional.of(expectedAppli));
+
+        var actual = appliSvc.getApplicationById(1L);
+
+        assertThat(actual).contains(expectedAppli);
+    }
+
+    @Test
+    void getNonexistentApplicationById() {
+        when(appliRepo.findById(1000L)).thenReturn(Optional.empty());
+
+        var actual = appliSvc.getApplicationById(1000L);
+
+        assertThat(actual).isEmpty();
     }
 
     @Test
