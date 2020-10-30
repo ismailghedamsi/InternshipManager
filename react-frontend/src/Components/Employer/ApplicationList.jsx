@@ -39,7 +39,6 @@ export default function ApplicationList() {
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
-        console.log(location.state.offerId)
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function clickOnce() {
@@ -86,8 +85,8 @@ export default function ApplicationList() {
                                                 }}
                                             ><i className="fa fa-envelope-square"/></button>
                                             }
-                                        </Typography>) :
-
+                                        </Typography>)
+                                        :
                                         offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
                                             (<Typography variant={"body1"} style={{color: "red"}}>
                                                 L'étudiant a refusé l'offre de stage
@@ -96,7 +95,8 @@ export default function ApplicationList() {
                                             (<Typography variant={"body1"}>
                                                 L'étudiant n'a pas encore décidé
                                             </Typography>)
-                                ) :
+                                )
+                                :
                                 <Typography>
                                     Application acceptée:
                                     <Checkbox
@@ -105,8 +105,8 @@ export default function ApplicationList() {
                                         onChange={
                                             () => {
                                                 var copy = {...offer}
-                                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ? "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-
+                                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
+                                                    "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
                                                 api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
                                                     .then(r => {
                                                         if (r) {
@@ -143,10 +143,9 @@ export default function ApplicationList() {
                                 dto.studentApplicationId = currentApplicationId;
                                 return api.post("/contractGeneration", dto)
                                     .then(() => {
-                                            closeContractModal();
-                                            history.push("/dashboard/contractList")
-                                        }
-                                    )
+                                        closeContractModal();
+                                        history.push("/dashboard/contractList")
+                                    })
                             }}
                             validateOnBlur={false}
                             validateOnChange={false}
