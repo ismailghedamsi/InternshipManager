@@ -12,7 +12,7 @@ export default function ApplicationList() {
     const api = useApi();
     const [offer, setOffer] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
-    
+
     const applicationStudentStates = [
         "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION",
         "JOB_OFFER_ACCEPTED_BY_STUDENT",
@@ -52,43 +52,43 @@ export default function ApplicationList() {
                             </Typography>
 
                             {applicationStudentStates.indexOf(offer.applications[i].state) > -1 ? (
-                                offer.applications[i].state === "JOB_OFFER_ACCEPTED_BY_STUDENT" ?
-                                (<Typography variant={"body1"} style={{color: "blue"}}>
-                                    L'étudiant a été embauché
-                                </Typography>) :
-                                
-                                offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
-                                (<Typography variant={"body1"} style={{color: "red"}}>
-                                    L'étudiant a refusé l'offre de stage
-                                </Typography>) :
+                                    offer.applications[i].state === "JOB_OFFER_ACCEPTED_BY_STUDENT" ?
+                                        (<Typography variant={"body1"} style={{color: "blue"}}>
+                                            L'étudiant a été embauché
+                                        </Typography>) :
 
-                                (<Typography variant={"body1"}>
-                                    L'étudiant n'a pas encore décidé
-                                </Typography>)
-                            ) :
+                                        offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
+                                            (<Typography variant={"body1"} style={{color: "red"}}>
+                                                L'étudiant a refusé l'offre de stage
+                                            </Typography>) :
 
-                            <Typography>
-                                Application acceptée:
+                                            (<Typography variant={"body1"}>
+                                                L'étudiant n'a pas encore décidé
+                                            </Typography>)
+                                ) :
 
-                                <Checkbox
-                                    value="state"
-                                    checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
-                                    onChange={
-                                        () => {
-                                            var copy = {...offer}
-                                            copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ? "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-                                            
-                                            api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
-                                                .then(r => {
-                                                    if (r) {
-                                                        copy.applications[i].state = r.data.state;
-                                                    }
-                                                    setOffer(copy)
-                                                });
-                                        }}
-                                    inputProps={{'aria-label': 'state'}}
-                                />
-                            </Typography>}
+                                <Typography>
+                                    Application acceptée:
+
+                                    <Checkbox
+                                        value="state"
+                                        checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
+                                        onChange={
+                                            () => {
+                                                var copy = {...offer}
+                                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ? "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
+
+                                                api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
+                                                    .then(r => {
+                                                        if (r) {
+                                                            copy.applications[i].state = r.data.state;
+                                                        }
+                                                        setOffer(copy)
+                                                    });
+                                            }}
+                                        inputProps={{'aria-label': 'state'}}
+                                    />
+                                </Typography>}
 
                             <Link variant={"body1"}
                                   to={{

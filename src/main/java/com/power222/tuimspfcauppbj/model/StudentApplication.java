@@ -1,7 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.power222.tuimspfcauppbj.util.ReviewState;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import lombok.*;
 
@@ -12,13 +11,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@EqualsAndHashCode
-public class StudentApplication {
+@EqualsAndHashCode(callSuper = true)
+public class StudentApplication extends SemesterDiscriminatedEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Builder.Default
     private StudentApplicationState state = StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW;
+
+    @Builder.Default
     private String reasonForRejection = "";
 
     @ManyToOne

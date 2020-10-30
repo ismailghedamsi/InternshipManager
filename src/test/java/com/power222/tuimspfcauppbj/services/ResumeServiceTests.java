@@ -6,7 +6,6 @@ import com.power222.tuimspfcauppbj.model.Resume;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.ResumeService;
-import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
