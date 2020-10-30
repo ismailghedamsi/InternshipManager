@@ -1,8 +1,10 @@
-package com.power222.tuimspfcauppbj.model;
+package com.power222.tuimspfcauppbj.util;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ContractDto {
     private long studentApplicationId;
     private String engagementCollege;
