@@ -27,8 +27,6 @@ export default function ApplicationList() {
     const api = useApi();
     const [offer, setOffer] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentApplicationId, setCurrentApplicationId] = useState(0);
-    const [isContractModalOpen, openContractModal, closeContractModal] = useModal();
 
     const applicationStudentStates = [
         "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION",
@@ -72,20 +70,11 @@ export default function ApplicationList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 {offer.applications[i].student.address}
                             </Typography>
+
                             {applicationStudentStates.indexOf(offer.applications[i].state) > -1 ? (
                                     offer.applications[i].state === "JOB_OFFER_ACCEPTED_BY_STUDENT" ?
                                         (<Typography variant={"body1"} style={{color: "blue"}}>
                                             L'étudiant a été embauché
-                                            {offer.applications[i].contract === null &&
-                                            <button
-                                                type={"button"}
-                                                className={[classes.linkButton].join(' ')}
-                                                onClick={() => {
-                                                    setCurrentApplicationId(offer.applications[i].id);
-                                                    openContractModal();
-                                                }}
-                                            ><i className="fa fa-envelope-square"/></button>
-                                            }
                                         </Typography>) :
 
                                         offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
@@ -97,8 +86,10 @@ export default function ApplicationList() {
                                                 L'étudiant n'a pas encore décidé
                                             </Typography>)
                                 ) :
+
                                 <Typography>
                                     Application acceptée:
+
                                     <Checkbox
                                         value="state"
                                         checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
@@ -118,6 +109,7 @@ export default function ApplicationList() {
                                         inputProps={{'aria-label': 'state'}}
                                     />
                                 </Typography>}
+
                             <Link variant={"body1"}
                                   to={{
                                       pathname: "/dashboard/interviewConvocation",

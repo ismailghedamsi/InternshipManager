@@ -13,10 +13,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.transaction.Transactional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("noBootstrappingTests")
 @SpringBootTest
+@Transactional
 public class AuthenticationServiceTests {
 
     @Autowired
@@ -45,7 +48,7 @@ public class AuthenticationServiceTests {
     @Test
     @WithMockUser("fk_etudiant")
     void invalidUser() {
-        assertThat(authSvc.getCurrentUser()).isEqualTo(new User());
+        assertThat(authSvc.getCurrentUser()).isNull();
     }
 
     @Test
