@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.power222.tuimspfcauppbj.util.ReviewState;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,9 +13,10 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
-@EqualsAndHashCode
-public class InternshipOffer {
+@SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = "file")
+public class InternshipOffer extends SemesterDiscriminatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +29,8 @@ public class InternshipOffer {
     private Date internshipStartDate;
     private Date internshipEndDate;
     private int nbStudentToHire;
+
+    @Builder.Default
     private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
     private int startTime;

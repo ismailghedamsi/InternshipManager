@@ -31,6 +31,10 @@ public class StudentApplicationService {
         return appliRepo.findAll();
     }
 
+    public Optional<StudentApplication> getApplicationById(long id) {
+        return appliRepo.findById(id);
+    }
+
     public Optional<StudentApplication> createAndSaveNewApplication(long offerId, long resumeId) {
         var currentUser = authSvc.getCurrentUser();
         var offer = offerRepo.findById(offerId);

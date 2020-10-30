@@ -21,6 +21,7 @@ import ContractList from './Manager/ContractList';
 import InterviewConvocation from './Employer/Interview/InterviewConvocation';
 import Interviewlist from './Employer/Interview/InterviewList';
 import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
+import SemesterSelector from "./Manager/SemesterSelector";
 
 
 const useStyles = makeStyles(() => ({
@@ -82,6 +83,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/employersStatus"
                                         component={Employerstatus}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path={"/dashboard/setSemester"}
+                                        component={SemesterSelector}
                                         role={"admin"}/>
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/contractList"

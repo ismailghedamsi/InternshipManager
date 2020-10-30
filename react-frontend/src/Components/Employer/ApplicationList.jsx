@@ -118,6 +118,7 @@ export default function ApplicationList() {
                                         inputProps={{'aria-label': 'state'}}
                                     />
                                 </Typography>}
+
                             <Link variant={"body1"}
                                   to={{
                                       pathname: "/dashboard/interviewConvocation",

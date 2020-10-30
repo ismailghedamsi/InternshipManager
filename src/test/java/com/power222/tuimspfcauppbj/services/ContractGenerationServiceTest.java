@@ -1,6 +1,5 @@
 package com.power222.tuimspfcauppbj.services;
 
-import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.ContractDto;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
@@ -20,8 +19,6 @@ import java.util.Optional;
 public class ContractGenerationServiceTest {
     @Mock
     private ContractService contractService;
-    @Mock
-    private ContractRepository contractRepository;
 
     @Mock
     private StudentApplicationService studentApplicationService;
@@ -45,8 +42,13 @@ public class ContractGenerationServiceTest {
                 .totalHoursPerWeek(20)
                 .build();
         exceptedStudentApplication = StudentApplication.builder().build();
-        contractDto = ContractDto.fromContract(contract, studentApplicationService);
+        //contractDto = ContractDto.fromContract(contract, studentApplicationService);
         nullContractDto = null;
+    }
+
+    @Test
+    public void successfulPdfGeneration() {
+
     }
 
     @Test
@@ -57,8 +59,4 @@ public class ContractGenerationServiceTest {
 
     }
 
-    @Test
-    public void getExistentStudentApplication() {
-
-    }
 }

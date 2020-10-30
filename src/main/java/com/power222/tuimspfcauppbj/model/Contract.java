@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @EqualsAndHashCode // je sais pas si j'en est besoin
-public class Contract {
+public class Contract extends SemesterDiscriminatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
