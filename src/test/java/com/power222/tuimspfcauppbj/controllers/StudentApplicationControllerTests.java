@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -55,6 +56,24 @@ class StudentApplicationControllerTests {
                 .resume(new Resume())
                 .reasonForRejection("")
                 .build();
+    }
+
+    @Test
+    void getApplicationFound() throws Exception {
+        when(svc.getApplicationById(anyLong())).thenReturn(Optional.of(new StudentApplication()));
+
+        var actual = mvc.perform(get("/api/applications/5")).andReturn();
+
+        assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    void getApplicationNotFound() throws Exception {
+        when(svc.getApplicationById(anyInt())).thenReturn(Optional.empty());
+
+        var actual = mvc.perform(get("/api/applications/5")).andReturn();
+
+        assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     @Test

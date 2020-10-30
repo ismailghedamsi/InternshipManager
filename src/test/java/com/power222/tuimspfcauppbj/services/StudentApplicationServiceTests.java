@@ -80,6 +80,24 @@ class StudentApplicationServiceTests {
     }
 
     @Test
+    void getApplicationById() {
+        when(appliRepo.findById(1L)).thenReturn(Optional.of(expectedAppli));
+
+        var actual = appliSvc.getApplicationById(1L);
+
+        assertThat(actual).contains(expectedAppli);
+    }
+
+    @Test
+    void getNonexistentApplicationById() {
+        when(appliRepo.findById(1000L)).thenReturn(Optional.empty());
+
+        var actual = appliSvc.getApplicationById(1000L);
+
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
     void createAndSaveNewApplicationWithNonStudentUser() {
         when(authSvc.getCurrentUser()).thenReturn(new Employer());
         when(offerRepo.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));

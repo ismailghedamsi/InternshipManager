@@ -76,9 +76,10 @@ export default function OfferApplication() {
     }
 
     function hasEmployeurAcceptedStudentToInterview(i) {
-        if (interviews[i])
+        if (interviews[i]) {
             return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id;
-        return false
+        }
+        return false;
     }
 
     function hasEmployeurAcceptedStudentOnOffer(offer, student) {

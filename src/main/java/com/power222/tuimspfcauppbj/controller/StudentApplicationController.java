@@ -23,6 +23,13 @@ public class StudentApplicationController {
         return svc.getAllApplication();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentApplication> getApplicationById(@PathVariable long id) {
+        return svc.getApplicationById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/{offerId}/{resumeId}")
     public ResponseEntity<StudentApplication> createStudentApplication(
             @PathVariable long offerId, @PathVariable long resumeId) {

@@ -53,7 +53,7 @@ public class ContractControllerTests {
                 .engagementCompany("Company")
                 .engagementStudent("Student")
                 .file("file")
-                .horaire(10)
+                //.horaire(10)
                 .totalHoursPerWeek(32)
                 .studentApplication(new StudentApplication())
                 .build();

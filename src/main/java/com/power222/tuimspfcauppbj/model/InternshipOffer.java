@@ -33,6 +33,8 @@ public class InternshipOffer extends SemesterDiscriminatedEntity {
     @Builder.Default
     private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
+    private int startTime;
+    private int endTime;
 
     @Lob
     private String file;
