@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ContractGenerationService {
@@ -103,13 +102,8 @@ public class ContractGenerationService {
     }
 
     public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
-        var applications = applicationService.getAllApplication().stream()
-                .filter(studentApplication -> studentApplication.getId() == contract.getStudentApplicationId())
-                .collect(Collectors.toList());
-        if (applications.size() > 0) {
-            return Optional.of(applications.get(0));
-        }
-        return Optional.empty();
+        var application = applicationService.getApplicationById(contract.getStudentApplicationId());
+        return application;
     }
 
     private void signaturesSection(Document document, float documentWidth) {
