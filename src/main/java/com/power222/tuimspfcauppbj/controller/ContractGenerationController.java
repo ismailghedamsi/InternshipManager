@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/api/contractGeneration")
 public class ContractGenerationController {
@@ -25,13 +23,8 @@ public class ContractGenerationController {
         if (contract == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        try {
-            if (service.generateContract(contract)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (!service.generateContract(contract)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(contract);
     }
