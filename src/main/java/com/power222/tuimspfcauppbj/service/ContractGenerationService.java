@@ -15,15 +15,15 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
 import com.power222.tuimspfcauppbj.model.Contract;
-import com.power222.tuimspfcauppbj.model.ContractDto;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
+import com.power222.tuimspfcauppbj.util.ContractDto;
 import org.joda.time.DateTime;
 import org.joda.time.Weeks;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -44,6 +44,7 @@ public class ContractGenerationService {
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {
             StudentApplication studentApplication = optionalApplication.get();
+            System.out.println(studentApplication);
             stream = new ByteArrayOutputStream();
             PdfWriter writer = new PdfWriter(stream);
             PdfDocument pdf = new PdfDocument(writer);
@@ -67,23 +68,20 @@ public class ContractGenerationService {
             document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
             document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDescription()).setWidth(documentWidth)));
-            try {
-                internshipPartiesResponsabilities(contract, document);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            internshipPartiesResponsabilities(contract, document, StandardFonts.TIMES_ROMAN);
             signaturesSection(document, documentWidth);
             document.close();
             String fileBase64 = com.itextpdf.io.codec.Base64.encodeBytes(stream.toByteArray());
             contract.setFile(fileBase64);
-            base64ToPdfFile(contract, "test.pdf", fileBase64);
+            contractService.createAndSaveNewContract(contractDtoToContract(contract, applicationService));
+            //base64ToPdfFile(contract, "test.pdf", fileBase64);
         }
         return stream != null;
     }
 
-    private void base64ToPdfFile(ContractDto contract, String filePathName, String fileBase64) {
-        contractService.createAndSaveNewContract(contractDtoToContract(contract, applicationService));
+    public boolean base64ToPdfFile(String filePathName, String fileBase64) {
         com.itextpdf.io.codec.Base64.decodeToFile(fileBase64, filePathName);
+        return new File(filePathName).exists();
     }
 
     public Contract contractDtoToContract(ContractDto contractDto, StudentApplicationService studentApplicationService) {
@@ -132,8 +130,8 @@ public class ContractGenerationService {
                         .add(new Paragraph("[Date]").setMarginLeft(145f)));
     }
 
-    private void internshipPartiesResponsabilities(ContractDto contract, Document document) throws IOException {
-        PdfFont font = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
+    private void internshipPartiesResponsabilities(ContractDto contract, Document document, String fontName) {
+        PdfFont font = undoBold(fontName);
         document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold()).setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph(new Text("Le Collège s’engage à :\n").setBold())
                 .add(new Paragraph(contract.getEngagementCollege())).setFont(font)
@@ -142,6 +140,16 @@ public class ContractGenerationService {
                 .add(new Text("\nL'étudiant s’engage à :\n").setBold())
                 .add(new Paragraph(contract.getEngagementStudent()))
         );
+    }
+
+    public PdfFont undoBold(String fontName) {
+        PdfFont font = null;
+        try {
+            font = PdfFontFactory.createFont(fontName);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+        return font;
     }
 
     public String parseDate(Date date) {
