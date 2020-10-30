@@ -5,6 +5,8 @@ import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.*;
+import com.power222.tuimspfcauppbj.util.ReviewState;
+import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -83,8 +85,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .owner(student)
                     .name("Bootstrapped Resume")
                     .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/1.pdf")).readAllBytes())))
-                    .reviewed(true)
-                    .approuved(true)
+                    .reviewState(ReviewState.APPROVED)
                     .build());
 
             var offer = internshipRepo.save(InternshipOffer.builder()
@@ -120,7 +121,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
 
             var application = appliRepo.save(StudentApplication.builder()
-                    .reviewState(ReviewState.APPROVED)
+                    .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
                     .offer(offer)
                     .student(student)
                     .resume(resume)

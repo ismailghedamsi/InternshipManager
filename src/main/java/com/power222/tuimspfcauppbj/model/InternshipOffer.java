@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.power222.tuimspfcauppbj.util.ReviewState;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -28,7 +29,9 @@ public class InternshipOffer extends SemesterDiscriminatedEntity {
     private Date internshipStartDate;
     private Date internshipEndDate;
     private int nbStudentToHire;
-    private ReviewState reviewState;
+
+    @Builder.Default
+    private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
 
     @Lob

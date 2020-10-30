@@ -34,7 +34,7 @@ public class Employer extends User {
     @Filter(name = "semesterFilter", condition = "semester = :semester")
     private List<InternshipOffer> offers;
 
-    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     @Filter(name = "semesterFilter", condition = "semester = :semester")
     private List<Interview> interviews;

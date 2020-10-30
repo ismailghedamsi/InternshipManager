@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,9 +18,11 @@ public class StudentApplication extends SemesterDiscriminatedEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private boolean hired;
-    private String reasonForRejection;
-    private ReviewState reviewState;
+    @Builder.Default
+    private StudentApplicationState state = StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW;
+
+    @Builder.Default
+    private String reasonForRejection = "";
 
     @ManyToOne
     @JsonIgnoreProperties({"file", "allowedStudents", "applications"})
@@ -32,4 +35,8 @@ public class StudentApplication extends SemesterDiscriminatedEntity {
     @ManyToOne
     @JsonIgnoreProperties({"owner", "applications"})
     private Resume resume;
+
+    @OneToOne(mappedBy = "studentApplication")
+    @JsonIgnoreProperties(value = "studentApplication", allowSetters = true)
+    private Interview interview;
 }

@@ -11,7 +11,7 @@ import RegisterEmployer from "./RegisterEmployer";
 import Grid from "@material-ui/core/Grid";
 import {Link as RouterLink, useHistory} from "react-router-dom";
 import Link from "@material-ui/core/Link";
-import {useStyles} from "./Utils/useStyles";
+import useStyles from "./Utils/useStyles";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;

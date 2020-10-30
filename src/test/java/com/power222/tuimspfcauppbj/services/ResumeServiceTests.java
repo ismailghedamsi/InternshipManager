@@ -88,9 +88,9 @@ class ResumeServiceTests {
         var r1 = Resume.builder().id(1L).build();
         var r2 = Resume.builder().id(2L).build();
 
-        when(resumeRepo.findByReviewedFalse()).thenReturn(Arrays.asList(r1, r2));
+        when(resumeRepo.findAllByReviewStatePending()).thenReturn(Arrays.asList(r1, r2));
 
-        var actual = resumeSvc.getResumeWithPendingApprouval();
+        var actual = resumeSvc.getResumeWithPendingApproval();
 
         assertThat(actual).hasSize(2);
     }
@@ -151,15 +151,5 @@ class ResumeServiceTests {
         resumeSvc.deleteResumeById(idToDelete);
 
         verify(resumeRepo, times(1)).deleteById(idToDelete);
-    }
-
-    @Test
-    void updateResumeWIthInvalidState() {
-        var updatedResume = expectedResume.toBuilder().approuved(true).build();
-        when(resumeRepo.findById(expectedResume.getId())).thenReturn(Optional.of(expectedResume));
-
-        var actual = resumeSvc.updateResume(expectedResume.getId(), updatedResume);
-
-        assertThat(actual).isEmpty();
     }
 }

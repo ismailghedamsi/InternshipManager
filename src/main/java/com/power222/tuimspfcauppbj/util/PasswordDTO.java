@@ -1,4 +1,4 @@
-package com.power222.tuimspfcauppbj.model.dto;
+package com.power222.tuimspfcauppbj.util;
 
 import lombok.Builder;
 import lombok.Data;

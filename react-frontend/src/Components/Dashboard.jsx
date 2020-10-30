@@ -17,9 +17,9 @@ import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
-import InterviewConvocation from './Interview/InterviewConvocation';
-import Interviewlist from './Interview/InterviewList';
-import {Rescheduleinterview} from './Interview/RescheduleInterview';
+import InterviewConvocation from './Employer/Interview/InterviewConvocation';
+import Interviewlist from './Employer/Interview/InterviewList';
+import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
 import SemesterSelector from "./Manager/SemesterSelector";
 
 

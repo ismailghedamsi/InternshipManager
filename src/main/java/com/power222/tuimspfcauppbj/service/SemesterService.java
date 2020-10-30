@@ -23,7 +23,6 @@ public class SemesterService {
     }
 
     private void checkIfUserIsInSemester(User user) {
-        log.info("User is connecting: " + user.getUsername());
         if (user instanceof Student) {
             Student student = (Student) user;
             if (!student.getSemesters().contains(SemesterContext.getPresentSemester())) {
