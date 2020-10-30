@@ -27,6 +27,8 @@ export default function ApplicationList() {
     const api = useApi();
     const [offer, setOffer] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentApplicationId, setCurrentApplicationId] = useState(0);
+    const [isContractModalOpen, openContractModal, closeContractModal] = useModal();
 
     const applicationStudentStates = [
         "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION",
@@ -37,7 +39,6 @@ export default function ApplicationList() {
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
-        console.log(location.state.offerId)
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function clickOnce() {
@@ -70,13 +71,22 @@ export default function ApplicationList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 {offer.applications[i].student.address}
                             </Typography>
-
                             {applicationStudentStates.indexOf(offer.applications[i].state) > -1 ? (
                                     offer.applications[i].state === "JOB_OFFER_ACCEPTED_BY_STUDENT" ?
                                         (<Typography variant={"body1"} style={{color: "blue"}}>
                                             L'étudiant a été embauché
-                                        </Typography>) :
-
+                                            {offer.applications[i].contract === null &&
+                                            <button
+                                                type={"button"}
+                                                className={[classes.linkButton].join(' ')}
+                                                onClick={() => {
+                                                    setCurrentApplicationId(offer.applications[i].id);
+                                                    openContractModal();
+                                                }}
+                                            ><i className="fa fa-envelope-square"/></button>
+                                            }
+                                        </Typography>)
+                                        :
                                         offer.applications[i].state === "JOB_OFFER_DENIED_BY_STUDENT" ?
                                             (<Typography variant={"body1"} style={{color: "red"}}>
                                                 L'étudiant a refusé l'offre de stage
@@ -85,19 +95,18 @@ export default function ApplicationList() {
                                             (<Typography variant={"body1"}>
                                                 L'étudiant n'a pas encore décidé
                                             </Typography>)
-                                ) :
-
+                                )
+                                :
                                 <Typography>
                                     Application acceptée:
-
                                     <Checkbox
                                         value="state"
                                         checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
                                         onChange={
                                             () => {
                                                 var copy = {...offer}
-                                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ? "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-
+                                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
+                                                    "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
                                                 api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
                                                     .then(r => {
                                                         if (r) {
@@ -135,10 +144,9 @@ export default function ApplicationList() {
                                 dto.studentApplicationId = currentApplicationId;
                                 return api.post("/contractGeneration", dto)
                                     .then(() => {
-                                            closeContractModal();
-                                            history.push("/dashboard/contractList")
-                                        }
-                                    )
+                                        closeContractModal();
+                                        history.push("/dashboard/contractList")
+                                    })
                             }}
                             validateOnBlur={false}
                             validateOnChange={false}
