@@ -14,6 +14,7 @@ import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
+import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.ContractDto;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
@@ -39,15 +40,13 @@ public class ContractGenerationService {
         this.applicationService = applicationService;
     }
 
-    public boolean generateContract(ContractDto contract) throws IOException {
+    public boolean generateContract(ContractDto contract) {
         Optional<StudentApplication> optionalApplication = getStudentApplication(contract);
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {
             StudentApplication studentApplication = optionalApplication.get();
             stream = new ByteArrayOutputStream();
             PdfWriter writer = new PdfWriter(stream);
-       /* OutputStream fos = new FileOutputStream("contract.pdf");
-        PdfWriter writer = new PdfWriter(fos);*/
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf, PageSize.A4);
             document.add(new Paragraph("CONTRAT DE STAGE").setBold().setFontSize(20)
@@ -69,15 +68,38 @@ public class ContractGenerationService {
             document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
             document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDescription()).setWidth(documentWidth)));
-            internshipPartiesResponsabilities(contract, document);
+            try {
+                internshipPartiesResponsabilities(contract, document);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             signaturesSection(document, documentWidth);
             document.close();
             String fileBase64 = com.itextpdf.io.codec.Base64.encodeBytes(stream.toByteArray());
             contract.setFile(fileBase64);
-            contractService.createAndSaveNewContract(ContractDto.toContract(contract, applicationService));
-            com.itextpdf.io.codec.Base64.decodeToFile(fileBase64, "test.pdf");
+            base64ToPdfFile(contract, "test.pdf", fileBase64);
         }
-        return stream == null;
+        return stream != null;
+    }
+
+    private void base64ToPdfFile(ContractDto contract, String filePathName, String fileBase64) {
+        contractService.createAndSaveNewContract(contractDtoToContract(contract, applicationService));
+        com.itextpdf.io.codec.Base64.decodeToFile(fileBase64, filePathName);
+    }
+
+    public Contract contractDtoToContract(ContractDto contractDto, StudentApplicationService studentApplicationService) {
+        Contract contract = new Contract();
+        contract.setAdminName(contractDto.getAdminName());
+        contract.setFile(contractDto.getFile());
+        contract.setEngagementCollege(contractDto.getEngagementCollege());
+        contract.setEngagementCompany(contractDto.getEngagementCompany());
+        contract.setEngagementStudent(contractDto.getEngagementStudent());
+        contract.setTotalHoursPerWeek(contractDto.getTotalHoursPerWeek());
+        if (studentApplicationService.getApplicationById(contractDto.getStudentApplicationId()).isPresent()) {
+            StudentApplication application = studentApplicationService.getApplicationById(contractDto.getStudentApplicationId()).get();
+            contract.setStudentApplication(application);
+        }
+        return contract;
     }
 
     public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
