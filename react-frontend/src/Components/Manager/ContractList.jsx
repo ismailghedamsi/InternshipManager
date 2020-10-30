@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import {useApi, useModal} from "../Utils/Hooks";
 import {Typography} from "@material-ui/core";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
