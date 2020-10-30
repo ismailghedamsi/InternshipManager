@@ -24,4 +24,9 @@ public class SemesterController {
 
         return semesterList;
     }
+
+    @GetMapping("/api/semesters/present")
+    public String getPresentSemester() {
+        return SemesterContext.getPresentSemester();
+    }
 }

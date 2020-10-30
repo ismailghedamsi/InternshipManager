@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import axios from "axios";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {ModalContext} from "../../App";
+import {ModalContext, SemesterContext} from "../../App";
 
 export function useModal() {
     const [isOpen, setOpen] = useState(false);
@@ -19,6 +19,7 @@ export function useModal() {
 
 export function useApi() {
     const {open} = useContext(ModalContext);
+    const {semester} = useContext(SemesterContext);
     const user = AuthenticationService.getCurrentUser();
     const api = axios.create({
         baseURL: "http://localhost:8080/api/",
@@ -26,6 +27,12 @@ export function useApi() {
         headers: {
             authorization: "Basic " + btoa(user.username + ":" + user.password)
         }
+    });
+    api.interceptors.request.use(config => {
+        if (semester)
+            config.headers = {"X-Semester": semester, ...config.headers};
+
+        return config;
     });
     api.interceptors.response.use(response => response, error => {
         console.warn("Axios error: " + error);

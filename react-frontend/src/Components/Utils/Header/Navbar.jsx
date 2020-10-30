@@ -58,7 +58,7 @@ export default function Navbar() {
                             AuthenticationService.logout()
                             history.push("/")
                         }}>
-                        Logout
+                        Déconnexion
                     </button>
                 </li>
             </ul>
