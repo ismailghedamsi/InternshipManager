@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import {Select} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import MenuItem from "@material-ui/core/MenuItem";
 import {useApi} from "../Utils/Hooks";
 import {useHistory} from "react-router-dom";
@@ -24,8 +24,7 @@ export default function SemesterSelector() {
     useEffect(() => {
         api.get("/semesters")
             .then(r => setSemesters(r ? r.data : []))
-    }, []);
-
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function generateMenuItems() {
         if (semesters.length !== 0) {

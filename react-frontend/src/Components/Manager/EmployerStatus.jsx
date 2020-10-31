@@ -72,7 +72,7 @@ export default function StudentStatus() {
 
     function InterviewStatus(props) {
         function getInterviewState(interview) {
-            if (interview.reviewState == "PENDING")
+            if (interview.reviewState === "PENDING")
                 return <span style={{color: "blue"}}>En attente</span>;
             else if (interview.reviewState === "DENIED")
                 return (<span style={{color: "red"}}>Rejeté<span
