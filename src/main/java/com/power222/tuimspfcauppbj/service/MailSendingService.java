@@ -2,8 +2,9 @@ package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Student;
+import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.power222.tuimspfcauppbj.util.MailContractDto;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,12 +16,19 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.util.Base64;
+import java.util.Optional;
 import java.util.Properties;
 
 @Service
 public class MailSendingService {
-    @Autowired
     private JavaMailSender javaMailSender;
+    private StudentApplicationService applicationService;
+
+    public MailSendingService(JavaMailSender javaMailSender, StudentApplicationService applicationService) {
+        this.javaMailSender = javaMailSender;
+        this.applicationService = applicationService;
+    }
+
 
     public Session setMailSession(Properties properties, User user) {
         return Session.getInstance(properties, new Authenticator() {
@@ -60,5 +68,10 @@ public class MailSendingService {
             e.printStackTrace();
         }
     }
+
+    public Optional<StudentApplication> getStudentApplication(MailContractDto mailContractDto) {
+        return applicationService.getApplicationById(mailContractDto.getStudentApplicationId());
+    }
+
 
 }
