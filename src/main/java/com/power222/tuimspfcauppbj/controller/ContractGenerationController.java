@@ -1,7 +1,7 @@
 package com.power222.tuimspfcauppbj.controller;
 
-import com.power222.tuimspfcauppbj.model.ContractDto;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
+import com.power222.tuimspfcauppbj.util.ContractDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

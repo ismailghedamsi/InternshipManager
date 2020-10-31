@@ -1,11 +1,11 @@
 package com.power222.tuimspfcauppbj.services;
 
 import com.power222.tuimspfcauppbj.model.Contract;
-import com.power222.tuimspfcauppbj.model.ContractDto;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
+import com.power222.tuimspfcauppbj.util.ContractDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
