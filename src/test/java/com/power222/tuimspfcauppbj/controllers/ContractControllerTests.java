@@ -24,7 +24,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -53,21 +54,9 @@ public class ContractControllerTests {
                 .engagementCompany("Company")
                 .engagementStudent("Student")
                 .file("file")
-                //.horaire(10)
                 .totalHoursPerWeek(32)
                 .studentApplication(new StudentApplication())
                 .build();
-    }
-
-    @Test
-    void createContractTest() throws Exception {
-        when(svc.createAndSaveNewContract(any())).thenReturn(Optional.of(expectedContract));
-
-        MvcResult result = mvc.perform(post("/api/contract")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}")).andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
     }
 
     @Test
@@ -108,7 +97,7 @@ public class ContractControllerTests {
 
     @Test
     void updateContractTest() throws Exception {
-        when(svc.updateContract(expectedContract.getId(), expectedContract)).thenReturn(expectedContract);
+        when(svc.updateContract(expectedContract.getId(), expectedContract)).thenReturn(Optional.ofNullable(expectedContract));
 
         MvcResult result = mvc.perform(put("/api/contract/" + expectedContract.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -117,6 +106,19 @@ public class ContractControllerTests {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateContract(expectedContract.getId(), expectedContract);
+    }
+
+    @Test
+    void updateContractNoValidIdTest() throws Exception {
+        var longTest = 100L;
+        when(svc.updateContract(longTest, expectedContract)).thenReturn(Optional.empty());
+
+        MvcResult result = mvc.perform(put("/api/contract/" + expectedContract.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expectedContract)))
+                .andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
     }
 
     @Test
