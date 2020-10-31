@@ -18,21 +18,22 @@ import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.ContractDto;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.Weeks;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ContractGenerationService {
 
-    private ContractService contractService;
-    private StudentApplicationService applicationService;
+    private final ContractService contractService;
+    private final StudentApplicationService applicationService;
 
     public ContractGenerationService(ContractService contractService, StudentApplicationService applicationService) {
         this.contractService = contractService;
@@ -67,7 +68,7 @@ public class ContractGenerationService {
             document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
             document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDescription()).setWidth(documentWidth)));
-            internshipPartiesResponsabilities(contract, document, StandardFonts.TIMES_ROMAN);
+            internshipPartiesResponsabilities(contract, document);
             signaturesSection(document, documentWidth);
             document.close();
             String fileBase64 = com.itextpdf.io.codec.Base64.encodeBytes(stream.toByteArray());
@@ -75,11 +76,6 @@ public class ContractGenerationService {
             contractService.createAndSaveNewContract(contractDtoToContract(contract, applicationService));
         }
         return stream != null;
-    }
-
-    public boolean base64ToPdfFile(String filePathName, String fileBase64) {
-        com.itextpdf.io.codec.Base64.decodeToFile(fileBase64, filePathName);
-        return new File(filePathName).exists();
     }
 
     public Contract contractDtoToContract(ContractDto contractDto, StudentApplicationService studentApplicationService) {
@@ -98,64 +94,7 @@ public class ContractGenerationService {
     }
 
     public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
-        var application = applicationService.getApplicationById(contract.getStudentApplicationId());
-        return application;
-    }
-
-    private void signaturesSection(Document document, float documentWidth) {
-        document.add(new Div().setTextAlignment(TextAlignment.JUSTIFIED).add(
-                new Paragraph("SIGNATURES\n").setBold())
-                .setBackgroundColor(WebColors.getRGBColor("#DCDCDC")).setWidth(documentWidth).setHeight(40f));
-        document.add(new Paragraph(new Text(" Les parties s’engagent à respecter cette entente de stage\nEn foi de quoi les parties ont signé,").setBold().setTextAlignment(TextAlignment.CENTER))
-                .setFirstLineIndent(15f)
-                .add(new Text("\nL’étudiant(e) :\n").setBold())
-                .add(new Paragraph(new Text("[signature_etudiant]\n")).setMarginRight(120f).setMarginBottom(0))
-                .add(new Text("[date_signature_etudiant]"))
-                .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)
-                ));
-        document.add(new LineSeparator(new SolidLine(1)).setMarginTop(-4));
-        document.add(new Paragraph(new Text("[nom_etudiant]")).setMarginRight(120f).setMarginBottom(0)
-                .add(new Paragraph("[Date]\n").setMarginLeft(145f)).add(new Text("\n\nL'employeur : ").setBold()));
-        document.add(new Paragraph(new Text("[signature_employeur]"))
-                .add(new Paragraph("[date_signature_employeur]").setMarginLeft(105f)))
-                .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
-                .add(new Paragraph(new Text("[nom_employeur]"))
-                        .add(new Paragraph("[Date]").setMarginLeft(145f)));
-        document.add(new Paragraph("Le gestionnaire de stage :").setBold()).add(new Paragraph(new Text("[signature_gestionnaire]"))
-                .add(new Paragraph("[date_signature_gestionnaire]").setMarginLeft(105f)))
-                .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
-                .add(new Paragraph(new Text("[nom_gestionnaire]"))
-                        .add(new Paragraph("[Date]").setMarginLeft(145f)));
-    }
-
-    private void internshipPartiesResponsabilities(ContractDto contract, Document document, String fontName) {
-        PdfFont font = undoBold(fontName);
-        document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold()).setTextAlignment(TextAlignment.CENTER));
-        document.add(new Paragraph(new Text("Le Collège s’engage à :\n").setBold())
-                .add(new Paragraph(contract.getEngagementCollege())).setFont(font)
-                .add(new Text("\nL'entreprise s’engage à :\n").setBold())
-                .add(new Paragraph(contract.getEngagementCompany()))
-                .add(new Text("\nL'étudiant s’engage à :\n").setBold())
-                .add(new Paragraph(contract.getEngagementStudent()))
-        );
-    }
-
-    public PdfFont undoBold(String fontName) {
-        PdfFont font = null;
-        try {
-            font = PdfFontFactory.createFont(fontName);
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
-        return font;
-    }
-
-    public String parseDate(Date date) {
-        return new SimpleDateFormat("dd/MM/yy").format(date);
-    }
-
-    public int dateIntervalToWeeks(Date endDate, Date startDate) {
-        return Weeks.weeksBetween(new DateTime(startDate), new DateTime(endDate)).getWeeks();
+        return applicationService.getApplicationById(contract.getStudentApplicationId());
     }
 
     private void addInternshipInfoTable(ContractDto contract, Document document) {
@@ -190,5 +129,62 @@ public class ContractGenerationService {
                     .add(new Paragraph("Salaire : " + offer.getSalary() + "$").setMultipliedLeading(1.2f)));
             document.add(internshipInfoTable);
         }
+    }
+
+    private void signaturesSection(Document document, float documentWidth) {
+        document.add(new Div().setTextAlignment(TextAlignment.JUSTIFIED).add(
+                new Paragraph("SIGNATURES\n").setBold())
+                .setBackgroundColor(WebColors.getRGBColor("#DCDCDC")).setWidth(documentWidth).setHeight(40f));
+        document.add(new Paragraph(new Text(" Les parties s’engagent à respecter cette entente de stage\nEn foi de quoi les parties ont signé,").setBold().setTextAlignment(TextAlignment.CENTER))
+                .setFirstLineIndent(15f)
+                .add(new Text("\nL’étudiant(e) :\n").setBold())
+                .add(new Paragraph(new Text("[signature_etudiant]\n")).setMarginRight(120f).setMarginBottom(0))
+                .add(new Text("[date_signature_etudiant]"))
+                .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)
+                ));
+        document.add(new LineSeparator(new SolidLine(1)).setMarginTop(-4));
+        document.add(new Paragraph(new Text("[nom_etudiant]")).setMarginRight(120f).setMarginBottom(0)
+                .add(new Paragraph("[Date]\n").setMarginLeft(145f)).add(new Text("\n\nL'employeur : ").setBold()));
+        document.add(new Paragraph(new Text("[signature_employeur]"))
+                .add(new Paragraph("[date_signature_employeur]").setMarginLeft(105f)))
+                .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
+                .add(new Paragraph(new Text("[nom_employeur]"))
+                        .add(new Paragraph("[Date]").setMarginLeft(145f)));
+        document.add(new Paragraph("Le gestionnaire de stage :").setBold()).add(new Paragraph(new Text("[signature_gestionnaire]"))
+                .add(new Paragraph("[date_signature_gestionnaire]").setMarginLeft(105f)))
+                .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
+                .add(new Paragraph(new Text("[nom_gestionnaire]"))
+                        .add(new Paragraph("[Date]").setMarginLeft(145f)));
+    }
+
+    private void internshipPartiesResponsabilities(ContractDto contract, Document document) {
+        PdfFont font = undoBold(StandardFonts.TIMES_ROMAN);
+        document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold()).setTextAlignment(TextAlignment.CENTER));
+        document.add(new Paragraph(new Text("Le Collège s’engage à :\n").setBold())
+                .add(new Paragraph(contract.getEngagementCollege())).setFont(font)
+                .add(new Text("\nL'entreprise s’engage à :\n").setBold())
+                .add(new Paragraph(contract.getEngagementCompany()))
+                .add(new Text("\nL'étudiant s’engage à :\n").setBold())
+                .add(new Paragraph(contract.getEngagementStudent()))
+        );
+    }
+
+    private PdfFont undoBold(String fontName) {
+        PdfFont font = null;
+        try {
+            font = PdfFontFactory.createFont(fontName);
+        } catch (java.io.IOException e) {
+            log.error("Invalid font name");
+            e.printStackTrace();
+        }
+        return font;
+    }
+
+    private String parseDate(Date date) {
+        return new SimpleDateFormat("dd/MM/yy").format(date);
+    }
+
+    public int dateIntervalToWeeks(Date endDate, Date startDate) {
+        return Weeks.weeksBetween(new DateTime(startDate), new DateTime(endDate)).getWeeks();
     }
 }
