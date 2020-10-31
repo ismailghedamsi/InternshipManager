@@ -102,7 +102,7 @@ public class InternshipOfferControllerTests {
     void getAllOffers() throws Exception {
         when(svc.getAllInternshipOffers()).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
-        mvc.perform(get("/api/offers"))
+        var list = mvc.perform(get("/api/offers"))
                 .andExpect(status().isOk());
     }
 

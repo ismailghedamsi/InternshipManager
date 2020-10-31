@@ -33,8 +33,9 @@ public class ContractService {
 
     public Contract updateContract(long id, Contract contract) {
         return contractRepo.findById(id)
-                .map(oldStudent -> {
-                    contract.setId(oldStudent.getId());
+                .map(oldContract -> {
+                    contract.setId(oldContract.getId());
+                    contract.setSemester(oldContract.getSemester());
                     return contractRepo.saveAndFlush(contract);
                 })
                 .orElse(contract);

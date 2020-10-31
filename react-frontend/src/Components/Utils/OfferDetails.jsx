@@ -43,6 +43,16 @@ export default function OfferDetails(props) {
                         display={"block"}>
                 {"Description de l'offre : " + props.offer.description}
             </Typography>
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {"Heure de début : " + props.offer.startTime + ":00"}
+            </Typography>
+            <Typography color={"textSecondary"}
+                        variant={"body1"}
+                        display={"block"}>
+                {"Heure de fin : " + props.offer.endTime + ":00"}
+            </Typography>
         </div>
     );
 }

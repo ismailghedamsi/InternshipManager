@@ -205,6 +205,7 @@ class InternshipOfferServiceTests {
         var actual = service.updateInternshipOffer(initialId, alteredResume);
 
         assertThat(actual).contains(expectedOffer);
+        assertThat(actual.get().getSemester()).isEqualTo(expectedOffer.getSemester());
     }
 
     @Test

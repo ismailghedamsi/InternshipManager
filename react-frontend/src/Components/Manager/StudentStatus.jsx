@@ -20,9 +20,9 @@ const applicationAcceptedStates = [
 
 function ResumeStatus(props) {
     function getResumeState(resume) {
-        if (!resume.reviewState === "APPROVED")
+        if (resume.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>;
-        else if (!resume.reviewState === "DENIED")
+        else if (resume.reviewState === "DENIED")
             return (<span style={{color: "red"}}>Rejeté<span
                 style={{color: "black"}}> : {resume.reasonForRejection} </span></span>);
         else

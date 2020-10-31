@@ -101,8 +101,9 @@ public class ContractGenerationService {
     }
 
     public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
-        var application = applicationService.getApplicationById(contract.getStudentApplicationId());
-        return application;
+        if (contract == null)
+            return Optional.empty();
+        return applicationService.getApplicationById(contract.getStudentApplicationId());
     }
 
     private void signaturesSection(Document document, float documentWidth) {
