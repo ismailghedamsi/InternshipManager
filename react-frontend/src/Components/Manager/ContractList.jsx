@@ -19,7 +19,7 @@ export default function ContractList() {
         <div style={{height: "100%"}}>
             <PdfSelectionViewer
                 documents={contracts ? contracts.map(c => c.file ? "data:application/pdf;base64," + c.file : "") : []}
-                title={"Contracts"}>
+                title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
