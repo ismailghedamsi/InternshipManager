@@ -30,11 +30,6 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Changer de session',
-        url: '/dashboard/setSemester',
-        role: 'admin'
-    },
-    {
         title: 'Téléverser un CV',
         url: '/dashboard/upload',
         role: 'student'
