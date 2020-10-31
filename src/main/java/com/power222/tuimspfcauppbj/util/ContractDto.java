@@ -13,5 +13,4 @@ public class ContractDto {
     private String adminName;
     private int totalHoursPerWeek;
     private String file;
-
 }

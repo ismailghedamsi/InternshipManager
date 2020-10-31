@@ -40,7 +40,6 @@ public class ContractService {
                 .orElse(contract);
     }
 
-
     @Transactional
     public void deleteContractById(long id) {
         contractRepo.deleteById(id);

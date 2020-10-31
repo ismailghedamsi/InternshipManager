@@ -5,7 +5,6 @@ import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.ContractGenerationController;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
 import com.power222.tuimspfcauppbj.util.ContractDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,11 +35,6 @@ public class ContractGenerationControllerTests {
 
     private ContractDto nullDto;
 
-    @BeforeEach
-    void setUp() {
-
-    }
-
     @Test
     void createContract() throws Exception {
         when(svc.generateContract(any())).thenReturn(true);
@@ -59,6 +53,5 @@ public class ContractGenerationControllerTests {
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
-
 
 }

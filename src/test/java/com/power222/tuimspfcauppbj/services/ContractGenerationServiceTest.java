@@ -81,8 +81,6 @@ public class ContractGenerationServiceTest {
                 .offer(offer)
                 .student(student)
                 .build();
-        //contractDto = ContractDto.fromContract(contract, studentApplicationService);
-        //nullContractDto = null;
     }
 
     @Test

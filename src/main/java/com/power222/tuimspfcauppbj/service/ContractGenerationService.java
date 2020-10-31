@@ -74,7 +74,6 @@ public class ContractGenerationService {
             String fileBase64 = com.itextpdf.io.codec.Base64.encodeBytes(stream.toByteArray());
             contract.setFile(fileBase64);
             contractService.createAndSaveNewContract(contractDtoToContract(contract, applicationService));
-            //base64ToPdfFile(contract, "test.pdf", fileBase64);
         }
         return stream != null;
     }

@@ -67,7 +67,6 @@ public class ContractControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}")).andReturn();
 
-
         assertEquals(result.getResponse().getStatus(), HttpStatus.CREATED.value());
     }
 
@@ -115,7 +114,6 @@ public class ContractControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedContract)))
                 .andReturn();
-
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateContract(expectedContract.getId(), expectedContract);
