@@ -41,6 +41,6 @@ public class StudentApplication extends SemesterDiscriminatedEntity {
     private Interview interview;
 
     @OneToOne(mappedBy = "studentApplication")
-    @JsonIgnoreProperties({"studentApplication"})
+    @JsonIgnoreProperties("studentApplication")
     private Contract contract;
 }

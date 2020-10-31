@@ -9,7 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@EqualsAndHashCode // je sais pas si j'en est besoin
+@EqualsAndHashCode(callSuper = true)
 public class Contract extends SemesterDiscriminatedEntity {
 
     @Id
