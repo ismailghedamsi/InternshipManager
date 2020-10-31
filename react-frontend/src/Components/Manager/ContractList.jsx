@@ -20,7 +20,6 @@ export default function ContractList() {
             <PdfSelectionViewer
                 documents={contracts ? contracts.map(c => c.file ? "data:application/pdf;base64," + c.file : "") : []}
                 title={"Contracts"}>
-                {/*{console.log(contracts[0].file)}*/}
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
@@ -34,7 +33,7 @@ export default function ContractList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
-                            <hr style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}/>
+                            <hr className={classes.hrStyle}/>
                         </button>
                     </div>
                 )}

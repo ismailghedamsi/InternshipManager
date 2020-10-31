@@ -18,10 +18,11 @@ import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
 import ContractList from './Manager/ContractList';
+import SemesterSelector from "./Manager/SemesterSelector";
+import ContractForm from "./Manager/ContractForm";
 import InterviewConvocation from './Employer/Interview/InterviewConvocation';
 import Interviewlist from './Employer/Interview/InterviewList';
 import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
-import SemesterSelector from "./Manager/SemesterSelector";
 
 
 const useStyles = makeStyles(() => ({
@@ -91,6 +92,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/contractList"
                                         component={ContractList}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/contractForm"
+                                        component={ContractForm}
                                         role={"admin"}/>
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
