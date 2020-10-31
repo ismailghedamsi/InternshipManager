@@ -21,7 +21,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -89,7 +88,6 @@ public class ContractGenerationServiceTest {
 
     @Test
     public void getStudentApplicationWithWrongDtoTest() {
-        lenient().when(contractGenerationService.getStudentApplication(emptyContractDto)).thenReturn(Optional.empty());
         boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
         assertThat(generatePdfSuccess).isFalse();
     }
