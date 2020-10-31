@@ -1,4 +1,4 @@
-package com.power222.tuimspfcauppbj.model;
+package com.power222.tuimspfcauppbj.util;
 
 import lombok.Data;
 
