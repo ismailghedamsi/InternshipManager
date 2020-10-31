@@ -44,7 +44,6 @@ public class ContractGenerationService {
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {
             StudentApplication studentApplication = optionalApplication.get();
-            System.out.println(studentApplication);
             stream = new ByteArrayOutputStream();
             PdfWriter writer = new PdfWriter(stream);
             PdfDocument pdf = new PdfDocument(writer);
