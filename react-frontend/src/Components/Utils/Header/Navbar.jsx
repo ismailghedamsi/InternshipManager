@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Menu} from "./Menu"
 import './Navbar.css'
 import {Link, useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import AuthenticationService from "../../../Services/AuthenticationService";
+import {SemesterContext} from "../../../App";
 
 const useStyles = makeStyles((theme) => ({
     navbarColor: {
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
     const classes = useStyles();
+    const {semester} = useContext(SemesterContext)
     const history = useHistory();
     const showIcon = () => {
         const x = document.getElementById("myNav");
@@ -49,6 +51,19 @@ export default function Navbar() {
                             </Link>
                         </li>
                     ))
+                }
+                {AuthenticationService.getCurrentUserRole() === "admin" &&
+                <li>
+                    <button
+                        type={"button"}
+                        className={["nav-links", classes.linkButton].join(' ')}
+                        onClick={() => {
+                            history.push("/dashboard/setSemester")
+                        }}>
+                        Année <br/>
+                        {semester}
+                    </button>
+                </li>
                 }
                 <li>
                     <button

@@ -1,6 +1,8 @@
 package com.power222.tuimspfcauppbj.services;
 
-import com.power222.tuimspfcauppbj.model.Contract;
+import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
@@ -13,10 +15,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ContractGenerationServiceTest {
+
     @Mock
     private ContractService contractService;
 
@@ -26,37 +35,58 @@ public class ContractGenerationServiceTest {
     @InjectMocks
     private ContractGenerationService contractGenerationService;
 
-    private Contract contract;
-    private StudentApplication exceptedStudentApplication;
     private ContractDto contractDto;
-    private ContractDto nullContractDto;
+    private StudentApplication expectedStudentApplication;
 
     @BeforeEach
     void setUp() {
-        contract = Contract.builder().adminName("Zack de la rocha")
+        contractDto = ContractDto.builder().adminName("Zack de la rocha")
                 .engagementCollege("Engagement College")
                 .engagementCompany("Engagement company")
                 .engagementStudent("Engagement Etudiant")
+                .studentApplicationId(1L)
                 .file("tttt")
-                .id(1)
                 .totalHoursPerWeek(20)
                 .build();
-        exceptedStudentApplication = StudentApplication.builder().build();
-        //contractDto = ContractDto.fromContract(contract, studentApplicationService);
-        nullContractDto = null;
+
+        Employer employer = Employer.builder()
+                .companyName("dacima")
+                .build();
+        InternshipOffer offer = null;
+        try {
+            offer = InternshipOffer.builder()
+                    .employer(employer)
+                    .description("The coolest internship")
+                    .startTime(8)
+                    .endTime(16)
+                    .internshipEndDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/11/2020"))
+                    .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("2/11/2020"))
+                    .build();
+        } catch (ParseException e) {
+            fail("Le format de date est invalide");
+        }
+        Student student = Student.builder()
+                .firstName("ismail")
+                .lastName("ghedamsi")
+                .build();
+        expectedStudentApplication = StudentApplication.builder()
+                .id(1L)
+                .offer(offer)
+                .student(student)
+                .build();
     }
 
     @Test
-    public void successfulPdfGeneration() {
-
+    public void successfulPdfGenerationTest() {
+        when(contractGenerationService.getStudentApplication(contractDto)).thenReturn(Optional.of(expectedStudentApplication));
+        when(studentApplicationService.getApplicationById(contractDto.getStudentApplicationId())).thenReturn(Optional.ofNullable(expectedStudentApplication));
+        boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
+        assertThat(generatePdfSuccess).isTrue();
     }
 
     @Test
-    public void getStudentApplicationWithWrongDto() {
-        Optional<StudentApplication> optionalStudentApplication = contractGenerationService.getStudentApplication(null);
-        System.out.println(optionalStudentApplication.isPresent());
-        //assertThat(optionalStudentApplication).contains(expectedContract);
-
+    public void getStudentApplicationWithWrongDtoTest() {
+        boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
+        assertThat(generatePdfSuccess).isFalse();
     }
-
 }

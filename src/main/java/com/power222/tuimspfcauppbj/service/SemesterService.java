@@ -22,7 +22,7 @@ public class SemesterService {
         authSvc.registerEventListeners(this::checkIfUserIsInSemester);
     }
 
-    private void checkIfUserIsInSemester(User user) {
+    public void checkIfUserIsInSemester(User user) {
         if (user instanceof Student) {
             Student student = (Student) user;
             if (!student.getSemesters().contains(SemesterContext.getPresentSemester())) {

@@ -24,8 +24,7 @@ export default function SemesterSelector() {
     useEffect(() => {
         api.get("/semesters")
             .then(r => setSemesters(r ? r.data : []))
-    }, []);
-
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function generateMenuItems() {
         if (semesters.length !== 0) {

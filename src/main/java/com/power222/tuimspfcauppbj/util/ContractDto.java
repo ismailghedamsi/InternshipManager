@@ -1,8 +1,10 @@
 package com.power222.tuimspfcauppbj.util;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ContractDto {
     private long studentApplicationId;
     private String engagementCollege;
@@ -11,5 +13,4 @@ public class ContractDto {
     private String adminName;
     private int totalHoursPerWeek;
     private String file;
-
 }

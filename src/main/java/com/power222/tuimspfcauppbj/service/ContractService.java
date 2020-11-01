@@ -12,15 +12,13 @@ import java.util.Optional;
 public class ContractService {
 
     private final ContractRepository contractRepo;
-    private final AuthenticationService authSvc;
 
-    public ContractService(ContractRepository contractRepo, AuthenticationService authSvc) {
+    public ContractService(ContractRepository contractRepo) {
         this.contractRepo = contractRepo;
-        this.authSvc = authSvc;
     }
 
-    public Optional<Contract> createAndSaveNewContract(Contract contract) {
-        return Optional.of(contractRepo.saveAndFlush(contract));
+    public Contract createAndSaveNewContract(Contract contract) {
+        return contractRepo.saveAndFlush(contract);
     }
 
     public List<Contract> getAllContract() {
@@ -31,16 +29,14 @@ public class ContractService {
         return contractRepo.findById(id);
     }
 
-    public Contract updateContract(long id, Contract contract) {
+    public Optional<Contract> updateContract(long id, Contract contract) {
         return contractRepo.findById(id)
                 .map(oldContract -> {
                     contract.setId(oldContract.getId());
-                    contract.setSemester(oldContract.getSemester());
-                    return contractRepo.saveAndFlush(contract);
+                    return Optional.of(contractRepo.saveAndFlush(contract));
                 })
-                .orElse(contract);
+                .orElse(Optional.empty());
     }
-
 
     @Transactional
     public void deleteContractById(long id) {
