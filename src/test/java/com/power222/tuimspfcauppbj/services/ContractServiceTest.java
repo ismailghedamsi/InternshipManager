@@ -55,7 +55,9 @@ public class ContractServiceTest {
     @Test
     void createAndSaveNewContractTest() {
         when(contractRepo.saveAndFlush(expectedContract)).thenReturn(expectedContract);
+
         var actual = contractSvc.createAndSaveNewContract(expectedContract);
+
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expectedContract);
     }
@@ -107,6 +109,7 @@ public class ContractServiceTest {
     @Test
     void updateContractWithNonexistentIdTest() {
         var actual = contractSvc.updateContract(expectedContract.getId(), expectedContract);
+
         assertThat(actual).isEmpty();
     }
 

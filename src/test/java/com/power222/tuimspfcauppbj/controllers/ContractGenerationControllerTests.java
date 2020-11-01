@@ -33,7 +33,7 @@ public class ContractGenerationControllerTests {
     @MockBean
     private ContractGenerationService svc;
 
-    private ContractDto nullDto;
+    private final ContractDto nullDto = new ContractDto();
 
     @Test
     void createContract() throws Exception {
