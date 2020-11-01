@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.controller.ContractController;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractService;
+import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class ContractControllerTests {
     private ContractService svc;
 
     private Contract expectedContract;
+    private ContractSignatureDTO expectedDto;
 
     @BeforeEach
     void beforeEach() {
@@ -57,6 +59,8 @@ public class ContractControllerTests {
                 .totalHoursPerWeek(32)
                 .studentApplication(new StudentApplication())
                 .build();
+
+        expectedDto = ContractSignatureDTO.builder().build();
     }
 
     @Test
@@ -120,26 +124,26 @@ public class ContractControllerTests {
 
     @Test
     void updateContractSignatureStateTest() throws Exception {
-        when(svc.updateContractSignatureState(expectedContract.getId(), true)).thenReturn(Optional.ofNullable(expectedContract));
+        when(svc.updateContractSignature(expectedContract.getId(), expectedDto)).thenReturn(Optional.ofNullable(expectedContract));
 
         MvcResult result = mvc.perform(put("/api/contract/state/" + expectedContract.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(true)))
+                .content(objectMapper.writeValueAsString(expectedDto)))
                 .andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        verify(svc, times(1)).updateContractSignatureState(expectedContract.getId(), true);
+        verify(svc, times(1)).updateContractSignature(expectedContract.getId(), expectedDto);
     }
 
     @Test
     void updateContractSignatureStateTestWithInvalidId() throws Exception {
         MvcResult result = mvc.perform(put("/api/contract/state/" + expectedContract.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(true)))
+                .content(objectMapper.writeValueAsString(expectedDto)))
                 .andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
-        verify(svc, times(1)).updateContractSignatureState(expectedContract.getId(), true);
+        verify(svc, times(1)).updateContractSignature(expectedContract.getId(), expectedDto);
     }
 
     @Test

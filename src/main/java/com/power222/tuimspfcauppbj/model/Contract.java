@@ -25,6 +25,7 @@ public class Contract extends SemesterDiscriminatedEntity {
     private String engagementStudent;
     private String adminName;
     private int totalHoursPerWeek;
+    private String reasonForRejection;
 
     @Builder.Default
     private ContractSignatureState signatureState = ContractSignatureState.PENDING_FOR_ADMIN_REVIEW;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.ContractGenerationController;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
-import com.power222.tuimspfcauppbj.util.ContractDto;
+import com.power222.tuimspfcauppbj.util.ContractDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,7 +33,7 @@ public class ContractGenerationControllerTests {
     @MockBean
     private ContractGenerationService svc;
 
-    private ContractDto nullDto;
+    private ContractDTO nullDto;
 
     @Test
     void createContract() throws Exception {

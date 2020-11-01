@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ContractDto {
+public class ContractDTO {
     private long studentApplicationId;
     private String engagementCollege;
     private String engagementCompany;
