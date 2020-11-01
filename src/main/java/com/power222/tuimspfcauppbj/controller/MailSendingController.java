@@ -15,10 +15,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/sendMail")
-public class SendMailController {
+public class MailSendingController {
     private final MailSendingService mailService;
 
-    public SendMailController(MailSendingService mailService, ContractService contractService) {
+    public MailSendingController(MailSendingService mailService, ContractService contractService) {
         this.mailService = mailService;
     }
 
@@ -28,7 +28,6 @@ public class SendMailController {
         if (optionalStudentApplication.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        System.out.println(contract.getFile());
         mailService.sendEmail(optionalStudentApplication.get().getOffer().getEmployer(), "contract" + contract + ".pdf", contract.getFile());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
