@@ -3,13 +3,11 @@ package com.power222.tuimspfcauppbj.services;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.MailSendingService;
-import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import com.power222.tuimspfcauppbj.util.MailContractDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,11 +15,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class MailSendingServiceTests {
 
-    @Mock
-    private JavaMailSender javaMailSender;
-    @Mock
-    private StudentApplicationService applicationService;
-    @Mock
+    @MockBean
     private MailSendingService service;
 
 
@@ -99,6 +93,7 @@ public class MailSendingServiceTests {
     StudentApplication studentApplication = StudentApplication.builder()
             .id(1L)
             .build();
+
 
     @Test
     public void sendMailSuccess() {

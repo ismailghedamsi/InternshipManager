@@ -5,6 +5,7 @@ import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.controller.MailSendingController;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
+import com.power222.tuimspfcauppbj.service.ContractService;
 import com.power222.tuimspfcauppbj.service.MailSendingService;
 import com.power222.tuimspfcauppbj.util.MailContractDto;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,11 @@ public class MailSendingControllerTests {
     @Autowired
     private ObjectMapper mapper;
 
+
+    private ContractService contractService;
+
     @MockBean
-    MailSendingService service;
+    private MailSendingService service;
 
 
     Employer employer = Employer.builder()
@@ -112,9 +116,8 @@ public class MailSendingControllerTests {
             .id(1L)
             .build();
 
-
     @Test
-    void createContract() throws Exception {
+    public void createContract() throws Exception {
         when(service.getStudentApplication(contract)).thenReturn(Optional.of(studentApplication));
         //doNothing().when(service.sendEmail(employer,"contract.pdf",contract.getFile()));
 
