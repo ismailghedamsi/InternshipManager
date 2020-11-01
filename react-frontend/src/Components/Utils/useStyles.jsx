@@ -97,6 +97,11 @@ export default function useStyles() {
         },
         title: {
             fontSize: "2em"
+        },
+        hrStyle: {
+            width: "80%",
+            marginLeft: "auto",
+            marginRight: "auto"
         }
     }))();
 };
