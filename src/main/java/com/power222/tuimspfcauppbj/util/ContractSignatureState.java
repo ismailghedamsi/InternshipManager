@@ -1,7 +1,5 @@
 package com.power222.tuimspfcauppbj.util;
 
-import com.power222.tuimspfcauppbj.model.Contract;
-
 public enum ContractSignatureState {
     PENDING_FOR_ADMIN_REVIEW,
     WAITING_FOR_EMPLOYER_SIGNATURE,
@@ -17,8 +15,8 @@ public enum ContractSignatureState {
                     return WAITING_FOR_STUDENT_SIGNATURE;
                 else
                     return REJECTED_BY_EMPLOYER;
+            default:
+                return signatureState;
         }
-
-        return signatureState;
     }
 }

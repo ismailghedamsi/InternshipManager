@@ -110,15 +110,36 @@ public class ContractControllerTests {
 
     @Test
     void updateContractNoValidIdTest() throws Exception {
-        var longTest = 100L;
-        when(svc.updateContract(longTest, expectedContract)).thenReturn(Optional.empty());
-
         MvcResult result = mvc.perform(put("/api/contract/" + expectedContract.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedContract)))
                 .andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void updateContractSignatureStateTest() throws Exception {
+        when(svc.updateContractSignatureState(expectedContract.getId(), true)).thenReturn(Optional.ofNullable(expectedContract));
+
+        MvcResult result = mvc.perform(put("/api/contract/state/" + expectedContract.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(true)))
+                .andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(svc, times(1)).updateContractSignatureState(expectedContract.getId(), true);
+    }
+
+    @Test
+    void updateContractSignatureStateTestWithInvalidId() throws Exception {
+        MvcResult result = mvc.perform(put("/api/contract/state/" + expectedContract.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(true)))
+                .andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
+        verify(svc, times(1)).updateContractSignatureState(expectedContract.getId(), true);
     }
 
     @Test

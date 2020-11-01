@@ -35,6 +35,13 @@ public class ContractController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/state/{id}")
+    public ResponseEntity<Contract> updateContractSignatureState(@PathVariable long id, @RequestBody boolean requestBody) {
+        return svc.updateContractSignatureState(id, requestBody).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
     @DeleteMapping("/{id}")
     public void deleteContract(@PathVariable long id) {
         svc.deleteContractById(id);

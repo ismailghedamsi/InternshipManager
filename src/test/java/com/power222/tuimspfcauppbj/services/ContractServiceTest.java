@@ -112,14 +112,39 @@ public class ContractServiceTest {
 
     @Test
     void updateContractSignatureStateIsApprovedTrueTest() {
+        var expectedContractWithModdedState = expectedContract.toBuilder()
+                .signatureState(ContractSignatureState.getNextState(expectedContract.getSignatureState(), true))
+                .build();
+
         when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
+        when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
 
         var actual = contractSvc.updateContractSignatureState(expectedContract.getId(), true);
 
         assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE));
+    }
 
-//        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE));
-//        assertThat(expectedContract.getSignatureState()).isEqualByComparingTo(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
+    @Test
+    void updateContractSignatureStateIsApprovedFalseTest() {
+        expectedContract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
+        var expectedContractWithModdedState = expectedContract.toBuilder()
+                .signatureState(ContractSignatureState.getNextState(expectedContract.getSignatureState(), false))
+                .build();
+
+        when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
+        when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
+
+        var actual = contractSvc.updateContractSignatureState(expectedContract.getId(), false);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.REJECTED_BY_EMPLOYER));
+    }
+
+    @Test
+    void updateContractSignatureStateWithInvalidId() {
+        assertThat(contractSvc.updateContractSignatureState(7843, true)).isEmpty();
+        assertThat(contractSvc.updateContractSignatureState(123, false)).isEmpty();
     }
 
     @Test

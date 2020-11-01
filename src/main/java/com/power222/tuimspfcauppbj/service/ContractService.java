@@ -42,11 +42,7 @@ public class ContractService {
     public Optional<Contract> updateContractSignatureState(long id, boolean isApproved) {
         return contractRepo.findById(id)
                 .map(contract -> {
-//                    contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), isApproved));
-                    contract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
-                    System.out.println(contract);
-                    System.out.println(contractRepo.saveAndFlush(contract));
-                    contractRepo.saveAndFlush(contract);
+                    contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), isApproved));
                     return contractRepo.saveAndFlush(contract);
                 });
     }
