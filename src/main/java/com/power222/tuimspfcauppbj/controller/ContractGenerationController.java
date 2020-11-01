@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/contractGeneration")
 public class ContractGenerationController {
-    private ContractGenerationService service;
+
+    private final ContractGenerationService service;
 
     public ContractGenerationController(ContractGenerationService service) {
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<ContractDto> generateContract(@RequestBody ContractDto contract) {
-        boolean generationSucceed = service.generateContract(contract);
-        return generationSucceed ? ResponseEntity.status(HttpStatus.CREATED).body(contract)
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(contract);
+    public ResponseEntity generateContract(@RequestBody ContractDto contract) {
+        return service.generateContract(contract) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

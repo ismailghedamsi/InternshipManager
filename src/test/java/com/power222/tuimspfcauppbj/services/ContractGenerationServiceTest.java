@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ContractGenerationServiceTest {
+
     @Mock
     private ContractService contractService;
 
@@ -35,7 +36,6 @@ public class ContractGenerationServiceTest {
     private ContractGenerationService contractGenerationService;
 
     private ContractDto contractDto;
-    private ContractDto emptyContractDto;
     private StudentApplication expectedStudentApplication;
 
     @BeforeEach
@@ -48,8 +48,6 @@ public class ContractGenerationServiceTest {
                 .file("tttt")
                 .totalHoursPerWeek(20)
                 .build();
-
-        emptyContractDto = ContractDto.builder().build();
 
         Employer employer = Employer.builder()
                 .companyName("dacima")

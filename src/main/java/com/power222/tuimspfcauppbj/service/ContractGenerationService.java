@@ -18,6 +18,7 @@ import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.ContractDto;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.Weeks;
@@ -78,7 +79,11 @@ public class ContractGenerationService {
         return stream != null;
     }
 
-    public Contract contractDtoToContract(ContractDto contractDto, StudentApplicationService studentApplicationService) {
+    public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
+        return applicationService.getApplicationById(contract.getStudentApplicationId());
+    }
+
+    private Contract contractDtoToContract(ContractDto contractDto, StudentApplicationService studentApplicationService) {
         Contract contract = new Contract();
         contract.setAdminName(contractDto.getAdminName());
         contract.setFile(contractDto.getFile());
@@ -91,10 +96,6 @@ public class ContractGenerationService {
             contract.setStudentApplication(application);
         }
         return contract;
-    }
-
-    public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
-        return applicationService.getApplicationById(contract.getStudentApplicationId());
     }
 
     private void addInternshipInfoTable(ContractDto contract, Document document) {
@@ -157,8 +158,9 @@ public class ContractGenerationService {
                         .add(new Paragraph("[Date]").setMarginLeft(145f)));
     }
 
+    @SneakyThrows
     private void internshipPartiesResponsabilities(ContractDto contract, Document document) {
-        PdfFont font = undoBold(StandardFonts.TIMES_ROMAN);
+        PdfFont font = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
         document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold()).setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph(new Text("Le Collège s’engage à :\n").setBold())
                 .add(new Paragraph(contract.getEngagementCollege())).setFont(font)
@@ -174,8 +176,7 @@ public class ContractGenerationService {
         try {
             font = PdfFontFactory.createFont(fontName);
         } catch (java.io.IOException e) {
-            log.error("Invalid font name");
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return font;
     }
@@ -184,7 +185,7 @@ public class ContractGenerationService {
         return new SimpleDateFormat("dd/MM/yy").format(date);
     }
 
-    public int dateIntervalToWeeks(Date endDate, Date startDate) {
+    private int dateIntervalToWeeks(Date endDate, Date startDate) {
         return Weeks.weeksBetween(new DateTime(startDate), new DateTime(endDate)).getWeeks();
     }
 }
