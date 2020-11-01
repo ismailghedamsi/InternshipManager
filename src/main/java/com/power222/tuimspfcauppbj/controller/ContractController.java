@@ -36,7 +36,7 @@ public class ContractController {
     }
 
     @DeleteMapping("/{id}")
-    public void contractInterview(@PathVariable long id) {
+    public void deleteContract(@PathVariable long id) {
         svc.deleteContractById(id);
     }
 
