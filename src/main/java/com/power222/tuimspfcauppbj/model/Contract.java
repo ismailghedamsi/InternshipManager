@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
+import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,7 +26,9 @@ public class Contract extends SemesterDiscriminatedEntity {
     private String adminName;
     private int totalHoursPerWeek;
 
+    @Builder.Default
+    private ContractSignatureState signatureState = ContractSignatureState.PENDING_FOR_ADMIN_REVIEW;
+
     @OneToOne
     private StudentApplication studentApplication;
-
 }
