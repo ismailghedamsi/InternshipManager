@@ -28,6 +28,7 @@ public class SendMailController {
         if (optionalStudentApplication.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        System.out.println(contract.getFile());
         mailService.sendEmail(optionalStudentApplication.get().getOffer().getEmployer(), "contract" + contract + ".pdf", contract.getFile());
         return ResponseEntity.status(HttpStatus.OK).build();
     }

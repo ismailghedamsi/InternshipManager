@@ -15,7 +15,6 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import java.util.Base64;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -58,7 +57,8 @@ public class MailSendingService {
             String htmlMsg = "<h1> This is your contract </h1>";
 
             // add attachment encode in base64
-            byte[] decodedPdfContent = Base64.getDecoder().decode(fileContent);
+
+            byte[] decodedPdfContent = com.itextpdf.io.codec.Base64.decode(fileContent);
             helper.addAttachment(fileName, new ByteArrayResource(decodedPdfContent));
             helper.setTo(sendTo);
             helper.setSubject("Internship contract");
