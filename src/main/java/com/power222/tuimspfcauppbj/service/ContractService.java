@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
+import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,11 +32,21 @@ public class ContractService {
 
     public Optional<Contract> updateContract(long id, Contract contract) {
         return contractRepo.findById(id)
-                .map(oldStudent -> {
-                    contract.setId(oldStudent.getId());
+                .map(oldContract -> {
+                    contract.setId(oldContract.getId());
                     return Optional.of(contractRepo.saveAndFlush(contract));
                 })
                 .orElse(Optional.empty());
+    }
+
+    public Optional<Contract> updateContractSignatureState(long id, boolean isApproved) {
+        return contractRepo.findById(id)
+                .map(contract -> {
+                    ContractSignatureState.advanceState(contract, isApproved);
+                    return Optional.of(contractRepo.saveAndFlush(contract));
+                })
+                .orElse(Optional.empty());
+
     }
 
     @Transactional
