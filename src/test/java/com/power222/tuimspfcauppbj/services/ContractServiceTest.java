@@ -100,7 +100,7 @@ public class ContractServiceTest {
 
         var actual = contractSvc.updateContract(initialId, alteredInterview);
 
-        assertThat(actual).isEqualTo(Optional.of(expectedContract));
+        assertThat(actual).contains(expectedContract);
     }
 
     @Test
