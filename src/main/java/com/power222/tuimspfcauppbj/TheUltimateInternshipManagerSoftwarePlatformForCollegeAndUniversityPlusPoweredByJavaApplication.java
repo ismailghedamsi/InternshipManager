@@ -127,7 +127,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .resume(resume)
                     .build());
 
-
             userRepo.flush();
             resumeRepo.flush();
             internshipRepo.flush();
