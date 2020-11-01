@@ -26,7 +26,7 @@ export default function ApplicationList() {
             case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
             case "STUDENT_HIRED_BY_EMPLOYER":
                 if (AuthenticationService.getCurrentUserRole() === "admin" && offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER") {
-                    return <Typography> Application est déjà accepté </Typography>
+                    return <Typography variant={"body1"} style={{color: "green"}}> Application acceptée </Typography>
                 }
                 return <Typography>
                     {console.log(offer.applications[i].state)}
@@ -51,16 +51,13 @@ export default function ApplicationList() {
                     />
                 </Typography>
             case "APPLICATION_REJECTED_BY_EMPLOYER":
+            case "STUDENT_REJECTED_BY_EMPLOYER":
                 return <Typography variant={"body1"} style={{color: "red"}}>
                     L'employeur a refusé la demande
                 </Typography>
-            case "STUDENT_REJECTED_BY_EMPLOYER":
-                return <Typography variant={"body1"} style={{color: "red"}}>
-                    L'employeur refuse l'étudiant pour l'offer de stage
-                </Typography>
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return <Typography variant={"body1"} style={{color: "blue"}}>
-                    En attente de la décision final de l'étudiant
+                    En attente de la décision de l'étudiant
                 </Typography>
             case "JOB_OFFER_ACCEPTED_BY_STUDENT":
                 return <Typography variant={"body1"} style={{color: "green"}}>
