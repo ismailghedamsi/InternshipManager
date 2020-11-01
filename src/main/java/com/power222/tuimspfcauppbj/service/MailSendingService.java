@@ -16,6 +16,7 @@ import java.util.Optional;
 @Service
 public class MailSendingService {
     private JavaMailSender javaMailSender;
+
     private StudentApplicationService applicationService;
 
     public MailSendingService(JavaMailSender javaMailSender, StudentApplicationService applicationService) {
@@ -28,7 +29,7 @@ public class MailSendingService {
         MimeMessageHelper helper;
         try {
             helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
-            String sendTo = "projetemployeur@gmail.com";
+            String sendTo = "";
             if (user instanceof Employer) {
                 sendTo = ((Employer) user).getEmail();
             }
