@@ -171,16 +171,6 @@ public class ContractGenerationService {
         );
     }
 
-    private PdfFont undoBold(String fontName) {
-        PdfFont font = null;
-        try {
-            font = PdfFontFactory.createFont(fontName);
-        } catch (java.io.IOException e) {
-            log.error(e.getMessage());
-        }
-        return font;
-    }
-
     private String parseDate(Date date) {
         return new SimpleDateFormat("dd/MM/yy").format(date);
     }
