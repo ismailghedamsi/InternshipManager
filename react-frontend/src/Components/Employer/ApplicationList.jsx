@@ -14,21 +14,53 @@ export default function ApplicationList() {
     const [offer, setOffer] = useState({});
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const applicationStudentStates = [
-        "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION",
-        "JOB_OFFER_ACCEPTED_BY_STUDENT",
-        "JOB_OFFER_DENIED_BY_STUDENT"
-    ]
-
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
             .then((r) => setOffer(r.data))
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    function StudentDecision(i) {
+    function studentApplicationState(i) {
         switch (offer.applications[i].state) {
-            case "JOB_OFFER_ACCEPTED_BY_STUDENT":
+            case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
+            case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
+            case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
+            case "STUDENT_HIRED_BY_EMPLOYER":
+                if (AuthenticationService.getCurrentUserRole() === "admin" && offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER") {
+                    return <Typography variant={"body1"} style={{color: "green"}}> Application acceptée </Typography>
+                }
+                return <Typography>
+                    {console.log(offer.applications[i].state)}
+                    Application acceptée:
+                    <Checkbox
+                        value="state"
+                        checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
+                        onChange={
+                            () => {
+                                var copy = {...offer}
+                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
+                                    "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
+                                api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
+                                    .then(r => {
+                                        if (r) {
+                                            copy.applications[i].state = r.data.state;
+                                        }
+                                        setOffer(copy)
+                                    });
+                            }}
+                        inputProps={{'aria-label': 'state'}}
+                    />
+                </Typography>
+            case "APPLICATION_REJECTED_BY_EMPLOYER":
+            case "STUDENT_REJECTED_BY_EMPLOYER":
+                return <Typography variant={"body1"} style={{color: "red"}}>
+                    L'employeur a refusé la demande
+                </Typography>
+            case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la décision de l'étudiant
+                </Typography>
+            case "JOB_OFFER_ACCEPTED_BY_STUDENT":
+                return <Typography variant={"body1"} style={{color: "green"}}>
                     L'étudiant a été embauché
                     {
                         offer.applications[i].contract === null && AuthenticationService.getCurrentUserRole() === "admin" &&
@@ -43,12 +75,10 @@ export default function ApplicationList() {
                         </Link>
                     }
                 </Typography>
-                break;
             case "JOB_OFFER_DENIED_BY_STUDENT":
                 return <Typography variant={"body1"} style={{color: "red"}}>
                     L'étudiant a refusé l'offre de stage
                 </Typography>
-                break;
             default:
                 return '';
         }
@@ -80,36 +110,9 @@ export default function ApplicationList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 {offer.applications[i].student.address}
                             </Typography>
-                            {applicationStudentStates.indexOf(offer.applications[i].state) > -1 ?
-                                StudentDecision(i)
-                                :
-                                <Typography>
-                                    Application acceptée:
-                                    <Checkbox
-                                        value="state"
-                                        checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
-                                        onChange={
-                                            () => {
-                                                var copy = {...offer}
-                                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
-                                                    "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-                                                api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
-                                                    .then(r => {
-                                                        if (r) {
-                                                            copy.applications[i].state = r.data.state;
-                                                        }
-                                                        setOffer(copy)
-                                                    });
-                                            }}
-                                        inputProps={{'aria-label': 'state'}}
-                                    />
-                                    {offer.applications[i].state === "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION" &&
-                                    <Typography variant={"body1"}>
-                                        L'étudiant n'a pas encore décidé
-                                    </Typography>
-                                    }
-                                </Typography>}
-
+                            {studentApplicationState(i)}
+                            {AuthenticationService.getCurrentUserRole() === "employer" &&
+                            offer.applications[i].state !== "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER" &&
                             <Link variant={"body1"}
                                   to={{
                                       pathname: "/dashboard/interviewConvocation",
@@ -119,6 +122,7 @@ export default function ApplicationList() {
                             >
                                 Convoquer l'étudiant pour un entrevue
                             </Link>
+                            }
                         </div>
                         }
                         <hr/>
