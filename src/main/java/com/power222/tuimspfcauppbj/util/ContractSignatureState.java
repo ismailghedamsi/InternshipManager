@@ -8,16 +8,17 @@ public enum ContractSignatureState {
     REJECTED_BY_EMPLOYER,
     WAITING_FOR_STUDENT_SIGNATURE;
 
-    public static void advanceState(Contract contract, boolean isApproved) {
-        switch (contract.getSignatureState()) {
+    public static ContractSignatureState getNextState(ContractSignatureState signatureState, boolean isApproved) {
+        switch (signatureState) {
             case PENDING_FOR_ADMIN_REVIEW:
-                contract.setSignatureState(WAITING_FOR_EMPLOYER_SIGNATURE);
-                break;
+                return WAITING_FOR_EMPLOYER_SIGNATURE;
             case WAITING_FOR_EMPLOYER_SIGNATURE:
                 if (isApproved)
-                    contract.setSignatureState(WAITING_FOR_STUDENT_SIGNATURE);
+                    return WAITING_FOR_STUDENT_SIGNATURE;
                 else
-                    contract.setSignatureState(REJECTED_BY_EMPLOYER);
+                    return REJECTED_BY_EMPLOYER;
         }
+
+        return signatureState;
     }
 }

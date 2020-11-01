@@ -54,8 +54,6 @@ public class StudentApplicationService {
     public Optional<StudentApplication> updateStudentApplicationState(long id, StudentApplication transitionalApplication) {
         return appliRepo.findById(id)
                 .map(application -> {
-                    System.out.println(application.getState());
-                    System.out.println(transitionalApplication.getState());
                     application.setState(transitionalApplication.getState());
                     application.setReasonForRejection(transitionalApplication.getReasonForRejection());
                     return appliRepo.saveAndFlush(application);

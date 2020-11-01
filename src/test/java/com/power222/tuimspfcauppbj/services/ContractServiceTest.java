@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
+import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -104,9 +105,21 @@ public class ContractServiceTest {
     }
 
     @Test
-    void updateContracWithNonexistentIdTest() {
+    void updateContractWithNonexistentIdTest() {
         var actual = contractSvc.updateContract(expectedContract.getId(), expectedContract);
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void updateContractSignatureStateIsApprovedTrueTest() {
+        when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
+
+        var actual = contractSvc.updateContractSignatureState(expectedContract.getId(), true);
+
+        assertThat(actual).isNotEmpty();
+
+//        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE));
+//        assertThat(expectedContract.getSignatureState()).isEqualByComparingTo(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
     }
 
     @Test
