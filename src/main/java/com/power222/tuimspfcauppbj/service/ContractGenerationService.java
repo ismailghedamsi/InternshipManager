@@ -18,6 +18,7 @@ import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.ContractDTO;
+import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -41,8 +42,8 @@ public class ContractGenerationService {
         this.applicationService = applicationService;
     }
 
-    public boolean generateContract(ContractDTO contract) {
-        Optional<StudentApplication> optionalApplication = getStudentApplication(contract);
+    public boolean generateContract(ContractDTO contractDto) {
+        Optional<StudentApplication> optionalApplication = getStudentApplication(contractDto);
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {
             StudentApplication studentApplication = optionalApplication.get();
@@ -57,24 +58,24 @@ public class ContractGenerationService {
             Paragraph paragraph = new Paragraph(new Text("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES \n\n").setBold()
             ).setPaddingTop(30f)
                     .add(new Text("Dans le cadre de la formule ATE, les parties citées ci-dessous:\n\n"))
-                    .add("Le gestionnaire de stage, " + contract.getAdminName() + "\n\n")
+                    .add("Le gestionnaire de stage, " + contractDto.getAdminName() + "\n\n")
                     .add(new Text("et\n\n\n").setBold())
                     .add(new Text("L'employeur, " + studentApplication.getOffer().getEmployer().getCompanyName() + "\n\n"))
                     .add(new Text("et\n\n\n").setBold())
                     .add(new Text("L'étudiant(e), " + studentApplication.getStudent().getFirstName() + " " + studentApplication.getStudent().getLastName() + "\n\n"))
                     .add(new Text("Conviennent des conditions de stage suivantes : "));
             document.add(paragraph.setTextAlignment(TextAlignment.CENTER));
-            addInternshipInfoTable(contract, document);
+            addInternshipInfoTable(contractDto, document);
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
             document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDescription()).setWidth(documentWidth)));
-            internshipPartiesResponsabilities(contract, document);
+            internshipPartiesResponsabilities(contractDto, document);
             signaturesSection(document, documentWidth);
             document.close();
             String fileBase64 = com.itextpdf.io.codec.Base64.encodeBytes(stream.toByteArray());
-            contract.setFile(fileBase64);
-            contractService.createAndSaveNewContract(contractDtoToContract(contract, applicationService));
+            contractDto.setFile(fileBase64);
+            contractService.createAndSaveNewContract(contractDtoToContract(contractDto, applicationService));
         }
         return stream != null;
     }

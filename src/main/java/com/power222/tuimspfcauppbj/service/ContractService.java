@@ -49,6 +49,7 @@ public class ContractService {
                     else
                         contract.setReasonForRejection(contractSignatureDTO.getReasonForRejection());
                     contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), contractSignatureDTO.isApproved()));
+
                     return contractRepo.saveAndFlush(contract);
                 });
     }
