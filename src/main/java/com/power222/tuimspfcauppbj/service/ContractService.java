@@ -44,10 +44,12 @@ public class ContractService {
     public Optional<Contract> updateContractSignature(long id, ContractSignatureDTO contractSignatureDTO) {
         return contractRepo.findById(id)
                 .map(contract -> {
-                    if (contractSignatureDTO.isApproved())
-                        contract = contractSignSvc.signContract(contract, contractSignatureDTO);
-                    else
-                        contract.setReasonForRejection(contractSignatureDTO.getReasonForRejection());
+                    if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW) {
+                        if (contractSignatureDTO.isApproved())
+                            contract = contractSignSvc.signContract(contract, contractSignatureDTO);
+                        else
+                            contract.setReasonForRejection(contractSignatureDTO.getReasonForRejection());
+                    }
                     contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), contractSignatureDTO.isApproved()));
 
                     return contractRepo.saveAndFlush(contract);
