@@ -23,6 +23,7 @@ import ContractForm from "./Manager/ContractForm";
 import InterviewConvocation from './Employer/Interview/InterviewConvocation';
 import Interviewlist from './Employer/Interview/InterviewList';
 import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
+import SignContract from './Employer/SignContract'
 
 
 const useStyles = makeStyles(() => ({
@@ -121,6 +122,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/rescheduleInterview"
                                         component={Rescheduleinterview}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/SignContract"
+                                        component={SignContract}
                                         role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}

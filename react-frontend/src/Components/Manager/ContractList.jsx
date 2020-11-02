@@ -15,6 +15,15 @@ export default function ContractList() {
             .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    function deleteContract(index) {
+        const nextState = [...contracts];
+        return api.delete("/contract/" + nextState[index].id)
+            .then(() => {
+                nextState.splice(index, 1)
+                setContracts(nextState)
+            })
+    }
+
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer
@@ -22,6 +31,14 @@ export default function ContractList() {
                 title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
+                        <div className={classes.buttonDiv}>
+                            <button
+                                type={"button"}
+                                className={classes.linkButton}
+                                onClick={() => deleteContract(i)}>
+                                <i className="fa fa-trash" style={{color: "red"}}/>
+                            </button>
+                        </div>
                         <button
                             type={"button"}
                             className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
