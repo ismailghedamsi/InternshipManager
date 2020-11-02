@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
+import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -114,7 +115,11 @@ public class ContractServiceTest {
     }
 
     @Test
-    void updateContractSignatureStateIsApprovedTrueTest() {
+    void updateContractSignatureTest() {
+        var dto = ContractSignatureDTO.builder()
+                .isApproved(true)
+                .build();
+
         var expectedContractWithModdedState = expectedContract.toBuilder()
                 .signatureState(ContractSignatureState.getNextState(expectedContract.getSignatureState(), true))
                 .build();
@@ -122,32 +127,17 @@ public class ContractServiceTest {
         when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
         when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
 
-        var actual = contractSvc.updateContractSignatureState(expectedContract.getId(), true);
+        var actual = contractSvc.updateContractSignature(expectedContract.getId(), dto);
 
         assertThat(actual).isNotEmpty();
         assertThat(actual.get().getSignatureState().equals(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE));
     }
 
     @Test
-    void updateContractSignatureStateIsApprovedFalseTest() {
-        expectedContract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
-        var expectedContractWithModdedState = expectedContract.toBuilder()
-                .signatureState(ContractSignatureState.getNextState(expectedContract.getSignatureState(), false))
-                .build();
-
-        when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
-        when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
-
-        var actual = contractSvc.updateContractSignatureState(expectedContract.getId(), false);
-
-        assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.REJECTED_BY_EMPLOYER));
-    }
-
-    @Test
     void updateContractSignatureStateWithInvalidId() {
-        assertThat(contractSvc.updateContractSignatureState(7843, true)).isEmpty();
-        assertThat(contractSvc.updateContractSignatureState(123, false)).isEmpty();
+        var dto = ContractSignatureDTO.builder().build();
+
+        assertThat(contractSvc.updateContractSignature(7843, dto)).isEmpty();
     }
 
     @Test

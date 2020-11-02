@@ -17,7 +17,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
-import com.power222.tuimspfcauppbj.util.ContractDto;
+import com.power222.tuimspfcauppbj.util.ContractDTO;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -41,7 +41,7 @@ public class ContractGenerationService {
         this.applicationService = applicationService;
     }
 
-    public boolean generateContract(ContractDto contract) {
+    public boolean generateContract(ContractDTO contract) {
         Optional<StudentApplication> optionalApplication = getStudentApplication(contract);
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {
@@ -79,11 +79,11 @@ public class ContractGenerationService {
         return stream != null;
     }
 
-    public Optional<StudentApplication> getStudentApplication(ContractDto contract) {
+    public Optional<StudentApplication> getStudentApplication(ContractDTO contract) {
         return applicationService.getApplicationById(contract.getStudentApplicationId());
     }
 
-    private Contract contractDtoToContract(ContractDto contractDto, StudentApplicationService studentApplicationService) {
+    private Contract contractDtoToContract(ContractDTO contractDto, StudentApplicationService studentApplicationService) {
         Contract contract = new Contract();
         contract.setAdminName(contractDto.getAdminName());
         contract.setFile(contractDto.getFile());
@@ -98,7 +98,7 @@ public class ContractGenerationService {
         return contract;
     }
 
-    private void addInternshipInfoTable(ContractDto contract, Document document) {
+    private void addInternshipInfoTable(ContractDTO contract, Document document) {
         Optional<StudentApplication> optionalApplication = getStudentApplication(contract);
         if (optionalApplication.isPresent()) {
             StudentApplication application = optionalApplication.get();
@@ -159,7 +159,7 @@ public class ContractGenerationService {
     }
 
     @SneakyThrows
-    private void internshipPartiesResponsabilities(ContractDto contract, Document document) {
+    private void internshipPartiesResponsabilities(ContractDTO contract, Document document) {
         PdfFont font = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
         document.add(new Paragraph(new Text("RESPONSABILITES\n").setBold()).setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph(new Text("Le Collège s’engage à :\n").setBold())

@@ -7,7 +7,7 @@ import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
-import com.power222.tuimspfcauppbj.util.ContractDto;
+import com.power222.tuimspfcauppbj.util.ContractDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,12 +35,12 @@ public class ContractGenerationServiceTest {
     @InjectMocks
     private ContractGenerationService contractGenerationService;
 
-    private ContractDto contractDto;
+    private ContractDTO contractDto;
     private StudentApplication expectedStudentApplication;
 
     @BeforeEach
     void setUp() {
-        contractDto = ContractDto.builder().adminName("Zack de la rocha")
+        contractDto = ContractDTO.builder().adminName("Zack de la rocha")
                 .engagementCollege("Engagement College")
                 .engagementCompany("Engagement company")
                 .engagementStudent("Engagement Etudiant")

@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
+import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,12 @@ import java.util.Optional;
 
 @Service
 public class ContractService {
-
     private final ContractRepository contractRepo;
+    private final ContractSignatureService contractSignSvc;
 
-    public ContractService(ContractRepository contractRepo) {
+    public ContractService(ContractRepository contractRepo, ContractSignatureService contractSignSvc) {
         this.contractRepo = contractRepo;
+        this.contractSignSvc = contractSignSvc;
     }
 
     public Contract createAndSaveNewContract(Contract contract) {
@@ -39,10 +41,14 @@ public class ContractService {
                 .orElse(Optional.empty());
     }
 
-    public Optional<Contract> updateContractSignatureState(long id, boolean isApproved) {
+    public Optional<Contract> updateContractSignature(long id, ContractSignatureDTO contractSignatureDTO) {
         return contractRepo.findById(id)
                 .map(contract -> {
-                    contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), isApproved));
+                    if (contractSignatureDTO.isApproved())
+                        contract = contractSignSvc.signContract(contract, contractSignatureDTO);
+                    else
+                        contract.setReasonForRejection(contractSignatureDTO.getReasonForRejection());
+                    contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), contractSignatureDTO.isApproved()));
                     return contractRepo.saveAndFlush(contract);
                 });
     }

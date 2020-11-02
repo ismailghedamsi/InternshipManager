@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.service.ContractService;
+import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +36,9 @@ public class ContractController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/state/{id}")
-    public ResponseEntity<Contract> updateContractSignatureState(@PathVariable long id, @RequestBody boolean requestBody) {
-        return svc.updateContractSignatureState(id, requestBody).map(ResponseEntity::ok)
+    @PutMapping("/sign/{id}")
+    public ResponseEntity<Contract> updateContractSignature(@PathVariable long id, @RequestBody ContractSignatureDTO contractSignatureDTO) {
+        return svc.updateContractSignature(id, contractSignatureDTO).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
