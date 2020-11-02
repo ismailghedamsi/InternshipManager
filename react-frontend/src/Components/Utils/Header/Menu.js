@@ -72,5 +72,10 @@ export const Menu = [
         title: 'Liste des entrevues',
         url: '/dashboard/listInterview',
         role: 'employer'
+    },
+    {
+        title: 'Liste de contrats',
+        url: '/dashboard/SignContract',
+        role: 'employer'
     }
 ]
