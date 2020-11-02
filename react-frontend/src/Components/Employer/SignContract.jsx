@@ -32,7 +32,7 @@ export default function SignContract() {
         application.reasonForRejection = reason;
         application.signatureState = studentDecision;
         console.log(application)
-        return api.put("/contract/state/" + application.id, application)
+        return api.put("/contract/sign/" + application.id, application)
             .then(result => {
                 nextState.splice(index, 1);
                 setContracts(nextState);
@@ -53,7 +53,7 @@ export default function SignContract() {
 
     useEffect(() => {
         api.get("/contract")
-            .then(r => setContracts(r ? r.data : []))
+            .then(r => setContracts(r ? r.data.filter(contract => contract.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE") : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
@@ -120,8 +120,12 @@ export default function SignContract() {
                                 nextState[currentIndex].date = new Date();
                                 nextState[currentIndex].signatureState = "WAITING_FOR_STUDENT_SIGNATURE";
                                 console.log(nextState[currentIndex])
-                                return api.put("/contract/state/" + nextState[currentIndex].id, nextState[currentIndex])
-                                    .then(result => closeReasonModal())
+                                return api.put("/contract/sign/" + nextState[currentIndex].id, nextState[currentIndex])
+                                    .then(result => {
+                                        nextState.splice(currentIndex, 1);
+                                        setContracts(nextState);
+                                        closeReasonModal()
+                                    })
                             })}
                             validateOnBlur={false}
                             validateOnChange={false}

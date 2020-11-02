@@ -24,6 +24,31 @@ export default function ContractList() {
             })
     }
 
+    function showContractState(index) {
+        const nextState = [...contracts];
+        const contractState = nextState[index].signatureState;
+
+        switch (contractState) {
+            case "WAITING_FOR_EMPLOYER_SIGNATURE" :
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature de l'employeur
+                </Typography>
+            case "REJECTED_BY_EMPLOYER" :
+                return <Typography variant={"body1"} style={{color: "red"}}>
+                    L'employeur a rejeté le contrat :
+                    {nextState[index].reasonForRejection}
+                </Typography>
+            case "WAITING_FOR_STUDENT_SIGNATURE" :
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature de l'étudiant
+                    {nextState[index].reasonForRejection}
+                </Typography>
+            default:
+                return '';
+        }
+
+    }
+
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer
@@ -50,6 +75,7 @@ export default function ContractList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
+                            {showContractState(i)}
                             <hr className={classes.hrStyle}/>
                         </button>
                     </div>
