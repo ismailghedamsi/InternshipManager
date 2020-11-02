@@ -6,6 +6,7 @@ import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
+import com.power222.tuimspfcauppbj.service.ContractSignatureService;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,9 @@ public class ContractServiceTest {
 
     @Mock
     private ContractRepository contractRepo;
+
+    @Mock
+    private ContractSignatureService contractSignSvc;
 
     @Mock
     private AuthenticationService authSvc;
@@ -115,13 +119,41 @@ public class ContractServiceTest {
     }
 
     @Test
-    void updateContractSignatureTest() {
+    void updateContractSignatureApprovedTest() {
         var dto = ContractSignatureDTO.builder()
                 .isApproved(true)
                 .build();
 
+        expectedContract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
+
         var expectedContractWithModdedState = expectedContract.toBuilder()
-                .signatureState(ContractSignatureState.getNextState(expectedContract.getSignatureState(), true))
+                .signatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE)
+                .build();
+
+        when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
+        when(contractSignSvc.signContract(expectedContract, dto)).thenReturn(expectedContract);
+        when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
+
+        var actual = contractSvc.updateContractSignature(expectedContract.getId(), dto);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE));
+    }
+
+    @Test
+    void updateContractSignatureDeniedTest() {
+        String reasonForRejection = "Raison de test.";
+
+        var dto = ContractSignatureDTO.builder()
+                .isApproved(false)
+                .reasonForRejection(reasonForRejection)
+                .build();
+
+        expectedContract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
+
+        var expectedContractWithModdedState = expectedContract.toBuilder()
+                .signatureState(ContractSignatureState.REJECTED_BY_EMPLOYER)
+                .reasonForRejection(reasonForRejection)
                 .build();
 
         when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
@@ -130,7 +162,7 @@ public class ContractServiceTest {
         var actual = contractSvc.updateContractSignature(expectedContract.getId(), dto);
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE));
+        assertThat(actual).contains(expectedContractWithModdedState);
     }
 
     @Test

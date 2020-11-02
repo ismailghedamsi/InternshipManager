@@ -126,7 +126,7 @@ public class ContractControllerTests {
     void updateContractSignatureStateTest() throws Exception {
         when(svc.updateContractSignature(expectedContract.getId(), expectedDto)).thenReturn(Optional.ofNullable(expectedContract));
 
-        MvcResult result = mvc.perform(put("/api/contract/state/" + expectedContract.getId())
+        MvcResult result = mvc.perform(put("/api/contract/sign/" + expectedContract.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedDto)))
                 .andReturn();
@@ -137,7 +137,7 @@ public class ContractControllerTests {
 
     @Test
     void updateContractSignatureStateTestWithInvalidId() throws Exception {
-        MvcResult result = mvc.perform(put("/api/contract/state/" + expectedContract.getId())
+        MvcResult result = mvc.perform(put("/api/contract/sign/" + expectedContract.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedDto)))
                 .andReturn();
