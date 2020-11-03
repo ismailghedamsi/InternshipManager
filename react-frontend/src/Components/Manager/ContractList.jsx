@@ -15,6 +15,16 @@ export default function ContractList() {
             .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    function sendDecision(index, contractState) {
+        const nextState = [...contracts];
+        const application = nextState[index];
+        application.signatureState = contractState;
+        return api.put("/contract/" + application.id, application)
+            .then(result => {
+                setContracts(nextState);
+            })
+    }
+
     function deleteContract(index) {
         const nextState = [...contracts];
         return api.delete("/contract/" + nextState[index].id)
@@ -46,7 +56,6 @@ export default function ContractList() {
             default:
                 return '';
         }
-
     }
 
     return (
@@ -56,15 +65,26 @@ export default function ContractList() {
                 title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
-                        <div className={classes.buttonDiv}>
+                        <di className={classes.buttonDiv}>
+                            {contracts[i].signatureState !== "WAITING_FOR_STUDENT_SIGNATURE" &&
                             <button
                                 type={"button"}
                                 className={classes.linkButton}
                                 onClick={() => deleteContract(i)}>
                                 <i className="fa fa-trash" style={{color: "red"}}/>
                             </button>
-                        </div>
-                        <button
+                            }
+                            {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton].join(' ')}
+                                onClick={() => sendDecision(i, "WAITING_FOR_EMPLOYER_SIGNATURE")}
+                                style={{marginRight: 5}}>
+                                <i className="fa fa-check-square" style={{color: "green"}}/>
+                            </button>
+                            }
+                        </di>
+                        < button
                             type={"button"}
                             className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                             onClick={() => {

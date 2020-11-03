@@ -53,7 +53,8 @@ export default function SignContract() {
 
     useEffect(() => {
         api.get("/contract")
-            .then(r => setContracts(r ? r.data.filter(contract => contract.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE") : []))
+            .then(r => setContracts(r ? r.data.filter(contract => contract.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE"
+                || contract.signatureState === "WAITING_FOR_STUDENT_SIGNATURE") : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
@@ -75,7 +76,7 @@ export default function SignContract() {
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
                         </button>
-                        {currentIndex === i &&
+                        {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
                         <div className={classes.buttonDiv} style={{display: "block"}}>
                             Signez le contrat
                             <button
@@ -112,12 +113,12 @@ export default function SignContract() {
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
                             onSubmit={async (values) => readFileAsync(values.file).then((file) => {
-                                let dto = {...values};
                                 const nextState = [...contracts];
+                                let dto = {...contracts};
                                 dto.imageSignature = file;
                                 dto.isApproved = true;
                                 dto.reasonForRejection = "";
-                                dto.nomSignataire = values.employerName;
+                                dto.nomSignataire = values.nomSignataire;
                                 dto.signatureTimestamp = new Date();
                                 // console.log(nextState[currentIndex])
                                 console.log(dto);
@@ -141,11 +142,11 @@ export default function SignContract() {
                             }}
                             validationSchema={yup.object()
                                 .shape({
-                                    employerName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champs est requis")
+                                    nomSignataire: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champs est requis")
                                 })
                             }
                             initialValues={{
-                                employerName: "",
+                                nomSignataire: "",
                                 file: ""
                             }}>
                             {({submitForm, isSubmitting}) => (
@@ -154,10 +155,10 @@ export default function SignContract() {
                                         <Grid item xs={12}>
                                             <Field
                                                 component={TextField}
-                                                name="employerName"
-                                                id="employerName"
+                                                name="nomSignataire"
+                                                id="nomSignataire"
                                                 variant="outlined"
-                                                label="Nom du employeur"
+                                                label="Nom du signataire"
                                                 required
                                                 fullWidth
                                                 autoFocus
@@ -170,7 +171,7 @@ export default function SignContract() {
                                                 name="file"
                                                 id="file"
                                                 variant="outlined"
-                                                label="Image PNG ou JPG"
+                                                label="Une image de signature en PNG ou JPG"
                                                 fullwidth
                                                 required
                                             />
