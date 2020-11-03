@@ -5,8 +5,8 @@ import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
+import com.power222.tuimspfcauppbj.service.ContractGenerationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
-import com.power222.tuimspfcauppbj.service.ContractSignatureService;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class ContractServiceTest {
     private ContractRepository contractRepo;
 
     @Mock
-    private ContractSignatureService contractSignSvc;
+    private ContractGenerationService contractGenSvc;
 
     @Mock
     private AuthenticationService authSvc;
@@ -69,11 +69,11 @@ public class ContractServiceTest {
 
     @Test
     void getAllContractTest() {
-        var i1 = Contract.builder().id(1L).build();
-        var i2 = Contract.builder().id(2L).build();
-        var i3 = Contract.builder().id(3L).build();
+        var c1 = Contract.builder().id(1L).build();
+        var c2 = Contract.builder().id(2L).build();
+        var c3 = Contract.builder().id(3L).build();
 
-        when(contractRepo.findAll()).thenReturn(Arrays.asList(i1, i2, i3));
+        when(contractRepo.findAll()).thenReturn(Arrays.asList(c1, c2, c3));
 
         var actual = contractSvc.getAllContract();
 
@@ -102,11 +102,11 @@ public class ContractServiceTest {
     void updateContractTest() {
         var initialId = expectedContract.getId();
         var alteredId = 123L;
-        var alteredInterview = expectedContract.toBuilder().id(alteredId).build();
+        var alteredContract = expectedContract.toBuilder().id(alteredId).build();
         when(contractRepo.findById(initialId)).thenReturn(Optional.of(expectedContract));
-        when(contractRepo.saveAndFlush(alteredInterview)).thenReturn(expectedContract);
+        when(contractRepo.saveAndFlush(alteredContract)).thenReturn(expectedContract);
 
-        var actual = contractSvc.updateContract(initialId, alteredInterview);
+        var actual = contractSvc.updateContract(initialId, alteredContract);
 
         assertThat(actual).contains(expectedContract);
     }
@@ -131,7 +131,7 @@ public class ContractServiceTest {
                 .build();
 
         when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
-        when(contractSignSvc.signContract(expectedContract, dto)).thenReturn(expectedContract);
+        when(contractGenSvc.signContract(dto)).thenReturn(Optional.of(expectedContract));
         when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
 
         var actual = contractSvc.updateContractSignature(expectedContract.getId(), dto);

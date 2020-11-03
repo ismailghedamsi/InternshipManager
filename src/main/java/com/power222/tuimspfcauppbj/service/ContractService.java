@@ -13,11 +13,11 @@ import java.util.Optional;
 @Service
 public class ContractService {
     private final ContractRepository contractRepo;
-    private final ContractSignatureService contractSignSvc;
+    private final ContractGenerationService contractGenSvc;
 
-    public ContractService(ContractRepository contractRepo, ContractSignatureService contractSignSvc) {
+    public ContractService(ContractRepository contractRepo, ContractGenerationService contractGenSvc) {
         this.contractRepo = contractRepo;
-        this.contractSignSvc = contractSignSvc;
+        this.contractGenSvc = contractGenSvc;
     }
 
     public Contract createAndSaveNewContract(Contract contract) {
@@ -46,7 +46,7 @@ public class ContractService {
                 .map(contract -> {
                     if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW) {
                         if (contractSignatureDTO.isApproved())
-                            contract = contractSignSvc.signContract(contract, contractSignatureDTO);
+                            contractGenSvc.signContract(contractSignatureDTO);
                         else
                             contract.setReasonForRejection(contractSignatureDTO.getReasonForRejection());
                     }

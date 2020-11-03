@@ -64,6 +64,7 @@ public class StudentApplicationService {
         return appliRepo.findById(id)
                 .map(oldApplication -> {
                     newApplication.setId(oldApplication.getId());
+                    newApplication.setSemester(oldApplication.getSemester());
                     return appliRepo.saveAndFlush(newApplication);
                 })
                 .orElse(newApplication);
