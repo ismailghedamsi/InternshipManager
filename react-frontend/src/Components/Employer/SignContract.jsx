@@ -30,21 +30,28 @@ export default function SignContract() {
         const nextState = [...contracts];
         let dto = {};
         if (isApprouved) {
-            dto.contractId = nextState[currentIndex].id;
-            dto.imageSignature = readFileAsync(values.file);
-            dto.isApproved = isApprouved;
-            dto.reasonForRejection = "";
-            dto.nomSignataire = values.nomSignataire;
-            dto.signatureTimestamp = new Date();
+            readFileAsync(values.file).then(file => {
+                dto.contractId = nextState[currentIndex].id;
+                dto.isApproved = isApprouved;
+                dto.imageSignature = file;
+                dto.reasonForRejection = "";
+                dto.nomSignataire = values.nomSignataire;
+                dto.signatureTimestamp = new Date();
+
+                return api.put("/contractGeneration/sign", dto)
+                    .then(result => {
+                        closeReasonModal()
+                    })
+            })
         } else {
             dto.contractId = nextState[currentIndex].id;
             dto.isApproved = isApprouved;
             dto.reasonForRejection = values.message;
+            return api.put("/contractGeneration/sign", dto)
+                .then(() => {
+                    closeReasonModal()
+                })
         }
-        return api.put("/contractGeneration/sign", dto)
-            .then(result => {
-                closeReasonModal()
-            })
     }
 
     function readFileAsync(file) {
@@ -60,8 +67,7 @@ export default function SignContract() {
 
     useEffect(() => {
         api.get("/contract")
-            .then(r => setContracts(r ? r.data.filter(contract => contract.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE"
-                || contract.signatureState === "WAITING_FOR_STUDENT_SIGNATURE") : []))
+            .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
@@ -119,21 +125,8 @@ export default function SignContract() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) => sendDecision(currentIndex, true, values)
-                                //     readFileAsync(values.file).then((file) => {
-                                //     const nextState = [...contracts];
-                                //     let dto = {};
-                                //     dto.contractId = nextState[currentIndex].id;
-                                //     dto.imageSignature = file;
-                                //     dto.isApproved = true;
-                                //     dto.reasonForRejection = "";
-                                //     dto.nomSignataire = values.nomSignataire;
-                                //     dto.signatureTimestamp = new Date();
-                                //     return api.put("/contractGeneration/sign", dto)
-                                //     .then(result => {
-                                //     closeReasonModal()
-                                // })
-                                // })
+                            onSubmit={async (values) =>
+                                sendDecision(currentIndex, true, values)
                             }
                             validateOnBlur={false}
                             validateOnChange={false}
