@@ -1,9 +1,5 @@
 export const Menu = [
     {
-        title: 'Accueil',
-        url: '/dashboard'
-    },
-    {
         title: 'Approbation CV',
         url: '/dashboard/approbation/cv',
         role: 'admin'
@@ -36,11 +32,6 @@ export const Menu = [
     {
         title: 'Liste de contrats',
         url: '/dashboard/contractList',
-        role: 'admin'
-    },
-    {
-        title: 'Changer de session',
-        url: '/dashboard/setSemester',
         role: 'admin'
     },
     {
