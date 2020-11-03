@@ -2,13 +2,14 @@ package com.power222.tuimspfcauppbj.util;
 
 import lombok.Builder;
 import lombok.Data;
-import org.joda.time.LocalDateTime;
 
 import javax.persistence.Lob;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class ContractSignatureDTO {
+    private long contractId;
     private boolean isApproved;
     private String reasonForRejection;
 

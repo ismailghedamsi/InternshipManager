@@ -5,8 +5,8 @@ import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
+import com.power222.tuimspfcauppbj.service.ContractGenerationService;
 import com.power222.tuimspfcauppbj.service.ContractService;
-import com.power222.tuimspfcauppbj.service.ContractSignatureService;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class ContractServiceTest {
     private ContractRepository contractRepo;
 
     @Mock
-    private ContractSignatureService contractSignSvc;
+    private ContractGenerationService contractGenSvc;
 
     @Mock
     private AuthenticationService authSvc;
@@ -131,7 +131,7 @@ public class ContractServiceTest {
                 .build();
 
         when(contractRepo.findById(expectedContract.getId())).thenReturn(Optional.of(expectedContract));
-        when(contractSignSvc.signContract(expectedContract, dto)).thenReturn(expectedContract);
+        when(contractGenSvc.signContract(dto)).thenReturn(Optional.of(expectedContract));
         when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
 
         var actual = contractSvc.updateContractSignature(expectedContract.getId(), dto);
