@@ -20,7 +20,7 @@ export const SemesterContext = React.createContext(null)
 
 function App() {
     const [isErrorModalOpen, openErrorModal, closeErrorModal] = useModal();
-    const [semester, setSemester] = useState('')
+    const [semester, setSemester] = useState(undefined)
 
     useEffect(() => {
         axios.get("http://localhost:8080/api/semesters/present")
