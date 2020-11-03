@@ -113,17 +113,18 @@ export default function SignContract() {
                         <Formik
                             onSubmit={async (values) => readFileAsync(values.file).then((file) => {
                                 let dto = {...values};
-                                dto.file = file;
                                 const nextState = [...contracts];
-                                nextState[currentIndex].employerName = values.employerName;
-                                nextState[currentIndex].file = dto.file;
-                                nextState[currentIndex].date = new Date();
-                                nextState[currentIndex].signatureState = "WAITING_FOR_STUDENT_SIGNATURE";
-                                console.log(nextState[currentIndex])
-                                return api.put("/contract/sign/" + nextState[currentIndex].id, nextState[currentIndex])
+                                dto.imageSignature = file;
+                                dto.isApproved = true;
+                                dto.reasonForRejection = "";
+                                dto.nomSignataire = values.employerName;
+                                dto.signatureTimestamp = new Date();
+                                // console.log(nextState[currentIndex])
+                                console.log(dto);
+                                return api.put("/contract/sign/" + nextState[currentIndex].id, dto)
                                     .then(result => {
-                                        nextState.splice(currentIndex, 1);
-                                        setContracts(nextState);
+                                        // nextState.splice(currentIndex, 1);
+                                        // setContracts(nextState);
                                         closeReasonModal()
                                     })
                             })}
