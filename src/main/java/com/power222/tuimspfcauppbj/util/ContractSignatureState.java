@@ -1,8 +1,5 @@
 package com.power222.tuimspfcauppbj.util;
 
-import com.power222.tuimspfcauppbj.model.Employer;
-import com.power222.tuimspfcauppbj.model.User;
-
 public enum ContractSignatureState {
     PENDING_FOR_ADMIN_REVIEW,
     WAITING_FOR_EMPLOYER_SIGNATURE,
