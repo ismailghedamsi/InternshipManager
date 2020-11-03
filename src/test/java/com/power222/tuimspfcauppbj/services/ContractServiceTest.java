@@ -63,11 +63,11 @@ public class ContractServiceTest {
 
     @Test
     void getAllContractTest() {
-        var i1 = Contract.builder().id(1L).build();
-        var i2 = Contract.builder().id(2L).build();
-        var i3 = Contract.builder().id(3L).build();
+        var c1 = Contract.builder().id(1L).build();
+        var c2 = Contract.builder().id(2L).build();
+        var c3 = Contract.builder().id(3L).build();
 
-        when(contractRepo.findAll()).thenReturn(Arrays.asList(i1, i2, i3));
+        when(contractRepo.findAll()).thenReturn(Arrays.asList(c1, c2, c3));
 
         var actual = contractSvc.getAllContract();
 
@@ -96,11 +96,11 @@ public class ContractServiceTest {
     void updateContractTest() {
         var initialId = expectedContract.getId();
         var alteredId = 123L;
-        var alteredInterview = expectedContract.toBuilder().id(alteredId).build();
+        var alteredContract = expectedContract.toBuilder().id(alteredId).build();
         when(contractRepo.findById(initialId)).thenReturn(Optional.of(expectedContract));
-        when(contractRepo.saveAndFlush(alteredInterview)).thenReturn(expectedContract);
+        when(contractRepo.saveAndFlush(alteredContract)).thenReturn(expectedContract);
 
-        var actual = contractSvc.updateContract(initialId, alteredInterview);
+        var actual = contractSvc.updateContract(initialId, alteredContract);
 
         assertThat(actual).contains(expectedContract);
     }

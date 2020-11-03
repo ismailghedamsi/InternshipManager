@@ -70,7 +70,10 @@ public class InternshipOfferService {
 
     public Optional<InternshipOffer> updateInternshipOffer(long id, InternshipOffer offer) {
         return internshipOfferRepository.findById(id)
-                .map(oldOffer -> offer.toBuilder().id(oldOffer.getId()).build())
+                .map(oldOffer -> offer.toBuilder()
+                        .id(oldOffer.getId())
+                        .semester(oldOffer.getSemester())
+                        .build())
                 .filter(this::isOfferStateValid)
                 .map(internshipOfferRepository::saveAndFlush);
     }
