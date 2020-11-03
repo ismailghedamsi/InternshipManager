@@ -15,6 +15,16 @@ export default function ContractList() {
             .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    function sendDecision(index, contractState) {
+        const nextState = [...contracts];
+        const application = nextState[index];
+        application.signatureState = contractState;
+        return api.put("/contract/" + application.id, application)
+            .then(result => {
+                setContracts(nextState);
+            })
+    }
+
     function deleteContract(index) {
         const nextState = [...contracts];
         return api.delete("/contract/" + nextState[index].id)
@@ -24,6 +34,30 @@ export default function ContractList() {
             })
     }
 
+    function showContractState(index) {
+        const nextState = [...contracts];
+        const contractState = nextState[index].signatureState;
+
+        switch (contractState) {
+            case "WAITING_FOR_EMPLOYER_SIGNATURE" :
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature de l'employeur
+                </Typography>
+            case "REJECTED_BY_EMPLOYER" :
+                return <Typography variant={"body1"} style={{color: "red"}}>
+                    L'employeur a rejeté le contrat :
+                    {nextState[index].reasonForRejection}
+                </Typography>
+            case "WAITING_FOR_STUDENT_SIGNATURE" :
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature de l'étudiant
+                    {nextState[index].reasonForRejection}
+                </Typography>
+            default:
+                return '';
+        }
+    }
+
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer
@@ -31,15 +65,17 @@ export default function ContractList() {
                 title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
-                        <div className={classes.buttonDiv}>
+                        <di className={classes.buttonDiv}>
+                            {contracts[i].signatureState !== "WAITING_FOR_STUDENT_SIGNATURE" &&
                             <button
                                 type={"button"}
                                 className={classes.linkButton}
                                 onClick={() => deleteContract(i)}>
                                 <i className="fa fa-trash" style={{color: "red"}}/>
                             </button>
-                        </div>
-                        <button
+                            }
+                        </di>
+                        < button
                             type={"button"}
                             className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                             onClick={() => {
@@ -50,6 +86,15 @@ export default function ContractList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
+                            {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
+                            <button
+                                type={"button"}
+                                className={[classes.approuvalButton].join(' ')}
+                                onClick={() => sendDecision(i, "WAITING_FOR_EMPLOYER_SIGNATURE")}>
+                                Approuver le contrat
+                            </button>
+                            }
+                            {showContractState(i)}
                             <hr className={classes.hrStyle}/>
                         </button>
                     </div>

@@ -102,6 +102,18 @@ export default function useStyles() {
             width: "80%",
             marginLeft: "auto",
             marginRight: "auto"
+        },
+        approuvalButton: {
+            backgroundColor: "#6a5acd",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+            margin: 0,
+            padding: 5,
+            borderRadius: 0,
+            '&:hover': {
+                backgroundColor: "#00000055",
+            }
         }
     }))();
 };

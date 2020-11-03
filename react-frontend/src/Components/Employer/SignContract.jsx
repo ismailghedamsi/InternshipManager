@@ -31,8 +31,7 @@ export default function SignContract() {
         const application = nextState[index];
         application.reasonForRejection = reason;
         application.signatureState = studentDecision;
-        console.log(application)
-        return api.put("/contract/state/" + application.id, application)
+        return api.put("/contract/sign/" + application.id, application)
             .then(result => {
                 nextState.splice(index, 1);
                 setContracts(nextState);
@@ -53,13 +52,14 @@ export default function SignContract() {
 
     useEffect(() => {
         api.get("/contract")
-            .then(r => setContracts(r ? r.data : []))
+            .then(r => setContracts(r ? r.data.filter(contract => contract.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE"
+                || contract.signatureState === "WAITING_FOR_STUDENT_SIGNATURE") : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer
-                documents={contracts ? contracts.map(c => c.file ? "data:application/pdf;base64," + c.file : "") : []}
+                documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
                 title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
@@ -75,7 +75,7 @@ export default function SignContract() {
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
                         </button>
-                        {currentIndex === i &&
+                        {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
                         <div className={classes.buttonDiv} style={{display: "block"}}>
                             Signez le contrat
                             <button
@@ -112,16 +112,18 @@ export default function SignContract() {
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
                             onSubmit={async (values) => readFileAsync(values.file).then((file) => {
-                                let dto = {...values};
-                                dto.file = file;
                                 const nextState = [...contracts];
-                                nextState[currentIndex].employerName = values.employerName;
-                                nextState[currentIndex].file = dto.file;
-                                nextState[currentIndex].date = new Date();
-                                nextState[currentIndex].signatureState = "WAITING_FOR_STUDENT_SIGNATURE";
-                                console.log(nextState[currentIndex])
-                                return api.put("/contract/state/" + nextState[currentIndex].id, nextState[currentIndex])
-                                    .then(result => closeReasonModal())
+                                let dto = {};
+                                // dto.id = nextState[currentIndex].id;
+                                dto.imageSignature = file;
+                                dto.isApproved = true;
+                                dto.reasonForRejection = "";
+                                dto.nomSignataire = values.nomSignataire;
+                                dto.signatureTimestamp = new Date();
+                                return api.put("/contract/sign/" + nextState[currentIndex].id, dto)
+                                    .then(result => {
+                                        closeReasonModal()
+                                    })
                             })}
                             validateOnBlur={false}
                             validateOnChange={false}
@@ -136,11 +138,11 @@ export default function SignContract() {
                             }}
                             validationSchema={yup.object()
                                 .shape({
-                                    employerName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champs est requis")
+                                    nomSignataire: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champs est requis")
                                 })
                             }
                             initialValues={{
-                                employerName: "",
+                                nomSignataire: "",
                                 file: ""
                             }}>
                             {({submitForm, isSubmitting}) => (
@@ -149,10 +151,10 @@ export default function SignContract() {
                                         <Grid item xs={12}>
                                             <Field
                                                 component={TextField}
-                                                name="employerName"
-                                                id="employerName"
+                                                name="nomSignataire"
+                                                id="nomSignataire"
                                                 variant="outlined"
-                                                label="Nom du employeur"
+                                                label="Nom du signataire"
                                                 required
                                                 fullWidth
                                                 autoFocus
@@ -165,7 +167,7 @@ export default function SignContract() {
                                                 name="file"
                                                 id="file"
                                                 variant="outlined"
-                                                label="Image PNG ou JPG"
+                                                label="Une image de signature en PNG ou JPG"
                                                 fullwidth
                                                 required
                                             />
