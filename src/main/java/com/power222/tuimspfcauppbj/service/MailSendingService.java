@@ -27,7 +27,7 @@ public class MailSendingService {
         javaMailSender.send(mimeMessage);
     }
 
-    public MimeMessageHelper setMailContent(StudentApplication studentApplication, MimeMessage mimeMessage, String sendTo) {
+    private MimeMessageHelper setMailContent(StudentApplication studentApplication, MimeMessage mimeMessage, String sendTo) {
         MimeMessageHelper helper = null;
         try {
             helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
