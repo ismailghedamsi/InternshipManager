@@ -5,7 +5,6 @@ import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.*;
-import com.power222.tuimspfcauppbj.service.MailSendingService;
 import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
@@ -33,20 +32,18 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
     @Profile("!noBootstrappingTests")
     @Component
     public static class BootstrapConfig implements CommandLineRunner {
-        private final MailSendingService mailService;
         private final UserRepository userRepo;
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
         private final InternshipOfferRepository internshipRepo;
         private final StudentApplicationRepository appliRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo, MailSendingService mailService) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
             this.internshipRepo = internshipRepo;
             this.appliRepo = appliRepo;
-            this.mailService = mailService;
         }
 
         @Override

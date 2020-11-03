@@ -16,6 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/sendMail")
 public class MailSendingController {
+
     private final MailSendingService mailService;
     private final StudentApplicationService applicationService;
 
