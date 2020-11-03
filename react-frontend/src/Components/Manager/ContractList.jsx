@@ -74,15 +74,6 @@ export default function ContractList() {
                                 <i className="fa fa-trash" style={{color: "red"}}/>
                             </button>
                             }
-                            {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton].join(' ')}
-                                onClick={() => sendDecision(i, "WAITING_FOR_EMPLOYER_SIGNATURE")}
-                                style={{marginRight: 5}}>
-                                <i className="fa fa-check-square" style={{color: "green"}}/>
-                            </button>
-                            }
                         </di>
                         < button
                             type={"button"}
@@ -95,6 +86,14 @@ export default function ContractList() {
                             <Typography color={"textPrimary"} variant={"body1"}>
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
+                            {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
+                            <button
+                                type={"button"}
+                                className={[classes.approuvalButton].join(' ')}
+                                onClick={() => sendDecision(i, "WAITING_FOR_EMPLOYER_SIGNATURE")}>
+                                Approuver le contrat
+                            </button>
+                            }
                             {showContractState(i)}
                             <hr className={classes.hrStyle}/>
                         </button>

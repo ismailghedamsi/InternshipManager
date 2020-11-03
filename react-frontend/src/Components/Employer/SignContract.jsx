@@ -31,7 +31,6 @@ export default function SignContract() {
         const application = nextState[index];
         application.reasonForRejection = reason;
         application.signatureState = studentDecision;
-        console.log(application)
         return api.put("/contract/sign/" + application.id, application)
             .then(result => {
                 nextState.splice(index, 1);
@@ -60,7 +59,7 @@ export default function SignContract() {
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer
-                documents={contracts ? contracts.map(c => c.file ? "data:application/pdf;base64," + c.file : "") : []}
+                documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
                 title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
@@ -114,18 +113,15 @@ export default function SignContract() {
                         <Formik
                             onSubmit={async (values) => readFileAsync(values.file).then((file) => {
                                 const nextState = [...contracts];
-                                let dto = {...contracts};
+                                let dto = {};
+                                // dto.id = nextState[currentIndex].id;
                                 dto.imageSignature = file;
                                 dto.isApproved = true;
                                 dto.reasonForRejection = "";
                                 dto.nomSignataire = values.nomSignataire;
                                 dto.signatureTimestamp = new Date();
-                                // console.log(nextState[currentIndex])
-                                console.log(dto);
                                 return api.put("/contract/sign/" + nextState[currentIndex].id, dto)
                                     .then(result => {
-                                        // nextState.splice(currentIndex, 1);
-                                        // setContracts(nextState);
                                         closeReasonModal()
                                     })
                             })}
