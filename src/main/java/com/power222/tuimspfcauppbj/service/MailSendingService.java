@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 
 @Service
 @Slf4j
@@ -20,23 +20,26 @@ public class MailSendingService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(User user) {
+    public void sendEmail(StudentApplication studentApplication) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        String sendTo = getUserEmail(user);
-        setMailContent(mimeMessage, sendTo);
+        String sendTo = getUserEmail(studentApplication.getOffer().getEmployer());
+        setMailContent(studentApplication, mimeMessage, sendTo);
         javaMailSender.send(mimeMessage);
     }
 
-    public MimeMessageHelper setMailContent(MimeMessage mimeMessage, String sendTo) {
+    public MimeMessageHelper setMailContent(StudentApplication studentApplication, MimeMessage mimeMessage, String sendTo) {
         MimeMessageHelper helper = null;
         try {
             helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
-            String htmlMsg = "<h1> This is your contract </h1>";
+            String htmlMsg = "Un contrat a été généré pour votre offre " + studentApplication.getOffer().getTitle()
+                    + " pour l'étudiant " + studentApplication.getStudent().getLastName() + " " + studentApplication.getStudent().getFirstName()
+                    + "<br/>Veuillez consulter le contract sur notre application";
+
             helper.setTo(sendTo);
-            helper.setSubject("Internship contract");
+            helper.setSubject("Contrat généré");
             helper.setText(htmlMsg, true);
         } catch (MessagingException e) {
-            log.error("Imposible d'envoyer un email ", e.getMessage());
+            log.error("Impossible d'envoyer l'email", e.getMessage());
         }
         return helper;
     }
