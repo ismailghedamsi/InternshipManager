@@ -31,7 +31,7 @@ export default function SignContract() {
         const application = nextState[index];
         application.reasonForRejection = reason;
         application.signatureState = studentDecision;
-        return api.put("/contract/sign/" + application.id, application)
+        return api.put("/contractGeneration/sign/" + application.id, application)
             .then(result => {
                 nextState.splice(index, 1);
                 setContracts(nextState);
@@ -114,13 +114,13 @@ export default function SignContract() {
                             onSubmit={async (values) => readFileAsync(values.file).then((file) => {
                                 const nextState = [...contracts];
                                 let dto = {};
-                                // dto.id = nextState[currentIndex].id;
+                                dto.contractId = nextState[currentIndex].id;
                                 dto.imageSignature = file;
                                 dto.isApproved = true;
                                 dto.reasonForRejection = "";
                                 dto.nomSignataire = values.nomSignataire;
                                 dto.signatureTimestamp = new Date();
-                                return api.put("/contract/sign/" + nextState[currentIndex].id, dto)
+                                return api.put("/contractGeneration/sign", dto)
                                     .then(result => {
                                         closeReasonModal()
                                     })
