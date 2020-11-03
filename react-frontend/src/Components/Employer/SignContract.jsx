@@ -26,15 +26,23 @@ export default function SignContract() {
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
     const [isSignModalOpen, openSignModal, closeSignModal] = useModal();
 
-    function sendDecision(index, studentDecision, reason = "") {
+    function sendDecision(index, isApprouved, values) {
         const nextState = [...contracts];
-        const application = nextState[index];
-        application.reasonForRejection = reason;
-        application.signatureState = studentDecision;
-        return api.put("/contractGeneration/sign/" + application.id, application)
+        let dto = {};
+        if (isApprouved) {
+            dto.contractId = nextState[currentIndex].id;
+            dto.imageSignature = readFileAsync(values.file);
+            dto.isApproved = isApprouved;
+            dto.reasonForRejection = "";
+            dto.nomSignataire = values.nomSignataire;
+            dto.signatureTimestamp = new Date();
+        } else {
+            dto.contractId = nextState[currentIndex].id;
+            dto.isApproved = isApprouved;
+            dto.reasonForRejection = values.message;
+        }
+        return api.put("/contractGeneration/sign", dto)
             .then(result => {
-                nextState.splice(index, 1);
-                setContracts(nextState);
                 closeReasonModal()
             })
     }
@@ -111,27 +119,28 @@ export default function SignContract() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) => readFileAsync(values.file).then((file) => {
-                                const nextState = [...contracts];
-                                let dto = {};
-                                dto.contractId = nextState[currentIndex].id;
-                                dto.imageSignature = file;
-                                dto.isApproved = true;
-                                dto.reasonForRejection = "";
-                                dto.nomSignataire = values.nomSignataire;
-                                dto.signatureTimestamp = new Date();
-                                return api.put("/contractGeneration/sign", dto)
-                                    .then(result => {
-                                        closeReasonModal()
-                                    })
-                            })}
+                            onSubmit={async (values) => sendDecision(currentIndex, true, values)
+                                //     readFileAsync(values.file).then((file) => {
+                                //     const nextState = [...contracts];
+                                //     let dto = {};
+                                //     dto.contractId = nextState[currentIndex].id;
+                                //     dto.imageSignature = file;
+                                //     dto.isApproved = true;
+                                //     dto.reasonForRejection = "";
+                                //     dto.nomSignataire = values.nomSignataire;
+                                //     dto.signatureTimestamp = new Date();
+                                //     return api.put("/contractGeneration/sign", dto)
+                                //     .then(result => {
+                                //     closeReasonModal()
+                                // })
+                                // })
+                            }
                             validateOnBlur={false}
                             validateOnChange={false}
                             enableReinitialize={true}
                             validate={(values) => {
                                 const errors = {};
-                                if (values.file.type === "image/png" || values.file.type === "image/jpeg") {
-                                } else {
+                                if (values.file.type !== "image/png" && values.file.type !== "image/jpeg") {
                                     errors.file = "L'image doit être de type PNG ou JPG"
                                 }
                                 return errors;
@@ -201,7 +210,7 @@ export default function SignContract() {
                 isOpen={isReasonModalOpen}
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, "REJECTED_BY_EMPLOYER", values.message)}
+                onSubmit={async (values) => sendDecision(currentIndex, false, values)}
             />
         </div>
     )

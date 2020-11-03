@@ -17,9 +17,9 @@ export default function ContractList() {
 
     function sendDecision(index, contractState) {
         const nextState = [...contracts];
-        const application = nextState[index];
-        application.signatureState = contractState;
-        return api.put("/contract/" + application.id, application)
+        const contract = nextState[index];
+        contract.signatureState = contractState;
+        return api.put("/contract/" + contract.id, contract)
             .then(result => {
                 setContracts(nextState);
             })
