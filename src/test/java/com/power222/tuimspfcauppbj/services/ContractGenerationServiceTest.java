@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,9 +31,6 @@ public class ContractGenerationServiceTest {
 
     @Mock
     private StudentApplicationService studentApplicationService;
-
-    @Mock
-    private MimeMessageHelper mimeMessageHelper;
 
     @InjectMocks
     private ContractGenerationService contractGenerationService;

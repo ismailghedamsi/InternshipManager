@@ -92,7 +92,6 @@ export default function OfferApplication() {
         } else if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_DENIED_BY_STUDENT")) {
             return " Vous avez refusé cette offre"
         }
-
         return ""
     }
 
@@ -104,7 +103,6 @@ export default function OfferApplication() {
                 return " Vous avez refusé l'entrevue";
             }
         }
-
         return ""
     }
 

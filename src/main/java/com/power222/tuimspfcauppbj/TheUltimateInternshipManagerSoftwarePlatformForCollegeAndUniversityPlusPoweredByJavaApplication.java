@@ -25,6 +25,7 @@ import java.util.Collections;
 
 @SpringBootApplication
 public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication.class, args);
     }
@@ -32,6 +33,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
     @Profile("!noBootstrappingTests")
     @Component
     public static class BootstrapConfig implements CommandLineRunner {
+
         private final UserRepository userRepo;
         private final PasswordEncoder passwordEncoder;
         private final ResumeRepository resumeRepo;
