@@ -34,13 +34,13 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Changer de session',
-        url: '/dashboard/setSemester',
+        title: 'Liste de contrats',
+        url: '/dashboard/contractList',
         role: 'admin'
     },
     {
-        title: 'Liste de contrats',
-        url: '/dashboard/contractList',
+        title: 'Changer de session',
+        url: '/dashboard/setSemester',
         role: 'admin'
     },
     {

@@ -72,7 +72,7 @@ export default function OfferApplication() {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {
-        return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0;
+        return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0
     }
 
     function hasEmployeurAcceptedStudentToInterview(i) {
@@ -88,13 +88,11 @@ export default function OfferApplication() {
 
     function getStudentDecision(offer, student) {
         if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")) {
-            return " Vous avez accepté cette offre";
-
+            return " Vous avez accepté cette offre"
         } else if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_DENIED_BY_STUDENT")) {
-            return " Vous avez refusé cette offre";
-
+            return " Vous avez refusé cette offre"
         }
-        return "";
+        return ""
     }
 
     function getStudentDecisionForInterview(i) {

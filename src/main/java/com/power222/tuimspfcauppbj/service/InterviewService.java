@@ -46,7 +46,10 @@ public class InterviewService {
 
     public Optional<Interview> updateInterview(long id, Interview interview) {
         return interviewRepo.findById(id)
-                .map(oldInterview -> interview.toBuilder().id(oldInterview.getId()).build())
+                .map(oldInterview -> interview.toBuilder()
+                        .id(oldInterview.getId())
+                        .semester(oldInterview.getSemester())
+                        .build())
                 .map(newInterview -> interviewRepo.saveAndFlush(interview));
     }
 
