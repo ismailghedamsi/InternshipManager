@@ -71,7 +71,7 @@ export default function ApplicationList() {
                               }}
                               style={{display: "block"}}
                         >
-                            Genérer un contrat pour l'étudiant
+                            Genérer le contrat
                         </Link>
                     }
                 </Typography>

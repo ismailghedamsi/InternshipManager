@@ -15,6 +15,6 @@ public class ContractDto {
     private String engagementCompany;
     private String engagementStudent;
     private String adminName;
-    private int totalHoursPerWeek;
+    private float totalHoursPerWeek;
     private String file;
 }

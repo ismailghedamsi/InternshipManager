@@ -19,11 +19,17 @@ public class Contract extends SemesterDiscriminatedEntity {
     @Lob
     private String file;
 
+    @Lob
     private String engagementCollege;
+
+    @Lob
     private String engagementCompany;
+
+    @Lob
     private String engagementStudent;
+
     private String adminName;
-    private int totalHoursPerWeek;
+    private float totalHoursPerWeek;
 
     @OneToOne
     private StudentApplication studentApplication;
