@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MailContractDto {
+public class StudentApplicationDto {
     private long studentApplicationId;
-    private String file;
 }

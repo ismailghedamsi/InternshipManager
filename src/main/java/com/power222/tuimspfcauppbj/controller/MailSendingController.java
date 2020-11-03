@@ -1,10 +1,9 @@
 package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.model.StudentApplication;
-import com.power222.tuimspfcauppbj.service.ContractService;
 import com.power222.tuimspfcauppbj.service.MailSendingService;
 import com.power222.tuimspfcauppbj.service.StudentApplicationService;
-import com.power222.tuimspfcauppbj.util.MailContractDto;
+import com.power222.tuimspfcauppbj.util.StudentApplicationDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,20 +19,18 @@ public class MailSendingController {
     private final MailSendingService mailService;
     private final StudentApplicationService applicationService;
 
-    public MailSendingController(MailSendingService mailService, ContractService contractService, StudentApplicationService applicationService) {
+    public MailSendingController(MailSendingService mailService, StudentApplicationService applicationService) {
         this.mailService = mailService;
         this.applicationService = applicationService;
     }
 
     @PostMapping("/contract")
-    public ResponseEntity SendContractByMail(@RequestBody MailContractDto contract) {
-        Optional<StudentApplication> optionalStudentApplication = applicationService.getApplicationById(contract.getStudentApplicationId());
+    public ResponseEntity<Void> SendContractByMail(@RequestBody StudentApplicationDto studentApplication) {
+        Optional<StudentApplication> optionalStudentApplication = applicationService.getApplicationById(studentApplication.getStudentApplicationId());
         if (optionalStudentApplication.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        mailService.sendEmail(optionalStudentApplication.get().getOffer().getEmployer());
+        mailService.sendEmail(optionalStudentApplication.get());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
 }
