@@ -18,7 +18,6 @@ import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.ContractDTO;
-import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
