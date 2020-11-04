@@ -19,7 +19,7 @@ public class ContractGenerationController {
     }
 
     @PostMapping
-    public ResponseEntity generateContract(@RequestBody ContractDTO contract) {
+    public ResponseEntity<Void> generateContract(@RequestBody ContractDTO contract) {
         return service.generateContract(contract) ? ResponseEntity.status(HttpStatus.CREATED).build()
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }

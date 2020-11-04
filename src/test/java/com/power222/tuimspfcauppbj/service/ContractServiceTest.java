@@ -1,14 +1,9 @@
-package com.power222.tuimspfcauppbj.services;
+package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
-import com.power222.tuimspfcauppbj.service.AuthenticationService;
-import com.power222.tuimspfcauppbj.service.ContractGenerationService;
-import com.power222.tuimspfcauppbj.service.ContractService;
-import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
-import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

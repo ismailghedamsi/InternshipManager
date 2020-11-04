@@ -1,7 +1,6 @@
-package com.power222.tuimspfcauppbj.controllers;
+package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
-import com.power222.tuimspfcauppbj.controller.SemesterController;
 import com.power222.tuimspfcauppbj.dao.SemesterRepository;
 import com.power222.tuimspfcauppbj.util.SemesterContext;
 import org.junit.jupiter.api.Test;

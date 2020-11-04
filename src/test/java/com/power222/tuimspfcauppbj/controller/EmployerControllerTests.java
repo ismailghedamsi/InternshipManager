@@ -1,9 +1,8 @@
-package com.power222.tuimspfcauppbj.controllers;
+package com.power222.tuimspfcauppbj.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
-import com.power222.tuimspfcauppbj.controller.EmployerController;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.service.EmployerService;
 import org.junit.jupiter.api.BeforeEach;

@@ -81,7 +81,7 @@ public class ContractGenerationService {
             document.close();
             String fileBase64 = encodeBytes(stream.toByteArray());
             contractDto.setFile("data:application/pdf;base64," + fileBase64);
-            contractService.createAndSaveNewContract(contractDtoToContract(contractDto, applicationService));
+            contractService.createAndSaveNewContract(contractDtoToContract(contractDto));
         }
         return stream != null;
     }
@@ -102,7 +102,6 @@ public class ContractGenerationService {
         });
     }
 
-    @SneakyThrows
     private String getContractFileWithSignature(Contract contract, ContractSignatureDTO signatureDto) {
         ByteArrayOutputStream appendedOut = new ByteArrayOutputStream();
         PdfDocument pdfAppendedOut = new PdfDocument(new PdfWriter(appendedOut));
@@ -145,7 +144,7 @@ public class ContractGenerationService {
                             .setMarginRight(120f)
                             .setMarginBottom(0)
                             .add(new Paragraph("Date\n").setMarginLeft(145f)));
-        } else if (ContractSignatureState.getSignerFromState(contract.getSignatureState()) == UserTypes.ADMIN) {
+        } else {
             documentAppendedOut.add(
                     new Paragraph()
                             .add(new Text("Le gestionnaire de stage :\n").setBold())
@@ -174,7 +173,7 @@ public class ContractGenerationService {
         return applicationService.getApplicationById(contract.getStudentApplicationId());
     }
 
-    private Contract contractDtoToContract(ContractDTO contractDto, StudentApplicationService studentApplicationService) {
+    private Contract contractDtoToContract(ContractDTO contractDto) {
         Contract contract = new Contract();
         contract.setAdminName(contractDto.getAdminName());
         contract.setFile(contractDto.getFile());
@@ -182,8 +181,8 @@ public class ContractGenerationService {
         contract.setEngagementCompany(contractDto.getEngagementCompany());
         contract.setEngagementStudent(contractDto.getEngagementStudent());
         contract.setTotalHoursPerWeek(contractDto.getTotalHoursPerWeek());
-        if (studentApplicationService.getApplicationById(contractDto.getStudentApplicationId()).isPresent()) {
-            StudentApplication application = studentApplicationService.getApplicationById(contractDto.getStudentApplicationId()).get();
+        if (applicationService.getApplicationById(contractDto.getStudentApplicationId()).isPresent()) {
+            StudentApplication application = applicationService.getApplicationById(contractDto.getStudentApplicationId()).get();
             contract.setStudentApplication(application);
         }
         return contract;

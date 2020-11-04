@@ -1,10 +1,7 @@
-package com.power222.tuimspfcauppbj.services;
+package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.*;
-import com.power222.tuimspfcauppbj.service.ContractGenerationService;
-import com.power222.tuimspfcauppbj.service.ContractService;
-import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import com.power222.tuimspfcauppbj.util.ContractDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
@@ -144,56 +141,79 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
-    public void signContractStateTest() {
-        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
-        var initialSignatureState = contract.getSignatureState();
+    void updateContractSignatureApprovedByEmployerTest() {
+        contract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
 
-        contractGenerationService.signContract(signatureDto);
-
-        System.out.println(initialSignatureState);
-        System.out.println(contract.getSignatureState());
-
-        assertThat(contract.getSignatureState() == ContractSignatureState.getNextState(initialSignatureState, signatureDto.isApproved()));
-        verify(contractService, times(1)).updateContract(contract.getId(), contract);
-    }
-
-    @Test
-    void updateContractSignatureApprovedTest() {
         var expectedContractWithModdedState = contract.toBuilder()
                 .signatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE)
                 .build();
 
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
-        when(contractGenerationService.signContract(signatureDto)).thenReturn(Optional.of(contract));
-        when(contractService.updateContract(contract.getId(), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
 
         var actual = contractGenerationService.signContract(signatureDto);
 
         assertThat(actual).isNotEmpty();
-        assertEquals(actual.get(), expectedContractWithModdedState);
-        assertThat(actual.get().getSignatureState().equals(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE));
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
+    }
+
+    @Test
+    void updateContractSignatureApprovedByStudentTest() {
+        contract.setSignatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE);
+
+        var expectedContractWithModdedState = contract.toBuilder()
+                .signatureState(ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE)
+                .build();
+
+        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+
+        var actual = contractGenerationService.signContract(signatureDto);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
+    }
+
+    @Test
+    void updateContractSignatureApprovedByAdminTest() {
+        contract.setSignatureState(ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE);
+
+        var expectedContractWithModdedState = contract.toBuilder()
+                .signatureState(ContractSignatureState.SIGNED)
+                .build();
+
+        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+
+        var actual = contractGenerationService.signContract(signatureDto);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.SIGNED);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
     }
 
     @Test
     void updateContractSignatureDeniedTest() {
         String reasonForRejection = "Raison de test.";
-
+        signatureDto.setApproved(false);
         signatureDto.setReasonForRejection(reasonForRejection);
-
-        contract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
 
         var expectedContractWithModdedState = contract.toBuilder()
                 .signatureState(ContractSignatureState.REJECTED_BY_EMPLOYER)
                 .reasonForRejection(reasonForRejection)
                 .build();
 
-        when(contractRepo.findById(contract.getId())).thenReturn(Optional.of(contract));
-        when(contractRepo.saveAndFlush(expectedContractWithModdedState)).thenReturn(expectedContractWithModdedState);
+        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
 
         var actual = contractGenerationService.signContract(signatureDto);
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual).contains(expectedContractWithModdedState);
+        assertEquals(actual.get().getReasonForRejection(), reasonForRejection);
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.REJECTED_BY_EMPLOYER);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
     }
 
     @Test

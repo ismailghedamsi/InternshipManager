@@ -1,8 +1,7 @@
-package com.power222.tuimspfcauppbj.controllers;
+package com.power222.tuimspfcauppbj.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
-import com.power222.tuimspfcauppbj.controller.ContractController;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractService;

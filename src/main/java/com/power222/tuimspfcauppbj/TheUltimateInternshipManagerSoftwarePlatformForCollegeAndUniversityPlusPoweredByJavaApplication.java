@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj;
 import com.power222.tuimspfcauppbj.dao.*;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
+import com.power222.tuimspfcauppbj.util.ContractDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import com.power222.tuimspfcauppbj.util.ReviewState;
@@ -54,11 +55,13 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         @Override
         @Transactional
         public void run(String... args) throws IOException {
-            userRepo.save(User.builder()
+            User admin = User.builder()
                     .username("admin")
                     .role("admin")
                     .password(passwordEncoder.encode("password"))
-                    .build());
+                    .build();
+
+            userRepo.save(admin);
 
             var employer = userRepo.save(Employer.builder()
                     .role("employer")
@@ -127,60 +130,21 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .resume(resume)
                     .build());
 
-            var contract = contractRepo.saveAndFlush(Contract.builder()
-                    .id(1L)
-                    .signatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE)
-                    .file("data:application/pdf;base64," +
-                            "JVBERi0xLjcKJeLjz9MKNSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDc5Pj5z" +
-                            "dHJlYW0KeJwr5HIK4dJ3M1QwMlAISeMytDTVM7FUMLa01LOwUAhJ4TJSCCniMtAzAwJzhXIuDWd/" +
-                            "v5AgxxAFF1eF4BBHd1fNkCwu1xCuQC4AR7gQRgplbmRzdHJlYW0KZW5kb2JqCjQgMCBvYmoKPDwv" +
-                            "Q29udGVudHMgNSAwIFIvTWVkaWFCb3hbMCAwIDU5NSA4NDJdL1BhcmVudCAyIDAgUi9SZXNvdXJj" +
-                            "ZXM8PC9Gb250PDwvRjEgNiAwIFI+Pj4+L1RyaW1Cb3hbMCAwIDU5NSA4NDJdL1R5cGUvUGFnZT4+" +
-                            "CmVuZG9iago4IDAgb2JqCjw8L0ZpbHRlci9GbGF0ZURlY29kZS9MZW5ndGggNzI2Pj5zdHJlYW0K" +
-                            "eJyVVdtum0AQfecr5qFSHcnZsHfwG61pailKWozzUOWFmLVNiyEBnKq/0b/MX3QAp03s2NnKFquF" +
-                            "md2z58ycvXc+xM7ZJwqUQbxwfI/4DLT0CecQpw6+rByXCPjpDMLLuP3DOIRpHJyHMMFZdB1ezkLA" +
-                            "D1EIF+EUvgRRPMFxOptcBxgwPYm/OwNon2HsfHXuX27IfE04aEEJl7sbHkyi3CVag2accN1mDcZJ" +
-                            "UUNuYJ6klYHUQJ7AoqzWG3wXxOEQv9Vwl1RNhuM8ax674TQ1dV1u6tHbGCVoVxLudbsdBuYJQiko" +
-                            "T+MJ2sgLA0tTN1lZFEnWI6ubZGmG8C2Z/9gCrcr5KrGBoJRPBDsOgfkMCVWSEiF2CTWNjRiKcyKU" +
-                            "tRjbJCqJ0PZJAlEKkJgr/J6p92Z9l5e/zKYaQprMs7UVJVL7RFIbSqSiRO4VtR0lUnAi7etzm8Qk" +
-                            "kf/BI9XE90G6eCxvS8ljs0mzpGhuBubmZAhZvU6yHJYrkybrOrPhR3g+UW8UrfKIViA0Jaovro9l" +
-                            "8ZCZojBFgyWKnVIWadYWcf23gKHeZA+IDL/ud49LPMW0hN2xWjrYr0JgIzEQvgdYNPisjLPYh9VF" +
-                            "IvhXfGgcXU1iGM96Hzp0rnYBLGXV6TYI0Bjq2sAIik2e24OlvHUmG7Con9rrgPEsCkMrqC7S723N" +
-                            "rOmcIn283TQI2GVnlJ4x97jeuAb3JNEvllhkBeZT23z0F90302W5vkW/asomyTvRDZZe0aoNrjV5" +
-                            "XHR+ZUEel5zoPaU/X0XBJOpunDgKroPJxTHwXBPda/25rJ7ctqmSh7ZnRuCdUvU2A4y2vbDPwO8V" +
-                            "GlN/hzxxMQLmruy5QH3RIG24wItGe7tcTIOLlosj2Bm2uu7NdJrkHQEoFnHfPccI7S86dzg2PBqi" +
-                            "R2HtyH+T3JnuxTG81BBvH7edvBLXms3Tit3sUKjk8nlsP30R/AdiT/7bCmVuZHN0cmVhbQplbmRv" +
-                            "YmoKNyAwIG9iago8PC9Db250ZW50cyA4IDAgUi9NZWRpYUJveFswIDAgNTk1IDg0Ml0vUGFyZW50" +
-                            "IDIgMCBSL1Jlc291cmNlczw8L0ZvbnQ8PC9GMSA2IDAgUj4+Pj4vVHJpbUJveFswIDAgNTk1IDg0" +
-                            "Ml0vVHlwZS9QYWdlPj4KZW5kb2JqCjEwIDAgb2JqCjw8L0ZpbHRlci9GbGF0ZURlY29kZS9MZW5n" +
-                            "dGggMzM3Pj5zdHJlYW0KeJyVkctOwkAUhvfzFGcnbo7tXDoddwUrNiFe6PgABEaoKS20NcbX8Ald" +
-                            "6ls4BdRSUiLppmeS7/+/nLMmfU0url1wKegnwjyQvkLGQM+IfSmIgxxeSU8Hg5swhlDDOIzv727j" +
-                            "oB+NIm2frh4h1sEwCqJxeK6fSajJA1m3Yn0UID2OvqiDe3phYJrnqSkrSLLKFFm5SFYN2oH6Gw9t" +
-                            "vbD1tZZUKCUsibAxjvszpyTuAoREqhrAdu4EkIq/kt14FBEeQ7kntp33ob09UO6iZ1W4g0y2V9xa" +
-                            "bHuXtHEil6MSbX5kYJCn6efcQPlusvnE/nzAZZ3TgyNpnmLIt3cJN9TSZNUmysxNF+faDTHaYJsm" +
-                            "R9uki8o7cD+znYVZFUl5qr2wEV7bfpovV5PsrdOeU1R+g/23PfVRHVxudPZVvcySiS0+zd2RyGXb" +
-                            "Pdxl/YLfMK/dhgplbmRzdHJlYW0KZW5kb2JqCjkgMCBvYmoKPDwvQ29udGVudHMgMTAgMCBSL01l" +
-                            "ZGlhQm94WzAgMCA1OTUgODQyXS9QYXJlbnQgMiAwIFIvUmVzb3VyY2VzPDwvRm9udDw8L0YxIDYg" +
-                            "MCBSL0YyIDExIDAgUj4+Pj4vVHJpbUJveFswIDAgNTk1IDg0Ml0vVHlwZS9QYWdlPj4KZW5kb2Jq" +
-                            "CjEgMCBvYmoKPDwvUGFnZXMgMiAwIFIvVHlwZS9DYXRhbG9nPj4KZW5kb2JqCjMgMCBvYmoKPDwv" +
-                            "Q3JlYXRpb25EYXRlKEQ6MjAyMDExMDIyMTA4MDItMDUnMDAnKS9Nb2REYXRlKEQ6MjAyMDExMDIy" +
-                            "MTA4MDItMDUnMDAnKS9Qcm9kdWNlcihpVGV4dK4gNy4xLjEzIKkyMDAwLTIwMjAgaVRleHQgR3Jv" +
-                            "dXAgTlYgXChBR1BMLXZlcnNpb25cKSk+PgplbmRvYmoKMTEgMCBvYmoKPDwvQmFzZUZvbnQvVGlt" +
-                            "ZXMtUm9tYW4vRW5jb2RpbmcvV2luQW5zaUVuY29kaW5nL1N1YnR5cGUvVHlwZTEvVHlwZS9Gb250" +
-                            "Pj4KZW5kb2JqCjYgMCBvYmoKPDwvQmFzZUZvbnQvSGVsdmV0aWNhL0VuY29kaW5nL1dpbkFuc2lF" +
-                            "bmNvZGluZy9TdWJ0eXBlL1R5cGUxL1R5cGUvRm9udD4+CmVuZG9iagoyIDAgb2JqCjw8L0NvdW50" +
-                            "IDMvS2lkc1s0IDAgUiA3IDAgUiA5IDAgUl0vVHlwZS9QYWdlcz4+CmVuZG9iagp4cmVmCjAgMTIK" +
-                            "MDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAxNzY4IDAwMDAwIG4gCjAwMDAwMDIxNTAgMDAwMDAg" +
-                            "biAKMDAwMDAwMTgxMyAwMDAwMCBuIAowMDAwMDAwMTYwIDAwMDAwIG4gCjAwMDAwMDAwMTUgMDAw" +
-                            "MDAgbiAKMDAwMDAwMjA2MiAwMDAwMCBuIAowMDAwMDAxMDg2IDAwMDAwIG4gCjAwMDAwMDAyOTMg" +
-                            "MDAwMDAgbiAKMDAwMDAwMTYyNCAwMDAwMCBuIAowMDAwMDAxMjE5IDAwMDAwIG4gCjAwMDAwMDE5" +
-                            "NzEgMDAwMDAgbiAKdHJhaWxlcgo8PC9JRCBbPDhlYmZiNzBlYWU4MTBlYWI3YWVjNDQzYzFiMTM2" +
-                            "MmM4Pjw4ZWJmYjcwZWFlODEwZWFiN2FlYzQ0M2MxYjEzNjJjOD5dL0luZm8gMyAwIFIvUm9vdCAx" +
-                            "IDAgUi9TaXplIDEyPj4KJWlUZXh0LTcuMS4xMwpzdGFydHhyZWYKMjIxMwolJUVPRgo=")
-                    .build());
+            var contractDto = ContractDTO.builder()
+                    .studentApplicationId(studentApplication.getId())
+                    .adminName("Jacob Blake")
+                    .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
+                    .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
+                    .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
+                    .totalHoursPerWeek(39)
+                    .build();
+
+            contractGenerationService.generateContract(contractDto);
+
+            var contract = contractRepo.findById(1L).get();
 
             var signatureDto = ContractSignatureDTO.builder()
-                    .contractId(1L)
+                    .contractId(contract.getId())
                     .isApproved(true)
                     .nomSignataire("Andrei Belkin")
                     .signatureTimestamp(LocalDateTime.now())
@@ -188,14 +152,17 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build();
 
             contractGenerationService.signContract(signatureDto);
+            contractGenerationService.signContract(signatureDto);
+            contractGenerationService.signContract(signatureDto);
+            contractGenerationService.signContract(signatureDto);
 
-//            ByteArrayInputStream pdfIn = new ByteArrayInputStream(java.util.Base64.getMimeDecoder().decode(contract.getFile().split(",")[1]));
-//            FileOutputStream pdfOut = new FileOutputStream("pdf/generatedPdf.pdf");
-//            pdfOut.write(pdfIn.readAllBytes());
-//
-//            ByteArrayInputStream signatureIn = new ByteArrayInputStream(java.util.Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1]));
-//            FileOutputStream signatureOut = new FileOutputStream("pdf/savedSignature.jpeg");
-//            signatureOut.write(signatureIn.readAllBytes());
+            ByteArrayInputStream pdfIn = new ByteArrayInputStream(java.util.Base64.getMimeDecoder().decode(contract.getFile().split(",")[1]));
+            FileOutputStream pdfOut = new FileOutputStream("pdf/generatedPdf.pdf");
+            pdfOut.write(pdfIn.readAllBytes());
+
+            ByteArrayInputStream signatureIn = new ByteArrayInputStream(java.util.Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1]));
+            FileOutputStream signatureOut = new FileOutputStream("pdf/savedSignature.jpeg");
+            signatureOut.write(signatureIn.readAllBytes());
 
             userRepo.flush();
             resumeRepo.flush();
