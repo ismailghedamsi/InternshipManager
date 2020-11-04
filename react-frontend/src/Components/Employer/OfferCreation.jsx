@@ -86,7 +86,7 @@ export default function OfferCreation() {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{minHeight: '100vh'}}
+            style={{minHeight: '100%'}}
         >
             <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>

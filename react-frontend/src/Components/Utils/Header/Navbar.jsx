@@ -5,6 +5,7 @@ import {Link, useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import AuthenticationService from "../../../Services/AuthenticationService";
 import {SemesterContext} from "../../../App";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     navbarColor: {
@@ -71,7 +72,8 @@ export default function Navbar() {
                         className={["nav-links", classes.linkButton].join(' ')}
                         onClick={() => {
                             AuthenticationService.logout()
-                            setSemester(undefined)
+                            axios.get("http://localhost:8080/api/semesters/present")
+                                .then(r => setSemester(r ? r.data : ''));
                             history.push("/")
                         }}>
                         Déconnexion

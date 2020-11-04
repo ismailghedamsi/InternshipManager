@@ -60,11 +60,11 @@ export default function Login() {
                         <CssBaseline/>
                         <div className={classes.paper}>
                             <Typography variant="h1" className={classes.logo}>
-                                TUIMSPFCAUPPBJ
+                                LPLDGDSUPCEUPPPJ
                             </Typography>
                             <Typography variant="h2" className={classes.subtitle}>
-                                The Ultimate Internship Manager Software Platform For College And University Plus
-                                Powered By Java
+                                La Platforme Logiciel de Gestion de Stage Ultime Pour Collèges et Universités Plus
+                                Propulsé Par Java
                             </Typography>
                             <Typography component="h1" variant="h5">
                                 Se connecter
