@@ -53,6 +53,10 @@ export default function ContractList() {
                     En attente de la signature de l'étudiant
                     {nextState[index].reasonForRejection}
                 </Typography>
+            case "SIGNED":
+                return <Typography variant={"body1"} style={{color: "green"}}>
+                    Contrat signé
+                </Typography>
             default:
                 return '';
         }

@@ -31,7 +31,7 @@ export default function SignContract() {
         let dto = {};
         if (isApprouved) {
             readFileAsync(values.file).then(file => {
-                dto.contractId = nextState[currentIndex].id;
+                dto.contractId = nextState[index].id;
                 dto.isApproved = isApprouved;
                 dto.imageSignature = file;
                 dto.reasonForRejection = "";
@@ -40,15 +40,20 @@ export default function SignContract() {
 
                 return api.put("/contractGeneration/sign", dto)
                     .then(result => {
-                        closeReasonModal()
+                        nextState.splice(index, 1, result.data);
+                        setContracts(nextState);
+                        closeSignModal()
                     })
             })
         } else {
-            dto.contractId = nextState[currentIndex].id;
+            dto.contractId = nextState[index].id;
             dto.isApproved = isApprouved;
             dto.reasonForRejection = values.message;
+            console.log(dto);
             return api.put("/contractGeneration/sign", dto)
-                .then(() => {
+                .then(result => {
+                    nextState.splice(index, 1, result.data);
+                    setContracts(nextState);
                     closeReasonModal()
                 })
         }
@@ -72,10 +77,6 @@ export default function SignContract() {
 
     function contractState(contract) {
         switch (contract.signatureState) {
-            case "WAITING_FOR_EMPLOYER_SIGNATURE":
-                return <Typography variant={"body1"} style={{color: "blue"}}>
-                    En attente de la signature de l'employeur
-                </Typography>
             case "REJECTED_BY_EMPLOYER":
                 return <Typography variant={"body1"} style={{color: "red"}}>
                     Rejeté :
@@ -89,8 +90,12 @@ export default function SignContract() {
                 return <Typography variant={"body1"} style={{color: "blue"}}>
                     En attente de la signature du gestionnaire de stage
                 </Typography>
+            case "SIGNED":
+                return <Typography variant={"body1"} style={{color: "green"}}>
+                    Contrat signé
+                </Typography>
             default:
-                return "";
+                return '';
         }
     }
 
