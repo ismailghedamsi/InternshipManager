@@ -1,9 +1,7 @@
-package com.power222.tuimspfcauppbj.services;
+package com.power222.tuimspfcauppbj.service;
 
+import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.*;
-import com.power222.tuimspfcauppbj.service.ContractGenerationService;
-import com.power222.tuimspfcauppbj.service.ContractService;
-import com.power222.tuimspfcauppbj.service.StudentApplicationService;
 import com.power222.tuimspfcauppbj.util.ContractDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
@@ -14,18 +12,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ContractGenerationServiceTest {
@@ -38,6 +33,9 @@ public class ContractGenerationServiceTest {
 
     @InjectMocks
     private ContractGenerationService contractGenerationService;
+
+    @Mock
+    private ContractRepository contractRepo;
 
     private ContractDTO contractDto;
     private StudentApplication expectedStudentApplication;
@@ -83,7 +81,7 @@ public class ContractGenerationServiceTest {
 
         contract = Contract.builder()
                 .id(1L)
-                .signatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE)
+                .signatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE)
                 .file("data:application/pdf;base64," +
                         "JVBERi0xLjcKJeLjz9MKNSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDc5Pj5z" +
                         "dHJlYW0KeJwr5HIK4dJ3M1QwMlAISeMytDTVM7FUMLa01LOwUAhJ4TJSCCniMtAzAwJzhXIuDWd/" +
@@ -143,18 +141,84 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
-    public void signContractTest() throws IOException {
+    void updateContractSignatureApprovedByEmployerTest() {
+        contract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
+
+        var expectedContractWithModdedState = contract.toBuilder()
+                .signatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE)
+                .build();
+
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
 
-        contractGenerationService.signContract(signatureDto);
+        var actual = contractGenerationService.signContract(signatureDto);
 
-        ByteArrayInputStream pdfIn = new ByteArrayInputStream(Base64.getMimeDecoder().decode(contract.getFile().split(",")[1]));
-        FileOutputStream pdfOut = new FileOutputStream("pdf/generatedPdf.pdf");
-        pdfOut.write(pdfIn.readAllBytes());
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
+    }
 
-        ByteArrayInputStream signatureIn = new ByteArrayInputStream(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1]));
-        FileOutputStream signatureOut = new FileOutputStream("pdf/savedSignature.jpeg");
-        signatureOut.write(signatureIn.readAllBytes());
+    @Test
+    void updateContractSignatureApprovedByStudentTest() {
+        contract.setSignatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE);
+
+        var expectedContractWithModdedState = contract.toBuilder()
+                .signatureState(ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE)
+                .build();
+
+        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+
+        var actual = contractGenerationService.signContract(signatureDto);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
+    }
+
+    @Test
+    void updateContractSignatureApprovedByAdminTest() {
+        contract.setSignatureState(ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE);
+
+        var expectedContractWithModdedState = contract.toBuilder()
+                .signatureState(ContractSignatureState.SIGNED)
+                .build();
+
+        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+
+        var actual = contractGenerationService.signContract(signatureDto);
+
+        assertThat(actual).isNotEmpty();
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.SIGNED);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
+    }
+
+    @Test
+    void updateContractSignatureDeniedTest() {
+        String reasonForRejection = "Raison de test.";
+        signatureDto.setApproved(false);
+        signatureDto.setReasonForRejection(reasonForRejection);
+
+        var expectedContractWithModdedState = contract.toBuilder()
+                .signatureState(ContractSignatureState.REJECTED_BY_EMPLOYER)
+                .reasonForRejection(reasonForRejection)
+                .build();
+
+        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+
+        var actual = contractGenerationService.signContract(signatureDto);
+
+        assertThat(actual).isNotEmpty();
+        assertEquals(actual.get().getReasonForRejection(), reasonForRejection);
+        assertThat(actual.get().getSignatureState() == ContractSignatureState.REJECTED_BY_EMPLOYER);
+        verify(contractService, times(1)).updateContract(contract.getId(), contract);
+    }
+
+    @Test
+    void updateContractSignatureStateWithInvalidId() {
+        assertThat(contractGenerationService.signContract(signatureDto)).isEmpty();
     }
 
     @Test

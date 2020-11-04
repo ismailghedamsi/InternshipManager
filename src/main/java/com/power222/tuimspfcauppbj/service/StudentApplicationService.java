@@ -20,7 +20,7 @@ public class StudentApplicationService {
     private final ResumeRepository resumeRepo;
     private final AuthenticationService authSvc;
 
-    public StudentApplicationService(StudentApplicationRepository appliRepo, InternshipOfferRepository offerRepo, StudentRepository studentRepo, ResumeRepository resumeRepo, AuthenticationService authSvc) {
+    public StudentApplicationService(StudentApplicationRepository appliRepo, InternshipOfferRepository offerRepo, ResumeRepository resumeRepo, AuthenticationService authSvc) {
         this.appliRepo = appliRepo;
         this.offerRepo = offerRepo;
         this.resumeRepo = resumeRepo;

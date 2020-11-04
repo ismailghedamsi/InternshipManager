@@ -8,10 +8,8 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
-import com.itextpdf.kernel.utils.PdfMerger;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
@@ -83,17 +81,28 @@ public class ContractGenerationService {
             document.close();
             String fileBase64 = encodeBytes(stream.toByteArray());
             contractDto.setFile("data:application/pdf;base64," + fileBase64);
-            contractService.createAndSaveNewContract(contractDtoToContract(contractDto, applicationService));
+            contractService.createAndSaveNewContract(contractDtoToContract(contractDto));
         }
         return stream != null;
     }
 
     public Optional<Contract> signContract(ContractSignatureDTO signatureDto) {
-        return contractService.getContractById(signatureDto.getContractId()).flatMap(contract -> signContractFunction(contract, signatureDto));
+        return contractService.getContractById(signatureDto.getContractId()).flatMap(contract -> {
+            if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW) {
+                if (signatureDto.isApproved()) {
+                    contract.setFile(getContractFileWithSignature(contract, signatureDto));
+                } else {
+                    contract.setReasonForRejection(signatureDto.getReasonForRejection());
+                }
+            }
+
+            contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), signatureDto.isApproved()));
+
+            return contractService.updateContract(contract.getId(), contract);
+        });
     }
 
-    @SneakyThrows
-    private Optional<Contract> signContractFunction(Contract contract, ContractSignatureDTO signatureDto) {
+    private String getContractFileWithSignature(Contract contract, ContractSignatureDTO signatureDto) {
         ByteArrayOutputStream appendedOut = new ByteArrayOutputStream();
         PdfDocument pdfAppendedOut = new PdfDocument(new PdfWriter(appendedOut));
         Document documentAppendedOut = new Document(pdfAppendedOut, PageSize.A4);
@@ -135,7 +144,7 @@ public class ContractGenerationService {
                             .setMarginRight(120f)
                             .setMarginBottom(0)
                             .add(new Paragraph("Date\n").setMarginLeft(145f)));
-        } else if (ContractSignatureState.getSignerFromState(contract.getSignatureState()) == UserTypes.ADMIN && contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW) {
+        } else {
             documentAppendedOut.add(
                     new Paragraph()
                             .add(new Text("Le gestionnaire de stage :\n").setBold())
@@ -157,16 +166,14 @@ public class ContractGenerationService {
 
         pdfEditor.concatenate(in, appendedIn, out);
 
-        String fileBase64 = encodeBytes(out.toByteArray());
-        contract.setFile("data:application/pdf;base64," + fileBase64);
-        return contractService.updateContract(contract.getId(), contract);
+        return "data:application/pdf;base64," + encodeBytes(out.toByteArray());
     }
 
     public Optional<StudentApplication> getStudentApplication(ContractDTO contract) {
         return applicationService.getApplicationById(contract.getStudentApplicationId());
     }
 
-    private Contract contractDtoToContract(ContractDTO contractDto, StudentApplicationService studentApplicationService) {
+    private Contract contractDtoToContract(ContractDTO contractDto) {
         Contract contract = new Contract();
         contract.setAdminName(contractDto.getAdminName());
         contract.setFile(contractDto.getFile());
@@ -174,8 +181,8 @@ public class ContractGenerationService {
         contract.setEngagementCompany(contractDto.getEngagementCompany());
         contract.setEngagementStudent(contractDto.getEngagementStudent());
         contract.setTotalHoursPerWeek(contractDto.getTotalHoursPerWeek());
-        if (studentApplicationService.getApplicationById(contractDto.getStudentApplicationId()).isPresent()) {
-            StudentApplication application = studentApplicationService.getApplicationById(contractDto.getStudentApplicationId()).get();
+        if (applicationService.getApplicationById(contractDto.getStudentApplicationId()).isPresent()) {
+            StudentApplication application = applicationService.getApplicationById(contractDto.getStudentApplicationId()).get();
             contract.setStudentApplication(application);
         }
         return contract;

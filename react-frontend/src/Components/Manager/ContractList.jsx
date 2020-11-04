@@ -84,6 +84,10 @@ export default function ContractList() {
                             }}
                         >
                             <Typography color={"textPrimary"} variant={"body1"}>
+                                {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
+                                &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
+                            </Typography>
+                            <Typography color={"textPrimary"} variant={"body2"}>
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
                             {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&

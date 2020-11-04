@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
     const classes = useStyles();
-    const {semester} = useContext(SemesterContext)
+    const {semester, setSemester} = useContext(SemesterContext)
     const history = useHistory();
     const showIcon = () => {
         const x = document.getElementById("myNav");
@@ -71,6 +71,7 @@ export default function Navbar() {
                         className={["nav-links", classes.linkButton].join(' ')}
                         onClick={() => {
                             AuthenticationService.logout()
+                            setSemester(undefined)
                             history.push("/")
                         }}>
                         Déconnexion
