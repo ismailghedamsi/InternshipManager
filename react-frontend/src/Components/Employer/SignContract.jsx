@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import TextboxModal from "../Utils/TextboxModal";
 import Grid from "@material-ui/core/Grid";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir moins que " + value.max + " caractères";
@@ -60,7 +61,7 @@ export default function SignContract() {
     }
 
     useEffect(() => {
-        api.get("/contract")
+        api.get("/contract/employer/" + AuthenticationService.getCurrentUser().id)
             .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
