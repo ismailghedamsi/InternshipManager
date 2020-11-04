@@ -44,7 +44,7 @@ export default function InterviewConvocation() {
             style={{minHeight: '100vh'}}
         >
             <Grid item xs={12} sm={7} lg={5}>
-                <Container component="main" maxWidth="sm" className={classes.container}>
+                <Container component="main" className={classes.container}>
                     <Formik
                         onSubmit={async (values) => createInterview(values)}
                         validateOnBlur={false}
@@ -63,7 +63,7 @@ export default function InterviewConvocation() {
                                     rencontrer {applicationInterview && applicationInterview.student ? applicationInterview.student.firstName + " " + applicationInterview.student.lastName : ""}
                                 </Typography>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12}>
                                         <Field
                                             component={DateTimePicker}
                                             name="interviewDate"
@@ -71,7 +71,7 @@ export default function InterviewConvocation() {
                                             label="Date et heure de l'entrevue "
                                             required
                                             fullWidth
-                                            format="MM/dd/yyyy"
+                                            format="MM/dd/yyyy hh:mm"
                                         />
                                     </Grid>
                                     <ErrorMessage name={"file"}>
