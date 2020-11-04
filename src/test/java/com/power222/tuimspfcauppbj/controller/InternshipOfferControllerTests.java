@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.InternshipOffer.InternshipOfferDetails;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.InternshipOfferService;
 import com.power222.tuimspfcauppbj.util.ReviewState;
@@ -18,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
@@ -69,14 +70,15 @@ public class InternshipOfferControllerTests {
 
         expectedOffer = InternshipOffer.builder()
                 .id(1)
-                .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("1/08/2020"))
-                .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                .description("desc")
-                .file("alalalala")
-                .file("alalalala")
-                .salary(15.87)
-                .reviewState(ReviewState.APPROVED)
                 .title("Titre")
+                .details(InternshipOfferDetails.builder()
+                        .creationDate(LocalDate.parse("2020-08-01"))
+                        .limitDateToApply(LocalDate.parse("2020-08-31"))
+                        .description("desc")
+                        .salary(15.87)
+                        .build())
+                .reviewState(ReviewState.APPROVED)
+                .file("alalalala")
                 .employer(expectedEmployer)
                 .allowedStudents(Collections.singletonList(expectedStudent))
                 .applications(Collections.emptyList())
@@ -84,13 +86,15 @@ public class InternshipOfferControllerTests {
 
         expectedOffer2 = InternshipOffer.builder()
                 .id(1)
-                .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("1/08/2020"))
-                .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                .description("desc")
-                .file("alalalala")
-                .salary(15.87)
-                .reviewState(ReviewState.APPROVED)
                 .title("Titre")
+                .details(InternshipOfferDetails.builder()
+                        .creationDate(LocalDate.parse("2020-08-01"))
+                        .limitDateToApply(LocalDate.parse("2020-08-31"))
+                        .description("desc")
+                        .salary(15.87)
+                        .build())
+                .reviewState(ReviewState.APPROVED)
+                .file("alalalala")
                 .employer(expectedEmployer)
                 .allowedStudents(Collections.singletonList(expectedStudent))
                 .applications(Collections.emptyList())

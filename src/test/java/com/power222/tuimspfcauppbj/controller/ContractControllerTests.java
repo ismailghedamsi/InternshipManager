@@ -5,7 +5,6 @@ import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractService;
-import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,6 @@ public class ContractControllerTests {
     private ContractService svc;
 
     private Contract expectedContract;
-    private ContractSignatureDTO expectedDto;
 
     @BeforeEach
     void beforeEach() {
@@ -59,8 +57,6 @@ public class ContractControllerTests {
                 .totalHoursPerWeek(32)
                 .studentApplication(new StudentApplication())
                 .build();
-
-        expectedDto = ContractSignatureDTO.builder().build();
     }
 
     @Test

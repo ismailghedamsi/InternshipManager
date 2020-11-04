@@ -4,6 +4,7 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.InternshipOffer.InternshipOfferDetails;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,39 +49,44 @@ class InternshipOfferServiceTests {
     void setUp() {
         Employer employer = Employer.builder().username("mark").email("a@gmail.com").build();
         String pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
-        try {
-            expectedOffer = InternshipOffer.builder().id(1L).allowedStudents(new ArrayList<>())
-                    .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
-                    .description("description").employer(employer).file(pdfContent)
-                    .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                    .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/11/2020"))
-                    .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/04/2021"))
-                    .salary(20)
-                    .title("Title")
-                    .reviewState(ReviewState.PENDING)
-                    .startTime(8)
-                    .endTime(16)
-                    .build();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            expectedOffer2 = InternshipOffer.builder().id(2).allowedStudents(new ArrayList<>())
-                    .creationDate(new SimpleDateFormat("dd/MM/yyyy").parse("08/08/2020"))
-                    .description("description").employer(new Employer()).file(pdfContent)
-                    .limitDateToApply(new SimpleDateFormat("dd/MM/yyyy").parse("31/08/2020"))
-                    .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2021"))
-                    .internshipStartDate(new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2021"))
-                    .salary(20)
-                    .title("Title")
-                    .reviewState(ReviewState.PENDING)
-                    .startTime(8)
-                    .endTime(16)
-                    .build();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        expectedOffer = InternshipOffer.builder()
+                .id(1L)
+                .title("Title")
+                .allowedStudents(new ArrayList<>())
+                .details(InternshipOfferDetails.builder()
+                        .description("description")
+                        .creationDate(LocalDate.parse("2020-08-08"))
+                        .limitDateToApply(LocalDate.parse("2020-08-31"))
+                        .internshipStartDate(LocalDate.parse("2020-11-01"))
+                        .internshipEndDate(LocalDate.parse("2021-04-01"))
+                        .startTime(8)
+                        .endTime(16)
+                        .salary(20)
+                        .build())
+                .employer(employer)
+                .file(pdfContent)
+                .reviewState(ReviewState.PENDING)
+                .build();
+
+        expectedOffer2 = InternshipOffer.builder()
+                .id(1L)
+                .title("Title")
+                .allowedStudents(new ArrayList<>())
+                .details(InternshipOfferDetails.builder()
+                        .description("description")
+                        .creationDate(LocalDate.parse("2020-08-08"))
+                        .limitDateToApply(LocalDate.parse("2020-08-31"))
+                        .internshipStartDate(LocalDate.parse("2020-11-01"))
+                        .internshipEndDate(LocalDate.parse("2021-05-01"))
+                        .startTime(8)
+                        .endTime(16)
+                        .salary(20)
+                        .build())
+                .employer(employer)
+                .file(pdfContent)
+                .reviewState(ReviewState.PENDING)
+                .build();
 
         expectedOffers = new ArrayList<>();
         expectedOffers.add(expectedOffer);

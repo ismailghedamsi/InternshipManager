@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from "react";
-import useStyles from "../Utils/useStyles";
-import {useApi, useModal} from "../Utils/Hooks";
 import {Typography} from "@material-ui/core";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
+import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import {Field, Form, Formik} from "formik";
-import * as yup from "yup";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
-import TextboxModal from "../Utils/TextboxModal";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {Field, Form, Formik} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
+import React, {useEffect, useState} from "react";
+import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi, useModal} from "../Utils/Hooks";
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
+import TextboxModal from "../Utils/TextboxModal";
+import useStyles from "../Utils/useStyles";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir moins que " + value.max + " caractères";
@@ -31,14 +31,13 @@ export default function SignContract() {
         const nextState = [...contracts];
         let dto = {};
         if (isApprouved) {
-            readFileAsync(values.file).then(file => {
+            return readFileAsync(values.file).then(file => {
                 dto.contractId = nextState[index].id;
                 dto.isApproved = isApprouved;
                 dto.imageSignature = file;
                 dto.reasonForRejection = "";
                 dto.nomSignataire = values.nomSignataire;
                 dto.signatureTimestamp = new Date();
-
                 return api.put("/contractGeneration/sign", dto)
                     .then(result => {
                         nextState.splice(index, 1, result.data);
@@ -50,7 +49,6 @@ export default function SignContract() {
             dto.contractId = nextState[index].id;
             dto.isApproved = isApprouved;
             dto.reasonForRejection = values.message;
-            console.log(dto);
             return api.put("/contractGeneration/sign", dto)
                 .then(result => {
                     nextState.splice(index, 1, result.data);
@@ -123,7 +121,6 @@ export default function SignContract() {
                         </button>
                         {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
                         <div className={classes.buttonDiv} style={{display: "block"}}>
-                            Signez le contrat
                             <button
                                 type={"button"}
                                 className={[classes.linkButton].join(' ')}
@@ -131,9 +128,12 @@ export default function SignContract() {
                                     setCurrentIndex(i);
                                     openSignModal()
                                 }}
-                                style={{marginRight: 5}}
-                            ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                            Refusez le contrat
+                            >
+                                <i className="fa fa-check-square" style={{color: "green"}}/>
+                                <Typography display={"inline"}>
+                                    &ensp;Signer le contrat
+                                </Typography>
+                            </button>
                             <button
                                 type={"button"}
                                 className={[classes.linkButton].join(' ')}
@@ -141,7 +141,12 @@ export default function SignContract() {
                                     setCurrentIndex(i);
                                     openReasonModal()
                                 }}
-                            ><i className="fa fa-ban" style={{color: "red"}}/></button>
+                            >
+                                <i className="fa fa-ban" style={{color: "red"}}/>
+                                <Typography display={"inline"}>
+                                    &ensp;Refuser le contrat
+                                </Typography>
+                            </button>
                         </div>}
                         {currentIndex === i &&
                         contractState(contracts[i])
@@ -155,8 +160,7 @@ export default function SignContract() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) =>
-                                sendDecision(currentIndex, true, values)
+                            onSubmit={async (values) => sendDecision(currentIndex, true, values)
                             }
                             validateOnBlur={false}
                             validateOnChange={false}
@@ -204,20 +208,22 @@ export default function SignContract() {
                                                 required
                                             />
                                         </Grid>
-                                        {isSubmitting && <LinearProgress/>}
-                                        <Button
-                                            id="buttonSubmit"
-                                            type={"submit"}
-                                            variant="contained"
-                                            fullWidth
-                                            size={"large"}
-                                            color="primary"
-                                            disabled={isSubmitting}
-                                            onClick={submitForm}
-                                        >
-                                            ENVOYER
-                                        </Button>
                                     </Grid>
+                                    <br/>
+                                    {isSubmitting && <LinearProgress/>}
+                                    <Button
+                                        id="buttonSubmit"
+                                        type={"submit"}
+                                        variant="contained"
+                                        fullWidth
+                                        size={"large"}
+                                        color="primary"
+                                        disabled={isSubmitting}
+                                        onClick={submitForm}
+                                    >
+                                        ENVOYER
+                                    </Button>
+
                                 </Form>
                             )}
                         </Formik>

@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.service;
 
+import com.aspose.pdf.facades.IPdfFileEditor;
 import com.aspose.pdf.facades.PdfFileEditor;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -25,26 +26,26 @@ import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import com.power222.tuimspfcauppbj.util.UserTypes;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
-import org.joda.time.Weeks;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 
 import static com.itextpdf.io.codec.Base64.encodeBytes;
 
+@SuppressWarnings("MagicNumber")
 @Service
 @Slf4j
 public class ContractGenerationService {
 
-    public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.US);
+    public static final DateTimeFormatter DTF_WITH_TIME = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.US);
+    public static final DateTimeFormatter DTF_WITHOUT_TIME = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.US);
 
     private final ContractService contractService;
     private final StudentApplicationService applicationService;
@@ -54,6 +55,17 @@ public class ContractGenerationService {
         this.contractService = contractService;
         this.applicationService = applicationService;
         this.mailService = mailService;
+    }
+
+    private static UserTypes getSignerFromState(ContractSignatureState state) {
+        switch (state) {
+            case WAITING_FOR_EMPLOYER_SIGNATURE:
+                return UserTypes.EMPLOYER;
+            case WAITING_FOR_STUDENT_SIGNATURE:
+                return UserTypes.STUDENT;
+            default:
+                return UserTypes.ADMIN;
+        }
     }
 
     public boolean generateContract(ContractDTO contractDto) {
@@ -83,7 +95,7 @@ public class ContractGenerationService {
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
-            document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDescription()).setWidth(documentWidth)));
+            document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDetails().getDescription()).setWidth(documentWidth)));
             internshipPartiesResponsabilities(contractDto, document);
             document.close();
             String fileBase64 = encodeBytes(stream.toByteArray());
@@ -117,7 +129,7 @@ public class ContractGenerationService {
         Document documentAppendedOut = new Document(pdfAppendedOut, PageSize.A4);
         float documentWidth = documentAppendedOut.getPageEffectiveArea(PageSize.A4).getWidth();
 
-        if (ContractSignatureState.getSignerFromState(contract.getSignatureState()) == UserTypes.EMPLOYER) {
+        if (getSignerFromState(contract.getSignatureState()) == UserTypes.EMPLOYER) {
             documentAppendedOut.add(new Div()
                     .setTextAlignment(TextAlignment.JUSTIFIED)
                     .add(new Paragraph("SIGNATURES\n").setBold())
@@ -135,17 +147,17 @@ public class ContractGenerationService {
                             .add(new Text("\n\nL'employeur :\n").setBold())
                             .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
                                     .scale(0.1F, 0.1F))
-                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF)).setMarginLeft(105f)))
+                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME)).setMarginLeft(105f)))
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph().add(new Text(signatureDto.getNomSignataire()))
                             .add(new Paragraph("Date").setMarginLeft(145f)));
-        } else if (ContractSignatureState.getSignerFromState(contract.getSignatureState()) == UserTypes.STUDENT) {
+        } else if (getSignerFromState(contract.getSignatureState()) == UserTypes.STUDENT) {
             documentAppendedOut.add(
                     new Paragraph()
                             .add(new Text("\nL’étudiant(e) :\n").setBold())
                             .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
                                     .scale(0.1F, 0.1F))
-                            .add(new Text(signatureDto.getSignatureTimestamp().format(DTF)))
+                            .add(new Text(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME)))
                             .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)))
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph()
@@ -159,7 +171,7 @@ public class ContractGenerationService {
                             .add(new Text("Le gestionnaire de stage :\n").setBold())
                             .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
                                     .scale(0.1F, 0.1F))
-                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF)).setMarginLeft(105f)))
+                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME)).setMarginLeft(105f)))
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph(new Text(signatureDto.getNomSignataire()))
                             .add(new Paragraph("Date").setMarginLeft(145f)));
@@ -170,7 +182,7 @@ public class ContractGenerationService {
         ByteArrayInputStream in = new ByteArrayInputStream(Base64.getMimeDecoder().decode(contract.getFile().split(",")[1]));
         ByteArrayInputStream appendedIn = new ByteArrayInputStream(appendedOut.toByteArray());
 
-        PdfFileEditor pdfEditor = new PdfFileEditor();
+        IPdfFileEditor pdfEditor = new PdfFileEditor();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         pdfEditor.concatenate(in, appendedIn, out);
@@ -206,21 +218,21 @@ public class ContractGenerationService {
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
                 .add(new Paragraph("DUREE DU STAGE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Date de début : " + parseDate(offer.getInternshipStartDate()) +
-                        "\nDate de fin: " + parseDate(offer.getInternshipEndDate())
-                        + "\nNombre total de semaines : " + dateIntervalToWeeks(offer.getInternshipEndDate(), offer.getInternshipStartDate()) + "\n").setMultipliedLeading(1.2f)));
+                .add(new Paragraph("Date de début : " + parseDate(offer.getDetails().getInternshipStartDate()) +
+                        "\nDate de fin: " + parseDate(offer.getDetails().getInternshipEndDate())
+                        + "\nNombre total de semaines : " + dateIntervalToWeeks(offer.getDetails().getInternshipStartDate(), offer.getDetails().getInternshipEndDate()) + "\n").setMultipliedLeading(1.2f)));
 
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
                 .add(new Paragraph("HORAIRE DE TRAVAIL").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Horaire de travail : " + application.getOffer().getStartTime() +
-                        "-" + application.getOffer().getEndTime() +
+                .add(new Paragraph("Horaire de travail : " + application.getOffer().getDetails().getStartTime() +
+                        "-" + application.getOffer().getDetails().getEndTime() +
                         "\nNombre total d’heures par semaine: " + weeklyHours + "h\n").setMultipliedLeading(1.2f)));
 
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
                 .add(new Paragraph("SALAIRE").setBold().setMultipliedLeading(1.2f).setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))));
         internshipInfoTable.addCell(new Cell().setPadding(0).setBorder(Border.NO_BORDER)
-                .add(new Paragraph("Salaire : " + offer.getSalary() + "$").setMultipliedLeading(1.2f)));
+                .add(new Paragraph("Salaire : " + offer.getDetails().getSalary() + "$").setMultipliedLeading(1.2f)));
         document.add(internshipInfoTable);
     }
 
@@ -237,11 +249,11 @@ public class ContractGenerationService {
         );
     }
 
-    private String parseDate(Date date) {
-        return new SimpleDateFormat("dd/MM/yy").format(date);
+    private String parseDate(LocalDate date) {
+        return date.format(DTF_WITHOUT_TIME);
     }
 
-    private int dateIntervalToWeeks(Date endDate, Date startDate) {
-        return Weeks.weeksBetween(new DateTime(startDate), new DateTime(endDate)).getWeeks();
+    private long dateIntervalToWeeks(LocalDate startDate, LocalDate endDate) {
+        return ChronoUnit.WEEKS.between(startDate, endDate);
     }
 }

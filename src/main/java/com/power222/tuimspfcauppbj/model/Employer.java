@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.power222.tuimspfcauppbj.util.SemesterAware;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Filter;
@@ -18,7 +19,7 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Employer extends User {
+public class Employer extends User implements SemesterAware {
 
     private String companyName;
     private String contactName;

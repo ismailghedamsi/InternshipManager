@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import useStyles from "../Utils/useStyles";
-import {useApi} from "../Utils/Hooks";
 import {Typography} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
+import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
+import useStyles from "../Utils/useStyles";
 
 export default function ContractList() {
     const classes = useStyles();
@@ -19,8 +19,10 @@ export default function ContractList() {
         const nextState = [...contracts];
         const contract = nextState[index];
         contract.signatureState = contractState;
+        delete contract.studentApplication.resume;
         return api.put("/contract/" + contract.id, contract)
-            .then(result => {
+            .then(r => {
+                nextState.splice(index, 1, r.data);
                 setContracts(nextState);
             })
     }
@@ -69,7 +71,7 @@ export default function ContractList() {
                 title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
-                        <di className={classes.buttonDiv}>
+                        <div className={classes.buttonDiv}>
                             {contracts[i].signatureState !== "WAITING_FOR_STUDENT_SIGNATURE" &&
                             <button
                                 type={"button"}
@@ -78,7 +80,7 @@ export default function ContractList() {
                                 <i className="fa fa-trash" style={{color: "red"}}/>
                             </button>
                             }
-                        </di>
+                        </div>
                         < button
                             type={"button"}
                             className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
@@ -94,17 +96,23 @@ export default function ContractList() {
                             <Typography color={"textPrimary"} variant={"body2"}>
                                 Nom du gestionnaire de stage : {contracts[i].adminName}
                             </Typography>
+                        </button>
+                        <div className={classes.buttonDiv} style={{display: "block"}}>
                             {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
                             <button
                                 type={"button"}
-                                className={[classes.approuvalButton].join(' ')}
-                                onClick={() => sendDecision(i, "WAITING_FOR_EMPLOYER_SIGNATURE")}>
-                                Approuver le contrat
+                                className={[classes.linkButton].join(' ')}
+                                onClick={() => sendDecision(i, "WAITING_FOR_EMPLOYER_SIGNATURE")}
+                            >
+                                <i className="fa fa-check-square" style={{color: "green"}}/>
+                                <Typography display={"inline"}>
+                                    &ensp;Approuver le contrat
+                                </Typography>
                             </button>
                             }
                             {showContractState(i)}
-                            <hr className={classes.hrStyle}/>
-                        </button>
+                        </div>
+                        <hr className={classes.hrStyle}/>
                     </div>
                 )}
             </PdfSelectionViewer>

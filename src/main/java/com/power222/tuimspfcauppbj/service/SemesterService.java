@@ -1,10 +1,8 @@
 package com.power222.tuimspfcauppbj.service;
 
-import com.power222.tuimspfcauppbj.dao.EmployerRepository;
-import com.power222.tuimspfcauppbj.dao.StudentRepository;
-import com.power222.tuimspfcauppbj.model.Employer;
-import com.power222.tuimspfcauppbj.model.Student;
+import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.util.SemesterAware;
 import com.power222.tuimspfcauppbj.util.SemesterContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,27 +11,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SemesterService {
 
-    private final StudentRepository studentRepo;
-    private final EmployerRepository employerRepo;
+    private final UserRepository userRepo;
 
-    public SemesterService(StudentRepository studentRepo, AuthenticationService authSvc, EmployerRepository employerRepo) {
-        this.studentRepo = studentRepo;
-        this.employerRepo = employerRepo;
-        authSvc.registerEventListeners(this::checkIfUserIsInSemester);
+    public SemesterService(UserRepository userRepo, AuthenticationService authSvc) {
+        this.userRepo = userRepo;
+        authSvc.registerEventListeners(this::registerUserInSemester);
     }
 
-    public void checkIfUserIsInSemester(User user) {
-        if (user instanceof Student) {
-            Student student = (Student) user;
-            if (!student.getSemesters().contains(SemesterContext.getPresentSemester())) {
-                student.getSemesters().add(SemesterContext.getPresentSemester());
-                studentRepo.saveAndFlush(student);
-            }
-        } else if (user instanceof Employer) {
-            Employer employer = (Employer) user;
-            if (!employer.getSemesters().contains(SemesterContext.getPresentSemester())) {
-                employer.getSemesters().add(SemesterContext.getPresentSemester());
-                employerRepo.saveAndFlush(employer);
+    public void registerUserInSemester(User user) {
+        if (user instanceof SemesterAware) {
+            SemesterAware semesterUser = (SemesterAware) user;
+            if (!semesterUser.getSemesters().contains(SemesterContext.getPresentSemester())) {
+                semesterUser.getSemesters().add(SemesterContext.getPresentSemester());
+                userRepo.saveAndFlush(user);
             }
         }
     }

@@ -22,14 +22,4 @@ public enum ContractSignatureState {
         }
     }
 
-    public static UserTypes getSignerFromState(ContractSignatureState state) {
-        switch (state) {
-            case WAITING_FOR_EMPLOYER_SIGNATURE:
-                return UserTypes.EMPLOYER;
-            case WAITING_FOR_STUDENT_SIGNATURE:
-                return UserTypes.STUDENT;
-            default:
-                return UserTypes.ADMIN;
-        }
-    }
 }

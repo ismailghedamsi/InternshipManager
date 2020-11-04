@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from "react";
-import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import AuthenticationService from "../../Services/AuthenticationService";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import MenuItem from "@material-ui/core/MenuItem";
+import Typography from "@material-ui/core/Typography";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Select} from "formik-material-ui";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import React, {useEffect, useState} from "react";
 import * as yup from "yup";
-import useStyles from "../Utils/useStyles";
+import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi, useModal} from "../Utils/Hooks";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import MenuItem from "@material-ui/core/MenuItem";
 import OfferDetails from "../Utils/OfferDetails";
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import TextboxModal from "../Utils/TextboxModal";
+import useStyles from "../Utils/useStyles";
 
 export default function OfferApplication() {
     const classes = useStyles();
@@ -63,7 +63,7 @@ export default function OfferApplication() {
 
     useEffect(() => {
         api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.limitDateToApply) >= new Date()) : []))
+            .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.details.limitDateToApply) >= new Date()) : []))
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
@@ -118,8 +118,8 @@ export default function OfferApplication() {
     function generateMenuItems() {
         let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED");
         if (filteredResumes.length !== 0) {
-            filteredResumes = filteredResumes.map((item, i) => (
-                <MenuItem key={i} value={item.id}>{item.name}</MenuItem>));
+            filteredResumes = filteredResumes.map((item, i) =>
+                <MenuItem key={i} value={item.id}>{item.name}</MenuItem>);
             filteredResumes.push(
                 <MenuItem key={filteredResumes.length} value={-1} disabled>Veuillez choisir un CV</MenuItem>
             );
@@ -128,20 +128,19 @@ export default function OfferApplication() {
             return <MenuItem value={-1} disabled>Aucun CV n'a été approuvé</MenuItem>;
     }
 
-    return (
-        <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage disponibles"}>
-                {(i, setCurrent) => (
-                    <div key={i}>
-                        {!hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
-                        <div className={classes.buttonDiv}>
-                            <button
-                                type={"button"}
-                                className={classes.linkButton}
-                                style={{marginRight: 5}}
-                                onClick={() => {
-                                    setCurrentIndex(i);
-                                    openResumeModal();
+    return <div style={{height: "100%"}}>
+        <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage disponibles"}>
+            {(i, setCurrent) =>
+                <div key={i}>
+                    {!hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
+                    <div className={classes.buttonDiv}>
+                        <button
+                            type={"button"}
+                            className={classes.linkButton}
+                            style={{marginRight: 5}}
+                            onClick={() => {
+                                setCurrentIndex(i);
+                                openResumeModal();
                                 }}
                             >
                                 <i className="fa fa-share-square-o"/>
@@ -224,16 +223,16 @@ export default function OfferApplication() {
                         </Typography>
                         <hr/>
                     </div>
-                )}
+            }
             </PdfSelectionViewer>
             <Dialog open={isResumeModalOpen} onClose={closeResumeModal} fullWidth maxWidth={"md"}>
                 <DialogTitle id="alert-dialog-title">{"Veuillez choisir un CV :"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) => {
+                            onSubmit={async values => {
                                 return api.post("/applications/" + offers[currentIndex].id + "/" + values.resumeId, {})
-                                    .then((r) => {
+                                    .then(r => {
                                         const nextState = [...offers];
                                         nextState[currentIndex].applications.push(r.data);
                                         setOffers(nextState);
@@ -249,7 +248,7 @@ export default function OfferApplication() {
                                 })
                             }
                             initialValues={{resumeId: -1}}>
-                            {({isSubmitting}) => (
+                            {({isSubmitting}) =>
                                 <Form>
                                     <Field
                                         component={Select}
@@ -277,7 +276,7 @@ export default function OfferApplication() {
                                         Soumettre ma candidature
                                     </Button>
                                 </Form>
-                            )}
+                            }
                         </Formik>
                     </DialogContentText>
                 </DialogContent>
@@ -293,12 +292,11 @@ export default function OfferApplication() {
                 title={"Justifiez le refus"}
                 onSubmit={async (values) => sendDecision(currentIndex, "JOB_OFFER_DENIED_BY_STUDENT", values.message)}
             />
-            <TextboxModal
-                isOpen={isReasonOfInterviewModalOpen}
-                hide={closeReasonOfInterviewModal}
-                title={"Justifiez le refus"}
-                onSubmit={async (values) => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
-            />
-        </div>
-    );
+        <TextboxModal
+            isOpen={isReasonOfInterviewModalOpen}
+            hide={closeReasonOfInterviewModal}
+            title={"Justifiez le refus"}
+            onSubmit={async (values) => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
+        />
+    </div>;
 }

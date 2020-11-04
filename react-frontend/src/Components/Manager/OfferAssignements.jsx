@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
 import {Typography} from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {Field, Form, Formik} from "formik";
 import {Checkbox} from "formik-material-ui";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import useStyles from "../Utils/useStyles";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
+import React, {useEffect, useState} from "react";
 import {useApi} from "../Utils/Hooks";
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
+import useStyles from "../Utils/useStyles";
 
 export default function OfferAssignements() {
     const classes = useStyles();
@@ -37,20 +37,19 @@ export default function OfferAssignements() {
         return offer.allowedStudents.find(s => s.id === student.id) !== undefined && offer.allowedStudents.length !== 0;
     }
 
-    return (
-        <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Assignation des offres aux étudiants"}>
-                {(i, setCurrent) => (
-                    <div key={i}>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(' ')}
-                            onClick={() => {
-                                setCurrent(i);
-                                setCurrentOfferIndex(i);
-                            }}
-                        >
-                            <Typography color={"textPrimary"} variant={"body1"}>
+    return <div style={{height: "100%"}}>
+        <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Assignation des offres aux étudiants"}>
+            {(i, setCurrent) =>
+                <div key={i}>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(' ')}
+                        onClick={() => {
+                            setCurrent(i);
+                            setCurrentOfferIndex(i);
+                        }}
+                    >
+                        <Typography color={"textPrimary"} variant={"body1"}>
                                 {offers[i].title}
                             </Typography>
                             <Typography color={"textSecondary"} variant={"body2"}>
@@ -58,7 +57,7 @@ export default function OfferAssignements() {
                             </Typography>
                         </button>
                         {currentOfferIndex === i &&
-                        students.map((student, j) => (
+                        students.map((student, j) =>
                             <div key={j}>
                                 <Formik
                                     initialValues={{
@@ -66,31 +65,30 @@ export default function OfferAssignements() {
                                         studentId: student.id,
                                         allowed: false
                                     }}
-                                        onSubmit={(values) => {
-                                            return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
-                                                .then((r) => {
-                                                    const nextState = [...offers];
-                                                    nextState.splice(i, 1, r.data);
-                                                    setOffers(nextState);
-                                                })
-                                        }}>
-                                        {({submitForm, isSubmitting}) => (
-                                            <Form style={{display: "inline", marginLeft: 16}}>
-                                                <Field name={"offerId"} type={"hidden"}/>
-                                                <Field name={"studentId"} type={"hidden"}/>
-                                                <Field id={"allowed"} name={"allowed"} component={Checkbox}
-                                                       type="checkbox" onChange={submitForm} disabled={isSubmitting}
-                                                       checked={isStudentAllowedInOffer(offers[i], student)}/>
-                                                <label
-                                                    htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
-                                                {isSubmitting && <CircularProgress size={18}/>}
-                                            </Form>)}
+                                    onSubmit={values => {
+                                        return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
+                                            .then(r => {
+                                                const nextState = [...offers];
+                                                nextState.splice(i, 1, r.data);
+                                                setOffers(nextState);
+                                            })
+                                    }}>
+                                    {({submitForm, isSubmitting}) =>
+                                        <Form style={{display: "inline", marginLeft: 16}}>
+                                            <Field name={"offerId"} type={"hidden"}/>
+                                            <Field name={"studentId"} type={"hidden"}/>
+                                            <Field id={"allowed"} name={"allowed"} component={Checkbox}
+                                                   type="checkbox" onChange={submitForm} disabled={isSubmitting}
+                                                   checked={isStudentAllowedInOffer(offers[i], student)}/>
+                                            <label
+                                                htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
+                                            {isSubmitting && <CircularProgress size={18}/>}
+                                        </Form>}
                                 </Formik>
                             </div>
-                        ))}
+                        )}
                     </div>
-                )}
+            }
             </PdfSelectionViewer>
         </div>
-    )
 }
