@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import TextboxModal from "../Utils/TextboxModal";
 import Grid from "@material-ui/core/Grid";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir moins que " + value.max + " caractères";
@@ -26,18 +27,43 @@ export default function SignContract() {
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
     const [isSignModalOpen, openSignModal, closeSignModal] = useModal();
 
-    function sendDecision(index, studentDecision, reason = "") {
+    function sendDecision(index, isApprouved, values) {
         const nextState = [...contracts];
-        const application = nextState[index];
-        application.reasonForRejection = reason;
-        application.signatureState = studentDecision;
-        return api.put("/contract/sign/" + application.id, application)
-            .then(result => {
-                nextState.splice(index, 1);
-                setContracts(nextState);
-                closeReasonModal()
+        let dto = {};
+        if (isApprouved) {
+            readFileAsync(values.file).then(file => {
+                dto.contractId = nextState[index].id;
+                dto.isApproved = isApprouved;
+                dto.imageSignature = file;
+                dto.reasonForRejection = "";
+                dto.nomSignataire = values.nomSignataire;
+                dto.signatureTimestamp = new Date();
+
+                return api.put("/contractGeneration/sign", dto)
+                    .then(result => {
+                        nextState.splice(index, 1, result.data);
+                        setContracts(nextState);
+                        closeSignModal()
+                    })
             })
+        } else {
+            dto.contractId = nextState[index].id;
+            dto.isApproved = isApprouved;
+            dto.reasonForRejection = values.message;
+            console.log(dto);
+            return api.put("/contractGeneration/sign", dto)
+                .then(result => {
+                    nextState.splice(index, 1, result.data);
+                    setContracts(nextState);
+                    closeReasonModal()
+                })
+        }
     }
+
+    useEffect(() => {
+        api.get("/contract/employer/" + AuthenticationService.getCurrentUser().id)
+            .then(r => setContracts(r ? r.data : []))
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
@@ -50,11 +76,29 @@ export default function SignContract() {
         })
     }
 
-    useEffect(() => {
-        api.get("/contract")
-            .then(r => setContracts(r ? r.data.filter(contract => contract.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE"
-                || contract.signatureState === "WAITING_FOR_STUDENT_SIGNATURE") : []))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    function contractState(contract) {
+        switch (contract.signatureState) {
+            case "REJECTED_BY_EMPLOYER":
+                return <Typography variant={"body1"} style={{color: "red"}}>
+                    Rejeté :
+                    {contract.reasonForRejection}
+                </Typography>
+            case "WAITING_FOR_STUDENT_SIGNATURE":
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature de l'étudiant
+                </Typography>
+            case "WAITING_FOR_ADMIN_SIGNATURE":
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature du gestionnaire de stage
+                </Typography>
+            case "SIGNED":
+                return <Typography variant={"body1"} style={{color: "green"}}>
+                    Contrat signé
+                </Typography>
+            default:
+                return '';
+        }
+    }
 
     return (
         <div style={{height: "100%"}}>
@@ -97,10 +141,8 @@ export default function SignContract() {
                                 }}
                             ><i className="fa fa-ban" style={{color: "red"}}/></button>
                         </div>}
-                        {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_STUDENT_SIGNATURE" &&
-                        <Typography variant={"body1"} style={{color: "blue"}}>
-                            En attente de la signature de l'étudiant
-                        </Typography>
+                        {currentIndex === i &&
+                        contractState(contracts[i])
                         }
                         <hr/>
                     </div>
@@ -111,27 +153,15 @@ export default function SignContract() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) => readFileAsync(values.file).then((file) => {
-                                const nextState = [...contracts];
-                                let dto = {};
-                                // dto.id = nextState[currentIndex].id;
-                                dto.imageSignature = file;
-                                dto.isApproved = true;
-                                dto.reasonForRejection = "";
-                                dto.nomSignataire = values.nomSignataire;
-                                dto.signatureTimestamp = new Date();
-                                return api.put("/contract/sign/" + nextState[currentIndex].id, dto)
-                                    .then(result => {
-                                        closeReasonModal()
-                                    })
-                            })}
+                            onSubmit={async (values) =>
+                                sendDecision(currentIndex, true, values)
+                            }
                             validateOnBlur={false}
                             validateOnChange={false}
                             enableReinitialize={true}
                             validate={(values) => {
                                 const errors = {};
-                                if (values.file.type === "image/png" || values.file.type === "image/jpeg") {
-                                } else {
+                                if (values.file.type !== "image/png" && values.file.type !== "image/jpeg") {
                                     errors.file = "L'image doit être de type PNG ou JPG"
                                 }
                                 return errors;
@@ -201,7 +231,7 @@ export default function SignContract() {
                 isOpen={isReasonModalOpen}
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, "REJECTED_BY_EMPLOYER", values.message)}
+                onSubmit={async (values) => sendDecision(currentIndex, false, values)}
             />
         </div>
     )

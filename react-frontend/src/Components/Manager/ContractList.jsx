@@ -17,9 +17,9 @@ export default function ContractList() {
 
     function sendDecision(index, contractState) {
         const nextState = [...contracts];
-        const application = nextState[index];
-        application.signatureState = contractState;
-        return api.put("/contract/" + application.id, application)
+        const contract = nextState[index];
+        contract.signatureState = contractState;
+        return api.put("/contract/" + contract.id, contract)
             .then(result => {
                 setContracts(nextState);
             })
@@ -53,6 +53,10 @@ export default function ContractList() {
                     En attente de la signature de l'étudiant
                     {nextState[index].reasonForRejection}
                 </Typography>
+            case "SIGNED":
+                return <Typography variant={"body1"} style={{color: "green"}}>
+                    Contrat signé
+                </Typography>
             default:
                 return '';
         }
@@ -61,7 +65,7 @@ export default function ContractList() {
     return (
         <div style={{height: "100%"}}>
             <PdfSelectionViewer
-                documents={contracts ? contracts.map(c => c.file ? "data:application/pdf;base64," + c.file : "") : []}
+                documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
                 title={"Contrats"}>
                 {(i, setCurrent) => (
                     <div key={i}>
