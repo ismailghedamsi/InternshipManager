@@ -54,6 +54,11 @@ export default function SignContract() {
         }
     }
 
+    useEffect(() => {
+        api.get("/contract")
+            .then(r => setContracts(r ? r.data : []))
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
             let reader = new FileReader();
@@ -65,10 +70,29 @@ export default function SignContract() {
         })
     }
 
-    useEffect(() => {
-        api.get("/contract")
-            .then(r => setContracts(r ? r.data : []))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    function contractState(contract) {
+        switch (contract.signatureState) {
+            case "WAITING_FOR_EMPLOYER_SIGNATURE":
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature de l'employeur
+                </Typography>
+            case "REJECTED_BY_EMPLOYER":
+                return <Typography variant={"body1"} style={{color: "red"}}>
+                    Rejeté :
+                    {contract.reasonForRejection}
+                </Typography>
+            case "WAITING_FOR_STUDENT_SIGNATURE":
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature de l'étudiant
+                </Typography>
+            case "WAITING_FOR_ADMIN_SIGNATURE":
+                return <Typography variant={"body1"} style={{color: "blue"}}>
+                    En attente de la signature du gestionnaire de stage
+                </Typography>
+            default:
+                return "";
+        }
+    }
 
     return (
         <div style={{height: "100%"}}>
@@ -111,10 +135,8 @@ export default function SignContract() {
                                 }}
                             ><i className="fa fa-ban" style={{color: "red"}}/></button>
                         </div>}
-                        {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_STUDENT_SIGNATURE" &&
-                        <Typography variant={"body1"} style={{color: "blue"}}>
-                            En attente de la signature de l'étudiant
-                        </Typography>
+                        {currentIndex === i &&
+                        contractState(contracts[i])
                         }
                         <hr/>
                     </div>
