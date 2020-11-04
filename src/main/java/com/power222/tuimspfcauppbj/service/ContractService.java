@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Service
 public class ContractService {
-
     private final ContractRepository contractRepo;
 
     public ContractService(ContractRepository contractRepo) {
@@ -23,6 +22,10 @@ public class ContractService {
 
     public List<Contract> getAllContract() {
         return contractRepo.findAll();
+    }
+
+    public List<Contract> getAllContractsByEmployerId(long id) {
+        return contractRepo.findAllByStudentApplication_Offer_Employer_Id(id);
     }
 
     public Optional<Contract> getContractById(long id) {

@@ -1,6 +1,5 @@
-package com.power222.tuimspfcauppbj.controllers;
+package com.power222.tuimspfcauppbj.controller;
 
-import com.power222.tuimspfcauppbj.controller.SecurityDemoController;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.User;
 import org.junit.jupiter.api.Test;

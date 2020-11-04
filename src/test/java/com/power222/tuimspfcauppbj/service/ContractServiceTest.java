@@ -1,11 +1,9 @@
-package com.power222.tuimspfcauppbj.services;
+package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
-import com.power222.tuimspfcauppbj.service.AuthenticationService;
-import com.power222.tuimspfcauppbj.service.ContractService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +22,9 @@ public class ContractServiceTest {
 
     @Mock
     private ContractRepository contractRepo;
+
+    @Mock
+    private ContractGenerationService contractGenSvc;
 
     @Mock
     private AuthenticationService authSvc;
@@ -75,6 +76,29 @@ public class ContractServiceTest {
     }
 
     @Test
+    void getAllContractsByEmployerId() {
+        var c1 = Contract.builder().id(1L).build();
+        var c2 = Contract.builder().id(1L).build();
+        var c3 = Contract.builder().id(1L).build();
+        var employerId = 1;
+
+        when(contractRepo.findAllByStudentApplication_Offer_Employer_Id(employerId)).thenReturn(Arrays.asList(c1, c2, c3));
+
+        var actual = contractSvc.getAllContractsByEmployerId(employerId);
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
+    void getAllContractsByEmployerIdWithInvalidId() {
+        var employerId = 1;
+
+        var actual = contractSvc.getAllContractsByEmployerId(employerId);
+
+        assertThat(actual).hasSize(0);
+    }
+
+    @Test
     void getContractIdTest() {
         when(contractRepo.findById(1L)).thenReturn(Optional.of(expectedContract));
 
@@ -106,7 +130,7 @@ public class ContractServiceTest {
     }
 
     @Test
-    void updateContracWithNonexistentIdTest() {
+    void updateContractWithNonexistentIdTest() {
         var actual = contractSvc.updateContract(expectedContract.getId(), expectedContract);
 
         assertThat(actual).isEmpty();
@@ -120,5 +144,4 @@ public class ContractServiceTest {
 
         verify(contractRepo, times(1)).deleteById(idToDelete);
     }
-
 }
