@@ -16,8 +16,4 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
     default List<Resume> findAllByReviewStatePending() {
         return findAllByReviewState(ReviewState.PENDING);
     }
-
-    default List<Resume> findAllByReviewStateApproved() {
-        return findAllByReviewState(ReviewState.APPROVED);
-    }
 }

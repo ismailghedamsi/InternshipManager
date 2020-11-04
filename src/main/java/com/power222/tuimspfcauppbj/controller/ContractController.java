@@ -10,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/contract")
 public class ContractController {
-
     private final ContractService svc;
 
     public ContractController(ContractService svc) {
@@ -27,6 +26,11 @@ public class ContractController {
         return svc.getContractById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/employer/{id}")
+    public List<Contract> getContractByEmployerId(@PathVariable long id) {
+        return svc.getAllContractsByEmployerId(id);
     }
 
     @PutMapping("/{id}")

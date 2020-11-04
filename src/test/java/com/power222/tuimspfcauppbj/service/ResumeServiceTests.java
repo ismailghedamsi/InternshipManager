@@ -1,11 +1,9 @@
-package com.power222.tuimspfcauppbj.services;
+package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Resume;
 import com.power222.tuimspfcauppbj.model.Student;
-import com.power222.tuimspfcauppbj.service.AuthenticationService;
-import com.power222.tuimspfcauppbj.service.ResumeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

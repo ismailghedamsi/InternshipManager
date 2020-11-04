@@ -1,8 +1,7 @@
-package com.power222.tuimspfcauppbj.controllers;
+package com.power222.tuimspfcauppbj.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
-import com.power222.tuimspfcauppbj.controller.StudentController;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
