@@ -116,7 +116,9 @@ export default function SignContract() {
                             }}
                         >
                             <Typography color={"textPrimary"} variant={"body1"}>
-                                Nom du gestionnaire de stage : {contracts[i].adminName}
+                                {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
+                                &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
+
                             </Typography>
                         </button>
                         {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
