@@ -1,15 +1,15 @@
+import Button from "@material-ui/core/Button";
 import Container from '@material-ui/core/Container';
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
 import {Field, Form, Formik} from "formik";
+import {TextField} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import {useApi} from "../Utils/Hooks";
-import Button from "@material-ui/core/Button";
 import useStyles from "../Utils/useStyles";
-import {TextField} from "formik-material-ui";
-import Typography from "@material-ui/core/Typography";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLongError = (value) => "Doit avoir moins que " + value.max + " caractères";
@@ -66,7 +66,7 @@ export default function ContractForm() {
                     >
                         {({isSubmitting}) => (
                             <Form className={classes.form}>
-                                <Grid container>
+                                <Grid container spacing={2}>
                                     <Typography variant="h1" className={classes.formTitle} style={{display: "block"}}>
                                         Genérer un contrat
                                     </Typography>
