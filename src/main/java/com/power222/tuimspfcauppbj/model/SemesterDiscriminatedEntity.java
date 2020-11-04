@@ -12,6 +12,7 @@ import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 @Data
 @SuperBuilder(toBuilder = true)
@@ -26,6 +27,7 @@ public abstract class SemesterDiscriminatedEntity {
     private String semester;
 
     @PrePersist
+    @PreUpdate
     public void onPrePersist() {
         if (semester == null || semester.isBlank())
             semester = SemesterContext.isSet() ? SemesterContext.getCurrent() : SemesterContext.getPresentSemester();

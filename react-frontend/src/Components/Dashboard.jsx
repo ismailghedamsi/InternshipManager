@@ -1,29 +1,29 @@
-import React from 'react';
-import {makeStyles} from "@material-ui/core/styles";
-import {Redirect, Route, Switch} from 'react-router-dom';
-import {RoleProtectedRoute} from "./Utils/Routes";
-import Navbar from "./Utils/Header/Navbar";
-import Footer from "./Utils/Footer";
-import AuthenticationService from '../Services/AuthenticationService';
-import ResumeApprobation from "./Manager/ResumeApprobation";
-import OfferApprobation from "./Manager/OfferApprobation";
-import OfferAssignements from "./Manager/OfferAssignements";
-import OfferCreation from "./Employer/OfferCreation";
-import OfferList from "./Employer/OfferList";
-import ApplicationList from "./Employer/ApplicationList";
-import ResumeUpload from "./Student/Upload/ResumeUpload";
-import ResumeList from "./Student/ResumeList";
-import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
-import StudentStatus from "./Manager/StudentStatus";
-import Employerstatus from './Manager/EmployerStatus';
-import ContractList from './Manager/ContractList';
-import SemesterSelector from "./Manager/SemesterSelector";
-import ContractForm from "./Manager/ContractForm";
+import {makeStyles} from "@material-ui/core/styles";
+import React from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import AuthenticationService from '../Services/AuthenticationService';
+import ApplicationList from "./Employer/ApplicationList";
 import InterviewConvocation from './Employer/Interview/InterviewConvocation';
 import Interviewlist from './Employer/Interview/InterviewList';
 import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
+import OfferCreation from "./Employer/OfferCreation";
+import OfferList from "./Employer/OfferList";
 import SignContract from './Employer/SignContract'
+import ContractForm from "./Manager/ContractForm";
+import ContractList from './Manager/ContractList';
+import Employerstatus from './Manager/EmployerStatus';
+import OfferApprobation from "./Manager/OfferApprobation";
+import OfferAssignements from "./Manager/OfferAssignements";
+import ResumeApprobation from "./Manager/ResumeApprobation";
+import SemesterSelector from "./Manager/SemesterSelector";
+import StudentStatus from "./Manager/StudentStatus";
+import OfferApplication from "./Student/OfferApplication";
+import ResumeList from "./Student/ResumeList";
+import ResumeUpload from "./Student/Upload/ResumeUpload";
+import Footer from "./Utils/Footer";
+import Navbar from "./Utils/Header/Navbar";
+import {RoleProtectedRoute} from "./Utils/Routes";
 
 
 const useStyles = makeStyles(() => ({

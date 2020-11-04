@@ -1,11 +1,11 @@
+import {makeStyles} from "@material-ui/core/styles";
+import axios from "axios";
 import React, {useContext} from 'react'
+import {Link, useHistory} from "react-router-dom";
+import {SemesterContext} from "../../../App";
+import AuthenticationService from "../../../Services/AuthenticationService";
 import {Menu} from "./Menu"
 import './Navbar.css'
-import {Link, useHistory} from "react-router-dom";
-import {makeStyles} from "@material-ui/core/styles";
-import AuthenticationService from "../../../Services/AuthenticationService";
-import {SemesterContext} from "../../../App";
-import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     navbarColor: {

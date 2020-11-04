@@ -28,8 +28,8 @@ public class MailSendingService {
         javaMailSender.send(mimeMessage);
     }
 
-    private MimeMessageHelper setMailContent(StudentApplication studentApplication, MimeMessage mimeMessage, String sendTo) {
-        MimeMessageHelper helper = null;
+    private void setMailContent(StudentApplication studentApplication, MimeMessage mimeMessage, String sendTo) {
+        MimeMessageHelper helper;
         try {
             helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
             String htmlMsg = "Un contrat a été généré pour votre offre " + studentApplication.getOffer().getTitle()
@@ -39,17 +39,17 @@ public class MailSendingService {
             helper.setTo(sendTo);
             helper.setSubject("Contrat généré");
             helper.setText(htmlMsg, true);
-        } catch (MessagingException e) {
-            log.error("Impossible d'envoyer l'email", e.getMessage());
         }
-        return helper;
+        catch (MessagingException e) {
+            log.error("Impossible d'envoyer l'email: {}", e.getMessage());
+        }
     }
 
     private String getUserEmail(User user) {
-        String sentTo = "";
-        if (user instanceof Employer) {
+        String sentTo = null;
+        if (user instanceof Employer)
             sentTo = ((Employer) user).getEmail();
-        }
+
         return sentTo;
     }
 }
