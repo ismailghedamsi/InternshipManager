@@ -31,8 +31,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.itextpdf.io.codec.Base64.encodeBytes;
@@ -40,6 +42,8 @@ import static com.itextpdf.io.codec.Base64.encodeBytes;
 @Service
 @Slf4j
 public class ContractGenerationService {
+
+    public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.US);
 
     private final ContractService contractService;
     private final StudentApplicationService applicationService;
@@ -126,7 +130,7 @@ public class ContractGenerationService {
                             .add(new Text("\n\nL'employeur :\n").setBold())
                             .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
                                     .scale(0.1F,0.1F))
-                            .add(new Paragraph(signatureDto.getSignatureTimestamp().toString()).setMarginLeft(105f)))
+                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF)).setMarginLeft(105f)))
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph().add(new Text(signatureDto.getNomSignataire()))
                             .add(new Paragraph("Date").setMarginLeft(145f)));
@@ -136,7 +140,7 @@ public class ContractGenerationService {
                             .add(new Text("\nL’étudiant(e) :\n").setBold())
                             .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
                                     .scale(0.1F,0.1F))
-                            .add(new Text(signatureDto.getSignatureTimestamp().toString()))
+                            .add(new Text(signatureDto.getSignatureTimestamp().format(DTF)))
                             .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)))
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph()
@@ -150,7 +154,7 @@ public class ContractGenerationService {
                             .add(new Text("Le gestionnaire de stage :\n").setBold())
                             .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
                                     .scale(0.1F,0.1F))
-                            .add(new Paragraph(signatureDto.getSignatureTimestamp().toString()).setMarginLeft(105f)))
+                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF)).setMarginLeft(105f)))
                             .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                             .add(new Paragraph(new Text(signatureDto.getNomSignataire()))
                                     .add(new Paragraph("Date").setMarginLeft(145f)));
