@@ -41,7 +41,7 @@ export default function InterviewConvocation() {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{minHeight: '100vh'}}
+            style={{minHeight: '100%'}}
         >
             <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
@@ -58,8 +58,8 @@ export default function InterviewConvocation() {
                         }}>
                         {({isSubmitting}) => (
                             <Form className={classes.form}>
-                                <Typography>
-                                    Étudiant à rencontrer
+                                <Typography variant={"h4"} display={"block"} style={{paddingTop: 15, marginBottom: 15}}>
+                                    Étudiant à rencontrer :&ensp;
                                     {applicationInterview && applicationInterview.student ?
                                         applicationInterview.student.firstName + " " + applicationInterview.student.lastName : ""}
                                 </Typography>
@@ -72,7 +72,7 @@ export default function InterviewConvocation() {
                                             component={DateTimePicker}
                                             name="interviewDate"
                                             variant="outlined"
-                                            label="Date et heure de l'entrevue "
+                                            label="Date et heure de l'entrevue"
                                             required
                                             fullWidth
                                             format="MM/dd/yyyy hh:mm"
