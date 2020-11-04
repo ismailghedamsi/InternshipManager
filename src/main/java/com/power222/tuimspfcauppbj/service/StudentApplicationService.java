@@ -50,11 +50,11 @@ public class StudentApplicationService {
             return Optional.empty();
     }
 
-    public Optional<StudentApplication> updateStudentApplicationState(long id, StudentApplication transitionalApplication) {
+    public Optional<StudentApplication> updateStudentApplicationState(long id, StudentApplication tempApplication) {
         return appliRepo.findById(id)
                 .map(application -> {
-                    application.setState(transitionalApplication.getState());
-                    application.setReasonForRejection(transitionalApplication.getReasonForRejection());
+                    application.setState(tempApplication.getState());
+                    application.setReasonForRejection(tempApplication.getReasonForRejection());
                     return appliRepo.saveAndFlush(application);
                 });
     }

@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.util;
 
+@SuppressWarnings("unused")
 public enum StudentApplicationState {
     APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW,
     APPLICATION_REJECTED_BY_EMPLOYER,

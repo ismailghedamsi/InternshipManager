@@ -91,7 +91,7 @@ public class ContractGenerationService {
                     .add(new Text("L'étudiant(e), " + studentApplication.getStudent().getFirstName() + " " + studentApplication.getStudent().getLastName() + "\n\n"))
                     .add(new Text("Conviennent des conditions de stage suivantes : "));
             document.add(paragraph.setTextAlignment(TextAlignment.CENTER));
-            addInternshipInfoTable(studentApplication, contractDto.getTotalHoursPerWeek(), document);
+            insertInternshipInfoTable(studentApplication, contractDto.getTotalHoursPerWeek(), document);
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
@@ -106,21 +106,24 @@ public class ContractGenerationService {
     }
 
     public Optional<Contract> signContract(ContractSignatureDTO signatureDto) {
-        return contractService.getContractById(signatureDto.getContractId()).flatMap(contract -> {
-            if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW)
-                if (signatureDto.isApproved())
-                    contract.setFile(getContractFileWithSignature(contract, signatureDto));
-                else
-                    contract.setReasonForRejection(signatureDto.getReasonForRejection());
+        return contractService.getContractById(signatureDto.getContractId())
+                .flatMap(contract -> getContractOptionalFunction(contract, signatureDto));
+    }
 
-            contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), signatureDto.isApproved()));
+    private Optional<Contract> getContractOptionalFunction(Contract contract, ContractSignatureDTO signatureDto) {
+        if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW)
+            if (signatureDto.isApproved())
+                contract.setFile(getContractFileWithSignature(contract, signatureDto));
+            else
+                contract.setReasonForRejection(signatureDto.getReasonForRejection());
 
-            final var signedContract = contractService.updateContract(contract.getId(), contract);
-            if (signedContract.isPresent() && signatureDto.isApproved())
-                mailService.sendEmail(contract.getStudentApplication());
+        contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), signatureDto.isApproved()));
 
-            return signedContract;
-        });
+        final var signedContract = contractService.updateContract(contract.getId(), contract);
+        if (signedContract.isPresent() && signatureDto.isApproved())
+            mailService.sendEmail(contract.getStudentApplication());
+
+        return signedContract;
     }
 
     private String getContractFileWithSignature(Contract contract, ContractSignatureDTO signatureDto) {
@@ -206,7 +209,7 @@ public class ContractGenerationService {
         return contract;
     }
 
-    private void addInternshipInfoTable(StudentApplication application, float weeklyHours, Document document) {
+    private void insertInternshipInfoTable(StudentApplication application, float weeklyHours, Document document) {
         InternshipOffer offer = application.getOffer();
         Table internshipInfoTable = new Table(1).setWidth(500f);
         internshipInfoTable.setBorder(new SolidBorder(1f));

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
+    @SuppressWarnings("MethodParameterNamingConvention")
     List<Resume> findAllByOwner_Id(long owner_id);
 
     List<Resume> findAllByReviewState(ReviewState reviewState);

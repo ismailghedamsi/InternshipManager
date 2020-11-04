@@ -2,7 +2,10 @@ package com.power222.tuimspfcauppbj.util;
 
 import java.time.LocalDate;
 
-public class SemesterContext {
+public final class SemesterContext {
+
+    private SemesterContext() {
+    }
 
     private static final ThreadLocal<String> CURRENT_SEMESTER = new ThreadLocal<>();
 

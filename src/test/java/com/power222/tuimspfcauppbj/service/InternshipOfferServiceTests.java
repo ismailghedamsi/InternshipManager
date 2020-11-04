@@ -227,7 +227,7 @@ class InternshipOfferServiceTests {
         when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.of(expectedStudent));
         when(offerRepository.saveAndFlush(expectedOffer2)).thenReturn(expectedOffer2);
 
-        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+        var actual = service.switchOfferVisibilityForStudent(expectedOffer.getId(), expectedStudent.getId());
 
         assertThat(actual).contains(expectedOffer2);
     }
@@ -241,7 +241,7 @@ class InternshipOfferServiceTests {
         when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.of(expectedStudent));
         when(offerRepository.saveAndFlush(expectedOffer2)).thenReturn(expectedOffer2);
 
-        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+        var actual = service.switchOfferVisibilityForStudent(expectedOffer.getId(), expectedStudent.getId());
 
         assertThat(actual).contains(expectedOffer2);
     }
@@ -251,7 +251,7 @@ class InternshipOfferServiceTests {
         when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.of(expectedOffer));
         when(studentRepo.findById(expectedStudent.getId())).thenReturn(Optional.empty());
 
-        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+        var actual = service.switchOfferVisibilityForStudent(expectedOffer.getId(), expectedStudent.getId());
 
         assertThat(actual).isEmpty();
     }
@@ -260,7 +260,7 @@ class InternshipOfferServiceTests {
     void addStudentToInvalidOffer() {
         when(offerRepository.findById(expectedOffer.getId())).thenReturn(Optional.empty());
 
-        var actual = service.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId());
+        var actual = service.switchOfferVisibilityForStudent(expectedOffer.getId(), expectedStudent.getId());
 
         assertThat(actual).isEmpty();
     }

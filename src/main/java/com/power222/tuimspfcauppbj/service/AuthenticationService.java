@@ -39,19 +39,21 @@ public class AuthenticationService {
 
     public PasswordUpdateStatus updateUserPassword(PasswordDTO dto) {
         return userRepo.findByUsername(dto.getUsername())
-                .map(user -> {
-                    if (encoder.matches(dto.getOldPassword(), user.getPassword())
-                            && !encoder.matches(dto.getNewPassword(), user.getPassword())) {
-                        user.setPassword(encoder.encode(dto.getNewPassword()));
-                        user.setPasswordExpired(false);
-                        userRepo.saveAndFlush(user);
-                        return PasswordUpdateStatus.SUCCESS;
-                    } else if (encoder.matches(dto.getNewPassword(), user.getPassword()))
-                        return PasswordUpdateStatus.OLD_AND_NEW_EQUAL;
-                    else
-                        return PasswordUpdateStatus.OLD_WRONG;
+                .map(u -> doPasswordUpdate(u, dto))
+                .orElse(PasswordUpdateStatus.USER_NOT_FOUND);
+    }
 
-                }).orElse(PasswordUpdateStatus.USER_NOT_FOUND);
+    private PasswordUpdateStatus doPasswordUpdate(User user, PasswordDTO dto) {
+        if (encoder.matches(dto.getOldPassword(), user.getPassword())
+                && !encoder.matches(dto.getNewPassword(), user.getPassword())) {
+            user.setPassword(encoder.encode(dto.getNewPassword()));
+            user.setPasswordExpired(false);
+            userRepo.saveAndFlush(user);
+            return PasswordUpdateStatus.SUCCESS;
+        } else if (encoder.matches(dto.getNewPassword(), user.getPassword()))
+            return PasswordUpdateStatus.OLD_AND_NEW_EQUAL;
+        else
+            return PasswordUpdateStatus.OLD_WRONG;
     }
 
     public void registerEventListeners(Consumer<User> userConsumer) {

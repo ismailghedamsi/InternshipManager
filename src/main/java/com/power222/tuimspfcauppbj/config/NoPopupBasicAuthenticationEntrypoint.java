@@ -15,14 +15,14 @@ public class NoPopupBasicAuthenticationEntrypoint implements AuthenticationEntry
     private boolean expiredRaised = false;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
-        if (exception instanceof CredentialsExpiredException) {
-            response.sendError(TOKEN_EXPIRED, exception.getMessage());
+        if (authException instanceof CredentialsExpiredException) {
+            response.sendError(TOKEN_EXPIRED, authException.getMessage());
         } else if (!expiredRaised) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
         }
 
-        expiredRaised = exception instanceof CredentialsExpiredException;
+        expiredRaised = authException instanceof CredentialsExpiredException;
     }
 }

@@ -194,7 +194,7 @@ public class InternshipOfferControllerTests {
 
     @Test
     void addStudentToOffer() throws Exception {
-        when(svc.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId())).thenReturn(Optional.of(expectedOffer));
+        when(svc.switchOfferVisibilityForStudent(expectedOffer.getId(), expectedStudent.getId())).thenReturn(Optional.of(expectedOffer));
 
         mvc.perform(put("/api/offers/" + expectedOffer.getId() + "/addRemoveStudent/" + expectedStudent.getId()).
                 contentType(MediaType.APPLICATION_JSON).content("{}"))
@@ -203,7 +203,7 @@ public class InternshipOfferControllerTests {
 
     @Test
     void addStudentToOfferWithError() throws Exception {
-        when(svc.addOrRemoveStudentFromOffer(expectedOffer.getId(), expectedStudent.getId())).thenReturn(Optional.empty());
+        when(svc.switchOfferVisibilityForStudent(expectedOffer.getId(), expectedStudent.getId())).thenReturn(Optional.empty());
 
         mvc.perform(put("/api/offers/" + expectedOffer.getId() + "/addRemoveStudent/" + expectedStudent.getId()).
                 contentType(MediaType.APPLICATION_JSON).content("{}"))

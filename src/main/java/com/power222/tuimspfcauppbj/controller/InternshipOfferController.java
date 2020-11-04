@@ -64,8 +64,8 @@ public class InternshipOfferController {
     }
 
     @PutMapping("/{offerId}/addRemoveStudent/{studentId}")
-    public ResponseEntity<InternshipOffer> addOrRemoveStudentFromOffer(@PathVariable long offerId, @PathVariable long studentId) {
-        return offerService.addOrRemoveStudentFromOffer(offerId, studentId)
+    public ResponseEntity<InternshipOffer> switchOfferVisibilityForStudent(@PathVariable long offerId, @PathVariable long studentId) {
+        return offerService.switchOfferVisibilityForStudent(offerId, studentId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }

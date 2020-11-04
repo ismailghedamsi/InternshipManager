@@ -16,8 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,15 +47,15 @@ class InterviewControllerTests {
     void setUp() {
         expectedInterview = Interview.builder()
                 .id(1L)
-                .date(new Date())
+                .date(LocalDate.now())
                 .build();
     }
 
     @Test
     void getAllInterviews() throws Exception {
-        var i1 = Interview.builder().id(1L).build();
-        var i2 = Interview.builder().id(2L).build();
-        var i3 = Interview.builder().id(3L).build();
+        var i1 = Interview.builder().id(1).build();
+        var i2 = Interview.builder().id(2).build();
+        var i3 = Interview.builder().id(3).build();
 
         when(svc.getAllInterviews()).thenReturn(Arrays.asList(i1, i2, i3));
 

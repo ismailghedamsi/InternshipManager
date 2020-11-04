@@ -4,6 +4,7 @@ import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,13 @@ import java.util.Optional;
 @Service
 public class InternshipOfferService {
 
-    private final InternshipOfferRepository internshipOfferRepository;
-    private final AuthenticationService authenticationService;
+    private final InternshipOfferRepository offerRepo;
+    private final AuthenticationService authSvc;
     private final StudentRepository studentRepo;
 
-    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, AuthenticationService authenticationService, StudentRepository studentRepo) {
-        this.internshipOfferRepository = internshipOfferRepository;
-        this.authenticationService = authenticationService;
+    public InternshipOfferService(InternshipOfferRepository offerRepo, AuthenticationService authSvc, StudentRepository studentRepo) {
+        this.offerRepo = offerRepo;
+        this.authSvc = authSvc;
         this.studentRepo = studentRepo;
     }
 
@@ -33,72 +34,74 @@ public class InternshipOfferService {
         offer.setEmployer(employer);
         offer.setReviewState(ReviewState.PENDING);
         offer.setAllowedStudents(Collections.emptyList());
-        return Optional.of(internshipOfferRepository.saveAndFlush(offer));
+        return Optional.of(offerRepo.saveAndFlush(offer));
     }
 
     private Employer offerUploader() {
         Employer employer = null;
-        if (authenticationService.getCurrentUser() instanceof Employer) {
-            employer = (Employer) authenticationService.getCurrentUser();
+        if (authSvc.getCurrentUser() instanceof Employer) {
+            employer = (Employer) authSvc.getCurrentUser();
         }
         return employer;
     }
 
     public List<InternshipOffer> getAllInternshipOffers() {
-        return internshipOfferRepository.findAll();
+        return offerRepo.findAll();
     }
 
     public List<InternshipOffer> getOfferByAllowedStudentId(long studentId) {
-        return internshipOfferRepository.findAllByAllowedStudentsId(studentId);
+        return offerRepo.findAllByAllowedStudentsId(studentId);
     }
 
     public List<InternshipOffer> getInternshipOffersWithPendingApproval() {
-        return internshipOfferRepository.findAllByReviewStatePending();
+        return offerRepo.findAllByReviewStatePending();
     }
 
     public List<InternshipOffer> getApprovedInternshipOffers() {
-        return internshipOfferRepository.findAllByReviewStateApproved();
+        return offerRepo.findAllByReviewStateApproved();
     }
 
     public Optional<InternshipOffer> getInternshipOfferById(long id) {
-        return internshipOfferRepository.findById(id);
+        return offerRepo.findById(id);
     }
 
     public List<InternshipOffer> getInternshipOffersOfEmployer(String username) {
-        return internshipOfferRepository.findByEmployerUsername(username);
+        return offerRepo.findByEmployerUsername(username);
     }
 
     public Optional<InternshipOffer> updateInternshipOffer(long id, InternshipOffer offer) {
-        return internshipOfferRepository.findById(id)
+        return offerRepo.findById(id)
                 .map(oldOffer -> offer.toBuilder()
                         .id(oldOffer.getId())
                         .semester(oldOffer.getSemester())
                         .build())
                 .filter(this::isOfferStateValid)
-                .map(internshipOfferRepository::saveAndFlush);
+                .map(offerRepo::saveAndFlush);
     }
 
-    public Optional<InternshipOffer> addOrRemoveStudentFromOffer(long offerId, long studentId) {
-        return internshipOfferRepository.findById(offerId)
+    public Optional<InternshipOffer> switchOfferVisibilityForStudent(long offerId, long studentId) {
+        return offerRepo.findById(offerId)
                 .flatMap(offer -> studentRepo.findById(studentId)
-                        .map(student -> {
-                            if (offer.getAllowedStudents().contains(student))
-                                offer.getAllowedStudents().remove(student);
-                            else
-                                offer.getAllowedStudents().add(student);
+                        .map(student -> getStudentInternshipOfferFunction(student, offer)));
+    }
 
-                            return internshipOfferRepository.saveAndFlush(offer);
-                        }));
+    private InternshipOffer getStudentInternshipOfferFunction(Student student, InternshipOffer offer) {
+        if (offer.getAllowedStudents().contains(student))
+            offer.getAllowedStudents().remove(student);
+        else
+            offer.getAllowedStudents().add(student);
+
+        return offerRepo.saveAndFlush(offer);
     }
 
     public void deleteOfferById(long id) {
-        internshipOfferRepository.deleteById(id);
+        offerRepo.deleteById(id);
     }
 
     @SuppressWarnings("SimplifiableConditionalExpression")
     private boolean isOfferStateValid(InternshipOffer offer) {
-        if (offer.getReviewState() ==ReviewState.DENIED)
-            return offer.getReasonForRejection() == null ? false : !offer.getReasonForRejection().isBlank();
+        if (offer.getReviewState() == ReviewState.DENIED)
+            return (offer.getReasonForRejection() == null) ? false : !offer.getReasonForRejection().isBlank();
 
         return true;
     }

@@ -21,7 +21,7 @@ public class DiscriminatorHeaderServletFilter implements Filter {
         }
 
         final var semesterHeader = ((HttpServletRequest) request).getHeader("X-Semester");
-        if (semesterHeader != null && semesterHeader.matches("a[0-9]{4}h[0-9]{4}")) {
+        if ((semesterHeader != null) && semesterHeader.matches("a[0-9]{4}h[0-9]{4}")) {
             SemesterContext.setCurrent(semesterHeader);
             chain.doFilter(request, response);
         } else if (semesterHeader != null) {
