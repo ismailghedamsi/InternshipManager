@@ -76,6 +76,29 @@ public class ContractServiceTest {
     }
 
     @Test
+    void getAllContractsByEmployerId() {
+        var c1 = Contract.builder().id(1L).build();
+        var c2 = Contract.builder().id(1L).build();
+        var c3 = Contract.builder().id(1L).build();
+        var employerId = 1;
+
+        when(contractRepo.findAllByStudentApplication_Offer_Employer_Id(employerId)).thenReturn(Arrays.asList(c1, c2, c3));
+
+        var actual = contractSvc.getAllContractsByEmployerId(employerId);
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
+    void getAllContractsByEmployerIdWithInvalidId() {
+        var employerId = 1;
+
+        var actual = contractSvc.getAllContractsByEmployerId(employerId);
+
+        assertThat(actual).hasSize(0);
+    }
+
+    @Test
     void getContractIdTest() {
         when(contractRepo.findById(1L)).thenReturn(Optional.of(expectedContract));
 
@@ -121,5 +144,4 @@ public class ContractServiceTest {
 
         verify(contractRepo, times(1)).deleteById(idToDelete);
     }
-
 }

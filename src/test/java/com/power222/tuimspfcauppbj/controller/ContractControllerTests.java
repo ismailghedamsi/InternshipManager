@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +79,33 @@ public class ContractControllerTests {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         assertEquals(actuals.size(), nbContract);
+    }
+
+    @Test
+    void getContractByEmployerIdTest() throws Exception {
+        var c1 = Contract.builder().id(1L).build();
+        var c2 = Contract.builder().id(1L).build();
+        var c3 = Contract.builder().id(1L).build();
+        var employerId = 1;
+
+        when(svc.getAllContractsByEmployerId(employerId)).thenReturn(Arrays.asList(c1, c2, c3));
+
+        MvcResult result = mvc.perform(get("/api/contract/employer/" + employerId)).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertThat(actuals).hasSize(3);
+    }
+
+    @Test
+    void getContractByEmployerIdWithInvalidIdTest() throws Exception {
+        var employerId = 1;
+
+        MvcResult result = mvc.perform(get("/api/contract/employer/" + employerId)).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertThat(actuals).hasSize(0);
     }
 
     @Test

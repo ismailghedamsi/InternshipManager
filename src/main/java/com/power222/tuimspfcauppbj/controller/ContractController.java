@@ -28,6 +28,11 @@ public class ContractController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/employer/{id}")
+    public List<Contract> getContractByEmployerId(@PathVariable long id) {
+        return svc.getAllContractsByEmployerId(id);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Contract> updateContract(@PathVariable long id, @RequestBody Contract requestBody) {
         return svc.updateContract(id, requestBody).map(ResponseEntity::ok)
