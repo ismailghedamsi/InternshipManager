@@ -18,6 +18,7 @@ import OfferAssignements from "./Manager/OfferAssignements";
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import SemesterSelector from "./Manager/SemesterSelector";
 import StudentStatus from "./Manager/StudentStatus";
+import SignForm from "./Employer/SignForm";
 import OfferApplication from "./Student/OfferApplication";
 import ResumeList from "./Student/ResumeList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
@@ -98,6 +99,10 @@ export default function Dashboard(props) {
                                         path="/dashboard/contractForm"
                                         component={ContractForm}
                                         role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/signFormAdmin"
+                                        component={SignForm}
+                                        role={"admin"}/>
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
@@ -124,8 +129,12 @@ export default function Dashboard(props) {
                                         component={Rescheduleinterview}
                                         role={"employer"}/>
                     <RoleProtectedRoute exact={true}
-                                        path="/dashboard/SignContract"
+                                        path="/dashboard/signContract"
                                         component={SignContract}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/signFormEmployer"
+                                        component={SignForm}
                                         role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}
@@ -141,8 +150,12 @@ export default function Dashboard(props) {
                                         component={OfferApplication}
                                         role={"student"}/>
                     <RoleProtectedRoute exact={true}
-                                        path="/dashboard/SignContractStudent"
+                                        path="/dashboard/signContractStudent"
                                         component={SignContract}
+                                        role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/signFormStudent"
+                                        component={SignForm}
                                         role={"student"}/>
                 </Switch>
             </Container>
