@@ -160,8 +160,7 @@ export default function SignContract() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description" component={"div"}>
                         <Formik
-                            onSubmit={async (values) => sendDecision(currentIndex, true, values)
-                            }
+                            onSubmit={async (values) => sendDecision(currentIndex, true, values)}
                             validateOnBlur={false}
                             validateOnChange={false}
                             enableReinitialize={true}
@@ -223,7 +222,6 @@ export default function SignContract() {
                                     >
                                         ENVOYER
                                     </Button>
-
                                 </Form>
                             )}
                         </Formik>

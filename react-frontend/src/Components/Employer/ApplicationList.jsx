@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import {Checkbox} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
-import useStyles from "../Utils/useStyles";
+import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import {Checkbox} from "@material-ui/core";
-import AuthenticationService from "../../Services/AuthenticationService";
+import useStyles from "../Utils/useStyles";
 
 export default function ApplicationList() {
     const classes = useStyles();
@@ -62,17 +62,16 @@ export default function ApplicationList() {
             case "JOB_OFFER_ACCEPTED_BY_STUDENT":
                 return <Typography variant={"body1"} style={{color: "green"}}>
                     L'étudiant a été embauché
-                    {
-                        offer.applications[i].contract === null && AuthenticationService.getCurrentUserRole() === "admin" &&
-                        <Link variant={"body1"}
-                              to={{
-                                  pathname: "/dashboard/contractForm",
-                                  state: {...offer.applications[i]}
-                              }}
-                              style={{display: "block"}}
-                        >
-                            Genérer le contrat
-                        </Link>
+                    {offer.applications[i].contract === null && AuthenticationService.getCurrentUserRole() === "admin" &&
+                    <Link variant={"body1"}
+                          to={{
+                              pathname: "/dashboard/contractForm",
+                              state: {...offer.applications[i]}
+                          }}
+                          style={{display: "block"}}
+                    >
+                        Genérer le contrat
+                    </Link>
                     }
                 </Typography>
             case "JOB_OFFER_DENIED_BY_STUDENT":

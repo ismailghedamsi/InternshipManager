@@ -19,6 +19,7 @@ export default function ContractList() {
         const nextState = [...contracts];
         const contract = nextState[index];
         contract.signatureState = contractState;
+        delete contract.studentApplication.contract;
         delete contract.studentApplication.resume;
         return api.put("/contract/" + contract.id, contract)
             .then(r => {
