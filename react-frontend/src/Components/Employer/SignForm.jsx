@@ -12,8 +12,8 @@ import {useApi} from "../Utils/Hooks";
 import useStyles from "../Utils/useStyles";
 import AuthenticationService from "../../Services/AuthenticationService";
 
-const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = (value) => "Doit avoir moins que " + value.max + " caractères";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+const tooLongError = value => "Doit avoir moins que " + value.max + " caractères";
 export default function SignForm() {
 
     const classes = useStyles();
