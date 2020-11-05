@@ -50,6 +50,11 @@ export const Menu = [
         role: 'student'
     },
     {
+        title: 'Liste de contrats',
+        url: '/dashboard/SignContractStudent',
+        role: 'student'
+    },
+    {
         title: 'Créer une offre',
         url: '/dashboard/createstage',
         role: 'employer'

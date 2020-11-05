@@ -140,6 +140,10 @@ export default function Dashboard(props) {
                                         path="/dashboard/stagelist"
                                         component={OfferApplication}
                                         role={"student"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/SignContractStudent"
+                                        component={SignContract}
+                                        role={"student"}/>
                 </Switch>
             </Container>
             <Footer/>
