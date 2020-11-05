@@ -14,6 +14,16 @@ export default function SignContract() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
 
+    useEffect(() => {
+        if (AuthenticationService.getCurrentUserRole() === "employer") {
+            api.get("/contract/employer/" + AuthenticationService.getCurrentUser().id)
+                .then(r => setContracts(r ? r.data : []))
+        } else if (AuthenticationService.getCurrentUserRole() === "student") {
+            api.get("/contract/student/" + AuthenticationService.getCurrentUser().id)
+                .then(r => setContracts(r ? r.data : []))
+        }
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
     function sendDecision(index, isApprouved, values) {
         const nextState = [...contracts];
         let dto = {};
@@ -27,16 +37,6 @@ export default function SignContract() {
                 closeReasonModal()
             })
     }
-
-    useEffect(() => {
-        if (AuthenticationService.getCurrentUserRole() === "employer") {
-            api.get("/contract/employer/" + AuthenticationService.getCurrentUser().id)
-                .then(r => setContracts(r ? r.data : []))
-        } else if (AuthenticationService.getCurrentUserRole() === "student") {
-            api.get("/contract")
-                .then(r => setContracts(r ? r.data : []))
-        }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function contractState(contract) {
         switch (contract.signatureState) {
