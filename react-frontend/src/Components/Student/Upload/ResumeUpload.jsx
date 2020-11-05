@@ -8,7 +8,7 @@ import {SimpleFileUpload, TextField} from "formik-material-ui";
 import './ResumeUpload.css'
 import LinearProgress from "@material-ui/core/LinearProgress";
 import * as yup from "yup";
-import {useStyles} from "../../Utils/useStyles";
+import useStyles from "../../Utils/useStyles";
 import {useApi} from "../../Utils/Hooks";
 import {useHistory} from "react-router-dom";
 
@@ -36,7 +36,7 @@ export default function ResumeUpload() {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{minHeight: '100vh'}}
+            style={{minHeight: '100%'}}
         >
             <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
@@ -68,7 +68,7 @@ export default function ResumeUpload() {
                             file: ""
                         }}
                     >
-                        {({submitForm, isSubmitting, setFieldValue}) => (
+                        {({submitForm, isSubmitting}) => (
                             <Form>
                                 <Grid container
                                       alignItems="start"

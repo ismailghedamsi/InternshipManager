@@ -1,9 +1,5 @@
 export const Menu = [
     {
-        title: 'Accueil',
-        url: '/dashboard'
-    },
-    {
         title: 'Approbation CV',
         url: '/dashboard/approbation/cv',
         role: 'admin'
@@ -24,13 +20,18 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Statut des employés',
+        title: 'Statut des employeurs',
         url: "/dashboard/employersStatus",
         role: 'admin'
     },
     {
         title: 'Liste des offres',
         url: '/dashboard/offerList',
+        role: 'admin'
+    },
+    {
+        title: 'Liste de contrats',
+        url: '/dashboard/contractList',
         role: 'admin'
     },
     {
@@ -61,6 +62,11 @@ export const Menu = [
     {
         title: 'Liste des entrevues',
         url: '/dashboard/listInterview',
+        role: 'employer'
+    },
+    {
+        title: 'Liste de contrats',
+        url: '/dashboard/SignContract',
         role: 'employer'
     }
 ]

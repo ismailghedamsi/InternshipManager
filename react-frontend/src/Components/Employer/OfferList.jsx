@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../Services/AuthenticationService';
 import Link from "@material-ui/core/Link";
 import {useHistory} from "react-router-dom";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import OfferDetails from "../Utils/OfferDetails";
@@ -16,10 +16,10 @@ export default function OfferList() {
     const [offers, setOffers] = useState([]);
 
     useEffect(() => {
-        if (AuthenticationService.getCurrentUserRole() == "employer") {
+        if (AuthenticationService.getCurrentUserRole() === "employer") {
             api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
                 .then(r => setOffers(r ? r.data : []))
-        } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+        } else if (AuthenticationService.getCurrentUserRole() === "admin") {
             api.get("/offers/approved")
                 .then(r => {
                     setOffers(r ? r.data : [])
@@ -41,9 +41,9 @@ export default function OfferList() {
     }
 
     function getOfferState(offer) {
-        if (!offer.reviewState === "PENDING")
+        if (offer.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>;
-        else if (!offer.reviewState === "REJECTED")
+        else if (offer.reviewState === "REJECTED")
             return (<span style={{color: "red"}}>Rejeté<span
                 style={{color: "black"}}> : {offer.reasonForRejection} </span></span>);
         else
@@ -87,9 +87,9 @@ export default function OfferList() {
                         {offers[i].applications.length !== 0 &&
                         <Link variant={"body1"}
                               onClick={() => {
-                                  if (AuthenticationService.getCurrentUserRole() == "employer") {
+                                  if (AuthenticationService.getCurrentUserRole() === "employer") {
                                       history.push("/dashboard/applications", {offerId: offers[i].id})
-                                  } else if (AuthenticationService.getCurrentUserRole() == "admin") {
+                                  } else if (AuthenticationService.getCurrentUserRole() === "admin") {
                                       history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
                                   }
                               }

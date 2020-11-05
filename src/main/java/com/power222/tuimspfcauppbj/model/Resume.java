@@ -1,19 +1,19 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.power222.tuimspfcauppbj.util.ReviewState;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
+@ToString(exclude = "file")
 @Entity
-@Builder(toBuilder = true)
 public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +23,9 @@ public class Resume {
     private String file;
 
     private String name;
-    private boolean reviewed;
-    private boolean approuved;
+
+    @Builder.Default
+    private ReviewState reviewState = ReviewState.PENDING;
     private String reasonForRejection;
 
     @ManyToOne

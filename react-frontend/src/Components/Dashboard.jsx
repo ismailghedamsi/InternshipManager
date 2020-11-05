@@ -17,9 +17,13 @@ import OfferApplication from "./Student/OfferApplication";
 import {Container} from "@material-ui/core";
 import StudentStatus from "./Manager/StudentStatus";
 import Employerstatus from './Manager/EmployerStatus';
-import InterviewConvocation from './Interview/InterviewConvocation';
-import Interviewlist from './Interview/InterviewList';
-import {Rescheduleinterview} from './Interview/RescheduleInterview';
+import ContractList from './Manager/ContractList';
+import SemesterSelector from "./Manager/SemesterSelector";
+import ContractForm from "./Manager/ContractForm";
+import InterviewConvocation from './Employer/Interview/InterviewConvocation';
+import Interviewlist from './Employer/Interview/InterviewList';
+import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
+import SignContract from './Employer/SignContract'
 
 
 const useStyles = makeStyles(() => ({
@@ -82,6 +86,18 @@ export default function Dashboard(props) {
                                         path="/dashboard/employersStatus"
                                         component={Employerstatus}
                                         role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path={"/dashboard/setSemester"}
+                                        component={SemesterSelector}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/contractList"
+                                        component={ContractList}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/contractForm"
+                                        component={ContractForm}
+                                        role={"admin"}/>
                     {/* Employeur */}
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/createstage"
@@ -106,6 +122,10 @@ export default function Dashboard(props) {
                     <RoleProtectedRoute exact={true}
                                         path="/dashboard/rescheduleInterview"
                                         component={Rescheduleinterview}
+                                        role={"employer"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/SignContract"
+                                        component={SignContract}
                                         role={"employer"}/>
                     {/* Etudiant */}
                     <RoleProtectedRoute exact={true}

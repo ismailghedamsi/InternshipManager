@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Menu} from "./Menu"
 import './Navbar.css'
 import {Link, useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import AuthenticationService from "../../../Services/AuthenticationService";
+import {SemesterContext} from "../../../App";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     navbarColor: {
@@ -27,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
     const classes = useStyles();
+    const {semester, setSemester} = useContext(SemesterContext)
     const history = useHistory();
     const showIcon = () => {
         const x = document.getElementById("myNav");
@@ -50,15 +53,30 @@ export default function Navbar() {
                         </li>
                     ))
                 }
+                {AuthenticationService.getCurrentUserRole() === "admin" &&
+                <li>
+                    <button
+                        type={"button"}
+                        className={["nav-links", classes.linkButton].join(' ')}
+                        onClick={() => {
+                            history.push("/dashboard/setSemester")
+                        }}>
+                        Année <br/>
+                        {semester}
+                    </button>
+                </li>
+                }
                 <li>
                     <button
                         type={"button"}
                         className={["nav-links", classes.linkButton].join(' ')}
                         onClick={() => {
                             AuthenticationService.logout()
+                            axios.get("http://localhost:8080/api/semesters/present")
+                                .then(r => setSemester(r ? r.data : ''));
                             history.push("/")
                         }}>
-                        Logout
+                        Déconnexion
                     </button>
                 </li>
             </ul>

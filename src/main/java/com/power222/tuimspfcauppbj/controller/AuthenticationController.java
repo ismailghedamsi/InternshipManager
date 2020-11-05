@@ -1,8 +1,8 @@
 package com.power222.tuimspfcauppbj.controller;
 
-import com.power222.tuimspfcauppbj.model.AuthenticationDTO;
-import com.power222.tuimspfcauppbj.model.PasswordDTO;
 import com.power222.tuimspfcauppbj.service.AuthenticationService;
+import com.power222.tuimspfcauppbj.util.AuthenticationDTO;
+import com.power222.tuimspfcauppbj.util.PasswordDTO;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
-
     private final AuthenticationService authSvc;
 
     public AuthenticationController(AuthenticationService authSvc) {
@@ -31,7 +30,9 @@ public class AuthenticationController {
             @ApiResponse(code = 404, message = "User does not exist")
     })
     public ResponseEntity<Void> updateUserPassword(@RequestBody PasswordDTO dto) {
-        switch (authSvc.updateUserPassword(dto)) {
+        var changePass = authSvc.updateUserPassword(dto);
+
+        switch (changePass) {
             case SUCCESS:
                 return ResponseEntity.ok().build();
             case OLD_AND_NEW_EQUAL:

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Document, Page} from "react-pdf";
 import * as PropTypes from "prop-types";
-import {useStyles} from "./useStyles";
+import useStyles from "./useStyles";
 
 export default function PdfDocument(props) {
     const classes = useStyles();

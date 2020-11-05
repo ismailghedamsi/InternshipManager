@@ -3,7 +3,7 @@ import {Typography} from "@material-ui/core";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import TextboxModal from "../Utils/TextboxModal";
 import {useApi, useModal} from "../Utils/Hooks";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import OfferDetails from "../Utils/OfferDetails";
 
 export default function OfferApprobation() {
@@ -37,7 +37,7 @@ export default function OfferApprobation() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"En attente d'approbation"}>
+            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage en attente d'approbation"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <div className={classes.buttonDiv}>

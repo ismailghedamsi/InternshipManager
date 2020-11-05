@@ -3,7 +3,7 @@ import {Typography} from "@material-ui/core";
 import {Field, Form, Formik} from "formik";
 import {Checkbox} from "formik-material-ui";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import {useApi} from "../Utils/Hooks";
 
@@ -39,7 +39,7 @@ export default function OfferAssignements() {
 
     return (
         <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Assignation des offres"}>
+            <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Assignation des offres aux étudiants"}>
                 {(i, setCurrent) => (
                     <div key={i}>
                         <button
@@ -78,11 +78,11 @@ export default function OfferAssignements() {
                                             <Form style={{display: "inline", marginLeft: 16}}>
                                                 <Field name={"offerId"} type={"hidden"}/>
                                                 <Field name={"studentId"} type={"hidden"}/>
-                                                <label
-                                                    htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
                                                 <Field id={"allowed"} name={"allowed"} component={Checkbox}
                                                        type="checkbox" onChange={submitForm} disabled={isSubmitting}
                                                        checked={isStudentAllowedInOffer(offers[i], student)}/>
+                                                <label
+                                                    htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
                                                 {isSubmitting && <CircularProgress size={18}/>}
                                             </Form>)}
                                 </Formik>

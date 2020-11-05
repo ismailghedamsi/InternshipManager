@@ -25,7 +25,7 @@ public class InterviewService {
     }
 
     public List<Interview> getAllInterviewsByEmployerId(long id) {
-        return interviewRepo.findAllByEmployer_id(id);
+        return interviewRepo.findAllByStudentApplication_Offer_Employer_Id(id);
     }
 
     public List<Interview> getAllInterviewsByStudentId(long id) {
@@ -46,7 +46,10 @@ public class InterviewService {
 
     public Optional<Interview> updateInterview(long id, Interview interview) {
         return interviewRepo.findById(id)
-                .map(oldInterview -> interview.toBuilder().id(oldInterview.getId()).build())
+                .map(oldInterview -> interview.toBuilder()
+                        .id(oldInterview.getId())
+                        .semester(oldInterview.getSemester())
+                        .build())
                 .map(newInterview -> interviewRepo.saveAndFlush(interview));
     }
 

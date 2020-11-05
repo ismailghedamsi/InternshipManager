@@ -10,11 +10,12 @@ import {DatePicker} from 'formik-material-ui-pickers';
 import {useApi} from "../Utils/Hooks";
 import AuthenticationService from "../../Services/AuthenticationService";
 import Button from "@material-ui/core/Button";
-import {useStyles} from "../Utils/useStyles";
+import useStyles from "../Utils/useStyles";
 import {Typography} from "@material-ui/core";
 
 const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
 const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
+const tooBigError = (valueNumber) => "Doit être un nombre plus petit que ou égal à " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function OfferCreation() {
@@ -33,26 +34,30 @@ export default function OfferCreation() {
                 "La date de fin doit être dans le futur")),
         internshipStartDate: yup.date().required().min(
             yup.ref("limitDateToApply"),
-            "La date du début ne peut pas être avant la date limite pour appliquer "),
+            "La date de début de stage ne peut pas être avant la date limite pour appliquer "),
         internshipEndDate: yup.date().required().min(
             yup.ref("internshipStartDate"),
-            "La date de fin du stage ne peut pas être avant la date du début")
+            "La date de fin de stage ne peut pas être avant la date de début")
             .when(
                 "internshipStartDate",
                 (internshipStartDate, schema) => internshipStartDate && schema.min(
                     internshipStartDate,
-                    "La date de début doit être avant la date de fin"))
+                    "La date de début doit être avant la date de fin")),
+        startTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
+        endTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg)
     });
     const initialValues = {
         title: '',
         description: '',
         salary: '',
         creationDate: new Date(),
-        internshipStartDate: new Date("2001-01-01"),
-        internshipEndDate: new Date("2001-01-01"),
+        internshipStartDate: new Date(),
+        internshipEndDate: new Date(),
         nbStudentToHire: '',
-        limitDateToApply: new Date("2001-01-01"),
-        file: ""
+        limitDateToApply: new Date(),
+        file: "",
+        startTime: '',
+        endTime: ''
     }
 
     function readFileAsync(file) {
@@ -81,7 +86,7 @@ export default function OfferCreation() {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{minHeight: '100vh'}}
+            style={{minHeight: '100%'}}
         >
             <Grid item xs={12} sm={7} lg={5}>
                 <Container component="main" maxWidth="sm" className={classes.container}>
@@ -166,11 +171,37 @@ export default function OfferCreation() {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Field
+                                            component={TextField}
+                                            name="startTime"
+                                            id="startTime"
+                                            variant="outlined"
+                                            label="Horaire de début"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                            InputProps={{inputProps: {min: 0}}}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
+                                            component={TextField}
+                                            name="endTime"
+                                            id="endTime"
+                                            variant="outlined"
+                                            label="Horaire de fin"
+                                            required
+                                            fullWidth
+                                            type={"number"}
+                                            InputProps={{inputProps: {min: 0}}}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Field
                                             component={DatePicker}
                                             name="internshipStartDate"
                                             id="internshipStartDate"
                                             variant="outlined"
-                                            label="Début du stage"
+                                            label="Début de stage"
                                             required
                                             fullWidth
                                             format="MM/dd/yyyy"
@@ -182,7 +213,7 @@ export default function OfferCreation() {
                                             name="internshipEndDate"
                                             id="internshipEndDate"
                                             variant="outlined"
-                                            label="Fin du stage"
+                                            label="Fin de stage"
                                             required
                                             fullWidth
                                             format="MM/dd/yyyy"

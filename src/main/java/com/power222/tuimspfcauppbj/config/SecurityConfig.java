@@ -59,6 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //Password update endpoint has built-in auth
                 .antMatchers(HttpMethod.PUT, "/api/auth/password").permitAll()
 
+                //Semesters
+                .antMatchers(HttpMethod.GET, "/api/semesters", "/api/semsters/present").permitAll()
+
                 //Dev
                 .antMatchers("/h2-console/*").permitAll()
                 .antMatchers("/api/hello").permitAll()
