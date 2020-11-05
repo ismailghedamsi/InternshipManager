@@ -28,6 +28,10 @@ public class ContractService {
         return contractRepo.findAllByStudentApplication_Offer_Employer_Id(id);
     }
 
+    public List<Contract> getAllContractsByStudentId(long id) {
+        return contractRepo.findAllByStudentApplication_Student_Id(id);
+    }
+
     public Optional<Contract> getContractById(long id) {
         return contractRepo.findById(id);
     }
