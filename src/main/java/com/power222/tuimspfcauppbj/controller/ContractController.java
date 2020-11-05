@@ -35,7 +35,7 @@ public class ContractController {
 
     @GetMapping("/student/{id}")
     public List<Contract> getContractByStudentId(@PathVariable long id) {
-        return svc.getAllContractsByEmployerId(id);
+        return svc.getAllContractsByStudentId(id);
     }
 
     @PutMapping("/{id}")
