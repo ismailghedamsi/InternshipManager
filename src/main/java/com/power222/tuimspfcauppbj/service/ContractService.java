@@ -36,6 +36,7 @@ public class ContractService {
         return contractRepo.findById(id)
                 .map(oldContract -> {
                     contract.setId(oldContract.getId());
+                    contract.setSemester(oldContract.getSemester());
                     return Optional.of(contractRepo.saveAndFlush(contract));
                 })
                 .orElse(Optional.empty());
