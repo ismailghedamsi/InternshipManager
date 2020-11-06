@@ -111,7 +111,7 @@ public class ContractControllerTests {
         var c3 = Contract.builder().id(1L).build();
         var studentId = 1;
 
-        when(svc.getAllContractsByEmployerId(studentId)).thenReturn(Arrays.asList(c1, c2, c3));
+        when(svc.getAllContractsByStudentId(studentId)).thenReturn(Arrays.asList(c1, c2, c3));
 
         MvcResult result = mvc.perform(get("/api/contract/student/" + studentId)).andReturn();
         var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
