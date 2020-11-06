@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)

@@ -23,7 +23,7 @@ import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.ContractDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
-import com.power222.tuimspfcauppbj.util.UserTypes;
+import com.power222.tuimspfcauppbj.util.UserType;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,14 +57,14 @@ public class ContractGenerationService {
         this.mailService = mailService;
     }
 
-    private static UserTypes getSignerFromState(ContractSignatureState state) {
+    private static UserType getSignerFromState(ContractSignatureState state) {
         switch (state) {
             case WAITING_FOR_EMPLOYER_SIGNATURE:
-                return UserTypes.EMPLOYER;
+                return UserType.EMPLOYER;
             case WAITING_FOR_STUDENT_SIGNATURE:
-                return UserTypes.STUDENT;
+                return UserType.STUDENT;
             default:
-                return UserTypes.ADMIN;
+                return UserType.ADMIN;
         }
     }
 
@@ -107,21 +107,21 @@ public class ContractGenerationService {
 
     public Optional<Contract> signContract(ContractSignatureDTO signatureDto) {
         return contractService.getContractById(signatureDto.getContractId())
-                .flatMap(contract -> getContractOptionalFunction(contract, signatureDto));
+                .flatMap(contract -> getSignedContract(contract, signatureDto));
     }
 
-    private Optional<Contract> getContractOptionalFunction(Contract contract, ContractSignatureDTO signatureDto) {
-        if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW)
+    private Optional<Contract> getSignedContract(Contract contract, ContractSignatureDTO signatureDto) {
+        if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW) {
             if (signatureDto.isApproved())
                 contract.setFile(getContractFileWithSignature(contract, signatureDto));
             else
                 contract.setReasonForRejection(signatureDto.getReasonForRejection());
+        }
 
         contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), signatureDto.isApproved()));
 
         final var signedContract = contractService.updateContract(contract.getId(), contract);
-        if (signedContract.isPresent() && signatureDto.isApproved())
-            mailService.sendEmail(contract.getStudentApplication());
+        signedContract.ifPresent(mailService::notifyConcernedUsers);
 
         return signedContract;
     }
@@ -132,7 +132,7 @@ public class ContractGenerationService {
         Document documentAppendedOut = new Document(pdfAppendedOut, PageSize.A4);
         float documentWidth = documentAppendedOut.getPageEffectiveArea(PageSize.A4).getWidth();
 
-        if (getSignerFromState(contract.getSignatureState()) == UserTypes.EMPLOYER) {
+        if (getSignerFromState(contract.getSignatureState()) == UserType.EMPLOYER) {
             documentAppendedOut.add(new Div()
                     .setTextAlignment(TextAlignment.JUSTIFIED)
                     .add(new Paragraph("SIGNATURES\n").setBold())
@@ -154,7 +154,7 @@ public class ContractGenerationService {
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph().add(new Text(signatureDto.getNomSignataire()))
                             .add(new Paragraph("Date").setMarginLeft(145f)));
-        } else if (getSignerFromState(contract.getSignatureState()) == UserTypes.STUDENT) {
+        } else if (getSignerFromState(contract.getSignatureState()) == UserType.STUDENT) {
             documentAppendedOut.add(
                     new Paragraph()
                             .add(new Text("\nL’étudiant(e) :\n").setBold())
@@ -199,7 +199,7 @@ public class ContractGenerationService {
 
     private Contract contractDtoToContract(ContractDTO contractDto, StudentApplication application) {
         Contract contract = new Contract();
-        contract.setAdminName(contractDto.getAdminName());
+        contract.getAdmin().setName(contractDto.getAdminName());
         contract.setFile(contractDto.getFile());
         contract.setEngagementCollege(contractDto.getEngagementCollege());
         contract.setEngagementCompany(contractDto.getEngagementCompany());

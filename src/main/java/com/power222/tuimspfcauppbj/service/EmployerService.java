@@ -37,7 +37,6 @@ public class EmployerService {
             return Optional.empty();
 
         employer.setPassword(passwordEncoder.encode(employer.getPassword()));
-        employer.setRole("employer");
         employer.setOffers(Collections.emptyList());
         return Optional.of(employerRepo.saveAndFlush(employer));
     }

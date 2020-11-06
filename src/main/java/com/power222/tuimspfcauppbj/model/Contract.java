@@ -30,8 +30,6 @@ public class Contract extends SemesterDiscriminatedEntity {
     @Lob
     private String engagementStudent;
 
-    private String adminName;
-
     private float totalHoursPerWeek;
     private String reasonForRejection;
 
@@ -40,4 +38,7 @@ public class Contract extends SemesterDiscriminatedEntity {
 
     @OneToOne
     private StudentApplication studentApplication;
+
+    @OneToOne
+    private Admin admin;
 }

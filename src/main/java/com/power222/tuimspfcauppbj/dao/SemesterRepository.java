@@ -12,7 +12,7 @@ public class SemesterRepository {
     @PersistenceContext
     private EntityManager em;
 
-    @SuppressWarnings({"unchecked", "SqlDialectInspection", "SqlNoDataSourceInspection"})
+    @SuppressWarnings({"unchecked"})
     public List<String> findAll() {
         return em.createNativeQuery("SELECT DISTINCT semester from (SELECT semester FROM INTERNSHIP_OFFER  " +
                 "union all SELECT semester FROM INTERVIEW " +

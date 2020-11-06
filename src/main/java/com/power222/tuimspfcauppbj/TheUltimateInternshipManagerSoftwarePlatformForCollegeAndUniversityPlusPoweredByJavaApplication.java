@@ -58,16 +58,14 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         @Override
         @Transactional
         public void run(String... args) throws IOException {
-            User admin = User.builder()
+            User admin = Admin.builder()
                     .username("admin")
-                    .role("admin")
                     .password(passwordEncoder.encode("password"))
                     .build();
 
             userRepo.save(admin);
 
             var employer = userRepo.save(Employer.builder()
-                    .role("employer")
                     .username("employeur")
                     .password(passwordEncoder.encode("password"))
                     .companyName("Dacima")
@@ -78,7 +76,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var student = userRepo.save(Student.builder()
-                    .role("student")
                     .username("etudiant")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Bob")

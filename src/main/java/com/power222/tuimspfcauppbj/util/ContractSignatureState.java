@@ -17,8 +17,11 @@ public enum ContractSignatureState {
                     return WAITING_FOR_STUDENT_SIGNATURE;
                 else
                     return REJECTED_BY_EMPLOYER;
+            case WAITING_FOR_STUDENT_SIGNATURE:
+                return WAITING_FOR_ADMIN_SIGNATURE;
+            case WAITING_FOR_ADMIN_SIGNATURE:
             default:
-                return signatureState;
+                return SIGNED;
         }
     }
 

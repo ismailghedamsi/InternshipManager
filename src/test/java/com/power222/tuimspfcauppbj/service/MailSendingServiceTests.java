@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -82,7 +83,7 @@ public class MailSendingServiceTests {
 
         service.sendEmail(expectedStudentApplication);
 
-        var actual = (String) ((MimeMultipart) ((MimeMultipart) mimeMessage.getContent()).getBodyPart(0).getContent()).getBodyPart(0).getContent();
+        var actual = (String) ((Multipart) ((Multipart) mimeMessage.getContent()).getBodyPart(0).getContent()).getBodyPart(0).getContent();
         String expected = "Un contrat a été généré pour votre offre " + expectedStudentApplication.getOffer().getTitle()
                 + " pour l'étudiant " + expectedStudentApplication.getStudent().getLastName() + " " + expectedStudentApplication.getStudent().getFirstName()
                 + "<br/>Veuillez consulter le contract sur notre application";
