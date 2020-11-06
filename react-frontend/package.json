@@ -48,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@material-ui/data-grid": "^4.0.0-alpha.8",
     "@material-ui/styles": "^4.10.0",
     "prop-types": "^15.7.2"
   }
