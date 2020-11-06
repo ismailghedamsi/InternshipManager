@@ -1,10 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,8 +9,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-//@EqualsAndHashCode(callSuper = true) // fonctione pas
-public class InternEvaluation {
+@EqualsAndHashCode(callSuper = true) // fonctione pas
+public class InternEvaluation extends SemesterDiscriminatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +27,6 @@ public class InternEvaluation {
     //2
 
 
-    @OneToOne(mappedBy = "studentApplication")
-    @JsonIgnoreProperties("studentApplication")
+    @OneToOne()
     private Contract contract;
 }
