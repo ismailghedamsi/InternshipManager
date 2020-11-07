@@ -68,5 +68,10 @@ export const Menu = [
         title: 'Liste de contrats',
         url: '/dashboard/SignContract',
         role: 'employer'
+    },
+    {
+        title: 'Évaluer stagiaire',
+        url: '/dashboard/evaluateStudent',
+        role: 'employer'
     }
 ]
