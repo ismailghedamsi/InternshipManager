@@ -121,7 +121,7 @@ public class ContractGenerationService {
 
         final var signedContract = contractService.updateContract(contract.getId(), contract);
         if (signedContract.isPresent() && signatureDto.isApproved())
-            mailService.sendEmail(contract.getStudentApplication());
+            mailService.sendEmail(contract.getStudentApplication(), getSignerFromState(contract.getSignatureState()));
 
         return signedContract;
     }
