@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
+
 @Service
 public class ReportService {
 
@@ -56,14 +58,18 @@ public class ReportService {
     public Page<InternshipOffer> offersWithoutHired(int page, int itemPerPage) {
         final var offerPage = offerRepo.findAll(PageRequest.of(page, itemPerPage));
         var itr = offerPage.iterator();
-        while (itr.hasNext()) {
-            var o = itr.next();
-            if (o.getApplications().stream().anyMatch(appli -> appli.getState().equals(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT))) {
+
+        while (itr.hasNext())
+            if (containsHiredStudent(itr)) {
                 itr.remove();
                 break;
             }
-        }
+
         return offerPage;
+    }
+
+    private boolean containsHiredStudent(Iterator<? extends InternshipOffer> itr) {
+        return itr.next().getApplications().stream().anyMatch(appli -> appli.getState().equals(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT));
     }
 
     public Page<Contract> contractsWaitingStudent(int page, int itemPerPage) {
