@@ -4,10 +4,7 @@ import com.power222.tuimspfcauppbj.dao.*;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.model.InternshipOffer.InternshipOfferDetails;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
-import com.power222.tuimspfcauppbj.util.ContractDTO;
-import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
-import com.power222.tuimspfcauppbj.util.ReviewState;
-import com.power222.tuimspfcauppbj.util.StudentApplicationState;
+import com.power222.tuimspfcauppbj.util.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -43,9 +40,10 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final StudentApplicationRepository appliRepo;
         private final ContractGenerationService contractGenSvc;
         private final ContractRepository contractRepo;
+        private final InterviewRepository interviewRepo;
 
         @SuppressWarnings("ConstructorWithTooManyParameters")
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo, ContractGenerationService contractGenSvc, ContractRepository contractRepo) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo, ContractGenerationService contractGenSvc, ContractRepository contractRepo, InterviewRepository interviewRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;
@@ -53,6 +51,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
             this.appliRepo = appliRepo;
             this.contractGenSvc = contractGenSvc;
             this.contractRepo = contractRepo;
+            this.interviewRepo = interviewRepo;
         }
 
         @Override
@@ -83,17 +82,69 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .password(passwordEncoder.encode("password"))
                     .firstName("Bob")
                     .lastName("Brutus")
-                    .studentId("1234")
+                    .studentId("1234567")
                     .email("projetemployeur@gmail.com")
                     .phoneNumber("911")
                     .address("9310 Lasalle")
                     .build());
 
+            var student2 = userRepo.save(Student.builder()
+                    .role("student")
+                    .username("etudiant2")
+                    .password(passwordEncoder.encode("password"))
+                    .firstName("Roméo")
+                    .lastName("Latullipe")
+                    .studentId("1234567")
+                    .email("projetemployeur@gmail.com")
+                    .phoneNumber("911")
+                    .address("9310 Lasalle")
+                    .build());
+
+            var student3 = userRepo.save(Student.builder()
+                    .role("student")
+                    .username("etudiant3")
+                    .password(passwordEncoder.encode("password"))
+                    .firstName("Bob")
+                    .lastName("Lamisère")
+                    .studentId("1234567")
+                    .email("projetemployeur@gmail.com")
+                    .phoneNumber("911")
+                    .address("9310 Lasalle")
+                    .build());
+
+            for (int i = 4; i < 30; i++) {
+                userRepo.save(Student.builder()
+                        .role("student")
+                        .username("etudiant" + i)
+                        .password(passwordEncoder.encode("password"))
+                        .firstName("Loop " + i)
+                        .lastName("Loop")
+                        .studentId("1234567")
+                        .email("projetemployeur@gmail.com")
+                        .phoneNumber("911")
+                        .address("9310 Lasalle")
+                        .build());
+            }
+
             var resume = resumeRepo.save(Resume.builder()
                     .name("Résumé bootstrappé")
                     .reviewState(ReviewState.APPROVED)
                     .owner(student)
-                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/1.pdf")).readAllBytes())))
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/1.pdf")).readAllBytes())))
+                    .build());
+
+            var resume2 = resumeRepo.save(Resume.builder()
+                    .name("Résumé bootstrappé 2")
+                    .reviewState(ReviewState.PENDING)
+                    .owner(student2)
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/5.pdf")).readAllBytes())))
+                    .build());
+
+            var resume3 = resumeRepo.save(Resume.builder()
+                    .name("Résumé bootstrappé 3")
+                    .reviewState(ReviewState.PENDING)
+                    .owner(student3)
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/3.pdf")).readAllBytes())))
                     .build());
 
             var internshipOffer = internshipRepo.save(InternshipOffer.builder()
@@ -110,10 +161,10 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .reviewState(ReviewState.APPROVED)
                     .employer(employer)
                     .allowedStudents(Collections.singletonList(student))
-                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/6.pdf")).readAllBytes())))
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/6.pdf")).readAllBytes())))
                     .build());
 
-            internshipRepo.save(InternshipOffer.builder()
+            var internshipOffer2 = internshipRepo.save(InternshipOffer.builder()
                     .semester("a2021h2022")
                     .title("Offre de stage bootstrappée 2022")
                     .details(InternshipOfferDetails.builder()
@@ -128,15 +179,35 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .reviewState(ReviewState.APPROVED)
                     .employer(employer)
                     .allowedStudents(Collections.singletonList(student))
-                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("pdf/6.pdf")).readAllBytes())))
+                    .file("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/6.pdf")).readAllBytes())))
                     .build());
 
             var studentApplication = appliRepo.save(StudentApplication.builder()
-                    .state(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT)
                     .offer(internshipOffer)
                     .student(student)
                     .resume(resume)
+                    .state(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT)
                     .build());
+
+            var studentApplication2 = appliRepo.save(StudentApplication.builder()
+                    .offer(internshipOffer)
+                    .student(student2)
+                    .resume(resume2)
+                    .build());
+
+            var studentApplication3 = appliRepo.save(StudentApplication.builder()
+                    .offer(internshipOffer)
+                    .student(student3)
+                    .resume(resume3)
+                    .state(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT)
+                    .build());
+
+            var interview = interviewRepo.save(Interview.builder()
+                    .studentApplication(studentApplication2)
+                    .studentAcceptanceState(InterviewState.INTERVIEW_ACCEPTED_BY_STUDENT)
+                    .dateTime(LocalDateTime.now().plusDays(3))
+                    .build());
+
 
             var contractDto = ContractDTO.builder()
                     .studentApplicationId(studentApplication.getId())
@@ -145,6 +216,24 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
                     .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
                     .totalHoursPerWeek(39)
+                    .build();
+
+            var contractDto2 = ContractDTO.builder()
+                    .studentApplicationId(studentApplication2.getId())
+                    .adminName("Jacob Blake")
+                    .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
+                    .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
+                    .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
+                    .totalHoursPerWeek(40)
+                    .build();
+
+            var contractDto3 = ContractDTO.builder()
+                    .studentApplicationId(studentApplication3.getId())
+                    .adminName("Jacob Blake")
+                    .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
+                    .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
+                    .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
+                    .totalHoursPerWeek(37.5f)
                     .build();
 
 
@@ -163,10 +252,44 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 contractGenSvc.signContract(signatureDto);
             }
 
+            contractGenSvc.generateContract(contractDto2);
+            var contract2 = contractRepo.findById(2L);
+
+            if (contract2.isPresent()) {
+                var signatureDto = ContractSignatureDTO.builder()
+                        .contractId(contract2.get().getId())
+                        .isApproved(true)
+                        .nomSignataire("Andrei Belkin")
+                        .signatureTimestamp(LocalDateTime.now())
+                        .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
+                        .build();
+
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+            }
+
+            contractGenSvc.generateContract(contractDto3);
+            var contract3 = contractRepo.findById(3L);
+
+            if (contract3.isPresent()) {
+                var signatureDto = ContractSignatureDTO.builder()
+                        .contractId(contract3.get().getId())
+                        .isApproved(true)
+                        .nomSignataire("Andrei Belkin")
+                        .signatureTimestamp(LocalDateTime.now())
+                        .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
+                        .build();
+
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+            }
+
             userRepo.flush();
             resumeRepo.flush();
             internshipRepo.flush();
             appliRepo.flush();
+            interviewRepo.flush();
         }
     }
 }
