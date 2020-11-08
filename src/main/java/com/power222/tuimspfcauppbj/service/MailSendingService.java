@@ -25,22 +25,27 @@ public class MailSendingService {
 
     public void sendEmail(StudentApplication studentApplication, UserTypes userTypes) {
         String sendTo = "";
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        System.out.println(userTypes);
-        if (userTypes == userTypes.ADMIN)
+
+
+        if (userTypes == userTypes.EMPLOYER) {
+            System.out.println(userTypes);
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             sendTo = getUserEmail(studentApplication.getOffer().getEmployer());
-        else if (userTypes == userTypes.STUDENT) {
-            System.out.println("get User");
+            setMailContent(studentApplication, mimeMessage, sendTo);
+            javaMailSender.send(mimeMessage);
+        } else if (userTypes == userTypes.STUDENT) {
+            System.out.println(userTypes);
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             sendTo = getUserEmail(studentApplication.getStudent());
+            setMailContent(studentApplication, mimeMessage, sendTo);
+            javaMailSender.send(mimeMessage);
         }
-        setMailContent(studentApplication, mimeMessage, sendTo);
-        javaMailSender.send(mimeMessage);
+
     }
 
     private void setMailContent(StudentApplication studentApplication, MimeMessage mimeMessage, String sendTo) {
         MimeMessageHelper helper;
         try {
-            System.out.println("get envoie");
             helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
             String htmlMsg = "Un contrat a été généré pour l'offre " + studentApplication.getOffer().getTitle()
                     + "<br/>Veuillez consulter le contract sur notre application";
