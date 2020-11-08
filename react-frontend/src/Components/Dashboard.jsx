@@ -103,6 +103,10 @@ export default function Dashboard() {
                                     path="/dashboard/contractForm"
                                     component={ContractForm}
                                     role={"admin"}/>
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/signFormAdmin"
+                                    component={SignForm}
+                                    role={"admin"}/>
                 {/* Employeur */}
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/createstage"
