@@ -95,7 +95,9 @@ public class ContractGenerationService {
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
-            document.add(new Table(1).addCell(new Paragraph(studentApplication.getOffer().getDetails().getDescription()).setWidth(documentWidth)));
+            final var table = new Table(1).setWidth(documentWidth);
+            table.addCell(new Paragraph(studentApplication.getOffer().getDetails().getDescription()));
+            document.add(table);
             internshipPartiesResponsabilities(contractDto, document);
             document.close();
             String fileBase64 = encodeBytes(stream.toByteArray());
