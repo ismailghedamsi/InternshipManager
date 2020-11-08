@@ -9,8 +9,8 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
-import {useApi} from "../Utils/Hooks";
+import React, {useEffect, useMemo, useState} from 'react';
+import {useApi, useDateParser} from "../Utils/Hooks";
 import useStyles from "../Utils/useStyles";
 
 const reports = [
@@ -29,7 +29,7 @@ const reports = [
     "Contrats en attente de signature par l'administration"
 ]
 const reportEndpoints = [
-    "registeredStudents",
+    "students",
     "studentsWithoutResume",
     "studentsPendingResumes",
     "studentsNotHired",
@@ -37,62 +37,150 @@ const reportEndpoints = [
     undefined,
     "offers",
     "offersPendingApprobation",
-    "offersWithoutStudents",
+    "offersWithoutHired",
     undefined,
-    "contracstWaitingStudent",
-    "contracstWaitingEmployer",
-    "contracstWaitingAdmin"
+    "contractsWaitingStudent",
+    "contractsWaitingEmployer",
+    "contractsWaitingAdmin"
 ]
 
-function StudentTable({report}) {
+function DataTableHeader({report}) {
+    let header = undefined
+    if (reportEndpoints[report].includes("student")) {
+        header = <TableRow>
+            <TableCell>Matricule</TableCell>
+            <TableCell>Prénom</TableCell>
+            <TableCell>Nom</TableCell>
+            <TableCell>Adresse courriel</TableCell>
+            <TableCell>Téléphone</TableCell>
+        </TableRow>
+    } else if (reportEndpoints[report].includes("offers")) {
+        header = <TableRow>
+            <TableCell>Entreprise</TableCell>
+            <TableCell>Contact</TableCell>
+            <TableCell>Titre</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Salaire</TableCell>
+            <TableCell>Horaire</TableCell>
+            <TableCell>Places</TableCell>
+            <TableCell>Créer le</TableCell>
+            <TableCell>Ferme le</TableCell>
+            <TableCell>Début</TableCell>
+            <TableCell>Fin</TableCell>
+            <TableCell>Fichier PDF</TableCell>
+        </TableRow>
+    }
+    if (reportEndpoints[report].includes("contracts")) {
+        header = <TableRow>
+            <TableCell>Étudiant</TableCell>
+            <TableCell>Entreprise</TableCell>
+            <TableCell>Gestionnaire</TableCell>
+            <TableCell>Fichier PDF</TableCell>
+        </TableRow>
+    }
+    return header
+}
+
+DataTableHeader.propTypes = {
+    report: PropTypes.number.isRequired
+}
+
+function DataTableBody({report, rows}) {
+    const parseDate = useDateParser()
+    let body = undefined
+    if (reportEndpoints[report].includes("student")) {
+        body = rows.map(student =>
+            <TableRow key={student.id}>
+                <TableCell>{student.studentId}</TableCell>
+                <TableCell>{student.firstName}</TableCell>
+                <TableCell>{student.lastName}</TableCell>
+                <TableCell>{student.email}</TableCell>
+                <TableCell>{student.phoneNumber}</TableCell>
+            </TableRow>
+        )
+    } else if (reportEndpoints[report].includes("offers")) {
+        body = rows.map(offer =>
+            <TableRow key={offer.id}>
+                <TableCell>{offer.employer.companyName}</TableCell>
+                <TableCell>{offer.employer.contactName}</TableCell>
+                <TableCell>{offer.title}</TableCell>
+                <TableCell>{offer.details.description}</TableCell>
+                <TableCell>{offer.details.salary}</TableCell>
+                <TableCell>{offer.details.startTime}h00&mdash;{offer.details.endTime}</TableCell>
+                <TableCell>{offer.details.nbStudentToHire}</TableCell>
+                <TableCell>{offer.details.creationDate}</TableCell>
+                <TableCell>{parseDate(offer.details.limitDateToApply)}</TableCell>
+                <TableCell>{parseDate(offer.details.internshipStartDate)}</TableCell>
+                <TableCell>{parseDate(offer.details.internshipEndDate)}</TableCell>
+                <TableCell>Show file</TableCell>
+            </TableRow>
+        )
+    }
+    if (reportEndpoints[report].includes("contracts")) {
+        body = rows.map(contract =>
+            <TableRow key={contract.id}>
+                <TableCell>{
+                    contract.studentApplication.student.firstName + " " +
+                    contract.studentApplication.student.lastName + " (" +
+                    contract.studentApplication.student.studentId + ")"
+                }</TableCell>
+                <TableCell>{contract.studentApplication.offer.employer.companyName}</TableCell>
+                <TableCell>{contract.adminName}</TableCell>
+                <TableCell>Show file</TableCell>
+            </TableRow>
+        )
+    }
+    return body
+}
+
+DataTableBody.propTypes = {
+    report: PropTypes.number.isRequired,
+    rows: PropTypes.array.isRequired
+}
+
+function DataTable({report}) {
     const api = useApi()
-    const [page, setPage] = useState(0)
+    const [itemCount, setItemCount] = useState(-1)
+    const [currentPage, setCurrentPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
-    const [students, setStudents] = useState([])
+    const [rows, setRows] = useState([])
+    //To prevent undefineds caused by rerender on report, before rows are updated
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const bodyMemo = useMemo(() => <DataTableBody rows={rows} report={report}/>, [rows]);
 
     useEffect(() => {
-        //TODO: Paging endpoint, with pageNum and num of rows param
-        api.get("/reports/" + reportEndpoints[report] + "/" + page + "?itemPerPages=" + rowsPerPage)
-            .then(response => setStudents(response.data))
-    }, [page, rowsPerPage]) // eslint-disable-line react-hooks/exhaustive-deps
+        api.get("/reports/" + reportEndpoints[report] + "?page=" + currentPage + "&itemsPerPage=" + rowsPerPage)
+            .then(response => {
+                setRows(response.data.content)
+                setItemCount(response.data.totalElements)
+            })
+    }, [currentPage, rowsPerPage, report]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return <TableContainer>
         <Table>
             <TableHead>
-                <TableRow>
-                    <TableCell>Matricule</TableCell>
-                    <TableCell>Prénom</TableCell>
-                    <TableCell>Nom</TableCell>
-                    <TableCell>Adresse courriel</TableCell>
-                    <TableCell>Téléphone</TableCell>
-                </TableRow>
+                <DataTableHeader report={report}/>
             </TableHead>
             <TableBody>
-                {students.map(student =>
-                    <TableRow key={student.id}>
-                        <TableCell>{student.studentId}</TableCell>
-                        <TableCell>{student.firstName}</TableCell>
-                        <TableCell>{student.lastName}</TableCell>
-                        <TableCell>{student.email}</TableCell>
-                        <TableCell>{student.phone}</TableCell>
-                    </TableRow>
-                )}
+                {bodyMemo}
             </TableBody>
             <TableFooter>
-                <TablePagination
-                    component="div"
-                    count={-1}
-                    page={page}
-                    onChangePage={({page}) => setPage(page)}
-                    rowsPerPage={rowsPerPage}
-                    onChangeRowsPerPage={({value}) => setRowsPerPage(value)}
-                />
+                <tr>
+                    <TablePagination
+                        component="td"
+                        count={itemCount}
+                        page={currentPage}
+                        onChangePage={(e, page) => setCurrentPage(page)}
+                        rowsPerPage={rowsPerPage}
+                        onChangeRowsPerPage={({target: {value}}) => setRowsPerPage(parseInt(value))}
+                    />
+                </tr>
             </TableFooter>
         </Table>
     </TableContainer>
 }
 
-StudentTable.propTypes = {
+DataTable.propTypes = {
     report: PropTypes.number.isRequired
 }
 
@@ -101,7 +189,7 @@ export default function Reports() {
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [report, setReport] = useState(0)
 
-    return <div className={classes.main}>
+    return <div className={classes.main} style={{overflowY: "auto"}}>
         <Typography variant={"h5"}>
             Rapport:&ensp;
             <Button onClick={() => setDrawerOpen(true)}>
@@ -110,7 +198,7 @@ export default function Reports() {
                 </Typography>
             </Button>
         </Typography>
-        <StudentTable report={report}/>
+        <DataTable report={report}/>
         <Drawer anchor={"left"} open={drawerOpen} onClose={() => setDrawerOpen(false)}>
             <List style={{width: 450}} onClick={() => setDrawerOpen(false)}>
                 <ListSubheader>Rapports</ListSubheader>

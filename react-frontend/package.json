@@ -3,34 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@date-io/date-fns": "1.x",
+    "formik": "^2.1.5",
     "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
+    "formik-material-ui": "^3.0.0",
+    "date-fns": "2.11.1",
+    "@date-io/date-fns": "1.x",
     "@material-ui/pickers": "^3.2.10",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
+    "formik-material-ui-pickers": "0.0.11",
+    "@material-ui/icons": "^4.9.1",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
-    "date-fns": "2.11.1",
-    "formik": "^2.1.5",
-    "formik-material-ui": "^3.0.0",
-    "formik-material-ui-pickers": "0.0.11",
-    "nanoid": "^2.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-pdf": "^5.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
-    "shortid": "^2.2.15",
-    "uuid": "^8.3.0",
     "yup": "^0.29.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && xcopy build\\* ..\\src\\main\\resources\\static /E /H",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "react-scripts build && xcopy build\\* ..\\src\\main\\resources\\static /E /H"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,7 +40,6 @@
     ]
   },
   "devDependencies": {
-    "@material-ui/data-grid": "^4.0.0-alpha.8",
     "@material-ui/styles": "^4.10.0",
     "prop-types": "^15.7.2"
   }

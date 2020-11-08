@@ -40,11 +40,11 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function Dashboard(props) {
+export default function Dashboard() {
     const classes = useStyles();
 
     return <div className={classes.root}>
-        <Navbar {...props}/>
+        <Navbar/>
         <Container className={classes.container}>
             <Switch>
                 <Route exact={true} path={"/dashboard"}>
