@@ -11,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -67,5 +70,36 @@ public class InternEvaluationServiceTests {
 
         assertThat(actual).isNotNull();
         assertThat(actual).isNotEqualTo(expectedInternEvaluation);
+    }
+
+    @Test
+    void getAllInternEvaluationTest() {
+        var i1 = InternEvaluation.builder().id(1L).build();
+        var i2 = InternEvaluation.builder().id(2L).build();
+        var i3 = InternEvaluation.builder().id(3L).build();
+
+        when(internRepo.findAll()).thenReturn(Arrays.asList(i1, i2, i3));
+
+        var actual = internSvc.getAllInternEvaluation();
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
+    void getInternEvaluationIdTest() {
+        when(internRepo.findById(1L)).thenReturn(Optional.of(expectedInternEvaluation));
+
+        var actual = internSvc.getInternEvaluationById(1L);
+
+        assertThat(actual).contains(expectedInternEvaluation);
+    }
+
+    @Test
+    void getInternEvaluationInvalideIdTest() {
+        when(internRepo.findById(1L)).thenReturn(Optional.empty());
+
+        var actual = internSvc.getInternEvaluationById(1L);
+
+        assertThat(actual).isEmpty();
     }
 }

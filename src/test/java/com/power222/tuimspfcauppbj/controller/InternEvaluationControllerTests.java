@@ -16,8 +16,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
@@ -67,5 +73,43 @@ public class InternEvaluationControllerTests {
                 .content("{}")).andReturn();
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+    }
+
+    @Test
+    void getAllInterEvaluationTest() throws Exception {
+        final int nbInternEvaluation = 3;
+
+        List<InternEvaluation> list = new ArrayList<>();
+        for (int i = 0; i < nbInternEvaluation; i++)
+            list.add(new InternEvaluation());
+
+        when(svc.getAllInternEvaluation()).thenReturn(list);
+
+        MvcResult result = mvc.perform(get("/api/internEvaluation")).andReturn();
+
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertEquals(actuals.size(), nbInternEvaluation);
+    }
+
+    @Test
+    void getInternEvaluationFound() throws Exception {
+        var id = 1L;
+        when(svc.getInternEvaluationById(1L)).thenReturn(Optional.of(expectedInternEvaluation));
+
+        var actual = mvc.perform(get("/api/internEvaluation/" + id)).andReturn();
+
+        assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    void getInternEvaluationNotFound() throws Exception {
+        var id = 1L;
+        when(svc.getInternEvaluationById(1L)).thenReturn(Optional.empty());
+
+        var actual = mvc.perform(get("/api/internEvaluation/" + id)).andReturn();
+
+        assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 }

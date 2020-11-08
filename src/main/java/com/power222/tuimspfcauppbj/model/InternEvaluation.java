@@ -36,6 +36,7 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
     private StatesEvaluation jobQualityC;
     private StatesEvaluation jobQualityD;
     private StatesEvaluation jobQualityE;
+    private String jobQualityCommentary;
 
 
     @OneToOne()
