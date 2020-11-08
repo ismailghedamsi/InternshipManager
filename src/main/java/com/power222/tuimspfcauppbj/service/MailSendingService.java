@@ -28,13 +28,11 @@ public class MailSendingService {
 
 
         if (userTypes == userTypes.EMPLOYER) {
-            System.out.println(userTypes);
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             sendTo = getUserEmail(studentApplication.getOffer().getEmployer());
             setMailContent(studentApplication, mimeMessage, sendTo);
             javaMailSender.send(mimeMessage);
         } else if (userTypes == userTypes.STUDENT) {
-            System.out.println(userTypes);
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             sendTo = getUserEmail(studentApplication.getStudent());
             setMailContent(studentApplication, mimeMessage, sendTo);
