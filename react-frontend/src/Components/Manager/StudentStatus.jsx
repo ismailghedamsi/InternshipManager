@@ -21,12 +21,12 @@ const applicationAcceptedStates = [
 function ResumeStatus(props) {
     function getResumeState(resume) {
         if (resume.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
+            return <span style={{color: "blue"}}>En attente</span>
         else if (resume.reviewState === "DENIED")
-            return (<span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>);
+            return <span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return <span style={{color: "green"}}>Approuvé</span>
     }
 
     return <div>
@@ -41,7 +41,7 @@ function ResumeStatus(props) {
             État: {getResumeState(props.resume)}
         </Typography>
         <hr/>
-    </div>;
+    </div>
 }
 
 ResumeStatus.propTypes = {
@@ -126,16 +126,15 @@ export default function StudentStatus() {
         api.get("students").then(resp => setStudents(resp ? resp.data : []))
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return (
-        <Grid
-            container
-            spacing={2}
-            className={classes.main}>
-            <Grid item xs={5} className={classes.list}>
-                <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                    État des étudiants
-                </Typography>
-                {students.map((item, i) =>
+    return <Grid
+        container
+        spacing={2}
+        className={classes.main}>
+        <Grid item xs={5} className={classes.list}>
+            <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
+                État des étudiants
+            </Typography>
+            {students.map((item, i) =>
                     <div key={i}>
                         <button
                             type={"button"}
@@ -203,5 +202,4 @@ export default function StudentStatus() {
                 </DialogActions>
             </Dialog>
         </Grid>
-    );
 }
