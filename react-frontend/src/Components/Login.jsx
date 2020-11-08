@@ -82,14 +82,14 @@ export default function Login() {
 
                         validationSchema={yup.object()
                             .shape({
-                                username: yup.string().trim().required(requiredFieldMsg),
-                                password: yup.string().trim().required(requiredFieldMsg)
-                            })}
-                        validateOnBlur={false}
-                        validateOnChange={false}
-                        enableReinitialize={true}
-                        initialValues={initialValues}
-                    >
+                                    username: yup.string().trim().required(requiredFieldMsg),
+                                    password: yup.string().trim().required(requiredFieldMsg)
+                                })}
+                            validateOnBlur={false}
+                            validateOnChange={false}
+                            enableReinitialize={true}
+                            initialValues={initialValues}
+                        >
                         {({isSubmitting}) =>
                             <Form className={classes.form}>
                                 <Grid container spacing={2}>
@@ -101,36 +101,36 @@ export default function Login() {
                                             variant="outlined"
                                             label="Nom d'utilisateur"
                                             required
-                                            fullWidth
-                                        />
+                                                fullWidth
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Field
+                                                component={TextField}
+                                                name="password"
+                                                id="password"
+                                                variant="outlined"
+                                                label="Mot de passe"
+                                                type={"password"}
+                                                required
+                                                fullWidth
+                                            />
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <Field
-                                            component={TextField}
-                                            name="password"
-                                            id="password"
-                                            variant="outlined"
-                                            label="Mot de passe"
-                                            type={"password"}
-                                            required
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <br/>
-                                {isSubmitting && <LinearProgress/>}
-                                <Button
-                                    type={"submit"}
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    size={"large"}
-                                    className={classes.submit}
-                                    disabled={isSubmitting}
-                                >
-                                    Se connecter
-                                </Button>
-                            </Form>
+                                    <br/>
+                                    {isSubmitting && <LinearProgress/>}
+                                    <Button
+                                        type={"submit"}
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        size={"large"}
+                                        className={classes.submit}
+                                        disabled={isSubmitting}
+                                    >
+                                        Se connecter
+                                    </Button>
+                                </Form>
                         }
                         </Formik>
                         <Grid container justify="flex-end" className={classes.link}>

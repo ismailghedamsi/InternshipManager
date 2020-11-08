@@ -61,7 +61,7 @@ export default function RegisteringManager() {
                         </Link>
                     </Grid>
                 </Grid>
-            </Container>
+                </Container>
+            </Grid>
         </Grid>
-    </Grid>
 }
