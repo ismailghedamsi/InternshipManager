@@ -127,7 +127,6 @@ export default function Navbar() {
     }
 
     useEffect(() => {
-        console.log(location.pathname)
         const index = getLinks().findIndex(route => route.url === location.pathname)
         if (index !== -1)
             setCurrent(index)
