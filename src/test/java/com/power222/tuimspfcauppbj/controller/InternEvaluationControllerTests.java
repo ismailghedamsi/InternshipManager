@@ -22,9 +22,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import({TestsWithoutSecurityConfig.class})
@@ -111,5 +110,36 @@ public class InternEvaluationControllerTests {
         var actual = mvc.perform(get("/api/internEvaluation/" + id)).andReturn();
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void updateContractTest() throws Exception {
+        when(svc.updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation)).thenReturn(Optional.ofNullable(expectedInternEvaluation));
+
+        MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expectedInternEvaluation)))
+                .andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(svc, times(1)).updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation);
+    }
+
+    @Test
+    void updateContractNoValidIdTest() throws Exception {
+        MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expectedInternEvaluation)))
+                .andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deleteInterEvaluationTest() throws Exception {
+        MvcResult result = mvc.perform(delete("/api/internEvaluation/1")).andReturn();
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        verify(svc, times(1)).deleteInternEvaluationById(1);
     }
 }

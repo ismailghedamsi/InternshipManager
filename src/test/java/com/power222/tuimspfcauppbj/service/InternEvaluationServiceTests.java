@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InternEvaluationServiceTests {
@@ -95,11 +95,31 @@ public class InternEvaluationServiceTests {
     }
 
     @Test
-    void getInternEvaluationInvalideIdTest() {
-        when(internRepo.findById(1L)).thenReturn(Optional.empty());
+    void updateInternEvaluationTest() {
+        var initialId = expectedInternEvaluation.getId();
+        var alteredId = 123L;
+        var alteredInternEvaluation = expectedInternEvaluation.toBuilder().id(alteredId).build();
+        when(internRepo.findById(initialId)).thenReturn(Optional.of(expectedInternEvaluation));
+        when(internRepo.saveAndFlush(alteredInternEvaluation)).thenReturn(expectedInternEvaluation);
 
-        var actual = internSvc.getInternEvaluationById(1L);
+        var actual = internSvc.updateInternEvaluation(initialId, alteredInternEvaluation);
+
+        assertThat(actual).contains(expectedInternEvaluation);
+    }
+
+    @Test
+    void updateInterEvaluationWithNonexistentIdTest() {
+        var actual = internSvc.updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation);
 
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void deleteContractByIdTest() {
+        var idToDelete = expectedInternEvaluation.getId();
+
+        internSvc.deleteInternEvaluationById(idToDelete);
+
+        verify(internRepo, times(1)).deleteById(idToDelete);
     }
 }
