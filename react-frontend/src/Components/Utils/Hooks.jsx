@@ -1,7 +1,7 @@
-import {useContext, useState} from "react";
 import axios from "axios";
-import AuthenticationService from "../../Services/AuthenticationService";
+import {useContext, useState} from "react";
 import {ModalContext, SemesterContext} from "../../App";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 export function useModal() {
     const [isOpen, setOpen] = useState(false);
@@ -43,7 +43,7 @@ export function useApi() {
 }
 
 export function useDateParser() {
-    return (date) => {
+    return date => {
         const m = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
         const d = new Date(date);
         return d.getDate() + " " + m[d.getMonth()] + " " + d.getFullYear();
@@ -51,7 +51,7 @@ export function useDateParser() {
 }
 
 export function useTimeParserFromDate() {
-    return (date) => {
+    return date => {
         return new Date(date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
     }
 }

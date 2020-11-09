@@ -15,23 +15,28 @@ export const Menu = [
         role: 'admin'
     },
     {
-        title: 'Statut des étudiants ',
+        title: 'Étudiants ',
         url: "/dashboard/status",
         role: 'admin'
     },
     {
-        title: 'Statut des employeurs',
+        title: 'Employeurs',
         url: "/dashboard/employersStatus",
         role: 'admin'
     },
     {
-        title: 'Liste des offres',
+        title: 'Offres',
         url: '/dashboard/offerList',
         role: 'admin'
     },
     {
-        title: 'Liste de contrats',
+        title: 'Contrats',
         url: '/dashboard/contractList',
+        role: 'admin'
+    },
+    {
+        title: 'Rapports',
+        url: '/dashboard/reports',
         role: 'admin'
     },
     {
