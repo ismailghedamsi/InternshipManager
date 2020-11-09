@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +46,7 @@ class InterviewControllerTests {
     void setUp() {
         expectedInterview = Interview.builder()
                 .id(1L)
-                .date(LocalDate.now())
+                .dateTime(LocalDateTime.now())
                 .build();
     }
 

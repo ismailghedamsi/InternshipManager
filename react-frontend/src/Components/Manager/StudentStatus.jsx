@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
 import {Typography} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import PdfDocument from "../Utils/PdfDocument";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
+import React, {useEffect, useState} from "react";
+import {useApi, useDateParser, useModal} from "../Utils/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
+import PdfDocument from "../Utils/PdfDocument";
+import useStyles from "../Utils/useStyles";
 
 const applicationAcceptedStates = [
     "STUDENT_HIRED_BY_EMPLOYER",
@@ -21,12 +21,16 @@ const applicationAcceptedStates = [
 function ResumeStatus(props) {
     function getResumeState(resume) {
         if (resume.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
+            return <span style={{color: "blue"}}>En attente</span>
         else if (resume.reviewState === "DENIED")
             return <span style={{color: "red"}}>Rejeté<span
+<<<<<<< HEAD
                 style={{color: "black"}}> : {resume.reasonForRejection} </span></span>;
+=======
+                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>
+>>>>>>> ade312267a2764ab98321ba0aa5a2c3a008582cf
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return <span style={{color: "green"}}>Approuvé</span>
     }
 
     return <div>
@@ -41,7 +45,7 @@ function ResumeStatus(props) {
             État: {getResumeState(props.resume)}
         </Typography>
         <hr/>
-    </div>;
+    </div>
 }
 
 ResumeStatus.propTypes = {
@@ -135,19 +139,7 @@ export default function StudentStatus() {
                 État des étudiants
             </Typography>
             {students.map((item, i) =>
-                <div key={i}>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
-                        onClick={() => {
-                            setCurrentIndex(i);
-                        }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {students[i].firstName} {students[i].lastName}
-                        </Typography>
-                    </button>
-                    {currentIndex === i &&
-                    <div>
+                    <div key={i}>
                         <button
                             type={"button"}
                             className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
@@ -191,15 +183,4 @@ export default function StudentStatus() {
                              }}/>
             ) : "L'étudiant n'a accès à aucune offre de stage")}
         </Grid>
-        <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-            <DialogContent className={classes.viewbox}>
-                <PdfDocument document={currentDoc}/>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={closePdf} color="primary">
-                    Fermer
-                </Button>
-            </DialogActions>
-        </Dialog>
-    </Grid>;
 }

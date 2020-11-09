@@ -1,7 +1,7 @@
-import {useContext, useState} from "react";
 import axios from "axios";
-import AuthenticationService from "../../Services/AuthenticationService";
+import {useContext, useState} from "react";
 import {ModalContext, SemesterContext} from "../../App";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 export function useModal() {
     const [isOpen, setOpen] = useState(false);

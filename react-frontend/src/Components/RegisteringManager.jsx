@@ -1,42 +1,21 @@
-import React from 'react';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import * as PropTypes from "prop-types";
-import RegisterStudent from "./RegisterStudent";
-import RegisterEmployer from "./RegisterEmployer";
+import Container from '@material-ui/core/Container';
 import Grid from "@material-ui/core/Grid";
-import {Link as RouterLink, useHistory} from "react-router-dom";
 import Link from "@material-ui/core/Link";
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import {Link as RouterLink, useHistory} from "react-router-dom";
+import RegisterEmployer from "./RegisterEmployer";
+import RegisterStudent from "./RegisterStudent";
+import TabPanel from "./Utils/TabPanel";
 import useStyles from "./Utils/useStyles";
-
-function TabPanel(props) {
-    const {children, value, index, ...other} = props;
-
-    return <div hidden={value !== index} id={`simple-tabpanel-${index}`} {...other}>
-        {value === index && <Box p={0}>
-                {children}
-            </Box>}
-    </div>;
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
 
 export default function RegisteringManager() {
     const classes = useStyles();
     const history = useHistory();
     const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     return <Grid
         container
@@ -61,7 +40,10 @@ export default function RegisteringManager() {
                     </Typography>
                 </div>
                 <AppBar position={"relative"}>
-                    <Tabs value={value} onChange={handleChange} centered aria-label="simple tabs example">
+                    <Tabs value={value}
+                          onChange={(event, newValue) => setValue(newValue)}
+                          centered
+                    >
                         <Tab label="Étudiant" id={`simple-tab-0`}/>
                         <Tab label="Employeur" id={`simple-tab-1`}/>
                     </Tabs>
@@ -79,7 +61,7 @@ export default function RegisteringManager() {
                         </Link>
                     </Grid>
                 </Grid>
-            </Container>
+                </Container>
+            </Grid>
         </Grid>
-    </Grid>;
 }

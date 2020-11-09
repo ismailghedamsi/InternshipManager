@@ -1,19 +1,21 @@
-import React, {useContext} from 'react';
-import {Field, Form, Formik} from 'formik';
-import AuthenticationService from '../Services/AuthenticationService';
-import Grid from "@material-ui/core/Grid";
-import {TextField} from "formik-material-ui";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import {Avatar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
-import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Link from "@material-ui/core/Link";
+import Typography from "@material-ui/core/Typography";
+import {Field, Form, Formik} from 'formik';
+import {TextField} from "formik-material-ui";
+import React, {useContext} from 'react';
+import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
 import * as yup from "yup";
-import useStyles from "./Utils/useStyles";
 import {ModalContext} from "../App";
+import fl from '../img/fl.png'
+import AuthenticationService from '../Services/AuthenticationService';
+import useStyles from "./Utils/useStyles";
 
 const HTTP_UNAUTHORIZED = 401;
 const HTTP_TOKEN_EXPIRED = 498;
@@ -58,7 +60,8 @@ export default function Login() {
                 <Container component="main" maxWidth="sm" className={classes.container}>
                     <CssBaseline/>
                     <div className={classes.paper}>
-                        <Typography variant="h1" className={classes.logo}>
+                        <Avatar alt={"Logo"} src={fl} style={{width: 150, height: 150, marginTop: 25}}/>
+                        <Typography variant="h1" className={classes.logo} style={{marginTop: 16}}>
                             LPLDGDSUPCEUPPPJ
                         </Typography>
                         <Typography variant="h2" className={classes.subtitle}>
@@ -74,68 +77,70 @@ export default function Login() {
                         onSubmit={async (values, {setFieldError}) =>
                             AuthenticationService.authenticate(values)
                                 .then(() => history.push("/dashboard"))
-                                .catch(error => handleHttpError(error, setFieldError, values.username))
+                                .catch((error) => handleHttpError(error, setFieldError, values.username))
                         }
 
                         validationSchema={yup.object()
                             .shape({
-                                username: yup.string().trim().required(requiredFieldMsg),
-                                password: yup.string().trim().required(requiredFieldMsg)
-                            })}
-                        validateOnBlur={false}
-                        validateOnChange={false}
-                        enableReinitialize={true}
-                        initialValues={initialValues}
-                    >
-                        {({isSubmitting}) => <Form className={classes.form}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <Field
-                                        component={TextField}
-                                        name="username"
-                                        id="username"
-                                        variant="outlined"
-                                        label="Nom d'utilisateur"
-                                        required
-                                        fullWidth
-                                    />
+                                    username: yup.string().trim().required(requiredFieldMsg),
+                                    password: yup.string().trim().required(requiredFieldMsg)
+                                })}
+                            validateOnBlur={false}
+                            validateOnChange={false}
+                            enableReinitialize={true}
+                            initialValues={initialValues}
+                        >
+                        {({isSubmitting}) =>
+                            <Form className={classes.form}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            component={TextField}
+                                            name="username"
+                                            id="username"
+                                            variant="outlined"
+                                            label="Nom d'utilisateur"
+                                            required
+                                                fullWidth
+                                            />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            component={TextField}
+                                            name="password"
+                                            id="password"
+                                            variant="outlined"
+                                            label="Mot de passe"
+                                            type={"password"}
+                                            required
+                                            fullWidth
+                                        />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Field
-                                        component={TextField}
-                                        name="password"
-                                        id="password"
-                                        variant="outlined"
-                                        label="Mot de passe"
-                                        type={"password"}
-                                        required
-                                        fullWidth
-                                    />
-                                </Grid>
-                            </Grid>
-                            <br/>
-                            {isSubmitting && <LinearProgress/>}
-                            <Button
-                                type={"submit"}
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                size={"large"}
-                                className={classes.submit}
-                                disabled={isSubmitting}
-                            >
-                                Se connecter
-                            </Button>
-                        </Form>}
+                                <br/>
+                                {isSubmitting && <LinearProgress/>}
+                                <Button
+                                    type={"submit"}
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    size={"large"}
+                                    className={classes.submit}
+                                    disabled={isSubmitting}
+                                >
+                                    Se connecter
+                                </Button>
+                            </Form>
+                        }
                     </Formik>
-                    <Grid container justify="flex-end" className={classes.link}>
-                        <Grid item>
-                            <Link component={RouterLink} to={"/register"} variant="body2">
-                                Vous n'avez pas de compte? S'enregister
-                            </Link>
-                        </Grid>
+                <Grid container justify="flex-end" className={classes.link}>
+                    <Grid item>
+                        <Link component={RouterLink} to={"/register"} variant="body2">
+                            Vous n'avez pas de compte? S'enregister
+                        </Link>
                     </Grid>
-                </Container>
-            </Grid>
-        </Grid>;
+                </Grid>
+            </Container>
+        </Grid>
+    </Grid>
 }

@@ -15,6 +15,7 @@ import ContractList from './Manager/ContractList';
 import Employerstatus from './Manager/EmployerStatus';
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
+import Reports from "./Manager/Reports";
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import SemesterSelector from "./Manager/SemesterSelector";
 import StudentStatus from "./Manager/StudentStatus";
@@ -39,11 +40,11 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function Dashboard(props) {
+export default function Dashboard() {
     const classes = useStyles();
 
     return <div className={classes.root}>
-        <Navbar {...props}/>
+        <Navbar/>
         <Container className={classes.container}>
             <Switch>
                 <Route exact={true} path={"/dashboard"}>
@@ -63,20 +64,20 @@ export default function Dashboard(props) {
                                     role={"admin"}/>
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/approbation/offres"
-                                    component={OfferApprobation}
-                                    role={"admin"}/>
-                <RoleProtectedRoute exact={true}
-                                    path="/dashboard/assignement/cv"
-                                    component={OfferAssignements}
-                                    role={"admin"}/>
-                <RoleProtectedRoute exact={true}
-                                    path="/dashboard/status"
-                                    component={StudentStatus}
-                                    role={"admin"}/>
-                <RoleProtectedRoute exact={true}
-                                    path="/dashboard/OfferList"
-                                    component={OfferList}
-                                    role={"admin"}/>
+                                        component={OfferApprobation}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/assignement/cv"
+                                        component={OfferAssignements}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/status"
+                                        component={StudentStatus}
+                                        role={"admin"}/>
+                    <RoleProtectedRoute exact={true}
+                                        path="/dashboard/OfferList"
+                                        component={OfferList}
+                                        role={"admin"}/>
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/applicationsAdmin"
                                     component={ApplicationList}
@@ -92,6 +93,10 @@ export default function Dashboard(props) {
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/contractList"
                                     component={ContractList}
+                                    role={"admin"}/>
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/reports"
+                                    component={Reports}
                                     role={"admin"}/>
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/contractForm"
@@ -139,8 +144,8 @@ export default function Dashboard(props) {
                                     path="/dashboard/stagelist"
                                     component={OfferApplication}
                                     role={"student"}/>
-            </Switch>
-        </Container>
-        <Footer/>
-    </div>;
+                </Switch>
+            </Container>
+            <Footer/>
+        </div>
 }
