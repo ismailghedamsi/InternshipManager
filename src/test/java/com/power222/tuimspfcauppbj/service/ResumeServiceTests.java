@@ -38,7 +38,6 @@ class ResumeServiceTests {
                 .id(1L)
                 .username("student")
                 .password("password")
-                .role("student")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
@@ -125,7 +124,7 @@ class ResumeServiceTests {
     @Test
     void updateResume() {
         var initialId = expectedResume.getId();
-        var alteredId = 123L;
+        final var alteredId = 123L;
         var alteredResume = expectedResume.toBuilder().id(alteredId).build();
         when(resumeRepo.findById(initialId)).thenReturn(Optional.of(expectedResume));
         when(resumeRepo.saveAndFlush(alteredResume)).thenReturn(expectedResume);

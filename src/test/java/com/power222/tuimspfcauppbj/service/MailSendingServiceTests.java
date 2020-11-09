@@ -6,22 +6,11 @@ import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
-
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MailSendingServiceTests {
@@ -41,7 +30,6 @@ public class MailSendingServiceTests {
     @BeforeEach
     public void setUp() {
         employer = Employer.builder()
-                .role("employer")
                 .username("employeur")
                 .password("Projet_employeur1")
                 .companyName("Dacima")
@@ -73,30 +61,5 @@ public class MailSendingServiceTests {
                 .student(Student.builder().firstName("Ismail").lastName("ghedamsi").build())
                 .offer(offerWithInvalidUser)
                 .build();
-    }
-
-    @Test
-    public void sendEmailSuccess() throws MessagingException, IOException {
-        MimeMessage mimeMessage = new MimeMessage((Session) null);
-
-        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-
-        service.sendEmail(expectedStudentApplication);
-
-        var actual = (String) ((Multipart) ((Multipart) mimeMessage.getContent()).getBodyPart(0).getContent()).getBodyPart(0).getContent();
-        String expected = "Un contrat a été généré pour votre offre " + expectedStudentApplication.getOffer().getTitle()
-                + " pour l'étudiant " + expectedStudentApplication.getStudent().getLastName() + " " + expectedStudentApplication.getStudent().getFirstName()
-                + "<br/>Veuillez consulter le contract sur notre application";
-
-        assertThat(actual).isEqualTo(expected);
-        assertThat(mimeMessage.getAllRecipients()[0].toString()).isEqualTo(expectedStudentApplication.getOffer().getEmployer().getEmail());
-        assertThat(mimeMessage.getSubject()).isEqualTo("Contrat généré");
-    }
-
-    @Test
-    public void mailSendingFailInvalidUser() {
-        MimeMessage mimeMessage = new MimeMessage((Session) null);
-        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-        service.sendEmail(failStudentApplication);
     }
 }

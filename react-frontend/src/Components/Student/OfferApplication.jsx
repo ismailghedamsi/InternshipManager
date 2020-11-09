@@ -290,13 +290,13 @@ export default function OfferApplication() {
                 isOpen={isReasonModalOpen}
                 hide={closeReasonModal}
                 title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, "JOB_OFFER_DENIED_BY_STUDENT", values.message)}
+                onSubmit={async values => sendDecision(currentIndex, "JOB_OFFER_DENIED_BY_STUDENT", values.message)}
             />
         <TextboxModal
             isOpen={isReasonOfInterviewModalOpen}
             hide={closeReasonOfInterviewModal}
             title={"Justifiez le refus"}
-            onSubmit={async (values) => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
+            onSubmit={async values => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
         />
     </div>;
 }

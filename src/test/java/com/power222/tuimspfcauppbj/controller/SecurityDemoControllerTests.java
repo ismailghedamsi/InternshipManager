@@ -1,7 +1,7 @@
 package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.model.Admin;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,9 +48,8 @@ public class SecurityDemoControllerTests {
     @Test
     @WithMockUser("test")
     void authenticatedPrivateHelloWorldTest() throws Exception {
-        when(userRepo.findByUsername(any())).thenReturn(Optional.of(User.builder()
+        when(userRepo.findByUsername(any())).thenReturn(Optional.of(Admin.builder()
                 .username("admin")
-                .role("admin")
                 .password("password")
                 .build()));
 

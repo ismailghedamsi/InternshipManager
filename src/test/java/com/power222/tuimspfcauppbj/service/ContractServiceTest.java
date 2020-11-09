@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
+import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
@@ -32,15 +33,11 @@ public class ContractServiceTest {
     @InjectMocks
     private ContractService contractSvc;
 
-    private User expectedUser;
     private Contract expectedContract;
 
     @BeforeEach
     void setUp() {
-        expectedUser = User.builder()
-                .id(1L)
-                .role("admin")
-                .build();
+        final User expectedAdmin = Admin.builder().id(1L).build();
 
         StudentApplication expectedStudentApplication = StudentApplication.builder()
                 .id(1L)
@@ -119,7 +116,7 @@ public class ContractServiceTest {
     @Test
     void updateContractTest() {
         var initialId = expectedContract.getId();
-        var alteredId = 123L;
+        final var alteredId = 123L;
         var alteredContract = expectedContract.toBuilder().id(alteredId).build();
         when(contractRepo.findById(initialId)).thenReturn(Optional.of(expectedContract));
         when(contractRepo.saveAndFlush(alteredContract)).thenReturn(expectedContract);

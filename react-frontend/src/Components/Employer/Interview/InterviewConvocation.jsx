@@ -34,73 +34,69 @@ export default function InterviewConvocation() {
         return api.post("/interviews", dto).then(() => history.push("/dashboard/listInterview"))
     }
 
-    return (
-        <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{minHeight: '100%'}}
-        >
-            <Grid item xs={12} sm={7} lg={5}>
-                <Container component="main" maxWidth="sm" className={classes.container}>
-                    <Formik
-                        onSubmit={async (values) => createInterview(values)}
-                        validateOnBlur={false}
-                        validateOnChange={false}
-                        enableReinitialize={true}
-                        validationSchema={yup.object().shape({
-                            interviewDate: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
-                        })}
-                        initialValues={{
-                            interviewDate: new Date()
-                        }}>
-                        {({isSubmitting}) => (
-                            <Form className={classes.form}>
-                                <Typography variant={"h4"} display={"block"} style={{paddingTop: 15, marginBottom: 15}}>
-                                    Étudiant à rencontrer :&ensp;
-                                    {applicationInterview && applicationInterview.student ?
-                                        applicationInterview.student.firstName + " " + applicationInterview.student.lastName : ""}
-                                </Typography>
-                                <Grid container
-                                      alignItems="start"
-                                      justify="center"
-                                      spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Field
-                                            component={DateTimePicker}
-                                            name="interviewDate"
-                                            variant="outlined"
-                                            label="Date et heure de l'entrevue"
-                                            required
-                                            fullWidth
-                                            format="MM/dd/yyyy hh:mm"
-                                        />
-                                    </Grid>
-                                    <ErrorMessage name={"file"}>
-                                        {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
-                                        </p>}
-                                    </ErrorMessage>
-                                </Grid>
-                                <br/>
-                                {isSubmitting && <LinearProgress/>}
-                                <Button
-                                    type={"submit"}
+    return <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{minHeight: '100%'}}
+    >
+        <Grid item xs={12} sm={7} lg={5}>
+            <Container component="main" maxWidth="sm" className={classes.container}>
+                <Formik
+                    onSubmit={async values => createInterview(values)}
+                    validateOnBlur={false}
+                    validateOnChange={false}
+                    enableReinitialize={true}
+                    validationSchema={yup.object().shape({
+                        interviewDate: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
+                    })}
+                    initialValues={{
+                        interviewDate: new Date()
+                    }}>
+                    {({isSubmitting}) => <Form className={classes.form}>
+                        <Typography variant={"h4"} display={"block"} style={{paddingTop: 15, marginBottom: 15}}>
+                            Étudiant à rencontrer :&ensp;
+                            {applicationInterview && applicationInterview.student ?
+                                applicationInterview.student.firstName + " " + applicationInterview.student.lastName : ""}
+                        </Typography>
+                        <Grid container
+                              alignItems="start"
+                              justify="center"
+                              spacing={2}>
+                            <Grid item xs={12}>
+                                <Field
+                                    component={DateTimePicker}
+                                    name="interviewDate"
+                                    variant="outlined"
+                                    label="Date et heure de l'entrevue"
+                                    required
                                     fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    size={"large"}
-                                    className={classes.submit}
-                                    disabled={isSubmitting}
-                                >
-                                    Convoquer l'étudiant
-                                </Button>
-                            </Form>
-                        )}
-                    </Formik>
-                </Container>
-            </Grid>
+                                    format="MM/dd/yyyy hh:mm"
+                                />
+                            </Grid>
+                            <ErrorMessage name={"file"}>
+                                {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
+                                </p>}
+                            </ErrorMessage>
+                        </Grid>
+                        <br/>
+                        {isSubmitting && <LinearProgress/>}
+                        <Button
+                            type={"submit"}
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            size={"large"}
+                            className={classes.submit}
+                            disabled={isSubmitting}
+                        >
+                            Convoquer l'étudiant
+                        </Button>
+                    </Form>}
+                </Formik>
+            </Container>
         </Grid>
-    )
+    </Grid>
 }

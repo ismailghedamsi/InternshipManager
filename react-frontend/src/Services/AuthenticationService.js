@@ -23,7 +23,7 @@ class AuthenticationService {
             headers: {
                 authorization: "Basic " + btoa(values.username + ":" + values.password)
             }
-        }).then((response) => {
+        }).then(response => {
             let user = response.data
             user.password = values.password
             this.setupAxiosInterceptors(values.username, values.password)
@@ -38,7 +38,7 @@ class AuthenticationService {
             .then(() => {
                 history.push("/")
             })
-            .catch((error) => {
+            .catch(error => {
                 if (error.response) {
                     if (error.response.status === HTTP_CONFLICT)
                         setFieldError("username", "Le nom d'utilisateur n'est pas disponible")
@@ -55,7 +55,7 @@ class AuthenticationService {
 
         let basicAuthHeader = 'Basic ' + btoa(username + ":" + password)
         this.interceptorId = axios.interceptors.request.use(
-            (config) => {
+            config => {
                 config.headers.authorization = basicAuthHeader
                 return config
             }

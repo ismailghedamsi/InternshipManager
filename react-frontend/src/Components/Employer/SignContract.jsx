@@ -17,8 +17,8 @@ import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import TextboxModal from "../Utils/TextboxModal";
 import useStyles from "../Utils/useStyles";
 
-const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = (value) => "Doit avoir moins que " + value.max + " caractères";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+const tooLongError = value => "Doit avoir moins que " + value.max + " caractères";
 export default function SignContract() {
     const classes = useStyles();
     const api = useApi();
@@ -98,147 +98,141 @@ export default function SignContract() {
         }
     }
 
-    return (
-        <div style={{height: "100%"}}>
-            <PdfSelectionViewer
-                documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
-                title={"Contrats"}>
-                {(i, setCurrent) => (
-                    <div key={i}>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
-                            onClick={() => {
-                                setCurrent(i);
-                                setCurrentIndex(i);
-                            }}
-                        >
-                            <Typography color={"textPrimary"} variant={"body1"}>
-                                {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
-                                &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
+    return <div style={{height: "100%"}}>
+        <PdfSelectionViewer
+            documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
+            title={"Contrats"}>
+            {(i, setCurrent) => <div key={i}>
+                <button
+                    type={"button"}
+                    className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                    onClick={() => {
+                        setCurrent(i);
+                        setCurrentIndex(i);
+                    }}
+                >
+                    <Typography color={"textPrimary"} variant={"body1"}>
+                        {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
+                        &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
 
-                            </Typography>
-                        </button>
-                        {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
-                        <div className={classes.buttonDiv} style={{display: "block"}}>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton].join(' ')}
-                                onClick={() => {
-                                    setCurrentIndex(i);
-                                    openSignModal()
-                                }}
-                            >
-                                <i className="fa fa-check-square" style={{color: "green"}}/>
-                                <Typography display={"inline"}>
-                                    &ensp;Signer le contrat
-                                </Typography>
-                            </button>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton].join(' ')}
-                                onClick={() => {
-                                    setCurrentIndex(i);
-                                    openReasonModal()
-                                }}
-                            >
-                                <i className="fa fa-ban" style={{color: "red"}}/>
-                                <Typography display={"inline"}>
-                                    &ensp;Refuser le contrat
-                                </Typography>
-                            </button>
-                        </div>}
-                        {currentIndex === i &&
-                        contractState(contracts[i])
-                        }
-                        <hr/>
-                    </div>
-                )}
-            </PdfSelectionViewer>
-            <Dialog open={isSignModalOpen} onClose={closeSignModal} fullWidth maxWidth={"md"}>
-                <DialogTitle id="alert-dialog-title">{"Veuillez signer le contrat :"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description" component={"div"}>
-                        <Formik
-                            onSubmit={async (values) => sendDecision(currentIndex, true, values)}
-                            validateOnBlur={false}
-                            validateOnChange={false}
-                            enableReinitialize={true}
-                            validate={(values) => {
-                                const errors = {};
-                                if (values.file.type !== "image/png" && values.file.type !== "image/jpeg") {
-                                    errors.file = "L'image doit être de type PNG ou JPG"
-                                }
-                                return errors;
-                            }}
-                            validationSchema={yup.object()
-                                .shape({
-                                    nomSignataire: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champs est requis")
-                                })
+                    </Typography>
+                </button>
+                {currentIndex === i && contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
+                <div className={classes.buttonDiv} style={{display: "block"}}>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton].join(' ')}
+                        onClick={() => {
+                            setCurrentIndex(i);
+                            openSignModal()
+                        }}
+                    >
+                        <i className="fa fa-check-square" style={{color: "green"}}/>
+                        <Typography display={"inline"}>
+                            &ensp;Signer le contrat
+                        </Typography>
+                    </button>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton].join(' ')}
+                        onClick={() => {
+                            setCurrentIndex(i);
+                            openReasonModal()
+                        }}
+                    >
+                        <i className="fa fa-ban" style={{color: "red"}}/>
+                        <Typography display={"inline"}>
+                            &ensp;Refuser le contrat
+                        </Typography>
+                    </button>
+                </div>}
+                {currentIndex === i &&
+                contractState(contracts[i])
+                }
+                <hr/>
+            </div>}
+        </PdfSelectionViewer>
+        <Dialog open={isSignModalOpen} onClose={closeSignModal} fullWidth maxWidth={"md"}>
+            <DialogTitle id="alert-dialog-title">{"Veuillez signer le contrat :"}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description" component={"div"}>
+                    <Formik
+                        onSubmit={async values => sendDecision(currentIndex, true, values)}
+                        validateOnBlur={false}
+                        validateOnChange={false}
+                        enableReinitialize={true}
+                        validate={values => {
+                            const errors = {};
+                            if (values.file.type !== "image/png" && values.file.type !== "image/jpeg") {
+                                errors.file = "L'image doit être de type PNG ou JPG"
                             }
-                            initialValues={{
-                                nomSignataire: "",
-                                file: ""
-                            }}>
-                            {({submitForm, isSubmitting}) => (
-                                <Form>
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            <Field
-                                                component={TextField}
-                                                name="nomSignataire"
-                                                id="nomSignataire"
-                                                variant="outlined"
-                                                label="Nom du signataire"
-                                                required
-                                                fullWidth
-                                                autoFocus
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Field
-                                                component={SimpleFileUpload}
-                                                type={"file"}
-                                                name="file"
-                                                id="file"
-                                                variant="outlined"
-                                                label="Une image de signature en PNG ou JPG"
-                                                fullwidth
-                                                required
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                    <br/>
-                                    {isSubmitting && <LinearProgress/>}
-                                    <Button
-                                        id="buttonSubmit"
-                                        type={"submit"}
-                                        variant="contained"
+                            return errors;
+                        }}
+                        validationSchema={yup.object()
+                            .shape({
+                                nomSignataire: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champs est requis")
+                            })
+                        }
+                        initialValues={{
+                            nomSignataire: "",
+                            file: ""
+                        }}>
+                        {({submitForm, isSubmitting}) => <Form>
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Field
+                                        component={TextField}
+                                        name="nomSignataire"
+                                        id="nomSignataire"
+                                        variant="outlined"
+                                        label="Nom du signataire"
+                                        required
                                         fullWidth
-                                        size={"large"}
-                                        color="primary"
-                                        disabled={isSubmitting}
-                                        onClick={submitForm}
-                                    >
-                                        ENVOYER
-                                    </Button>
-                                </Form>
-                            )}
-                        </Formik>
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeSignModal} color={"primary"}>
-                        Annuler
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <TextboxModal
-                isOpen={isReasonModalOpen}
-                hide={closeReasonModal}
-                title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, false, values)}
-            />
-        </div>
-    )
+                                        autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Field
+                                        component={SimpleFileUpload}
+                                        type={"file"}
+                                        name="file"
+                                        id="file"
+                                        variant="outlined"
+                                        label="Une image de signature en PNG ou JPG"
+                                        fullwidth
+                                        required
+                                    />
+                                </Grid>
+                            </Grid>
+                            <br/>
+                            {isSubmitting && <LinearProgress/>}
+                            <Button
+                                id="buttonSubmit"
+                                type={"submit"}
+                                variant="contained"
+                                fullWidth
+                                size={"large"}
+                                color="primary"
+                                disabled={isSubmitting}
+                                onClick={submitForm}
+                            >
+                                ENVOYER
+                            </Button>
+                        </Form>}
+                    </Formik>
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={closeSignModal} color={"primary"}>
+                    Annuler
+                </Button>
+            </DialogActions>
+        </Dialog>
+        <TextboxModal
+            isOpen={isReasonModalOpen}
+            hide={closeReasonModal}
+            title={"Justifiez le refus"}
+            onSubmit={async values => sendDecision(currentIndex, false, values)}
+        />
+    </div>
 }

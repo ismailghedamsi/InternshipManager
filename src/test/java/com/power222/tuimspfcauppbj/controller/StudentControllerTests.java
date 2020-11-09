@@ -44,7 +44,6 @@ public class StudentControllerTests {
     void beforeEach() {
         expected = Student.builder()
                 .username("etudiant")
-                .role("student")
                 .firstName("Bob")
                 .lastName("Brutus")
                 .id(4L)

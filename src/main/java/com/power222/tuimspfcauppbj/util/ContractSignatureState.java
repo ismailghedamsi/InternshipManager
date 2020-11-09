@@ -24,5 +24,4 @@ public enum ContractSignatureState {
                 return SIGNED;
         }
     }
-
 }

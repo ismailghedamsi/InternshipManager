@@ -46,7 +46,6 @@ public class EmployerControllerTests {
         expected = Employer.builder()
                 .id(1L)
                 .username("employer")
-                .role("employer")
                 .companyName("AL")
                 .contactName("emp1")
                 .phoneNumber("0123456789")

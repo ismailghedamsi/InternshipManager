@@ -39,7 +39,7 @@ class ContractSignatureStateTest {
     @Test
     void getNextStatefromWAITING_FOR_STUDENT_SIGNATURE() {
         var initialState = ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE;
-        var finalState = ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE;
+        var finalState = ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE;
 
         var actual = ContractSignatureState.getNextState(initialState, true);
         assertThat(actual).isEqualTo(finalState);

@@ -7,8 +7,7 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
 export default function ErrorModal({isOpen, hide}) {
-    return isOpen ? (
-        <Dialog open={isOpen} onClose={hide}>
+    return isOpen ? <Dialog open={isOpen} onClose={hide}>
             <DialogTitle id="alert-dialog-title">{"Erreur réseau"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
@@ -20,6 +19,5 @@ export default function ErrorModal({isOpen, hide}) {
                     J'ai compris
                 </Button>
             </DialogActions>
-        </Dialog>
-    ) : null;
+        </Dialog> : null;
 }

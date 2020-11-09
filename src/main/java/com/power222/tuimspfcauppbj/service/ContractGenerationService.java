@@ -38,6 +38,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.itextpdf.io.codec.Base64.encodeBytes;
+import static com.power222.tuimspfcauppbj.util.ContractSignatureState.*;
 
 @SuppressWarnings("MagicNumber")
 @Service
@@ -111,14 +112,14 @@ public class ContractGenerationService {
     }
 
     private Optional<Contract> getSignedContract(Contract contract, ContractSignatureDTO signatureDto) {
-        if (contract.getSignatureState() != ContractSignatureState.PENDING_FOR_ADMIN_REVIEW) {
+        if (contract.getSignatureState() != PENDING_FOR_ADMIN_REVIEW) {
             if (signatureDto.isApproved())
                 contract.setFile(getContractFileWithSignature(contract, signatureDto));
             else
                 contract.setReasonForRejection(signatureDto.getReasonForRejection());
         }
 
-        contract.setSignatureState(ContractSignatureState.getNextState(contract.getSignatureState(), signatureDto.isApproved()));
+        contract.setSignatureState(getNextState(contract.getSignatureState(), signatureDto.isApproved()));
 
         final var signedContract = contractService.updateContract(contract.getId(), contract);
         signedContract.ifPresent(mailService::notifyConcernedUsers);

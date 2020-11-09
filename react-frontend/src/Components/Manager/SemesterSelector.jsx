@@ -35,73 +35,69 @@ export default function SemesterSelector() {
             return <MenuItem value={-1} disabled>Aucune année</MenuItem>;
     }
 
-    return (
-        <Grid
-            container
-            spacing={2}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{minHeight: '100vh'}}
-        >
-            <Grid item xs={12} sm={7} lg={5}>
-                <Container component="main" maxWidth="sm" className={classes.container}>
-                    <Formik
-                        onSubmit={async values => {
-                            setSemester(semesters[values.semester]);
-                            history.push("/dashboard");
-                        }}
+    return <Grid
+        container
+        spacing={2}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{minHeight: '100vh'}}
+    >
+        <Grid item xs={12} sm={7} lg={5}>
+            <Container component="main" maxWidth="sm" className={classes.container}>
+                <Formik
+                    onSubmit={async values => {
+                        setSemester(semesters[values.semester]);
+                        history.push("/dashboard");
+                    }}
 
-                        validateOnBlur={false}
-                        validateOnChange={false}
-                        enableReinitialize={true}
-                        validationSchema={yup.object()
-                            .shape({
-                                semester: yup.number().notOneOf([-1], "Impossible de choisir une année invalide").required("Ce champ est requis")
-                            })}
-                        initialValues={{
-                            semester: -1,
-                        }}
-                    >
-                        {({submitForm, isSubmitting}) => (
-                            <Form>
-                                <Grid container
-                                      alignItems="start"
-                                      justify="center"
-                                      spacing={2}>
-                                    <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
-                                        Choisir une année scolaire
-                                    </Typography>
-                                    <Grid item xs={12} sm={6}>
-                                        <Field
-                                            component={Select}
-                                            id="semester"
-                                            name="semester"
-                                            fullWidth
-                                            style={{marginBottom: "10px"}}
-                                        >
-                                            {generateMenuItems()}
-                                        </Field>
-                                    </Grid>
-                                    {isSubmitting && <LinearProgress/>}
-                                    <Button
-                                        id="buttonSubmit"
-                                        type={"submit"}
-                                        variant="contained"
-                                        fullWidth
-                                        size={"large"}
-                                        color="primary"
-                                        disabled={isSubmitting}
-                                        onClick={submitForm}
-                                    >
-                                        Changer d'année
-                                    </Button>
-                                </Grid>
-                            </Form>
-                        )}
-                    </Formik>
-                </Container>
-            </Grid>
+                    validateOnBlur={false}
+                    validateOnChange={false}
+                    enableReinitialize={true}
+                    validationSchema={yup.object()
+                        .shape({
+                            semester: yup.number().notOneOf([-1], "Impossible de choisir une année invalide").required("Ce champ est requis")
+                        })}
+                    initialValues={{
+                        semester: -1,
+                    }}
+                >
+                    {({submitForm, isSubmitting}) => <Form>
+                        <Grid container
+                              alignItems="start"
+                              justify="center"
+                              spacing={2}>
+                            <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
+                                Choisir une année scolaire
+                            </Typography>
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    component={Select}
+                                    id="semester"
+                                    name="semester"
+                                    fullWidth
+                                    style={{marginBottom: "10px"}}
+                                >
+                                    {generateMenuItems()}
+                                </Field>
+                            </Grid>
+                            {isSubmitting && <LinearProgress/>}
+                            <Button
+                                id="buttonSubmit"
+                                type={"submit"}
+                                variant="contained"
+                                fullWidth
+                                size={"large"}
+                                color="primary"
+                                disabled={isSubmitting}
+                                onClick={submitForm}
+                            >
+                                Changer d'année
+                            </Button>
+                        </Grid>
+                    </Form>}
+                </Formik>
+            </Container>
         </Grid>
-    )
+    </Grid>
 }
