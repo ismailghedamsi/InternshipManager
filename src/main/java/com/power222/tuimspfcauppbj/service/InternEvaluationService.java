@@ -21,7 +21,7 @@ public class InternEvaluationService {
         return InterEvaluationRepo.saveAndFlush(internEvaluation);
     }
 
-    public List<InternEvaluation> getAllinternEvaluation() {
+    public List<InternEvaluation> getAllInternEvaluation() {
         return InterEvaluationRepo.findAll();
     }
 
@@ -41,7 +41,7 @@ public class InternEvaluationService {
     }
 
     @Transactional
-    public void deleteInterEvaluationById(long id) {
+    public void deleteInternEvaluationById(long id) {
         InterEvaluationRepo.deleteById(id);
     }
 }
