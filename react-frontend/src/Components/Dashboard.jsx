@@ -24,7 +24,7 @@ import OfferApplication from "./Student/OfferApplication";
 import ResumeList from "./Student/ResumeList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
-import Navbar from "./Utils/Header/Navbar";
+import Navbar from "./Utils/Navbar";
 import {RoleProtectedRoute} from "./Utils/Routes";
 
 
@@ -68,7 +68,7 @@ export default function Dashboard() {
                                         component={OfferApprobation}
                                         role={"admin"}/>
                     <RoleProtectedRoute exact={true}
-                                        path="/dashboard/assignement/cv"
+                                        path="/dashboard/assignement/offer"
                                         component={OfferAssignements}
                                         role={"admin"}/>
                     <RoleProtectedRoute exact={true}
