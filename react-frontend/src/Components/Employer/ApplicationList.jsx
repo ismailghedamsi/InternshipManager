@@ -16,7 +16,7 @@ export default function ApplicationList() {
 
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
-            .then((r) => setOffer(r.data))
+            .then(r => setOffer(r.data))
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function studentApplicationState(i) {
