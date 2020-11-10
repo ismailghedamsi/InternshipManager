@@ -40,9 +40,7 @@ export default function ContractForm() {
                         let dto = {...values};
                         dto.studentApplicationId = applicationContract.id;
                         return api.post("/contractGeneration", dto)
-                            .then(() => {
-                                history.push("/dashboard/contractList")
-                            })
+                            .then(() => history.push("/dashboard/contractList"))
                     }}
                     validateOnBlur={false}
                     validateOnChange={false}
@@ -60,7 +58,7 @@ export default function ContractForm() {
                         engagementCollege: "",
                         engagementCompany: "",
                         engagementStudent: "",
-                        totalHoursPerWeek: 0
+                        totalHoursPerWeek: 1
                     }}
                 >
                     {({isSubmitting}) =>

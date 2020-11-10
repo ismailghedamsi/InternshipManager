@@ -1,9 +1,9 @@
 import {Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import useStyles from "../Utils/useStyles";
-import {Link} from "react-router-dom";
 
 export default function ContractList() {
     const classes = useStyles();
@@ -24,8 +24,8 @@ export default function ContractList() {
         delete contract.studentApplication.resume;
         return api.put("/contract/" + contract.id, contract)
             .then(r => {
-                nextState.splice(index, 1, r.data);
-                setContracts(nextState);
+                nextState.splice(index, 1, r.data)
+                setContracts(nextState)
             })
     }
 
@@ -33,7 +33,7 @@ export default function ContractList() {
         const nextState = [...contracts];
         return api.delete("/contract/" + nextState[index].id)
             .then(() => {
-                nextState.splice(index, 1);
+                nextState.splice(index, 1)
                 setContracts(nextState)
             })
     }
@@ -59,7 +59,7 @@ export default function ContractList() {
                 </Typography>
             case "SIGNED":
                 return <Typography variant={"body1"} style={{color: "green"}}>
-                    Contrat signée
+                    Contrat signé
                 </Typography>
             default:
                 return '';
@@ -82,7 +82,7 @@ export default function ContractList() {
                         </button>
                         }
                     </div>
-                    < button
+                    <button
                         type={"button"}
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                         onClick={() => {

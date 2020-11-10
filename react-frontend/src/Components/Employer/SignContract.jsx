@@ -1,11 +1,11 @@
 import {Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi, useModal} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import TextboxModal from "../Utils/TextboxModal";
 import useStyles from "../Utils/useStyles";
-import {Link} from "react-router-dom";
 
 export default function SignContract() {
     const classes = useStyles();
@@ -122,7 +122,7 @@ export default function SignContract() {
                         {AuthenticationService.getCurrentUserRole() !== "student" &&
                         <button
                             type={"button"}
-                            className={[classes.linkButton].join(' ')}
+                            className={classes.linkButton}
                             onClick={() => {
                                 setCurrentIndex(i);
                                 openReasonModal()
