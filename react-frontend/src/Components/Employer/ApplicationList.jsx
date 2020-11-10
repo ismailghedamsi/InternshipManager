@@ -16,7 +16,7 @@ export default function ApplicationList() {
 
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
-            .then((r) => setOffer(r.data))
+            .then(r => setOffer(r.data))
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function studentApplicationState(i) {
@@ -83,51 +83,48 @@ export default function ApplicationList() {
         }
     }
 
-    return (
-        <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
-                                title={(<span>Application<br/>{offer.title}</span>)}>
-                {(i, setCurrent) => (
-                    <div key={i}>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, classes.fileButton].join(' ')}
-                            autoFocus={i === 0}
-                            onClick={() => {
-                                setCurrent(i)
-                                setCurrentIndex(i)
-                            }}>
-                            <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
-                                {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
-                            </Typography>
-                        </button>
-                        {currentIndex === i &&
-                        <div>
-                            <Typography color={"textPrimary"} variant={"body1"}>
-                                {offer.applications[i].student.phoneNumber} {offer.applications[i].student.email}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body1"}>
-                                {offer.applications[i].student.address}
-                            </Typography>
-                            {studentApplicationState(i)}
-                            {AuthenticationService.getCurrentUserRole() === "employer" &&
-                            offer.applications[i].state !== "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER" &&
-                            <Link variant={"body1"}
-                                  to={{
-                                      pathname: "/dashboard/interviewConvocation",
-                                      state: {...offer.applications[i]}
-                                  }}
-                                  style={{display: "block"}}
-                            >
-                                Convoquer l'étudiant pour un entrevue
-                            </Link>
-                            }
-                        </div>
+    return <div style={{height: "100%"}}>
+        <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
+                            title={<span>Application<br/>{offer.title}</span>}>
+            {(i, setCurrent) =>
+                <div key={i}>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton, classes.fileButton].join(' ')}
+                        autoFocus={i === 0}
+                        onClick={() => {
+                            setCurrent(i)
+                            setCurrentIndex(i)
+                        }}>
+                        <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
+                            {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
+                        </Typography>
+                    </button>
+                    {currentIndex === i &&
+                    <div>
+                        <Typography color={"textPrimary"} variant={"body1"}>
+                            {offer.applications[i].student.phoneNumber} {offer.applications[i].student.email}
+                        </Typography>
+                        <Typography color={"textPrimary"} variant={"body1"}>
+                            {offer.applications[i].student.address}
+                        </Typography>
+                        {studentApplicationState(i)}
+                        {AuthenticationService.getCurrentUserRole() === "employer" &&
+                        offer.applications[i].state !== "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER" &&
+                        <Link variant={"body1"}
+                              to={{
+                                  pathname: "/dashboard/interviewConvocation",
+                                  state: {...offer.applications[i]}
+                              }}
+                              style={{display: "block"}}
+                        >
+                            Convoquer l'étudiant pour un entrevue
+                        </Link>
                         }
-                        <hr/>
                     </div>
-                )}
-            </PdfSelectionViewer>
-        </div>
-    )
+                    }
+                    <hr/>
+                </div>}
+        </PdfSelectionViewer>
+    </div>
 }
