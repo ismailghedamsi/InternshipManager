@@ -36,14 +36,14 @@ export default function SignForm() {
                 dto.nomSignataire = values.nomSignataire;
                 dto.signatureTimestamp = new Date();
                 return api.put("/contractGeneration/sign", dto)
-                    .then(result => redirection())
+                    .then(() => redirection())
             })
         } else {
             dto.contractId = contract.id;
             dto.isApproved = isApprouved;
             dto.reasonForRejection = values.message;
             return api.put("/contractGeneration/sign", dto)
-                .then(result => redirection())
+                .then(() => redirection())
         }
     }
 
