@@ -4,6 +4,9 @@ import com.power222.tuimspfcauppbj.dao.InternEvaluationRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternEvaluation;
 import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.util.AccepteStudentAgain;
+import com.power222.tuimspfcauppbj.util.AppreciationStates;
+import com.power222.tuimspfcauppbj.util.StatesEvaluation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -47,6 +51,20 @@ public class InternEvaluationServiceTests {
         expectedInternEvaluation = InternEvaluation.builder()
                 .id(1L)
                 .contract(expectedContract)
+                .discussedWithIntern(true)
+                .entrepriseName("steve")
+                .fullName("roger")
+                .evaluationDate(LocalDate.now())
+                .fonction("space ranger")
+                .globalAppreciation(AppreciationStates.EXCEED_EXPECTATIONS)
+                .globalAppreciationCommentary("Muahaha")
+                .hireInternAgainPossibility(AccepteStudentAgain.NON)
+                .interpersonalCommentary("muahaha")
+                .interpersonalRelationsA(StatesEvaluation.AGGREED)
+                .jobQualityA(StatesEvaluation.AGGREED)
+                .personalSkillsA(StatesEvaluation.DISAGREED)
+                .productivityB(StatesEvaluation.N_A)
+                .supervisorName("Bob")
                 .phoneNumber("121314")
                 .build();
     }
