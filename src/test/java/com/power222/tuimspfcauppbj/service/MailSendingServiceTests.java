@@ -59,7 +59,12 @@ public class MailSendingServiceTests {
         expectedStudentApplication = StudentApplication.builder()
                 .id(1L)
                 .offer(offer)
-                .student(Student.builder().firstName("Ismail").lastName("ghedamsi").email("projetemployeur@gmail.com").build())
+                .student(
+                        Student.builder()
+                                .firstName("Ismail")
+                                .lastName("ghedamsi")
+                                .email("projetemployeur@gmail.com")
+                                .build())
                 .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
                 .reasonForRejection("")
                 .build();

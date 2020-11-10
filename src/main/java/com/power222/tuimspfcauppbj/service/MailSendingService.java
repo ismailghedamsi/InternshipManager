@@ -25,20 +25,12 @@ public class MailSendingService {
 
     public void sendEmail(StudentApplication studentApplication, UserTypes userTypes) {
         String sendTo = "";
-
-
-        if (userTypes == userTypes.EMPLOYER) {
+        if ((userTypes == userTypes.EMPLOYER) || (userTypes == userTypes.STUDENT)) {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             sendTo = getUserEmail(studentApplication.getOffer().getEmployer());
             setMailContent(studentApplication, mimeMessage, sendTo);
             javaMailSender.send(mimeMessage);
-        } else if (userTypes == userTypes.STUDENT) {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            sendTo = getUserEmail(studentApplication.getStudent());
-            setMailContent(studentApplication, mimeMessage, sendTo);
-            javaMailSender.send(mimeMessage);
         }
-
     }
 
     private void setMailContent(StudentApplication studentApplication, MimeMessage mimeMessage, String sendTo) {
