@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
+@SuppressWarnings("JpaDataSourceORMInspection")
 public class InternEvaluation extends SemesterDiscriminatedEntity {
 
     @Id
@@ -32,12 +33,21 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
 
     @Data
     @Embeddable
+    public static class GeneralInfo {
+        private String studentProgram;
+        private String supervisorRole;
+        private String phoneNumber;
+    }
+
+    @Data
+    @Embeddable
     public static class ProductivityCriterias {
         private Opinion efficiency;
         private Opinion comprehension;
         private Opinion rythm;
         private Opinion priorities;
         private Opinion deadlines;
+        @Column(name = "PRODUCTIVITY_COMMENT")
         private String comment;
     }
 
@@ -47,8 +57,9 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
         private Opinion followsInstructions;
         private Opinion detailsAttention;
         private Opinion doubleChecks;
-        private Opinion striveForPerfection;
+        private Opinion strivesForPerfection;
         private Opinion problemAnalysis;
+        @Column(name = "QUALITY_COMMENT")
         private String comment;
 
     }
@@ -62,6 +73,7 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
         private Opinion acceptsCriticism;
         private Opinion respectsOthers;
         private Opinion activelyListens;
+        @Column(name = "RELATIONSHIPS_COMMENT")
         private String comment;
     }
 
@@ -74,6 +86,7 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
         private Opinion worksSafely;
         private Opinion dependable;
         private Opinion punctual;
+        @Column(name = "SKILLS_COMMENT")
         private String comment;
     }
 
@@ -81,16 +94,9 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
     @Embeddable
     public static class GlobalAppreciation {
         private Expectations expectations;
+        @Column(name = "GLOBAL_COMMENT")
         private String comment;
         private boolean discussedWithIntern;
-    }
-
-    @Data
-    @Embeddable
-    public static class GeneralInfo {
-        private String studentProgram;
-        private String supervisorRole;
-        private String phoneNumber;
     }
 
     @Data

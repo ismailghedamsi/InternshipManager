@@ -83,21 +83,20 @@ export default function ApplicationList() {
         }
     }
 
-    return (
-        <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
-                                title={(<span>Application<br/>{offer.title}</span>)}>
-                {(i, setCurrent) => (
-                    <div key={i}>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, classes.fileButton].join(' ')}
-                            autoFocus={i === 0}
-                            onClick={() => {
-                                setCurrent(i)
-                                setCurrentIndex(i)
-                            }}>
-                            <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
+    return <div style={{height: "100%"}}>
+        <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
+                            title={(<span>Application<br/>{offer.title}</span>)}>
+            {(i, setCurrent) =>
+                <div key={i}>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton, classes.fileButton].join(' ')}
+                        autoFocus={i === 0}
+                        onClick={() => {
+                            setCurrent(i)
+                            setCurrentIndex(i)
+                        }}>
+                        <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
                                 {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
                             </Typography>
                         </button>
@@ -135,8 +134,7 @@ export default function ApplicationList() {
                         }
                         <hr/>
                     </div>
-                )}
+            }
             </PdfSelectionViewer>
         </div>
-    )
 }

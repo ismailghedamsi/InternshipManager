@@ -1,94 +1,170 @@
 import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@material-ui/core';
 import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
+import {useLocation} from "react-router-dom";
 import EvaluationModal from '../../Utils/EvaluationModal';
+import {useFileReader} from "../../Utils/Hooks";
 
-export function FormikStepper({children, ...props}) {
-    const childrenArray = React.Children.toArray(children);
-    const [step, setStep] = useState(0);
-    const currentChild = childrenArray[step];
-    const [completed, setCompleted] = useState(false);
-    const [data, setData] = useState({});
-    const [isOpen, setOpen] = useState(false);
+const sleep = time => new Promise(acc => setTimeout(acc, time))
+
+export function FormikStepper({children, evaluationAnswers, globalAppreciations}) {
+    const childrenArray = React.Children.toArray(children)
+    const location = useLocation()
+    const readFile = useFileReader()
+    const [step, setStep] = useState(0)
+    const currentChild = childrenArray[step]
+    const [completed, setCompleted] = useState(false)
+    const [data, setData] = useState({})
+    const [isOpen, setOpen] = useState(false)
 
     function isLastStep() {
         return step === childrenArray.length - 1;
     }
 
+    return <>
+        <EvaluationModal isOpen={isOpen} data={data}/>
+        <Formik
+            initialValues={{
+                infos: {
+                    fullname: location.state.student.firstName + " " + location.state.student.lastName,
+                    studentProgram: "",
+                    supervisorRole: "",
+                    phoneNumber: "",
+                },
+                productivity: {
+                    efficiency: evaluationAnswers[0],
+                    comprehension: evaluationAnswers[0],
+                    rythm: evaluationAnswers[0],
+                    priorities: evaluationAnswers[0],
+                    deadlines: evaluationAnswers[0],
+                    comment: ""
+                },
+                quality: {
+                    followsInstructions: evaluationAnswers[0],
+                    detailsAttention: evaluationAnswers[0],
+                    doubleChecks: evaluationAnswers[0],
+                    strivesForPerfection: evaluationAnswers[0],
+                    problemAnalysis: evaluationAnswers[0],
+                    comment: ""
+                },
+                relationships: {
+                    connectsEasily: evaluationAnswers[0],
+                    teamworkContribution: evaluationAnswers[0],
+                    culturalAdaptation: evaluationAnswers[0],
+                    acceptsCriticism: evaluationAnswers[0],
+                    respectsOthers: evaluationAnswers[0],
+                    activelyListens: evaluationAnswers[0],
+                    comment: ""
+                },
+                skills: {
+                    showsInterest: evaluationAnswers[0],
+                    expressesOwnIdeas: evaluationAnswers[0],
+                    showsInitiative: evaluationAnswers[0],
+                    worksSafely: evaluationAnswers[0],
+                    dependable: evaluationAnswers[0],
+                    punctual: evaluationAnswers[0],
+                    comment: ""
+                },
+                globalAppreciation: {
+                    expectations: globalAppreciations[0],
+                    comment: "",
+                    discussedWithIntern: false,
+                },
+                feedback: {
+                    weeklySupervisionHours: 0,
+                    hireAgain: "",
+                    technicalFormationOpinion: "",
+                },
+                signature: {
+                    image: "",
+                    date: new Date(),
+                    name: "",
+                }
+            }}
+            validationSchema={currentChild.props.validationSchema}
+            validateOnBlur={false}
+            validateOnChange={false}
+            validate={values => {
+                if (!isLastStep())
+                    return {};
 
-    return (
-            <>
-                <EvaluationModal isOpen={isOpen} data={data}/>
-                <Formik
-                        {...props}
-                        validationSchema={currentChild.props.validationSchema}
-                        onSubmit={async (values, helpers) => {
-                            if (isLastStep()) {
-                                await props.onSubmit(values, helpers);
-                                setCompleted(true);
-                            } else {
-                                setStep((s) => s + 1);
-                            }
-                        }}
-                >
-                    {({isSubmitting, values}) => (
-                            <Form autoComplete="off">
-                                <Stepper alternativeLabel activeStep={step}>
-                                    {childrenArray.map((child, index) => (
-                                            <Step key={child.props.label} completed={step > index || completed}>
-                                                <StepLabel>{child.props.label}</StepLabel>
-                                            </Step>
-                                    ))}
-                                </Stepper>
+                const errors = {signature: {}};
+                if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
+                    errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
+                }
+                if (values.signature.image.length === 0) {
+                    errors.signature.image = "Aucun fichier selectionné ou le fichier est vide"
+                }
+                return errors;
+            }}
+            onSubmit={async values => {
+                if (isLastStep()) {
+                    const dto = {...values}
+                    dto.signature.image = await readFile(values.signature.image)
 
-                                {currentChild}
+                    //await sleep(3000);
+                    console.log(dto)
+                    setCompleted(true);
+                } else {
+                    setStep(s => s + 1);
+                }
+            }}
+        >
+            {({isSubmitting, values}) =>
+                <Form autoComplete="off">
+                    <Stepper alternativeLabel activeStep={step}>
+                        {childrenArray.map((child, index) =>
+                            <Step key={child.props.label} completed={step > index || completed}>
+                                <StepLabel>{child.props.label}</StepLabel>
+                            </Step>
+                        )}
+                    </Stepper>
 
-                                <Grid container spacing={2}>
-                                    {step > 0 ? (
-                                            <Grid item>
-                                                <Button
-                                                        disabled={isSubmitting}
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() => setStep((s) => s - 1)}
-                                                >
-                                                    Back
-                                                </Button>
-                                            </Grid>
-                                    ) : null}
+                    {currentChild}
 
-                                    {
-                                        isLastStep() ? (
-                                                <Grid item>
-                                                    <Button
-                                                            disabled={isSubmitting}
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={() => {
-                                                                setData(values);
-                                                                setOpen(true)
-                                                            }}
-                                                    >
-                                                        Valider evaluation
-                                                    </Button>
-                                                </Grid>
-                                        ) : null
-                                    }
-                                    <Grid item>
-                                        <Button
-                                                startIcon={isSubmitting ? <CircularProgress size="1rem"/> : null}
-                                                disabled={isSubmitting}
-                                                variant="contained"
-                                                color="primary"
-                                                type="submit"
-                                        >
-                                            {isSubmitting ? 'Submitting' : isLastStep() ? 'Submit' : 'Next'}
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Form>
-                    )}
-                </Formik>
-            </>
-    );
+                    <Grid container spacing={2}>
+                        {step > 0 &&
+                        <Grid item>
+                            <Button
+                                disabled={isSubmitting}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setStep(s => s - 1)}
+                            >
+                                Back
+                            </Button>
+                        </Grid>
+                        }
+
+                        {isLastStep() &&
+                        <Grid item>
+                            <Button
+                                disabled={isSubmitting}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                    setData(values);
+                                    setOpen(true)
+                                }}
+                            >
+                                Valider evaluation
+                            </Button>
+                        </Grid>
+                        }
+                        <Grid item>
+                            <Button
+                                startIcon={isSubmitting ? <CircularProgress size="1rem"/> : null}
+                                disabled={isSubmitting}
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                            >
+                                {isSubmitting ? 'Submitting' : isLastStep() ? 'Submit' : 'Next'}
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Form>
+            }
+        </Formik>
+    </>
 }

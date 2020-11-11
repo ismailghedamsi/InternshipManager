@@ -55,3 +55,14 @@ export function useTimeParserFromDate() {
         return new Date(date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
     }
 }
+
+export function useFileReader() {
+    return file => {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        })
+    }
+}
