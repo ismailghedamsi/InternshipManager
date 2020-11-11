@@ -4,9 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.model.InternEvaluation;
 import com.power222.tuimspfcauppbj.service.InternEvaluationService;
-import com.power222.tuimspfcauppbj.util.Appreciation;
-import com.power222.tuimspfcauppbj.util.Opinion;
-import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,21 +45,6 @@ public class InternEvaluationControllerTests {
     void beforeEach() {
         expectedInternEvaluation = InternEvaluation.builder()
                 .id(1L)
-                .discussedWithIntern(true)
-                .entrepriseName("steve")
-                .fullName("roger")
-                .evaluationDate(LocalDate.now())
-                .fonction("space ranger")
-                .globalAppreciation(Appreciation.EXCEED_EXPECTATIONS)
-                .globalAppreciationComment("Muahaha")
-                .hireInternAgainPossibility(SimpleResponse.NO)
-                .interpersonalComment("muahaha")
-                .interpersonalRelationsA(Opinion.AGGREED)
-                .jobQualityA(Opinion.AGGREED)
-                .personalSkillsA(Opinion.DISAGREED)
-                .productivityB(Opinion.N_A)
-                .supervisorName("Bob")
-                .phoneNumber("121314")
                 .build();
     }
 

@@ -1,12 +1,10 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.power222.tuimspfcauppbj.util.Appreciation;
 import com.power222.tuimspfcauppbj.util.Opinion;
 import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @Entity
@@ -20,57 +18,94 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long studentApplicationId;
-
-    private String fullName;
-    private String program;
-    private String entrepriseName;
-    private String supervisorName;
-    private String fonction;
-    private String phoneNumber;
-
-    private Opinion productivityA;
-    private Opinion productivityB;
-    private Opinion productivityC;
-    private Opinion productivityD;
-    private Opinion productivityE;
-    private String productivityComment;
-
-    private Opinion jobQualityA;
-    private Opinion jobQualityB;
-    private Opinion jobQualityC;
-    private Opinion jobQualityD;
-    private Opinion jobQualityE;
-    private String jobQualityComment;
-
-    private Opinion interpersonalRelationsA;
-    private Opinion interpersonalRelationsB;
-    private Opinion interpersonalRelationsC;
-    private Opinion interpersonalRelationsD;
-    private Opinion interpersonalRelationsE;
-    private Opinion interpersonalRelationsF;
-    private String interpersonalComment;
-
-    private Opinion personalSkillsA;
-    private Opinion personalSkillsB;
-    private Opinion personalSkillsC;
-    private Opinion personalSkillsD;
-    private Opinion personalSkillsE;
-    private Opinion personalSkillsF;
-    private String personalSkillsComment;
-
-    private Appreciation globalAppreciation;
-    private String globalAppreciationComment;
-    private boolean discussedWithIntern;
-    private float nbHourSupervisionPerWeek;
-
-    private SimpleResponse hireInternAgainPossibility;
-    private String techincalFormationOpinion;
-    private String signature;
-    private LocalDate evaluationDate;
-    private String reviewerName;
-    private String reviewerFunction;
+    private GeneralInfo infos;
+    private ProductivityCriterias productivity;
+    private WorkQualityCriterias quality;
+    private InterpersonalRelationsCriterias relationships;
+    private PersonalSkills skills;
+    private GlobalAppreciation appreciation;
+    private Feedback feedback;
+    private Signature signature;
 
     @OneToOne
     private Contract contract;
+
+    @Data
+    @Embeddable
+    public static class ProductivityCriterias {
+        private Opinion efficiency;
+        private Opinion comprehension;
+        private Opinion rythm;
+        private Opinion priorities;
+        private Opinion deadlines;
+        private String comment;
+    }
+
+    @Data
+    @Embeddable
+    public static class WorkQualityCriterias {
+        private Opinion followsInstructions;
+        private Opinion detailsAttention;
+        private Opinion doubleChecks;
+        private Opinion striveForPerfection;
+        private Opinion problemAnalysis;
+        private String comment;
+
+    }
+
+    @Data
+    @Embeddable
+    public static class InterpersonalRelationsCriterias {
+        private Opinion connectsEasily;
+        private Opinion teamworkContribution;
+        private Opinion culturalAdaptation;
+        private Opinion acceptsCriticism;
+        private Opinion respectsOthers;
+        private Opinion activelyListens;
+        private String comment;
+    }
+
+    @Data
+    @Embeddable
+    public static class PersonalSkills {
+        private Opinion showsInterest;
+        private Opinion expressesOwnIdeas;
+        private Opinion showsInitiative;
+        private Opinion worksSafely;
+        private Opinion dependable;
+        private Opinion punctual;
+        private String comment;
+    }
+
+    @Data
+    @Embeddable
+    public static class GlobalAppreciation {
+        private Expectations expectations;
+        private String comment;
+        private boolean discussedWithIntern;
+    }
+
+    @Data
+    @Embeddable
+    public static class GeneralInfo {
+        private String studentProgram;
+        private String supervisorRole;
+        private String phoneNumber;
+    }
+
+    @Data
+    @Embeddable
+    public static class Feedback {
+        private float weeklySupervisionHours;
+        private SimpleResponse hireAgain;
+        private String technicalFormationOpinion;
+    }
+
+    public enum Expectations {
+        GREATLY_EXCEEDED,
+        EXCEEDED,
+        MET,
+        PARTIALLY_MET,
+        NOT_MET
+    }
 }
