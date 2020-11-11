@@ -4,9 +4,9 @@ import com.power222.tuimspfcauppbj.dao.InternEvaluationRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternEvaluation;
 import com.power222.tuimspfcauppbj.model.User;
-import com.power222.tuimspfcauppbj.util.AccepteStudentAgain;
-import com.power222.tuimspfcauppbj.util.AppreciationStates;
-import com.power222.tuimspfcauppbj.util.StatesEvaluation;
+import com.power222.tuimspfcauppbj.util.Appreciation;
+import com.power222.tuimspfcauppbj.util.Opinion;
+import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,14 +56,14 @@ public class InternEvaluationServiceTests {
                 .fullName("roger")
                 .evaluationDate(LocalDate.now())
                 .fonction("space ranger")
-                .globalAppreciation(AppreciationStates.EXCEED_EXPECTATIONS)
-                .globalAppreciationCommentary("Muahaha")
-                .hireInternAgainPossibility(AccepteStudentAgain.NON)
-                .interpersonalCommentary("muahaha")
-                .interpersonalRelationsA(StatesEvaluation.AGGREED)
-                .jobQualityA(StatesEvaluation.AGGREED)
-                .personalSkillsA(StatesEvaluation.DISAGREED)
-                .productivityB(StatesEvaluation.N_A)
+                .globalAppreciation(Appreciation.EXCEED_EXPECTATIONS)
+                .globalAppreciationComment("Muahaha")
+                .hireInternAgainPossibility(SimpleResponse.YES)
+                .interpersonalComment("muahaha")
+                .interpersonalRelationsA(Opinion.AGGREED)
+                .jobQualityA(Opinion.AGGREED)
+                .personalSkillsA(Opinion.DISAGREED)
+                .productivityB(Opinion.N_A)
                 .supervisorName("Bob")
                 .phoneNumber("121314")
                 .build();
@@ -133,7 +133,7 @@ public class InternEvaluationServiceTests {
     }
 
     @Test
-    void deleteContractByIdTest() {
+    void deleteInterEvaluationByIdTest() {
         var idToDelete = expectedInternEvaluation.getId();
 
         internSvc.deleteInternEvaluationById(idToDelete);

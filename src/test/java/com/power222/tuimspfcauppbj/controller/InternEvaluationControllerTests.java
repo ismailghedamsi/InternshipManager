@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
 import com.power222.tuimspfcauppbj.model.InternEvaluation;
 import com.power222.tuimspfcauppbj.service.InternEvaluationService;
-import com.power222.tuimspfcauppbj.util.AccepteStudentAgain;
-import com.power222.tuimspfcauppbj.util.AppreciationStates;
-import com.power222.tuimspfcauppbj.util.StatesEvaluation;
+import com.power222.tuimspfcauppbj.util.Appreciation;
+import com.power222.tuimspfcauppbj.util.Opinion;
+import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,14 +54,14 @@ public class InternEvaluationControllerTests {
                 .fullName("roger")
                 .evaluationDate(LocalDate.now())
                 .fonction("space ranger")
-                .globalAppreciation(AppreciationStates.EXCEED_EXPECTATIONS)
-                .globalAppreciationCommentary("Muahaha")
-                .hireInternAgainPossibility(AccepteStudentAgain.NON)
-                .interpersonalCommentary("muahaha")
-                .interpersonalRelationsA(StatesEvaluation.AGGREED)
-                .jobQualityA(StatesEvaluation.AGGREED)
-                .personalSkillsA(StatesEvaluation.DISAGREED)
-                .productivityB(StatesEvaluation.N_A)
+                .globalAppreciation(Appreciation.EXCEED_EXPECTATIONS)
+                .globalAppreciationComment("Muahaha")
+                .hireInternAgainPossibility(SimpleResponse.NO)
+                .interpersonalComment("muahaha")
+                .interpersonalRelationsA(Opinion.AGGREED)
+                .jobQualityA(Opinion.AGGREED)
+                .personalSkillsA(Opinion.DISAGREED)
+                .productivityB(Opinion.N_A)
                 .supervisorName("Bob")
                 .phoneNumber("121314")
                 .build();
@@ -131,7 +131,7 @@ public class InternEvaluationControllerTests {
     }
 
     @Test
-    void updateContractTest() throws Exception {
+    void updateInterEvaluationTest() throws Exception {
         when(svc.updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation)).thenReturn(Optional.ofNullable(expectedInternEvaluation));
 
         MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
@@ -144,7 +144,7 @@ public class InternEvaluationControllerTests {
     }
 
     @Test
-    void updateContractNoValidIdTest() throws Exception {
+    void updateInterEvaluationNoValidIdTest() throws Exception {
         MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedInternEvaluation)))
