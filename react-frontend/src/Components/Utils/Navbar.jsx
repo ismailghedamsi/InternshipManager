@@ -57,6 +57,13 @@ const Links = {
         {
             title: 'Rapports',
             url: '/dashboard/reports',
+        },
+        {
+            title: <Divider/>
+        },
+        {
+            title: 'Évaluation',
+            url: '/dashboard/businessEvaluation',
         }
     ],
     student: [
