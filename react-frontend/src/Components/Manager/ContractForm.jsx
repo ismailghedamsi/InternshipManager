@@ -40,9 +40,7 @@ export default function ContractForm() {
                         let dto = {...values};
                         dto.studentApplicationId = applicationContract.id;
                         return api.post("/contractGeneration", dto)
-                            .then(() => {
-                                history.push("/dashboard/contractList")
-                            })
+                            .then(() => history.push("/dashboard/contractList"))
                     }}
                     validateOnBlur={false}
                     validateOnChange={false}
@@ -60,92 +58,93 @@ export default function ContractForm() {
                         engagementCollege: "",
                         engagementCompany: "",
                         engagementStudent: "",
-                        totalHoursPerWeek: 0
+                        totalHoursPerWeek: 1
                     }}
                 >
-                    {({isSubmitting}) => <Form className={classes.form}>
-                        <Grid container spacing={2}>
-                            <Typography variant="h1" className={classes.formTitle} style={{display: "block"}}>
-                                Genérer un contrat
-                            </Typography>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="adminName"
-                                    id="adminName"
-                                    variant="outlined"
-                                    label="Nom du gestionnaire de stage"
-                                    required
-                                    fullWidth
-                                    autoFocus
-                                />
+                    {({isSubmitting}) =>
+                        <Form className={classes.form}>
+                            <Grid container spacing={2}>
+                                <Typography variant="h1" className={classes.formTitle} style={{display: "block"}}>
+                                    Genérer un contrat
+                                </Typography>
+                                <Grid item xs={12} sm={6}>
+                                    <Field
+                                        component={TextField}
+                                        name="adminName"
+                                        id="adminName"
+                                        variant="outlined"
+                                        label="Nom du gestionnaire de stage"
+                                        required
+                                        fullWidth
+                                        autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Field
+                                        component={TextField}
+                                        name="totalHoursPerWeek"
+                                        id="totalHoursPerWeek"
+                                        variant="outlined"
+                                        label="Nombre d'heures par semaine"
+                                        required
+                                        fullWidth
+                                        type={"number"}
+                                        InputProps={{
+                                            inputProps: {
+                                                min: 1,
+                                                step: "any"
+                                            }
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Field
+                                        component={TextField}
+                                        name="engagementCollege"
+                                        id="engagementCollege"
+                                        variant="outlined"
+                                        label="Engagements du collège"
+                                        required
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Field
+                                        component={TextField}
+                                        name="engagementCompany"
+                                        id="engagementCompany"
+                                        variant="outlined"
+                                        label="Engagements de l'entreprise"
+                                        required
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Field
+                                        component={TextField}
+                                        name="engagementStudent"
+                                        id="engagementStudent"
+                                        variant="outlined"
+                                        label="Engagements de l'étudiant"
+                                        required
+                                        fullWidth
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    component={TextField}
-                                    name="totalHoursPerWeek"
-                                    id="totalHoursPerWeek"
-                                    variant="outlined"
-                                    label="Nombre d'heures par semaine"
-                                    required
-                                    fullWidth
-                                    type={"number"}
-                                    InputProps={{
-                                        inputProps: {
-                                            min: 1,
-                                            step: "any"
-                                        }
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Field
-                                    component={TextField}
-                                    name="engagementCollege"
-                                    id="engagementCollege"
-                                    variant="outlined"
-                                    label="Engagements du collège"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Field
-                                    component={TextField}
-                                    name="engagementCompany"
-                                    id="engagementCompany"
-                                    variant="outlined"
-                                    label="Engagements de l'entreprise"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Field
-                                    component={TextField}
-                                    name="engagementStudent"
-                                    id="engagementStudent"
-                                    variant="outlined"
-                                    label="Engagements de l'étudiant"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                        </Grid>
-                        <br/>
-                        {isSubmitting && <LinearProgress/>}
-                        <Button
-                            type={"submit"}
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            size={"large"}
-                            className={classes.submit}
-                            disabled={isSubmitting}
-                        >
-                            Génerer
-                        </Button>
-                    </Form>}
+                            <br/>
+                            {isSubmitting && <LinearProgress/>}
+                            <Button
+                                type={"submit"}
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                size={"large"}
+                                className={classes.submit}
+                                disabled={isSubmitting}
+                            >
+                                Génerer
+                            </Button>
+                        </Form>}
                 </Formik>
             </Container>
         </Grid>

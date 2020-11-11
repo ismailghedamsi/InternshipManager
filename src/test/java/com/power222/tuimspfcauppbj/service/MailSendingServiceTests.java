@@ -5,6 +5,7 @@ import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
+import com.power222.tuimspfcauppbj.util.UserTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,7 +48,12 @@ public class MailSendingServiceTests {
         expectedStudentApplication = StudentApplication.builder()
                 .id(1L)
                 .offer(offer)
-                .student(Student.builder().firstName("Ismail").lastName("ghedamsi").build())
+                .student(
+                        Student.builder()
+                                .firstName("Ismail")
+                                .lastName("ghedamsi")
+                                .email("projetemployeur@gmail.com")
+                                .build())
                 .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
                 .reasonForRejection("")
                 .build();
