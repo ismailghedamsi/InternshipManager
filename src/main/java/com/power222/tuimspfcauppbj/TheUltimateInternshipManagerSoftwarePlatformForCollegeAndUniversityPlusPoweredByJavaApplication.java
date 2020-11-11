@@ -86,7 +86,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var student2 = userRepo.save(Student.builder()
-                    .role("student")
                     .username("etudiant2")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Roméo")
@@ -98,7 +97,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var student3 = userRepo.save(Student.builder()
-                    .role("student")
                     .username("etudiant3")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Bob")
@@ -111,7 +109,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             for (int i = 4; i < 30; i++) {
                 userRepo.save(Student.builder()
-                        .role("student")
                         .username("etudiant" + i)
                         .password(passwordEncoder.encode("password"))
                         .firstName("Loop " + i)

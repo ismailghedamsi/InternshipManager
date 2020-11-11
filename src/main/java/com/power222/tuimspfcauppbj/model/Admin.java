@@ -14,5 +14,4 @@ import javax.persistence.Entity;
 @Entity
 public class Admin extends User {
     private String name;
-    private String email;
 }

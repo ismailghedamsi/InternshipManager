@@ -25,7 +25,6 @@ public class Employer extends User implements SemesterAware {
     private String contactName;
     private String phoneNumber;
     private String address;
-    private String email;
 
     @ElementCollection
     private List<String> semesters;

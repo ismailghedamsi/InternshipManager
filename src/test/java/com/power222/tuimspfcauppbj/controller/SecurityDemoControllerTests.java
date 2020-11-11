@@ -48,10 +48,7 @@ public class SecurityDemoControllerTests {
     @Test
     @WithMockUser("test")
     void authenticatedPrivateHelloWorldTest() throws Exception {
-        when(userRepo.findByUsername(any())).thenReturn(Optional.of(Admin.builder()
-                .username("admin")
-                .password("password")
-                .build()));
+        when(userRepo.findByUsername(any())).thenReturn(Optional.of(Admin.builder().username("admin").password("password").build()));
 
         mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())

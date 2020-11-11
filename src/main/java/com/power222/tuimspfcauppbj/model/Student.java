@@ -21,7 +21,6 @@ public class Student extends User implements SemesterAware {
     private String firstName;
     private String lastName;
     private String studentId;
-    private String email;
     private String phoneNumber;
     private String address;
 

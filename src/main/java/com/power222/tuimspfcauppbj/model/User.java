@@ -12,7 +12,7 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@MappedSuperclass
+@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
 
@@ -27,4 +27,5 @@ public abstract class User {
     private String password;
 
     private boolean passwordExpired;
+    private String email;
 }
