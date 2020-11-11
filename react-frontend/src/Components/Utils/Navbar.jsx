@@ -71,6 +71,10 @@ const Links = {
         {
             title: 'Offre de stages',
             url: '/dashboard/stagelist'
+        },
+        {
+            title: 'List de contrats',
+            url: '/dashboard/signContractStudent'
         }
     ],
     employer: [
@@ -88,7 +92,7 @@ const Links = {
         },
         {
             title: 'Liste de contrats',
-            url: '/dashboard/SignContract'
+            url: '/dashboard/signContract'
         }
     ]
 }

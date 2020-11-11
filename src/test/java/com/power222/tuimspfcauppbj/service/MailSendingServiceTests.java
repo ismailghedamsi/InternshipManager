@@ -5,6 +5,7 @@ import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
+import com.power222.tuimspfcauppbj.util.UserTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +59,12 @@ public class MailSendingServiceTests {
         expectedStudentApplication = StudentApplication.builder()
                 .id(1L)
                 .offer(offer)
-                .student(Student.builder().firstName("Ismail").lastName("ghedamsi").build())
+                .student(
+                        Student.builder()
+                                .firstName("Ismail")
+                                .lastName("ghedamsi")
+                                .email("projetemployeur@gmail.com")
+                                .build())
                 .state(StudentApplicationState.APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW)
                 .reasonForRejection("")
                 .build();
@@ -75,16 +81,15 @@ public class MailSendingServiceTests {
     }
 
     @Test
-    public void sendEmailSuccess() throws MessagingException, IOException {
+    public void sendEmailSuccessEmployer() throws MessagingException, IOException {
         MimeMessage mimeMessage = new MimeMessage((Session) null);
-
+        UserTypes user = UserTypes.EMPLOYER;
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
-        service.sendEmail(expectedStudentApplication);
+        service.sendEmail(expectedStudentApplication, user);
 
         var actual = (String) ((MimeMultipart) ((MimeMultipart) mimeMessage.getContent()).getBodyPart(0).getContent()).getBodyPart(0).getContent();
-        String expected = "Un contrat a été généré pour votre offre " + expectedStudentApplication.getOffer().getTitle()
-                + " pour l'étudiant " + expectedStudentApplication.getStudent().getLastName() + " " + expectedStudentApplication.getStudent().getFirstName()
+        String expected = "Un contrat a été généré pour l'offre " + expectedStudentApplication.getOffer().getTitle()
                 + "<br/>Veuillez consulter le contract sur notre application";
 
         assertThat(actual).isEqualTo(expected);
@@ -93,9 +98,27 @@ public class MailSendingServiceTests {
     }
 
     @Test
+    public void sendEmailSuccessStudent() throws MessagingException, IOException {
+        MimeMessage mimeMessage = new MimeMessage((Session) null);
+        UserTypes user = UserTypes.STUDENT;
+        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+
+        service.sendEmail(expectedStudentApplication, user);
+
+        var actual = (String) ((MimeMultipart) ((MimeMultipart) mimeMessage.getContent()).getBodyPart(0).getContent()).getBodyPart(0).getContent();
+        String expected = "Un contrat a été généré pour l'offre " + expectedStudentApplication.getOffer().getTitle()
+                + "<br/>Veuillez consulter le contract sur notre application";
+
+        assertThat(actual).isEqualTo(expected);
+        assertThat(mimeMessage.getAllRecipients()[0].toString()).isEqualTo(expectedStudentApplication.getStudent().getEmail());
+        assertThat(mimeMessage.getSubject()).isEqualTo("Contrat généré");
+    }
+
+    @Test
     public void mailSendingFailInvalidUser() {
         MimeMessage mimeMessage = new MimeMessage((Session) null);
+        UserTypes user = UserTypes.EMPLOYER;
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-        service.sendEmail(failStudentApplication);
+        service.sendEmail(failStudentApplication, user);
     }
 }
