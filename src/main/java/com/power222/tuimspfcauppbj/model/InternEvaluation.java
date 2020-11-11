@@ -1,8 +1,8 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.power222.tuimspfcauppbj.util.AccepteStudentAgain;
-import com.power222.tuimspfcauppbj.util.AppreciationStates;
-import com.power222.tuimspfcauppbj.util.StatesEvaluation;
+import com.power222.tuimspfcauppbj.util.Appreciation;
+import com.power222.tuimspfcauppbj.util.Opinion;
+import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,48 +29,48 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
     private String fonction;
     private String phoneNumber;
 
-    private StatesEvaluation productivityA;
-    private StatesEvaluation productivityB;
-    private StatesEvaluation productivityC;
-    private StatesEvaluation productivityD;
-    private StatesEvaluation productivityE;
-    private String productivityCommentary;
+    private Opinion productivityA;
+    private Opinion productivityB;
+    private Opinion productivityC;
+    private Opinion productivityD;
+    private Opinion productivityE;
+    private String productivityComment;
 
-    private StatesEvaluation jobQualityA;
-    private StatesEvaluation jobQualityB;
-    private StatesEvaluation jobQualityC;
-    private StatesEvaluation jobQualityD;
-    private StatesEvaluation jobQualityE;
-    private String jobQualityCommentary;
+    private Opinion jobQualityA;
+    private Opinion jobQualityB;
+    private Opinion jobQualityC;
+    private Opinion jobQualityD;
+    private Opinion jobQualityE;
+    private String jobQualityComment;
 
-    private StatesEvaluation interpersonalRelationsA;
-    private StatesEvaluation interpersonalRelationsB;
-    private StatesEvaluation interpersonalRelationsC;
-    private StatesEvaluation interpersonalRelationsD;
-    private StatesEvaluation interpersonalRelationsE;
-    private StatesEvaluation interpersonalRelationsF;
-    private String interpersonalCommentary;
+    private Opinion interpersonalRelationsA;
+    private Opinion interpersonalRelationsB;
+    private Opinion interpersonalRelationsC;
+    private Opinion interpersonalRelationsD;
+    private Opinion interpersonalRelationsE;
+    private Opinion interpersonalRelationsF;
+    private String interpersonalComment;
 
-    private StatesEvaluation personalSkillsA;
-    private StatesEvaluation personalSkillsB;
-    private StatesEvaluation personalSkillsC;
-    private StatesEvaluation personalSkillsD;
-    private StatesEvaluation personalSkillsE;
-    private StatesEvaluation personalSkillsF;
-    private String personalSkillsCommentary;
+    private Opinion personalSkillsA;
+    private Opinion personalSkillsB;
+    private Opinion personalSkillsC;
+    private Opinion personalSkillsD;
+    private Opinion personalSkillsE;
+    private Opinion personalSkillsF;
+    private String personalSkillsComment;
 
-    private AppreciationStates globalAppreciation;
-    private String globalAppreciationCommentary;
+    private Appreciation globalAppreciation;
+    private String globalAppreciationComment;
     private boolean discussedWithIntern;
     private float nbHourSupervisionPerWeek;
 
-    private AccepteStudentAgain hireInternAgainPossibility;
+    private SimpleResponse hireInternAgainPossibility;
     private String techincalFormationOpinion;
     private String signature;
     private LocalDate evaluationDate;
     private String reviewerName;
     private String reviewerFunction;
 
-    @OneToOne()
+    @OneToOne
     private Contract contract;
 }

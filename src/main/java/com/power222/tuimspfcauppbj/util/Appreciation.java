@@ -1,6 +1,6 @@
 package com.power222.tuimspfcauppbj.util;
 
-public enum AppreciationStates {
+public enum Appreciation {
     GREATLY_EXCEED_EXPECTATIONS,
     EXCEED_EXPECTATIONS,
     MEET_EXPECTATIONS,
