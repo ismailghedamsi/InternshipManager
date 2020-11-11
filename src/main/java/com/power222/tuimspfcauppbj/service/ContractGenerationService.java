@@ -68,6 +68,17 @@ public class ContractGenerationService {
         }
     }
 
+    private static UserTypes getSignerFromStateEmails(ContractSignatureState state) {
+        switch (state) {
+            case WAITING_FOR_STUDENT_SIGNATURE:
+                return UserTypes.EMPLOYER;
+            case WAITING_FOR_ADMIN_SIGNATURE:
+                return UserTypes.STUDENT;
+            default:
+                return UserTypes.ADMIN;
+        }
+    }
+
     public boolean generateContract(ContractDTO contractDto) {
         Optional<StudentApplication> optionalApplication = getStudentApplication(contractDto);
         ByteArrayOutputStream stream = null;
@@ -123,7 +134,7 @@ public class ContractGenerationService {
 
         final var signedContract = contractService.updateContract(contract.getId(), contract);
         if (signedContract.isPresent() && signatureDto.isApproved())
-            mailService.sendEmail(contract.getStudentApplication());
+            mailService.sendEmail(contract.getStudentApplication(), getSignerFromStateEmails(contract.getSignatureState()));
 
         return signedContract;
     }

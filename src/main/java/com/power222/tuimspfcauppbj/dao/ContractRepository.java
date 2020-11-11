@@ -14,4 +14,6 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
     List<Contract> findAllByStudentApplication_Offer_Employer_Id(long id);
 
     Page<Contract> findAllBySignatureState(ContractSignatureState state, Pageable pageable);
+
+    List<Contract> findAllByStudentApplication_Student_Id(long id);
 }

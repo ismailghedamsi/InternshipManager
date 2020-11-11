@@ -105,6 +105,33 @@ public class ContractControllerTests {
     }
 
     @Test
+    void getContractByStudentIdTest() throws Exception {
+        var c1 = Contract.builder().id(1L).build();
+        var c2 = Contract.builder().id(1L).build();
+        var c3 = Contract.builder().id(1L).build();
+        var studentId = 1;
+
+        when(svc.getAllContractsByStudentId(studentId)).thenReturn(Arrays.asList(c1, c2, c3));
+
+        MvcResult result = mvc.perform(get("/api/contract/student/" + studentId)).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertThat(actuals).hasSize(3);
+    }
+
+    @Test
+    void getContractByStudentIdWithInvalidIdTest() throws Exception {
+        var studentId = 1;
+
+        MvcResult result = mvc.perform(get("/api/contract/student/" + studentId)).andReturn();
+        var actuals = objectMapper.readValue(result.getResponse().getContentAsString(), List.class);
+
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+        assertThat(actuals).hasSize(0);
+    }
+
+    @Test
     void getContractFound() throws Exception {
         when(svc.getContractById(anyLong())).thenReturn(Optional.of(new Contract()));
 
