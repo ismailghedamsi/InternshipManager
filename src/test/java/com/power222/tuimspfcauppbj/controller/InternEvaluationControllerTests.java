@@ -131,7 +131,7 @@ public class InternEvaluationControllerTests {
     }
 
     @Test
-    void updateContractTest() throws Exception {
+    void updateInterEvaluationTest() throws Exception {
         when(svc.updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation)).thenReturn(Optional.ofNullable(expectedInternEvaluation));
 
         MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
@@ -144,7 +144,7 @@ public class InternEvaluationControllerTests {
     }
 
     @Test
-    void updateContractNoValidIdTest() throws Exception {
+    void updateInterEvaluationNoValidIdTest() throws Exception {
         MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expectedInternEvaluation)))

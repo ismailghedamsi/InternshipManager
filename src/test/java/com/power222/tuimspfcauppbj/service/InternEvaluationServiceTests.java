@@ -133,7 +133,7 @@ public class InternEvaluationServiceTests {
     }
 
     @Test
-    void deleteContractByIdTest() {
+    void deleteInterEvaluationByIdTest() {
         var idToDelete = expectedInternEvaluation.getId();
 
         internSvc.deleteInternEvaluationById(idToDelete);
