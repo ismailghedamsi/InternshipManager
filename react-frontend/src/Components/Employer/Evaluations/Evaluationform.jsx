@@ -3,6 +3,7 @@ import {Field} from 'formik';
 import {SimpleFileUpload, TextField} from 'formik-material-ui';
 import {DatePicker} from 'formik-material-ui-pickers';
 import React from 'react';
+import {useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import useStyles from '../../Utils/useStyles';
 import {FormikStepper} from './FormikStepper';
@@ -15,7 +16,7 @@ const requiredFieldMsg = "Ce champs est requis";
 
 export default function Evaluationform() {
     const classes = useStyles()
-
+    const location = useLocation()
     const evaluationAnswers = [
         "Totalement en accord",
         "Plutôt en accord",
@@ -40,7 +41,65 @@ export default function Evaluationform() {
 
     return <Card>
         <CardContent>
-            <FormikStepper evaluationAnswers={evaluationAnswers} globalAppreciations={globalAppreciations}>
+            <FormikStepper
+                    initialValues={{
+                        infos: {
+                            fullname: location.state.student.firstName + " " + location.state.student.lastName,
+                            studentProgram: "",
+                            supervisorRole: "",
+                            phoneNumber: "",
+                        },
+                        productivity: {
+                            efficiency: evaluationAnswers[0],
+                            comprehension: evaluationAnswers[0],
+                            rythm: evaluationAnswers[0],
+                            priorities: evaluationAnswers[0],
+                            deadlines: evaluationAnswers[0],
+                            comment: ""
+                        },
+                        quality: {
+                            followsInstructions: evaluationAnswers[0],
+                            detailsAttention: evaluationAnswers[0],
+                            doubleChecks: evaluationAnswers[0],
+                            strivesForPerfection: evaluationAnswers[0],
+                            problemAnalysis: evaluationAnswers[0],
+                            comment: ""
+                        },
+                        relationships: {
+                            connectsEasily: evaluationAnswers[0],
+                            teamworkContribution: evaluationAnswers[0],
+                            culturalAdaptation: evaluationAnswers[0],
+                            acceptsCriticism: evaluationAnswers[0],
+                            respectsOthers: evaluationAnswers[0],
+                            activelyListens: evaluationAnswers[0],
+                            comment: ""
+                        },
+                        skills: {
+                            showsInterest: evaluationAnswers[0],
+                            expressesOwnIdeas: evaluationAnswers[0],
+                            showsInitiative: evaluationAnswers[0],
+                            worksSafely: evaluationAnswers[0],
+                            dependable: evaluationAnswers[0],
+                            punctual: evaluationAnswers[0],
+                            comment: ""
+                        },
+                        globalAppreciation: {
+                            expectations: globalAppreciations[0],
+                            comment: "",
+                            discussedWithIntern: false,
+                        },
+                        feedback: {
+                            weeklySupervisionHours: 0,
+                            hireAgain: "",
+                            technicalFormationOpinion: "",
+                        },
+                        signature: {
+                            image: "",
+                            date: new Date(),
+                            name: "",
+                        }
+                    }}
+                    evaluationAnswers={evaluationAnswers} globalAppreciations={globalAppreciations}>
                 <FormikStep label="Information Generale" validationSchema={validationSchemaStep1}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Typography variant={"h1"} className={classes.formTitle}>
@@ -48,9 +107,9 @@ export default function Evaluationform() {
                         </Typography>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                name="infos.fullname"
-                                id="fullname"
+                                    component={TextField}
+                                    name="infos.fullname"
+                                    id="fullname"
                                 variant="outlined"
                                 label="Nom de l’étudiant :"
                                 disabled
