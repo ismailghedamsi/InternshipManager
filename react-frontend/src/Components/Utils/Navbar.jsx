@@ -64,6 +64,10 @@ const Links = {
         {
             title: 'Évaluation',
             url: '/dashboard/businessEvaluation',
+        },
+        {
+            title: 'Évaluation',
+            url: '/dashboard/businessEvaluation1',
         }
     ],
     student: [

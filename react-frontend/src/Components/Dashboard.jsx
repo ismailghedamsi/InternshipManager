@@ -27,6 +27,7 @@ import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
 import {RoleProtectedRoute} from "./Utils/Routes";
+import {FormikStepper} from "./Manager/Evaluation/FormikStepper";
 
 
 const useStyles = makeStyles(() => ({
@@ -111,6 +112,10 @@ export default function Dashboard() {
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/businessEvaluation"
                                     component={BusinessEvaluationStepper}
+                                    role={"admin"}/>
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/businessEvaluation1"
+                                    component={FormikStepper}
                                     role={"admin"}/>
                 {/* Employeur */}
                 <RoleProtectedRoute exact={true}
