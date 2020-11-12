@@ -32,11 +32,7 @@ export default function BusinessEvalution() {
         "Les habiletés démontrées ne répondent pas aux attentes"
     ]
 
-    const validationSchemaStep1 = yup.object().shape({
-        infos: yup.object().shape({
-            studentProgram: yup.string().trim().min(5, tooLittleError).max(50, tooBigError).required(),
-        })
-    });
+    const validationSchemaStep1 = yup.object().shape({});
 
     return <Card>
         <CardContent>
