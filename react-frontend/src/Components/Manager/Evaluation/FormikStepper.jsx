@@ -21,56 +21,6 @@ export function FormikStepper({children, evaluationAnswers, globalAppreciations}
     return <>
         <Formik
             initialValues={{
-                infos: {
-                    fullname: "",
-                    studentProgram: "",
-                    supervisorRole: "",
-                    phoneNumber: "",
-                },
-                productivity: {
-                    efficiency: evaluationAnswers[0],
-                    comprehension: evaluationAnswers[0],
-                    rythm: evaluationAnswers[0],
-                    priorities: evaluationAnswers[0],
-                    deadlines: evaluationAnswers[0],
-                    comment: ""
-                },
-                quality: {
-                    followsInstructions: evaluationAnswers[0],
-                    detailsAttention: evaluationAnswers[0],
-                    doubleChecks: evaluationAnswers[0],
-                    strivesForPerfection: evaluationAnswers[0],
-                    problemAnalysis: evaluationAnswers[0],
-                    comment: ""
-                },
-                relationships: {
-                    connectsEasily: evaluationAnswers[0],
-                    teamworkContribution: evaluationAnswers[0],
-                    culturalAdaptation: evaluationAnswers[0],
-                    acceptsCriticism: evaluationAnswers[0],
-                    respectsOthers: evaluationAnswers[0],
-                    activelyListens: evaluationAnswers[0],
-                    comment: ""
-                },
-                skills: {
-                    showsInterest: evaluationAnswers[0],
-                    expressesOwnIdeas: evaluationAnswers[0],
-                    showsInitiative: evaluationAnswers[0],
-                    worksSafely: evaluationAnswers[0],
-                    dependable: evaluationAnswers[0],
-                    punctual: evaluationAnswers[0],
-                    comment: ""
-                },
-                globalAppreciation: {
-                    expectations: globalAppreciations[0],
-                    comment: "",
-                    discussedWithIntern: false,
-                },
-                feedback: {
-                    weeklySupervisionHours: 0,
-                    hireAgain: "",
-                    technicalFormationOpinion: "",
-                },
                 signature: {
                     image: "",
                     date: new Date(),
