@@ -46,7 +46,6 @@ public class BusinessEvaluationTests {
 
         expectedBusinessEvaluation = BusinessEvaluation.builder()
                 .id(1L)
-                .name("Steve")
                 .contract(expectedContract)
                 .build();
     }
