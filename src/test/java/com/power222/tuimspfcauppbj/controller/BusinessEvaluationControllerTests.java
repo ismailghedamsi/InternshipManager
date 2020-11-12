@@ -45,7 +45,6 @@ public class BusinessEvaluationControllerTests {
     void beforeEach() {
         expectedBusinessEvaluation = BusinessEvaluation.builder()
                 .id(1L)
-                .name("steve")
                 .build();
     }
 
