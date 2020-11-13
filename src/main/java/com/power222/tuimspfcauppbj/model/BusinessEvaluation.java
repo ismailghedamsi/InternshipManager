@@ -77,7 +77,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @Embeddable
     public static class Observations {
         private Internship whichInternship;
-        private SimpleNumbers numbersOfIntern;
+        private SimpleNumbers numbersOfInterns;
         private SimpleResponse welcomeSameIntern;
         private SimpleResponse variablesQuarters;
         private String quartersOne;
