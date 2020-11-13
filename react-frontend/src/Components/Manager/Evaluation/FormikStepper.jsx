@@ -2,9 +2,9 @@ import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@materia
 import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import {useLocation} from "react-router-dom";
-import {useFileReader} from "../../Utils/Hooks";
+import {useFileReader, useModal} from "../../Utils/Hooks";
 
-export function FormikStepper({children, evaluationAnswers, globalAppreciations}) {
+export function FormikStepper({children, initialValues}) {
     const childrenArray = React.Children.toArray(children)
     const location = useLocation()
     const readFile = useFileReader()
@@ -12,7 +12,7 @@ export function FormikStepper({children, evaluationAnswers, globalAppreciations}
     const currentChild = childrenArray[step]
     const [completed, setCompleted] = useState(false)
     const [data, setData] = useState({})
-    const [isOpen, setOpen] = useState(false)
+    const [isBusinessEvaluationModalOpen, openBusinessEvaluationModal, closeBusinessEvaluationModal] = useModal();
 
     function isLastStep() {
         return step === childrenArray.length - 1;
@@ -20,13 +20,7 @@ export function FormikStepper({children, evaluationAnswers, globalAppreciations}
 
     return <>
         <Formik
-            initialValues={{
-                signature: {
-                    image: "",
-                    date: new Date(),
-                    name: "",
-                }
-            }}
+            initialValues={initialValues}
             validationSchema={currentChild.props.validationSchema}
             validateOnBlur={false}
             validateOnChange={false}
@@ -87,7 +81,7 @@ export function FormikStepper({children, evaluationAnswers, globalAppreciations}
                                 color="primary"
                                 onClick={() => {
                                     setData(values);
-                                    setOpen(true)
+                                    openBusinessEvaluationModal();
                                 }}
                             >
                                 Valider évaluation

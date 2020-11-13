@@ -6,6 +6,7 @@ import React from 'react';
 import * as yup from "yup";
 import useStyles from '../../Utils/useStyles';
 import {FormikStepper} from './FormikStepper';
+import {useLocation} from 'react-router-dom';
 
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
@@ -14,7 +15,8 @@ const tooBigError = valueNumber => "Doit être plus petit que ou égal à " + va
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function BusinessEvalution() {
-    const classes = useStyles()
+    const classes = useStyles();
+    const location = useLocation();
 
     const evaluationAnswers = [
         "Totalement en accord",
@@ -43,7 +45,16 @@ export default function BusinessEvalution() {
 
     return <Card>
         <CardContent>
-            <FormikStepper evaluationAnswers={evaluationAnswers} globalAppreciations={globalAppreciations}>
+            <FormikStepper
+                initialValues={{
+                    BusinessInfos: {},
+                    signature: {
+                        image: "",
+                        date: new Date(),
+                        name: "",
+                    }
+                }}
+                evaluationAnswers={evaluationAnswers} globalAppreciations={globalAppreciations}>
                 <FormikStep label="IDENTIFICATION DE L’ENTREPRISE" validationSchema={validationSchemaStep1}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>

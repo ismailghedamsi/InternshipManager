@@ -4,7 +4,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Typography from "@material-ui/core/Typography";
 import React, {useState} from 'react';
 import useStyles from "../../Utils/useStyles";
-import BusinessIdentificationForm from "./BusinessIdentificationForm";
 import OfferIdentificationForm from "./OfferIdentificationForm";
 import Button from "@material-ui/core/Button";
 import EvaluationForm from "./EvaluationForm";
@@ -32,7 +31,7 @@ export default function BusinessEvaluationStepper() {
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return <BusinessIdentificationForm/>
+                return ""
             case 1:
                 return <OfferIdentificationForm/>
             case 2:
