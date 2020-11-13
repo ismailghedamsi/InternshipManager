@@ -36,8 +36,64 @@ export default function Evaluationform() {
     const validationSchemaStep1 = yup.object().shape({
         infos: yup.object().shape({
             studentProgram: yup.string().trim().min(5, tooLittleError).max(50, tooBigError).required(),
+            fullname: yup.string().trim().min(5, tooLittleError).max(50, tooBigError).required()
         })
     });
+
+    const validationSchemaStep2 = yup.object().shape({
+        productivity: yup.object().shape({
+            comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError)
+        })
+    });
+
+    const validationSchemaStep3 = yup.object().shape({
+        quality: yup.object().shape({
+            comment: yup.string().required(requiredFieldMsg)
+        })
+    });
+
+    const validationSchemaStep4 = yup.object().shape({
+        relationships: yup.object().shape({
+            comment: yup.string().required(requiredFieldMsg)
+        })
+    });
+
+    const validationSchemaStep5 = yup.object().shape({
+        skills: yup.object().shape({
+            comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError)
+        })
+    });
+
+    const validationSchemaStep6 = yup.object().shape({
+        globalAppreciation: yup.object().shape({
+            comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError)
+        })
+    });
+
+    const validationSchemaStep7 = yup.object().shape({
+        feedback: yup.object().shape({
+            weeklySupervisionHours: yup.number().required().min(0, tooShortError)
+        })
+    });
+
+    const validationSchemaStep8 = yup.object().shape({
+        feedback: yup.object().shape({
+            hireAgain: yup.string().required(),
+            technicalFormationOpinion: yup.string().required(),
+        }),
+        signature: yup.object().shape({
+            name: yup.string().required().min(5).max(50),
+            image: yup.string().min(1),
+            date: yup.date().min(new Date(), "Date doit etre au present")
+        }),
+        infos: yup.object().shape({
+            supervisorRole: yup.string().required().min(5).max(50),
+            phoneNumber: yup.string().required().min(10)
+        })
+
+
+    });
+
 
     return <Card>
         <CardContent>
@@ -91,12 +147,12 @@ export default function Evaluationform() {
                         feedback: {
                             weeklySupervisionHours: 0,
                             hireAgain: "",
-                            technicalFormationOpinion: "",
+                            technicalFormationOpinion: ""
                         },
                         signature: {
                             image: "",
                             date: new Date(),
-                            name: "",
+                            name: ""
                         }
                     }}
                     evaluationAnswers={evaluationAnswers} globalAppreciations={globalAppreciations}>
@@ -119,19 +175,19 @@ export default function Evaluationform() {
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                name="infos.studentProgram"
-                                id="studentProgram"
-                                variant="outlined"
-                                label="Programme d’études :"
-                                required
-                                fullWidth
-                                autoFocus
+                                    component={TextField}
+                                    name="infos.studentProgram"
+                                    id="studentProgram"
+                                    variant="outlined"
+                                    label="Programme d’études :"
+                                    required
+                                    fullWidth
+                                    autoFocus
                             />
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="Evaluation productivité">
+                <FormikStep label="Evaluation productivité" validationSchema={validationSchemaStep2}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
                             <h1>Capacité d’optimiser son rendement au travail</h1>
@@ -176,7 +232,7 @@ export default function Evaluationform() {
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="Evaluation qualité du travail">
+                <FormikStep label="Evaluation qualité du travail" validationSchema={validationSchemaStep3}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <h1>Capacité de s’acquitter des tâches sous sa responsabilité en s’imposant
@@ -213,13 +269,16 @@ export default function Evaluationform() {
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
-                            <Field component="textarea" label="Commentaires" name="quality.comment">
-                                {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
+                            <Field component={TextField} style={{
+                                backgroundColor: "#F2F3F4"
+                            }} rows={4} fullWidth multiline label="Commentaires" name="quality.comment">
+
                             </Field>
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="Evaluation QUALITÉS DES RELATIONS INTERPERSONNELLES">
+                <FormikStep label="Evaluation QUALITÉS DES RELATIONS INTERPERSONNELLES"
+                            validationSchema={validationSchemaStep4}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <h1>Capacité d’établir des interrelations harmonieuses dans son milieu de
@@ -264,15 +323,15 @@ export default function Evaluationform() {
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
-                            <label>Commentaires</label>
-                            <Field as="textarea" name="relationships.comment">
-                                {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
+                            <Field component={TextField} style={{
+                                backgroundColor: "#F2F3F4"
+                            }} rows={4} fullWidth multiline label="Commentaires" name="relationships.comment">
+
                             </Field>
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="HABILETÉS PERSONNELLES"
-                >
+                <FormikStep label="HABILETÉS PERSONNELLES" validationSchema={validationSchemaStep5}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <h1>Capacité de faire preuve d’attitudes ou de comportements matures et
@@ -316,15 +375,16 @@ export default function Evaluationform() {
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
+
                         <Grid item xs={12}>
-                            <label>Commentaires</label>
-                            <Field as="textarea" name="skills.comment">
-                                {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
+                            <Field component={TextField} style={{
+                                backgroundColor: "#F2F3F4"
+                            }} rows={4} fullWidth multiline label="Commentaires" name="skills.comment">
                             </Field>
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="APPRÉCIATION GLOBALE DU STAGIAIRE">
+                <FormikStep label="APPRÉCIATION GLOBALE DU STAGIAIRE" validationSchema={validationSchemaStep6}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <label>APPRÉCIATION GLOBALE DU STAGIAIRE</label>
@@ -332,9 +392,13 @@ export default function Evaluationform() {
                                 {globalAppreciations.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
+
                         <Grid item xs={12}>
-                            <label>PRÉCISEZ VOTRE APPRÉCIATION:</label>
-                            <Field as="textarea" name="globalAppreciation.comment">
+                            <Field component={TextField} style={{
+                                backgroundColor: "#F2F3F4"
+                            }} rows={4} fullWidth multiline label="PRÉCISEZ VOTRE APPRÉCIATION:"
+                                   name="globalAppreciation.comment">
+
                             </Field>
                         </Grid>
 
@@ -353,7 +417,7 @@ export default function Evaluationform() {
 
                     </Grid>
                 </FormikStep>
-                <FormikStep label="Nombre d'heure de supervision par semaine">
+                <FormikStep label="Nombre d'heure de supervision par semaine" validationSchema={validationSchemaStep7}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <label>Veuillez indiquer le nombre d’heures réel par semaine d’encadrement accordé
@@ -363,7 +427,7 @@ export default function Evaluationform() {
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="Decision">
+                <FormikStep label="Decision" validationSchema={validationSchemaStep8}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <label>L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN STAGE</label>
@@ -380,11 +444,13 @@ export default function Evaluationform() {
                                 Peut-être
                             </label>
                         </Grid>
+
                         <Grid item xs={12}>
-                            <label>La formation technique du stagiaire était-elle suffisante pour accomplir le
-                                mandat de stage?</label>
-                            <Field component={TextField}
-                                   name="feedback.technicalFormationOpinion"/>
+                            <Field component={TextField} style={{
+                                backgroundColor: "#F2F3F4"
+                            }} rows={4} fullWidth multiline label="La formation technique du stagiaire était-elle suffisante pour accomplir le
+                            mandat de stage?" name="feedback.technicalFormationOpinion">
+                            </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <Field component={TextField}
