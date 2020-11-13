@@ -21,7 +21,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private BusinessInfo businessInfo;
+    private BusinessInfos businessInfos;
     private InternInfo internInfo;
     private EvaluationCriterias evaluationCriterias;
     private Observations observations;
@@ -36,7 +36,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
 
     @Data
     @Embeddable
-    public static class BusinessInfo {
+    public static class BusinessInfos {
         private String companyName;
         private String employerName;
         private String address;
