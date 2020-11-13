@@ -7,11 +7,11 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import React from "react";
 
-export default function EvaluationModal({data, isOpen, onClose}) {
-    // console.log("from modal")
-    // console.log(data)
+export default function EvaluationModal({isOpen, data, hide}) {
+
     return (
-            <Dialog open={isOpen}>
+            <Dialog open={isOpen} onClose={hide} fullWidth={true} fullScreen={true}
+                    maxWidth={'md'}>
                 <DialogTitle id="alert-dialog-title">{"Sommaire evaluation"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -52,7 +52,7 @@ export default function EvaluationModal({data, isOpen, onClose}) {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button color="primary">
+                    <Button color="primary" onClick={hide}>
                         J'ai compris
                     </Button>
                 </DialogActions>
