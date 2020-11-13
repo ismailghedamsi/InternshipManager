@@ -21,8 +21,8 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private BusinessInfo businessInfo;
-    private InternInfo internInfo;
+    private BusinessInfos businessInfos;
+    private InternInfos internInfos;
     private EvaluationCriterias evaluationCriterias;
     private Observations observations;
 
@@ -36,7 +36,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
 
     @Data
     @Embeddable
-    public static class BusinessInfo {
+    public static class BusinessInfos {
         private String companyName;
         private String employerName;
         private String address;
@@ -48,7 +48,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
 
     @Data
     @Embeddable
-    public static class InternInfo {
+    public static class InternInfos {
         private String internName;
         private String internDate;
         private Internship intership;
@@ -77,7 +77,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @Embeddable
     public static class Observations {
         private Internship whichInternship;
-        private SimpleNumbers numbersOfIntern;
+        private SimpleNumbers numbersOfInterns;
         private SimpleResponse welcomeSameIntern;
         private SimpleResponse variablesQuarters;
         private String quartersOne;
