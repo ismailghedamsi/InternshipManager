@@ -7,7 +7,6 @@ import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @Entity
@@ -25,13 +24,9 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     private InternInfos internInfos;
     private EvaluationCriterias evaluationCriterias;
     private Observations observations;
+    private Signature signature;
 
-    @Lob
-    private String signature;
-    private LocalDate date;
-
-
-    @OneToOne()
+    @OneToOne
     private Contract contract;
 
     @Data
@@ -80,8 +75,11 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
         private SimpleNumbers numbersOfInterns;
         private SimpleResponse welcomeSameIntern;
         private SimpleResponse variablesQuarters;
-        private String quartersOne;
-        private String quartersTwo;
-        private String quartersThree;
+        private float startQuartersOne;
+        private float startQuartersTwo;
+        private float startQuartersThree;
+        private float endQuartersOne;
+        private float endQuartersTwo;
+        private float endQuartersThree;
     }
 }
