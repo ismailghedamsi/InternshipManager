@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.power222.tuimspfcauppbj.util.Opinion;
 import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import lombok.*;
@@ -108,10 +109,15 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
     }
 
     public enum Expectations {
+        @JsonProperty("Les habiletés démontrées dépassent de beaucoup les attentes")
         GREATLY_EXCEEDED,
+        @JsonProperty("Les habiletés démontrées dépassent les attentes")
         EXCEEDED,
+        @JsonProperty("Les habiletés démontrées répondent pleinement aux attentes")
         MET,
+        @JsonProperty("Les habiletés démontrées répondent partiellement aux attentes")
         PARTIALLY_MET,
+        @JsonProperty("Les habiletés démontrées ne répondent pas aux attentes")
         NOT_MET
     }
 }
