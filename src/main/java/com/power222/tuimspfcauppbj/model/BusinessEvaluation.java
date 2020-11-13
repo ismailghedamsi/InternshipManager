@@ -22,7 +22,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     private long id;
 
     private BusinessInfos businessInfos;
-    private InternInfo internInfo;
+    private InternInfos internInfos;
     private EvaluationCriterias evaluationCriterias;
     private Observations observations;
 
@@ -48,7 +48,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
 
     @Data
     @Embeddable
-    public static class InternInfo {
+    public static class InternInfos {
         private String internName;
         private String internDate;
         private Internship intership;
