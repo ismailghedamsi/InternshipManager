@@ -83,6 +83,14 @@ export default function ApplicationList() {
         }
     }
 
+    function evaluationDirection() {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return "/dashboard/businessEvaluation";
+        else
+            return "/dashboard/evaluateStudent";
+
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
                             title={<span>Application<br/>{offer.title}</span>}>
@@ -121,6 +129,15 @@ export default function ApplicationList() {
                             Convoquer l'étudiant pour un entrevue
                         </Link>
                         }
+                        <Link variant={"body1"}
+                              to={{
+                                  pathname: evaluationDirection(),
+                                  state: {...offer.applications[i]}
+                              }}
+                              style={{display: "block"}}
+                        >
+                            {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
+                        </Link>
                     </div>
                     }
                     <hr/>

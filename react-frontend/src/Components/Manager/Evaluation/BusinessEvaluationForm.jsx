@@ -143,8 +143,8 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <Field
                                 component={DatePicker}
-                                name="internshipStartDate"
-                                id="internshipStartDate"
+                                name="internStartDate"
+                                id="internStartDate"
                                 variant="outlined"
                                 label="Date du stage"
                                 required
@@ -352,13 +352,24 @@ export default function BusinessEvalution() {
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
+                            <label style={{marginRight: "1em"}}>
+                                <Field type="radio" name="" value="oui"/>
+                                oui
+                            </label>
+                            <label>
+                                <Field type="radio" name="" value="non"/>
+                                non
+                            </label>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
                                 name="optionStarted1"
                                 id="optionStarted1"
                                 variant="outlined"
                                 label="De"
-                                required
+                                // required
+                                fullWidth
                                 type={"number"}
                                 InputProps={{
                                     inputProps: {
@@ -367,13 +378,16 @@ export default function BusinessEvalution() {
                                     }
                                 }}
                             />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
                                 name="optionEnd1"
                                 id="optionEnd1"
                                 variant="outlined"
                                 label="À"
-                                required
+                                // required
+                                fullWidth
                                 type={"number"}
                                 InputProps={{
                                     inputProps: {
@@ -383,14 +397,15 @@ export default function BusinessEvalution() {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
                                 name="optionStarted2"
                                 id="optionStarted2"
                                 variant="outlined"
                                 label="De"
-                                required
+                                // required
+                                fullWidth
                                 type={"number"}
                                 InputProps={{
                                     inputProps: {
@@ -399,13 +414,16 @@ export default function BusinessEvalution() {
                                     }
                                 }}
                             />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
                                 name="optionEnd2"
                                 id="optionEnd2"
                                 variant="outlined"
                                 label="À"
-                                required
+                                // required
+                                fullWidth
                                 type={"number"}
                                 InputProps={{
                                     inputProps: {
@@ -415,15 +433,15 @@ export default function BusinessEvalution() {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
+                        <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
                                 name="optionStarted3"
                                 id="optionStarted3"
                                 variant="outlined"
                                 label="De"
-                                required
+                                // required
+                                fullWidth
                                 type={"number"}
                                 InputProps={{
                                     inputProps: {
@@ -432,13 +450,16 @@ export default function BusinessEvalution() {
                                     }
                                 }}
                             />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
                                 name="optionEnd3"
                                 id="optionEnd3"
                                 variant="outlined"
                                 label="À"
-                                required
+                                // required
+                                fullWidth
                                 type={"number"}
                                 InputProps={{
                                     inputProps: {
@@ -453,49 +474,16 @@ export default function BusinessEvalution() {
                 <FormikStep label="Decision">
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
-                            <label>L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN STAGE</label>
-                            <label>
-                                <Field type="radio" name="feedback.hireAgain" value="Oui"/>
-                                Oui
-                            </label>
-                            <label>
-                                <Field type="radio" name="feedback.hireAgain" value="Non"/>
-                                Non
-                            </label>
-                            <label>
-                                <Field type="radio" name="feedback.hireAgain" value="Peut-être"/>
-                                Peut-être
-                            </label>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <label>La formation technique du stagiaire était-elle suffisante pour accomplir le
-                                mandat de stage?</label>
                             <Field component={TextField}
-                                   name="feedback.technicalFormationOpinion"/>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field component={TextField}
+                                   name="signature.name"
                                    variant="outlined"
                                    label="Nom :"
-                                   name="signature.name"/>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field
-                                component={TextField}
-                                name="infos.supervisorRole"
-                                id="supervisorRole"
-                                variant="outlined"
-                                label="Fonction du superviseur:"
-                                required
-                                fullWidth
+                                   fullWitdh
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={SimpleFileUpload}
-                                onChange={(e) => {
-                                    console.log(e)
-                                }}
                                 type={"file"}
                                 name="signature.image"
                                 id="file"
@@ -505,11 +493,12 @@ export default function BusinessEvalution() {
                                 required
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={6}>
                             <Field component={DatePicker}
                                    name="signature.date"
                                    label="Date d'évaluation"
-                                   format="MM/dd/yyyy"/>
+                                   format="MM/dd/yyyy"
+                            />
                         </Grid>
                     </Grid>
                 </FormikStep>

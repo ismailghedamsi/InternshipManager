@@ -64,8 +64,8 @@ export default function StudentStatus() {
         if (offer.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>;
         else if (offer.reviewState === "DENIED")
-            return (<span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>);
+            return <span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>;
         else
             return <span style={{color: "green"}}>Approuvé</span>;
     }
@@ -75,8 +75,8 @@ export default function StudentStatus() {
             if (interview.reviewState === "PENDING")
                 return <span style={{color: "blue"}}>En attente</span>;
             else if (interview.reviewState === "DENIED")
-                return (<span style={{color: "red"}}>Rejeté<span
-                    style={{color: "black"}}> : {interview.reasonForRejection} </span></span>);
+                return <span style={{color: "red"}}>Rejeté<span
+                    style={{color: "black"}}> : {interview.reasonForRejection} </span></span>;
             else
                 return <span style={{color: "green"}}>Approuvé</span>;
         }
@@ -100,105 +100,103 @@ export default function StudentStatus() {
         </div>;
     }
 
-    return (
-        <Grid
-            container
-            spacing={2}
-            className={classes.main}
-        >
-            <Grid item xs={5} className={classes.list}>
-                <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                    État des employeurs
-                </Typography>
-                {employers.map((item, i) =>
-                    <div key={i}>
-                        <button type={"button"}
-                                className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(' ')}
-                                onClick={() => {
-                                    setCurrentEmployerIndex(i);
-                                }}
-                        >
-                            <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                                {employers[i].companyName}
+    return <Grid
+        container
+        spacing={2}
+        className={classes.main}
+    >
+        <Grid item xs={5} className={classes.list}>
+            <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
+                État des employeurs
+            </Typography>
+            {employers.map((item, i) =>
+                <div key={i}>
+                    <button type={"button"}
+                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(' ')}
+                            onClick={() => {
+                                setCurrentEmployerIndex(i);
+                            }}
+                    >
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                            {employers[i].companyName}
+                        </Typography>
+                    </button>
+                    {currentEmployerIndex === i &&
+                    <div>
+                        <button
+                            type={"button"}
+                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
+                            onClick={() => setCurrentSubtab(0)}>
+                            <Typography color={"textSecondary"} variant={"body2"}>
+                                Offers
                             </Typography>
                         </button>
-                        {currentEmployerIndex === i &&
-                        <div>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
-                                onClick={() => setCurrentSubtab(0)}>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    Offers
-                                </Typography>
-                            </button>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
-                                onClick={() => {
-                                    setCurrentSubtab(1)
-                                    getCurrentEmployerInterviews(currentEmployerIndex)
-                                }
-                                }>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    Inteviews
-                                </Typography>
-                            </button>
-                        </div>
-                        }
+                        <button
+                            type={"button"}
+                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
+                            onClick={() => {
+                                setCurrentSubtab(1)
+                                getCurrentEmployerInterviews(currentEmployerIndex)
+                            }
+                            }>
+                            <Typography color={"textSecondary"} variant={"body2"}>
+                                Inteviews
+                            </Typography>
+                        </button>
                     </div>
-                )}
-            </Grid>
-            <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
-                {
-                    currentSubtab === offersTabIndex ?
-                        currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                                return <div>
-                                    <Typography>
-                                        <button type={"button"} className={[classes.linkButton].join(" ")}
-                                                onClick={() => {
-                                                    setCurrentDoc(o.file);
-                                                    openPdf();
-                                                }}
-                                        >
-                                            {o.title}
-                                        </button>
-                                    </Typography>
-                                    <OfferDetails key={k} offer={o}/>
-                                    <Typography>
-                                        <span>Liste des étudiants selectionnés</span>
-                                    </Typography>
-                                    {hiredStudentsNames(o)}
-                                    {printOfferStatus(o)}
-                                    <hr/>
-                                </div>
-                            })
-                            : "L'employeur n'a aucune offre"
-                        : ""
-                }
-                {
-                    currentSubtab === interviewsTabIndex ?
-                        currentSubtab === interviewsTabIndex && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
-                                return <div>
-                                    <InterviewStatus key={index} classes={classes} interview={interview}/>
-                                    <hr/>
-                                </div>
-                            })
-                            : "L'employeur n'a programmé aucune entrevue"
-                        : ""
-                }
-            </Grid>
-            <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-                <DialogContent className={classes.viewbox}>
-                    <PdfDocument document={currentDoc}/>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closePdf} color="primary">
-                        Fermer
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                    }
+                </div>
+            )}
         </Grid>
-    );
+        <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
+            {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
+            {
+                currentSubtab === offersTabIndex ?
+                    currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
+                            return <div>
+                                <Typography>
+                                    <button type={"button"} className={[classes.linkButton].join(" ")}
+                                            onClick={() => {
+                                                setCurrentDoc(o.file);
+                                                openPdf();
+                                            }}
+                                    >
+                                        {o.title}
+                                    </button>
+                                </Typography>
+                                <OfferDetails key={k} offer={o}/>
+                                <Typography>
+                                    <span>Liste des étudiants selectionnés</span>
+                                </Typography>
+                                {hiredStudentsNames(o)}
+                                {printOfferStatus(o)}
+                                <hr/>
+                            </div>
+                        })
+                        : "L'employeur n'a aucune offre"
+                    : ""
+            }
+            {
+                currentSubtab === interviewsTabIndex ?
+                    currentSubtab === interviewsTabIndex && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
+                            return <div>
+                                <InterviewStatus key={index} classes={classes} interview={interview}/>
+                                <hr/>
+                            </div>
+                        })
+                        : "L'employeur n'a programmé aucune entrevue"
+                    : ""
+            }
+        </Grid>
+        <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
+            <DialogContent className={classes.viewbox}>
+                <PdfDocument document={currentDoc}/>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={closePdf} color="primary">
+                    Fermer
+                </Button>
+            </DialogActions>
+        </Dialog>
+    </Grid>;
 }

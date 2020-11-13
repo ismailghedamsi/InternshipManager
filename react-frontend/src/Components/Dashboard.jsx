@@ -14,7 +14,6 @@ import SignForm from "./Employer/SignForm";
 import ContractForm from "./Manager/ContractForm";
 import ContractList from './Manager/ContractList';
 import Employerstatus from './Manager/EmployerStatus';
-import BusinessEvaluationStepper from "./Manager/Evaluation/BusinessEvaluationStepper";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 import Reports from "./Manager/Reports";
@@ -111,10 +110,6 @@ export default function Dashboard() {
                                     role={"admin"}/>
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/businessEvaluation"
-                                    component={BusinessEvaluationStepper}
-                                    role={"admin"}/>
-                <RoleProtectedRoute exact={true}
-                                    path="/dashboard/businessEvaluation1"
                                     component={BusinessEvaluationForm}
                                     role={"admin"}/>
                 {/* Employeur */}
