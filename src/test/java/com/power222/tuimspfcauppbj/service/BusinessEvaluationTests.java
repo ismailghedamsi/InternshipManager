@@ -2,8 +2,6 @@ package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.BusinessEvaluationRepository;
 import com.power222.tuimspfcauppbj.model.BusinessEvaluation;
-import com.power222.tuimspfcauppbj.model.Contract;
-import com.power222.tuimspfcauppbj.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,24 +27,12 @@ public class BusinessEvaluationTests {
     @InjectMocks
     private BusinessEvaluationService businessEvaluationService;
 
-    private User expectedUser;
-    private Contract expectedContract;
     private BusinessEvaluation expectedBusinessEvaluation;
 
     @BeforeEach
     void setUp() {
-        expectedUser = User.builder()
-                .id(1L)
-                .role("admin")
-                .build();
-
-        expectedContract = Contract.builder()
-                .id(1L)
-                .build();
-
         expectedBusinessEvaluation = BusinessEvaluation.builder()
                 .id(1L)
-                .contract(expectedContract)
                 .build();
     }
 
@@ -73,9 +59,9 @@ public class BusinessEvaluationTests {
 
     @Test
     void getAllBusinessEvaluationTest() {
-        var i1 = BusinessEvaluation.builder().id(1L).build();
-        var i2 = BusinessEvaluation.builder().id(2L).build();
-        var i3 = BusinessEvaluation.builder().id(3L).build();
+        var i1 = BusinessEvaluation.builder().id(1).build();
+        var i2 = BusinessEvaluation.builder().id(2).build();
+        var i3 = BusinessEvaluation.builder().id(3).build();
 
         when(businessEvaluationRepository.findAll()).thenReturn(Arrays.asList(i1, i2, i3));
 
@@ -96,12 +82,12 @@ public class BusinessEvaluationTests {
     @Test
     void updatBusinessEvaluationTest() {
         var initialId = expectedBusinessEvaluation.getId();
-        var alteredId = 123L;
-        var alteredInternEvaluation = expectedBusinessEvaluation.toBuilder().id(alteredId).build();
+        var alteredId = 100;
+        var alteredIntern = expectedBusinessEvaluation.toBuilder().id(alteredId).build();
         when(businessEvaluationRepository.findById(initialId)).thenReturn(Optional.of(expectedBusinessEvaluation));
-        when(businessEvaluationRepository.saveAndFlush(alteredInternEvaluation)).thenReturn(expectedBusinessEvaluation);
+        when(businessEvaluationRepository.saveAndFlush(alteredIntern)).thenReturn(expectedBusinessEvaluation);
 
-        var actual = businessEvaluationService.updateBusinessEvaluation(initialId, alteredInternEvaluation);
+        var actual = businessEvaluationService.updateBusinessEvaluation(initialId, alteredIntern);
 
         assertThat(actual).contains(expectedBusinessEvaluation);
     }
