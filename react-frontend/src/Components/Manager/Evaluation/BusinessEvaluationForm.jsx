@@ -17,6 +17,7 @@ const requiredFieldMsg = "Ce champs est requis";
 export default function BusinessEvalution() {
     const classes = useStyles();
     const location = useLocation();
+    console.log(location.state);
 
     const evaluationAnswers = [
         "Totalement en accord",
@@ -24,22 +25,14 @@ export default function BusinessEvalution() {
         "Plutôt en désaccord",
         "Totalement en désaccord",
         "N/A"
-    ]
-
-    const globalAppreciations = [
-        "Les habiletés démontrées dépassent de beaucoup les attentes",
-        "Les habiletés démontrées dépassent les attentes",
-        "Les habiletés démontrées répondent pleinement aux attentes",
-        "Les habiletés démontrées répondent partiellement aux attentes",
-        "Les habiletés démontrées ne répondent pas aux attentes"
-    ]
+    ];
 
     const traineesNumber = [
         "Un stagiaire",
         "Deux stagiaires",
         "Trois stagiaires",
         "Plus de trois"
-    ]
+    ];
 
     const validationSchemaStep1 = yup.object().shape({});
 
@@ -47,14 +40,54 @@ export default function BusinessEvalution() {
         <CardContent>
             <FormikStepper
                 initialValues={{
-                    BusinessInfos: {},
+                    BusinessInfos: {
+                        companyName: "",
+                        employerName: "",
+                        address: "",
+                        phone: "",
+                        city: "",
+                        fax: "",
+                        postalCode: ""
+                    },
+                    InternInfos: {
+                        internName: "",
+                        internDate: new Date(),
+                    },
+                    EvaluationCriterias: {
+                        workAsAnnoncement: evaluationAnswers[0],
+                        easyIntigration: evaluationAnswers[0],
+                        sufficientTime: evaluationAnswers[0],
+                        hoursOfWeekFirstMonth: 0,
+                        hoursOfWeekSecondMonth: 0,
+                        hoursOfWeekThirdMonth: 0,
+                        securityWorkPlace: evaluationAnswers[0],
+                        agreeableEnvironnement: evaluationAnswers[0],
+                        goodSalary: evaluationAnswers[0],
+                        salary: 12.50,
+                        supervisorFacilitatesIntern: evaluationAnswers[0],
+                        adequateEquipement: evaluationAnswers[0],
+                        accetableWorkload: evaluationAnswers[0],
+                        comment: ""
+                    },
+                    Obervations: {
+                        whichInternship: "",
+                        numbersOfInterns: traineesNumber[0],
+                        welcomeSameIntern: false,
+                        variablesQuarters: false,
+                        startQuartersOne: 0,
+                        startQuartersTwo: 0,
+                        startQuartersThree: 0,
+                        endQuartersOne: 0,
+                        endQuartersTwo: 0,
+                        endQuartersThree: 0,
+                    },
                     signature: {
                         image: "",
                         date: new Date(),
                         name: "",
                     }
                 }}
-                evaluationAnswers={evaluationAnswers} globalAppreciations={globalAppreciations}>
+                evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
                 <FormikStep label="IDENTIFICATION DE L’ENTREPRISE" validationSchema={validationSchemaStep1}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
