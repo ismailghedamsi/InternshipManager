@@ -13,9 +13,9 @@ export default function StudentStatus() {
     const api = useApi();
     const parseDate = useDateParser();
     const parseTimeFromDate = useTimeParserFromDate();
-    const [employers, setEmployers] = useState([{}]);
-    const [currentEmployerOffers, setCurrentEmployerOffers] = useState([{}]);
-    const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([{}]);
+    const [employers, setEmployers] = useState([]);
+    const [currentEmployerOffers, setCurrentEmployerOffers] = useState([]);
+    const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([]);
     const [currentEmployerIndex, setCurrentEmployerIndex] = useState(0);
     const [isPdfOpen, openPdf, closePdf] = useModal();
     const [currentDoc, setCurrentDoc] = useState('');
@@ -28,14 +28,15 @@ export default function StudentStatus() {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        api.get("/offers/employer/" + employers[currentEmployerIndex].username)
-            .then(r => {
-                setCurrentEmployerOffers(r.data);
-            })
+        if (employers[currentEmployerIndex])
+            api.get("/offers/employer/" + employers[currentEmployerIndex].username)
+                .then(r => {
+                    setCurrentEmployerOffers(r.data);
+                })
     }, [currentEmployerIndex, employers]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (typeof employers[currentEmployerIndex].id !== "undefined") {
+        if (employers[currentEmployerIndex]) {
             api.get("/interviews/employer/" + employers[currentEmployerIndex].id)
                 .then(r => {
                     setCurrentEmployerInterviews(r ? r.data : []);
@@ -53,9 +54,9 @@ export default function StudentStatus() {
 
     function hiredStudentsNames(o) {
         return o.reviewState === "APPROVED" ?
-            o.applications.map((elem) =>
-                <Typography
-                    style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
+            o.applications.map((elem, i) =>
+                <Typography key={i}
+                            style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
             )
             : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>;
     }
@@ -153,7 +154,7 @@ export default function StudentStatus() {
             {
                 currentSubtab === offersTabIndex ?
                     currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                            return <div>
+                            return <div key={k}>
                                 <Typography>
                                     <button type={"button"} className={[classes.linkButton].join(" ")}
                                             onClick={() => {
@@ -164,7 +165,7 @@ export default function StudentStatus() {
                                         {o.title}
                                     </button>
                                 </Typography>
-                                <OfferDetails key={k} offer={o}/>
+                                <OfferDetails offer={o}/>
                                 <Typography>
                                     <span>Liste des étudiants selectionnés</span>
                                 </Typography>
@@ -179,8 +180,8 @@ export default function StudentStatus() {
             {
                 currentSubtab === interviewsTabIndex ?
                     currentSubtab === interviewsTabIndex && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
-                            return <div>
-                                <InterviewStatus key={index} classes={classes} interview={interview}/>
+                            return <div key={index}>
+                                <InterviewStatus classes={classes} interview={interview}/>
                                 <hr/>
                             </div>
                         })
