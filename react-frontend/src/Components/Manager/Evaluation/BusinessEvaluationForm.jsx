@@ -39,6 +39,7 @@ export default function BusinessEvalution() {
     return <Card>
         <CardContent>
             <FormikStepper
+                contract={location.state.contract}
                 initialValues={{
                     businessInfos: {
                         companyName: "",
@@ -50,7 +51,7 @@ export default function BusinessEvalution() {
                         postalCode: ""
                     },
                     internInfos: {
-                        internName: "",
+                        internName: location.state.student.firstName + " " + location.state.student.lastName,
                         internDate: new Date(),
                     },
                     evaluationCriterias: {
@@ -88,36 +89,35 @@ export default function BusinessEvalution() {
                     }
                 }}
                 evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
-                <FormikStep label="IDENTIFICATION DE L’ENTREPRISE" validationSchema={validationSchemaStep1}>
+                <FormikStep label="IDENTIFICATION DE L’ENTREPRISE">
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
-                                name="businessInfor.companyName"
+                                name="businessInfos.companyName"
                                 id="companyName"
                                 variant="outlined"
                                 label="Nom de l’entreprise"
-                                disabled
                                 required
+                                autoFocus
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
-                                name="businessInfors.employerName"
+                                name="businessInfos.employerName"
                                 id="employerName"
                                 variant="outlined"
                                 label="Personne contact"
                                 required
                                 fullWidth
-                                autoFocus
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="businessInfors.address"
+                                name="businessInfos.address"
                                 id="address"
                                 variant="outlined"
                                 label="Adresse"
@@ -128,7 +128,7 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="businessInfors.phone"
+                                name="businessInfos.phone"
                                 id="phone"
                                 variant="outlined"
                                 label="Téléphone"
@@ -139,7 +139,7 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="businessInfors.city"
+                                name="businessInfos.city"
                                 id="city"
                                 variant="outlined"
                                 label="Ville"
@@ -150,7 +150,7 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="businessInfors.fax"
+                                name="businessInfos.fax"
                                 id="fax"
                                 variant="outlined"
                                 label="Télécopieur"
@@ -160,7 +160,7 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
-                                name="businessInfors.postalCode"
+                                name="businessInfos.postalCode"
                                 id="postalCode"
                                 variant="outlined"
                                 label="Code postal"
@@ -180,8 +180,8 @@ export default function BusinessEvalution() {
                                 variant="outlined"
                                 label="Nom du stagiaire"
                                 required
+                                disabled
                                 fullWidth
-                                autoFocus
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -193,6 +193,7 @@ export default function BusinessEvalution() {
                                 label="Date du stage"
                                 required
                                 fullWidth
+                                autoFocus
                                 format="MM/dd/yyyy"
                             />
                         </Grid>

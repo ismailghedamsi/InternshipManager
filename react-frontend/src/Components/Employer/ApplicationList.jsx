@@ -129,6 +129,7 @@ export default function ApplicationList() {
                             Convoquer l'étudiant pour un entrevue
                         </Link>
                         }
+                        {offer.applications[i].contract.businessEvaluation === null &&
                         <Link variant={"body1"}
                               to={{
                                   pathname: evaluationDirection(),
@@ -138,6 +139,7 @@ export default function ApplicationList() {
                         >
                             {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
                         </Link>
+                        }
                     </div>
                     }
                     <hr/>

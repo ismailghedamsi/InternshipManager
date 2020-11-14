@@ -1,12 +1,12 @@
 import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@material-ui/core';
 import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
-import {useLocation} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {useFileReader, useModal} from "../../Utils/Hooks";
 
-export function FormikStepper({children, initialValues}) {
+export function FormikStepper({contract, children, initialValues}) {
+    const history = useHistory()
     const childrenArray = React.Children.toArray(children)
-    const location = useLocation()
     const readFile = useFileReader()
     const [step, setStep] = useState(0)
     const currentChild = childrenArray[step]
@@ -24,22 +24,23 @@ export function FormikStepper({children, initialValues}) {
             validationSchema={currentChild.props.validationSchema}
             validateOnBlur={false}
             validateOnChange={false}
-            validate={values => {
-                if (!isLastStep())
-                    return {};
-
-                const errors = {signature: {}};
-                if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
-                    errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
-                }
-                if (values.signature.image.length === 0) {
-                    errors.signature.image = "Aucun fichier selectionné ou le fichier est vide"
-                }
-                return errors;
-            }}
+            // validate={values => {
+            //     if (!isLastStep())
+            //         return {};
+            //
+            //     const errors = {signature: {}};
+            //     if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
+            //         errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
+            //     }
+            //     if (values.signature.image.length === 0) {
+            //         errors.signature.image = "Aucun fichier selectionné ou le fichier est vide"
+            //     }
+            //     return errors;
+            // }}
             onSubmit={async values => {
                 if (isLastStep()) {
-                    const dto = {...values}
+                    const dto = {...values};
+                    dto.contract = contract;
                     dto.signature.image = await readFile(values.signature.image)
 
                     console.log(dto)
