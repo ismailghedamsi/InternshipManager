@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,17 +48,15 @@ public class InternshipOfferControllerTests {
     private Student expectedStudent;
 
     @BeforeEach
-    void beforeEach() throws ParseException {
+    void beforeEach() {
 
         expectedEmployer = Employer.builder()
                 .username("employeur")
-                .role("employer")
                 .build();
 
         expectedStudent = Student.builder()
                 .id(1L)
                 .username("student")
-                .role("student")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")

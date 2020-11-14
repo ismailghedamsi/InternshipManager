@@ -23,7 +23,7 @@ export default function OfferAssignements() {
         api.get("/students")
             .then(r => {
                 if (r) {
-                    r.data.forEach((s) => {
+                    r.data.forEach(s => {
                         delete s.resumes;
                         delete s.appliedOffers;
                     })

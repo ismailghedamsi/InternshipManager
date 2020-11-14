@@ -41,7 +41,6 @@ public class StudentServiceTests {
                 .id(1L)
                 .username("student")
                 .password("password")
-                .role("student")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
@@ -95,7 +94,8 @@ public class StudentServiceTests {
     @Test
     void createStudent() {
         expectedStudent.setPassword("encodedPassword");
-        var dto = expectedStudent.toBuilder().role(null).password("password").build();
+        var dto = expectedStudent;
+        dto.setPassword("password");
         when(studentRepo.saveAndFlush(expectedStudent)).thenReturn(expectedStudent);
         when(passwordEncoder.encode(dto.getPassword())).thenReturn("encodedPassword");
 
@@ -123,12 +123,13 @@ public class StudentServiceTests {
     @Test
     void updateStudentWithModifiedId() {
         var idToPersistTo = expectedStudent.getId();
-        var idToBeOverwritten = 5L;
-        var studentWithIdToIgnore = expectedStudent.toBuilder().id(idToBeOverwritten).build();
+        final var idToOverwrite = 5L;
+        var modifiedStudent = expectedStudent;
+        modifiedStudent.setId(idToOverwrite);
         when(studentRepo.findById(idToPersistTo)).thenReturn(Optional.of(expectedStudent));
         when(studentRepo.saveAndFlush(expectedStudent)).thenReturn(expectedStudent);
 
-        var actual = svc.updateStudent(idToPersistTo, studentWithIdToIgnore);
+        var actual = svc.updateStudent(idToPersistTo, modifiedStudent);
 
         assertThat(actual).isEqualTo(expectedStudent);
     }

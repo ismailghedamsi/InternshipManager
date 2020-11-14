@@ -1,7 +1,7 @@
 import {makeStyles} from "@material-ui/core/styles";
 
 export default function useStyles() {
-    return makeStyles((theme) => ({
+    return makeStyles(theme => ({
         main: {
             backgroundColor: "#fff",
             alignItems: "stretch",

@@ -13,9 +13,9 @@ import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi} from "../Utils/Hooks";
 import useStyles from "../Utils/useStyles";
 
-const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
-const tooLittleError = (valueNumber) => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
-const tooBigError = (valueNumber) => "Doit être un nombre plus petit que ou égal à " + valueNumber.max;
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+const tooLittleError = valueNumber => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
+const tooBigError = valueNumber => "Doit être un nombre plus petit que ou égal à " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function OfferCreation() {
@@ -70,7 +70,7 @@ export default function OfferCreation() {
     }
 
     function sendOfferToBackEnd(values) {
-        return readFileAsync(values.file).then((base64file) => {
+        return readFileAsync(values.file).then(base64file => {
             let dto = {};
             dto.details = {...values};
             dto.title = dto.details.title;

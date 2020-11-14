@@ -11,13 +11,17 @@ import java.util.Optional;
 @Service
 public class ContractService {
     private final ContractRepository contractRepo;
+    private final MailSendingService mailSvc;
 
-    public ContractService(ContractRepository contractRepo) {
+    public ContractService(ContractRepository contractRepo, final MailSendingService mailSvc) {
         this.contractRepo = contractRepo;
+        this.mailSvc = mailSvc;
     }
 
     public Contract createAndSaveNewContract(Contract contract) {
-        return contractRepo.saveAndFlush(contract);
+        var newContract = contractRepo.saveAndFlush(contract);
+        mailSvc.notifyAboutCreation(newContract);
+        return newContract;
     }
 
     public List<Contract> getAllContract() {
@@ -48,6 +52,10 @@ public class ContractService {
 
     @Transactional
     public void deleteContractById(long id) {
+        var contractOp = getContractById(id);
+        if (contractOp.isEmpty())
+            return;
+        mailSvc.notifyAboutDeletion(contractOp.get());
         contractRepo.deleteById(id);
     }
 }

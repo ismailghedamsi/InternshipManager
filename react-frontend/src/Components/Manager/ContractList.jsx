@@ -95,7 +95,7 @@ export default function ContractList() {
                             &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
                         </Typography>
                         <Typography color={"textPrimary"} variant={"body2"}>
-                            Nom du gestionnaire de stage : {contracts[i].adminName}
+                            Nom du gestionnaire de stage : {contracts[i].admin.name}
                         </Typography>
                     </button>
                     <div className={classes.buttonDiv} style={{display: "block"}}>

@@ -9,12 +9,12 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 
 @Data
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +27,5 @@ public class User {
     private String password;
 
     private boolean passwordExpired;
-    private String role;
+    private String email;
 }

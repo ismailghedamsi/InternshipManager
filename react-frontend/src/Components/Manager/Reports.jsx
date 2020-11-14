@@ -125,7 +125,7 @@ function DataTableBody({report, rows}) {
                     contract.studentApplication.student.studentId + ")"
                 }</TableCell>
                 <TableCell>{contract.studentApplication.offer.employer.companyName}</TableCell>
-                <TableCell>{contract.adminName}</TableCell>
+                <TableCell>{contract.admin.name}</TableCell>
                 <TableCell>Show file</TableCell>
             </TableRow>
         )
