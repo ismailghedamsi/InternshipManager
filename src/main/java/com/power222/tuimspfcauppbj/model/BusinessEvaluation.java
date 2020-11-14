@@ -7,6 +7,7 @@ import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -45,7 +46,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @Embeddable
     public static class InternInfos {
         private String internName;
-        private String internDate;
+        private LocalDate internDate;
         private Internship internship;
     }
 
