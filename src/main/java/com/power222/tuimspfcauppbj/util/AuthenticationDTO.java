@@ -13,6 +13,7 @@ public class AuthenticationDTO {
         var dto = new AuthenticationDTO();
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
+        dto.setRole(user.getClass().getSimpleName().toLowerCase());
         return dto;
     }
 }
