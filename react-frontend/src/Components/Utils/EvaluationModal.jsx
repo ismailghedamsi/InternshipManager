@@ -6,9 +6,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import React from "react";
+import useStyles from "../Utils/useStyles";
+import {useApi} from "./Hooks";
 
 export default function EvaluationModal({isOpen, data, hide}) {
-
+    const classes = useStyles()
+    const api = useApi()
+    console.log(data.infos)
     return (
             <Dialog open={isOpen} onClose={hide} fullWidth={true} fullScreen={true}
                     maxWidth={'md'}>
@@ -16,23 +20,18 @@ export default function EvaluationModal({isOpen, data, hide}) {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         {data ?
-                                <div style={{
-                                    width: "50VW",
-                                    height: "10VH",
-                                    border: "1px solid #969696",
-                                    margin: "10px"
-                                }}>
+                                <div>
 
                                     <Typography variant="body1">
-                                        Nom de l’élève : {data.fullname}
+                                        Nom de l’élève : {data.infos.fullname}
                                     </Typography>
 
                                     <Typography variant="body1">
-                                        Programme d’études : {data.program}
+                                        Programme d’études : {data.infos.studentProgram}
                                     </Typography>
 
-                                    <Typography variant="body1">
-                                        Nom de l’entreprise : {data.entrpriseName}
+                                    {/* <Typography variant="body1">
+                                        Nom de l’entreprise : {data.infos}
                                     </Typography>
 
                                     <Typography variant="body1">
@@ -45,7 +44,7 @@ export default function EvaluationModal({isOpen, data, hide}) {
 
                                     <Typography variant="body1">
                                         Téléphone: {data.program}
-                                    </Typography>
+                                    </Typography> */}
                                 </div>
                                 : ""
                         }

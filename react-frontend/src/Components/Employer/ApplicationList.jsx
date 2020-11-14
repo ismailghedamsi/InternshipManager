@@ -121,15 +121,19 @@ export default function ApplicationList() {
                                 Convoquer l'étudiant pour un entrevue
                             </Link>
                             }
-                            <Link variant={"body1"}
-                                  to={{
-                                      pathname: "/dashboard/evaluateStudent",
-                                      state: {...offer.applications[i]}
-                                  }}
-                                  style={{display: "block"}}
+                            {console.log(offer.applications[i])}
+                            {offer.applications[i].contract.internEvaluation === null &&
+                            <Link
+                                    variant={"body1"}
+                                    to={{
+                                        pathname: "/dashboard/evaluateStudent",
+                                        state: {...offer.applications[i]},
+                                    }}
+                                    style={{display: "block"}}
                             >
                                 Évaluer l'étudiant
                             </Link>
+                            }
                         </div>
                         }
                         <hr/>

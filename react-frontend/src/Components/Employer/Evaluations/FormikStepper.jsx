@@ -1,23 +1,23 @@
 import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@material-ui/core';
 import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
-import {useLocation} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import EvaluationModal from '../../Utils/EvaluationModal';
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
 
 const sleep = time => new Promise(acc => setTimeout(acc, time))
 
-export function FormikStepper({children, initialValues, evaluationAnswers, globalAppreciations}) {
+export function FormikStepper({contract, children, initialValues}) {
+    const history = useHistory()
     const childrenArray = React.Children.toArray(children)
-    const location = useLocation()
     const readFile = useFileReader()
-    const api = useApi()
     const [step, setStep] = useState(0)
     const currentChild = childrenArray[step]
     const [completed, setCompleted] = useState(false)
     const [data, setData] = useState({})
-    const [isOpen, setIsOpen] = useState(false)
     const [isEvaluationModalOpen, openEvalationModal, closeEvaluationModal] = useModal()
+    const [validationButtonClick, setValidationButtonClick] = useState(false)
+    const api = useApi()
 
     function isLastStep() {
         return step === childrenArray.length - 1;
@@ -26,7 +26,8 @@ export function FormikStepper({children, initialValues, evaluationAnswers, globa
     console.log(currentChild.props.validationSchema)
 
     return <>
-        <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>
+        {validationButtonClick ?
+                <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/> : ""}
         <Formik
                 initialValues={initialValues}
                 validationSchema={currentChild.props.validationSchema}
@@ -47,13 +48,13 @@ export function FormikStepper({children, initialValues, evaluationAnswers, globa
                 // }}
                 onSubmit={async values => {
                     if (isLastStep()) {
-                        const dto = {...values}
+                        var dto = {...values}
+                        dto.contract = contract
                         dto.signature.image = await readFile(values.signature.image)
-                        console.log("aaaa")
+                        console.log("approuve")
                         await sleep(3000);
-                        // api.post("/internEvaluation", dto)
-                        // .then(() => alert("success"))
-                        // .catch(() => alert("fail"))
+                        api.post("/internEvaluation", dto)
+                                .then(() => history.push("/dashboard/listoffer"))
                         setCompleted(true);
                     } else {
                     setStep(s => s + 1);
@@ -94,6 +95,7 @@ export function FormikStepper({children, initialValues, evaluationAnswers, globa
                                 color="primary"
                                 onClick={() => {
                                     setData(values);
+                                    setValidationButtonClick(true)
                                     openEvalationModal()
                                 }}
                             >

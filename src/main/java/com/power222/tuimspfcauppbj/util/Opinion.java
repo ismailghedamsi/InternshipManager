@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.util;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum Opinion {
+
     @JsonProperty("Totalement en accord")
     TOTALY_AGGREED,
     @JsonProperty("Plutôt en accord")

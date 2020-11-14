@@ -97,7 +97,7 @@ public class InternEvaluation extends SemesterDiscriminatedEntity {
         private Expectations expectations;
         @Column(name = "GLOBAL_COMMENT")
         private String comment;
-        private boolean discussedWithIntern;
+        private SimpleResponse discussedWithIntern;
     }
 
     @Data
