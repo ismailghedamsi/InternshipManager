@@ -46,7 +46,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     public static class InternInfos {
         private String internName;
         private String internDate;
-        private Internship intership;
+        private Internship internship;
     }
 
     @Data

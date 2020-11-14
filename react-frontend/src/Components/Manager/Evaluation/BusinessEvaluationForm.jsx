@@ -53,6 +53,7 @@ export default function BusinessEvalution() {
                     internInfos: {
                         internName: location.state.student.firstName + " " + location.state.student.lastName,
                         internDate: new Date(),
+                        internship: ""
                     },
                     evaluationCriterias: {
                         workAsAnnoncement: evaluationAnswers[0],
@@ -63,6 +64,7 @@ export default function BusinessEvalution() {
                         hoursOfWeekThirdMonth: 0,
                         securityWorkPlace: evaluationAnswers[0],
                         pleasantEnvironnement: evaluationAnswers[0],
+                        accessiblePlace: evaluationAnswers[0],
                         goodSalary: evaluationAnswers[0],
                         salary: 12.50,
                         supervisorFacilitatesIntern: evaluationAnswers[0],
@@ -200,11 +202,12 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label>Stage : </label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="internDate.internship" id="internship" value="premier stage"/>
+                                <Field type="radio" name="internInfos.internship" id="internship"
+                                       value="premier stage"/>
                                 1
                             </label>
                             <label>
-                                <Field type="radio" name="internDate.internship" id="internship"
+                                <Field type="radio" name="internInfos.internship" id="internship"
                                        value="deuxieme stage"/>
                                 2
                             </label>
