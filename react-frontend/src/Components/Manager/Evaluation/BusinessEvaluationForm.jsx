@@ -40,7 +40,7 @@ export default function BusinessEvalution() {
         <CardContent>
             <FormikStepper
                 initialValues={{
-                    BusinessInfos: {
+                    businessInfos: {
                         companyName: "",
                         employerName: "",
                         address: "",
@@ -49,11 +49,11 @@ export default function BusinessEvalution() {
                         fax: "",
                         postalCode: ""
                     },
-                    InternInfos: {
+                    internInfos: {
                         internName: "",
                         internDate: new Date(),
                     },
-                    EvaluationCriterias: {
+                    evaluationCriterias: {
                         workAsAnnoncement: evaluationAnswers[0],
                         easyIntigration: evaluationAnswers[0],
                         sufficientTime: evaluationAnswers[0],
@@ -61,7 +61,7 @@ export default function BusinessEvalution() {
                         hoursOfWeekSecondMonth: 0,
                         hoursOfWeekThirdMonth: 0,
                         securityWorkPlace: evaluationAnswers[0],
-                        agreeableEnvironnement: evaluationAnswers[0],
+                        pleasantEnvironnement: evaluationAnswers[0],
                         goodSalary: evaluationAnswers[0],
                         salary: 12.50,
                         supervisorFacilitatesIntern: evaluationAnswers[0],
@@ -69,7 +69,7 @@ export default function BusinessEvalution() {
                         accetableWorkload: evaluationAnswers[0],
                         comment: ""
                     },
-                    Obervations: {
+                    observations: {
                         whichInternship: "",
                         numbersOfInterns: traineesNumber[0],
                         welcomeSameIntern: false,
@@ -83,8 +83,8 @@ export default function BusinessEvalution() {
                     },
                     signature: {
                         image: "",
-                        date: new Date(),
                         name: "",
+                        date: new Date(),
                     }
                 }}
                 evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
@@ -93,23 +93,23 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
-                                name="companyName"
+                                name="businessInfor.companyName"
                                 id="companyName"
                                 variant="outlined"
                                 label="Nom de l’entreprise"
                                 disabled
-                                // required
+                                required
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
-                                name="employerName"
+                                name="businessInfors.employerName"
                                 id="employerName"
                                 variant="outlined"
                                 label="Personne contact"
-                                // required
+                                required
                                 fullWidth
                                 autoFocus
                             />
@@ -117,40 +117,40 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="address"
+                                name="businessInfors.address"
                                 id="address"
                                 variant="outlined"
                                 label="Adresse"
-                                // required
+                                required
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="phone"
+                                name="businessInfors.phone"
                                 id="phone"
                                 variant="outlined"
                                 label="Téléphone"
-                                // required
+                                required
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="city"
+                                name="businessInfors.city"
                                 id="city"
                                 variant="outlined"
                                 label="Ville"
-                                // required
+                                required
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="fax"
+                                name="businessInfors.fax"
                                 id="fax"
                                 variant="outlined"
                                 label="Télécopieur"
@@ -160,11 +160,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
-                                name="postalCode"
+                                name="businessInfors.postalCode"
                                 id="postalCode"
                                 variant="outlined"
                                 label="Code postal"
-                                // required
+                                required
                                 fullWidth
                             />
                         </Grid>
@@ -175,11 +175,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
-                                name="traineeName"
-                                id="traineeName"
+                                name="internInfos.internName"
+                                id="internName"
                                 variant="outlined"
                                 label="Nom du stagiaire"
-                                // required
+                                required
                                 fullWidth
                                 autoFocus
                             />
@@ -187,8 +187,8 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <Field
                                 component={DatePicker}
-                                name="internStartDate"
-                                id="internStartDate"
+                                name="internInfos.internDate"
+                                id="internDate"
                                 variant="outlined"
                                 label="Date du stage"
                                 required
@@ -199,11 +199,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label>Stage : </label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="" value="1"/>
+                                <Field type="radio" name="internDate.internship" id="internship" value="1"/>
                                 1
                             </label>
                             <label>
-                                <Field type="radio" name="" value="2"/>
+                                <Field type="radio" name="internDate.internship" id="internship" value="2"/>
                                 2
                             </label>
                         </Grid>
@@ -214,41 +214,41 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Les tâches confiées au stagiaire sont conformes aux
                                 tâches annoncées dans l’entente de stage</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.workAsAnnoncement">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Des mesures d’accueil facilitent l’intégration du
                                 nouveau stagiaire</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.easyIntigration">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le temps réel consacré à l’encadrement du stagiaire est
                                 suffisant</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.sufficientTime">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>L’environnement de travail respecte les normes d’hygiène
                                 et de sécurité au travail</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.securityWorkPlace">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le climat de travail est agréable</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.pleasantEnvironnement">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le milieu de stage est accessible par transport en
                                 commun</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.accessiblePlace">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
@@ -257,11 +257,11 @@ export default function BusinessEvalution() {
                                 stagiaire</label>
                             <Field
                                 component={TextField}
-                                name="salary"
+                                name="evaluationCriterias.salary"
                                 id="salary"
                                 variant="outlined"
                                 label="Préciser : __/l’heure."
-                                // required
+                                required
                                 type={"number"}
                                 style={{marginRight: "2em"}}
                                 InputProps={{
@@ -271,27 +271,27 @@ export default function BusinessEvalution() {
                                     }
                                 }}
                             />
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.goodSalary">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>La communication avec le superviseur de stage facilite
                                 le déroulement du stage</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.supervisorFacilitatesIntern">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>L’équipement fourni est adéquat pour réaliser les tâches
                                 confiées</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.adequateEquipement">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le volume de travail est acceptable</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="evaluationCriterias.accetableWorkload">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
@@ -301,11 +301,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={4}>
                             <Field
                                 component={TextField}
-                                name="month1"
-                                id="month1"
+                                name="evaluationCriterias.hoursOfWeekFirstMonth"
+                                id="hoursOfWeekFirstMonth"
                                 variant="outlined"
                                 label="Premier mois"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -320,11 +320,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={4}>
                             <Field
                                 component={TextField}
-                                name="month2"
-                                id="month2"
+                                name="evaluationCriterias.hoursOfWeekSecondMonth"
+                                id="hoursOfWeekSecondMonth"
                                 variant="outlined"
                                 label="Deuxième mois"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -339,11 +339,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={4}>
                             <Field
                                 component={TextField}
-                                name="month3"
-                                id="month3"
+                                name="evaluationCriterias.hoursOfWeekThirdMonth"
+                                id="hoursOfWeekThirdMonth"
                                 variant="outlined"
                                 label="Troisième mois"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -358,7 +358,7 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <Field component={TextField} style={{
                                 backgroundColor: "#F2F3F4"
-                            }} rows={4} fullWidth multiline label="Commentaires" name="productivity.comment">
+                            }} rows={4} fullWidth multiline label="Commentaires" name="evaluationCriterias.comment">
                             </Field>
                         </Grid>
                     </Grid>
@@ -368,17 +368,17 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="" value="premierStage"/>
+                                <Field type="radio" name="observations.whichInternship" value="premierStage"/>
                                 Premier stage
                             </label>
                             <label>
-                                <Field type="radio" name="" value="deuxiemeStage"/>
+                                <Field type="radio" name="observations.whichInternship" value="deuxiemeStage"/>
                                 Deuxième stage
                             </label>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est ouvert à accueillir</label>
-                            <Field as="select" name="">
+                            <Field as="select" name="observations.numbersOfInterns">
                                 {traineesNumber.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                         </Grid>
@@ -386,33 +386,33 @@ export default function BusinessEvalution() {
                             <label style={{marginRight: "2em"}}>Ce milieu désire accueillir le même stagiaire pour un
                                 prochain stage</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="" value="oui"/>
+                                <Field type="radio" name="observations.welcomeSameIntern" value="oui"/>
                                 oui
                             </label>
                             <label>
-                                <Field type="radio" name="" value="non"/>
+                                <Field type="radio" name="observations.welcomeSameIntern" value="non"/>
                                 non
                             </label>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="" value="oui"/>
+                                <Field type="radio" name="observations.variablesQuarters" value="oui"/>
                                 oui
                             </label>
                             <label>
-                                <Field type="radio" name="" value="non"/>
+                                <Field type="radio" name="observations.variablesQuarters" value="non"/>
                                 non
                             </label>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="optionStarted1"
-                                id="optionStarted1"
+                                name="observations.startQuartersOne"
+                                id="startQuartersOne"
                                 variant="outlined"
                                 label="De"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -426,11 +426,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="optionEnd1"
-                                id="optionEnd1"
+                                name="observations.endQuartersOne"
+                                id="endQuartersOne"
                                 variant="outlined"
                                 label="À"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -444,11 +444,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="optionStarted2"
-                                id="optionStarted2"
+                                name="observations.startQuartersTwo"
+                                id="startQuartersTwo"
                                 variant="outlined"
                                 label="De"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -462,11 +462,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="optionEnd2"
-                                id="optionEnd2"
+                                name="observations.endQuartersTwo"
+                                id="endQuartersTwo"
                                 variant="outlined"
                                 label="À"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -480,11 +480,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="optionStarted3"
-                                id="optionStarted3"
+                                name="observations.startQuartersThree"
+                                id="startQuartersThree"
                                 variant="outlined"
                                 label="De"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -498,11 +498,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="optionEnd3"
-                                id="optionEnd3"
+                                name="observations.endQuartersThree"
+                                id="endQuartersThree"
                                 variant="outlined"
                                 label="À"
-                                // required
+                                required
                                 fullWidth
                                 type={"number"}
                                 InputProps={{
@@ -522,6 +522,7 @@ export default function BusinessEvalution() {
                                    name="signature.name"
                                    variant="outlined"
                                    label="Nom :"
+                                   required
                                    fullWitdh
                             />
                         </Grid>
@@ -533,8 +534,8 @@ export default function BusinessEvalution() {
                                 id="file"
                                 variant="outlined"
                                 label="Fichier JPG/PNG"
-                                fullwidth
                                 required
+                                fullwidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
