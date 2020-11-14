@@ -59,7 +59,8 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
         private float hoursOfWeekSecondMonth;
         private float hoursOfWeekThirdMonth;
         private Opinion securityWorkPlace;
-        private Opinion agreeableEnvironnement;
+        private Opinion pleasantEnvironnement;
+        private Opinion accessiblePlace;
         private Opinion goodSalary;
         private float salary;
         private Opinion supervisorFacilitatesIntern;
