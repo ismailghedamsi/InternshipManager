@@ -1,5 +1,6 @@
 package com.power222.tuimspfcauppbj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import lombok.*;
 import lombok.Builder.Default;
@@ -39,6 +40,7 @@ public class Contract extends SemesterDiscriminatedEntity {
     @OneToOne
     private StudentApplication studentApplication;
 
-    @OneToOne
+    @ManyToOne
+    @JsonIgnoreProperties({"contracts"})
     private Admin admin;
 }
