@@ -7,14 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    Optional<Student> findByUsername(String username);
-
-    boolean existsByUsername(String username);
-
     Page<Student> findAllByResumesIsEmpty(Pageable pageable);
 
     Page<Student> findAllByResumes_ReviewState(ReviewState reviewState, Pageable pageable);
