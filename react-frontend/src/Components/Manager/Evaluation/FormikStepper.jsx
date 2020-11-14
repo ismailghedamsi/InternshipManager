@@ -3,8 +3,9 @@ import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
+import BusinessEvaluationModal from "../../Utils/BusinessEvaluationModal";
 
-export function FormikStepper({contract, children, initialValues}) {
+export function FormikStepper({application, initialValues, children}) {
     const history = useHistory()
     const api = useApi()
     const childrenArray = React.Children.toArray(children)
@@ -13,6 +14,7 @@ export function FormikStepper({contract, children, initialValues}) {
     const currentChild = childrenArray[step]
     const [completed, setCompleted] = useState(false)
     const [data, setData] = useState({})
+    const [validationButtonClick, setValidationButtonClick] = useState(false)
     const [isBusinessEvaluationModalOpen, openBusinessEvaluationModal, closeBusinessEvaluationModal] = useModal();
 
     function isLastStep() {
@@ -20,28 +22,27 @@ export function FormikStepper({contract, children, initialValues}) {
     }
 
     return <>
+        {validationButtonClick ?
+            <BusinessEvaluationModal isOpen={isBusinessEvaluationModalOpen} data={data}
+                                     hide={closeBusinessEvaluationModal}/> : ""}
         <Formik
             initialValues={initialValues}
             validationSchema={currentChild.props.validationSchema}
             validateOnBlur={false}
             validateOnChange={false}
-            // validate={values => {
-            //     if (!isLastStep())
-            //         return {};
-            //
-            //     const errors = {signature: {}};
-            //     if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
-            //         errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
-            //     }
-            //     if (values.signature.image.length === 0) {
-            //         errors.signature.image = "Aucun fichier selectionné ou le fichier est vide"
-            //     }
-            //     return errors;
-            // }}
+            validate={values => {
+                // if (!isLastStep())
+                //     return;
+                // const errors = {signature: {}};
+                // if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
+                //     errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
+                // }
+                // return errors;
+            }}
             onSubmit={async values => {
                 if (isLastStep()) {
                     const dto = {...values};
-                    dto.contract = contract;
+                    dto.contract = application.contract;
                     dto.signature.image = await readFile(values.signature.image)
                     api.post("/businessEvaluation", dto)
                         .then(() => history.push("/dashboard/offerList"))
@@ -83,6 +84,7 @@ export function FormikStepper({contract, children, initialValues}) {
                                 color="primary"
                                 onClick={() => {
                                     setData(values);
+                                    setValidationButtonClick(true)
                                     openBusinessEvaluationModal();
                                 }}
                             >

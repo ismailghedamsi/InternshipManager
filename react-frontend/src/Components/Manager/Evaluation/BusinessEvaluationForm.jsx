@@ -1,23 +1,19 @@
 import {Card, CardContent, Grid} from '@material-ui/core';
 import {Field} from 'formik';
 import {SimpleFileUpload, TextField} from 'formik-material-ui';
-import {DatePicker} from 'formik-material-ui-pickers';
 import React from 'react';
 import * as yup from "yup";
-import useStyles from '../../Utils/useStyles';
 import {FormikStepper} from './FormikStepper';
 import {useLocation} from 'react-router-dom';
 
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+const tooLongError = value => "Doit avoir moins que " + value.max + " caractères";
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min;
-const tooBigError = valueNumber => "Doit être plus petit que ou égal à " + valueNumber.max;
+const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
-
 export default function BusinessEvalution() {
-    const classes = useStyles();
     const location = useLocation();
-    console.log(location.state);
 
     const evaluationAnswers = [
         "Totalement en accord",
@@ -34,12 +30,55 @@ export default function BusinessEvalution() {
         "Plus de trois"
     ];
 
-    const validationSchemaStep1 = yup.object().shape({});
-
+    const BusinessInfosValidation = yup.object().shape({
+        businessInfos: yup.object().shape({
+            companyName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
+            employerName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
+            address: yup.string().trim().min(5, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
+            phone: yup.string().trim().min(10, tooLittleError).max(10, tooBigError).required(requiredFieldMsg),
+            city: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
+            fax: yup.string().trim().min(7, tooLittleError).max(10, tooBigError),
+            postalCode: yup.string().trim().min(6, tooShortError).max(6, tooLongError).required(requiredFieldMsg)
+        }),
+    });
+    const InternInfosValidation = yup.object().shape({
+        internInfos: yup.object().shape({
+            internName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
+            internship: yup.string().required(requiredFieldMsg)
+        }),
+    });
+    const EvaluationCriteriasValidation = yup.object().shape({
+        evaluationCriterias: yup.object().shape({
+            hoursOfWeekFirstMonth: yup.number().required().max(40, tooBigError).required(requiredFieldMsg),
+            hoursOfWeekSecondMonth: yup.number().required().max(40, tooBigError).required(requiredFieldMsg),
+            hoursOfWeekThirdMonth: yup.number().required().max(40, tooBigError).required(requiredFieldMsg),
+            salary: yup.number().required().min(12.5, tooLittleError).required(requiredFieldMsg)
+        }),
+    });
+    const ObservationsValidation = yup.object().shape({
+        observations: yup.object().shape({
+            whichInternship: yup.string().required(requiredFieldMsg),
+            welcomeSameIntern: yup.string().required(requiredFieldMsg),
+            variablesQuarters: yup.string().required(requiredFieldMsg),
+            startQuartersOne: yup.number().required().min(1, tooLittleError).required(requiredFieldMsg),
+            startQuartersTwo: yup.number().required().min(0, tooLittleError),
+            startQuartersThree: yup.number().required().min(0, tooLittleError),
+            endQuartersOne: yup.number().required().min(yup.ref("startQuartersOne"), tooLittleError).required(requiredFieldMsg),
+            endQuartersTwo: yup.number().required().min(yup.ref("startQuartersTwo"), tooLittleError),
+            endQuartersThree: yup.number().required().min(yup.ref("startQuartersThree"), tooLittleError),
+        }),
+    });
+    const SignatureValidation = yup.object().shape({
+        signature: yup.object().shape({
+            name: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
+            image: yup.string().trim().min(1)
+        }),
+    });
+    console.log(location.state)
     return <Card>
         <CardContent>
             <FormikStepper
-                contract={location.state.contract}
+                application={location.state}
                 initialValues={{
                     businessInfos: {
                         companyName: "",
@@ -52,16 +91,15 @@ export default function BusinessEvalution() {
                     },
                     internInfos: {
                         internName: location.state.student.firstName + " " + location.state.student.lastName,
-                        internDate: new Date(),
                         internship: ""
                     },
                     evaluationCriterias: {
                         workAsAnnoncement: evaluationAnswers[0],
                         easyIntigration: evaluationAnswers[0],
                         sufficientTime: evaluationAnswers[0],
-                        hoursOfWeekFirstMonth: 0,
-                        hoursOfWeekSecondMonth: 0,
-                        hoursOfWeekThirdMonth: 0,
+                        hoursOfWeekFirstMonth: 1,
+                        hoursOfWeekSecondMonth: 1,
+                        hoursOfWeekThirdMonth: 1,
                         securityWorkPlace: evaluationAnswers[0],
                         pleasantEnvironnement: evaluationAnswers[0],
                         accessiblePlace: evaluationAnswers[0],
@@ -75,8 +113,8 @@ export default function BusinessEvalution() {
                     observations: {
                         whichInternship: "",
                         numbersOfInterns: traineesNumber[0],
-                        welcomeSameIntern: false,
-                        variablesQuarters: false,
+                        welcomeSameIntern: "",
+                        variablesQuarters: "",
                         startQuartersOne: 0,
                         startQuartersTwo: 0,
                         startQuartersThree: 0,
@@ -86,12 +124,11 @@ export default function BusinessEvalution() {
                     },
                     signature: {
                         image: "",
-                        name: "",
-                        date: new Date(),
+                        name: ""
                     }
                 }}
                 evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
-                <FormikStep label="IDENTIFICATION DE L’ENTREPRISE">
+                <FormikStep label="IDENTIFICATION DE L’ENTREPRISE" validationSchema={BusinessInfosValidation}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <Field
@@ -172,7 +209,7 @@ export default function BusinessEvalution() {
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="IDENTIFICATION DU STAGIAIRE" validationSchema={validationSchemaStep1}>
+                <FormikStep label="IDENTIFICATION DU STAGIAIRE" validationSchema={InternInfosValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
                             <Field
@@ -184,19 +221,6 @@ export default function BusinessEvalution() {
                                 required
                                 disabled
                                 fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field
-                                component={DatePicker}
-                                name="internInfos.internDate"
-                                id="internDate"
-                                variant="outlined"
-                                label="Date du stage"
-                                required
-                                fullWidth
-                                autoFocus
-                                format="MM/dd/yyyy"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -214,7 +238,7 @@ export default function BusinessEvalution() {
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="ÉVALUATION">
+                <FormikStep label="ÉVALUATION" validationSchema={EvaluationCriteriasValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Les tâches confiées au stagiaire sont conformes aux
@@ -368,7 +392,7 @@ export default function BusinessEvalution() {
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="OBSERVATIONS GÉNÉRALES">
+                <FormikStep label="OBSERVATIONS GÉNÉRALES" validationSchema={ObservationsValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>
@@ -420,12 +444,6 @@ export default function BusinessEvalution() {
                                 required
                                 fullWidth
                                 type={"number"}
-                                InputProps={{
-                                    inputProps: {
-                                        min: 1,
-                                        step: "any"
-                                    }
-                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -438,12 +456,6 @@ export default function BusinessEvalution() {
                                 required
                                 fullWidth
                                 type={"number"}
-                                InputProps={{
-                                    inputProps: {
-                                        min: 2,
-                                        step: "any"
-                                    }
-                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -453,15 +465,8 @@ export default function BusinessEvalution() {
                                 id="startQuartersTwo"
                                 variant="outlined"
                                 label="De"
-                                required
                                 fullWidth
                                 type={"number"}
-                                InputProps={{
-                                    inputProps: {
-                                        min: 1,
-                                        step: "any"
-                                    }
-                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -471,15 +476,8 @@ export default function BusinessEvalution() {
                                 id="endQuartersTwo"
                                 variant="outlined"
                                 label="À"
-                                required
                                 fullWidth
                                 type={"number"}
-                                InputProps={{
-                                    inputProps: {
-                                        min: 2,
-                                        step: "any"
-                                    }
-                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -489,15 +487,8 @@ export default function BusinessEvalution() {
                                 id="startQuartersThree"
                                 variant="outlined"
                                 label="De"
-                                required
                                 fullWidth
                                 type={"number"}
-                                InputProps={{
-                                    inputProps: {
-                                        min: 1,
-                                        step: "any"
-                                    }
-                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -507,20 +498,13 @@ export default function BusinessEvalution() {
                                 id="endQuartersThree"
                                 variant="outlined"
                                 label="À"
-                                required
                                 fullWidth
                                 type={"number"}
-                                InputProps={{
-                                    inputProps: {
-                                        min: 2,
-                                        step: "any"
-                                    }
-                                }}
                             />
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="Decision">
+                <FormikStep label="Signature" validationSchema={SignatureValidation}>
                     <Grid container alignItems="flex-start" justify="center" spacing={2}>
                         <Grid item xs={12}>
                             <Field component={TextField}
@@ -541,13 +525,6 @@ export default function BusinessEvalution() {
                                 label="Fichier JPG/PNG"
                                 required
                                 fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field component={DatePicker}
-                                   name="signature.date"
-                                   label="Date d'évaluation"
-                                   format="MM/dd/yyyy"
                             />
                         </Grid>
                     </Grid>
