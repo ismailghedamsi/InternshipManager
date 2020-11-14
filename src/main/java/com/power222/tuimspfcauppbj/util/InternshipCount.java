@@ -2,7 +2,7 @@ package com.power222.tuimspfcauppbj.util;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum Internship {
+public enum InternshipCount {
     @JsonProperty("premier stage")
     INTERNSHIP_ONE,
     @JsonProperty("deuxieme stage")
