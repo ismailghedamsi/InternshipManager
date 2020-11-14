@@ -5,6 +5,7 @@ import React from 'react';
 import * as yup from "yup";
 import {FormikStepper} from './FormikStepper';
 import {useLocation} from 'react-router-dom';
+import {DatePicker} from "formik-material-ui-pickers";
 
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
@@ -30,14 +31,12 @@ export default function BusinessEvalution() {
         "Plus de trois"
     ];
 
-    const InternInfosValidation = yup.object().shape({
-        internship: yup.string().required(requiredFieldMsg)
-    });
+    const InternInfosValidation = yup.object().shape({});
     const EvaluationCriteriasValidation = yup.object().shape({
         evaluationCriterias: yup.object().shape({
-            hoursOfWeekFirstMonth: yup.number().required().max(40, tooBigError).required(requiredFieldMsg),
-            hoursOfWeekSecondMonth: yup.number().required().max(40, tooBigError).required(requiredFieldMsg),
-            hoursOfWeekThirdMonth: yup.number().required().max(40, tooBigError).required(requiredFieldMsg),
+            hoursOfWeekFirstMonth: yup.number().required().max(100, tooBigError).required(requiredFieldMsg),
+            hoursOfWeekSecondMonth: yup.number().required().max(100, tooBigError).required(requiredFieldMsg),
+            hoursOfWeekThirdMonth: yup.number().required().max(100, tooBigError).required(requiredFieldMsg),
             salary: yup.number().required().min(12.5, tooLittleError).required(requiredFieldMsg)
         }),
     });
@@ -45,19 +44,19 @@ export default function BusinessEvalution() {
         observations: yup.object().shape({
             preferedInternship: yup.string().required(requiredFieldMsg),
             welcomeSameIntern: yup.string().required(requiredFieldMsg),
-            variablesQuarters: yup.string().required(requiredFieldMsg),
-            startShiftsOne: yup.number().required().min(1, tooLittleError).required(requiredFieldMsg),
-            startShiftsTwo: yup.number().required().min(0, tooLittleError),
-            startShiftsThree: yup.number().required().min(0, tooLittleError),
-            endShiftsOne: yup.number().required().min(yup.ref("startQuartersOne"), tooLittleError).required(requiredFieldMsg),
-            endQuartersTwo: yup.number().required().min(yup.ref("startQuartersTwo"), tooLittleError),
-            endQuartersThree: yup.number().required().min(yup.ref("startQuartersThree"), tooLittleError),
+            variablesShifts: yup.string().required(requiredFieldMsg),
+            startShiftsOne: yup.number().required().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
+            startShiftsTwo: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
+            startShiftsThree: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
+            endShiftsOne: yup.number().required().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
+            endShiftsTwo: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
+            endShiftsThree: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
         }),
     });
     const SignatureValidation = yup.object().shape({
         signature: yup.object().shape({
             name: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
-            image: yup.string().trim().min(1)
+            date: yup.date().min(new Date(), "Date doit être au present"),
         }),
     });
     console.log(location.state)
@@ -66,8 +65,8 @@ export default function BusinessEvalution() {
             <FormikStepper
                 application={location.state}
                 initialValues={{
-                    internship: "",
                     evaluationCriterias: {
+                        internshipCount: "",
                         workAsAnnoncement: evaluationAnswers[0],
                         easyIntigration: evaluationAnswers[0],
                         sufficientTime: evaluationAnswers[0],
@@ -102,35 +101,6 @@ export default function BusinessEvalution() {
                     }
                 }}
                 evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
-                <FormikStep label="IDENTIFICATION DU STAGIAIRE" validationSchema={InternInfosValidation}>
-                    <Grid container justify="space-between" spacing={2}>
-                        <Grid item xs={12}>
-                            <Field
-                                component={TextField}
-                                name="internInfos.internName"
-                                id="internName"
-                                variant="outlined"
-                                label="Nom du stagiaire"
-                                required
-                                disabled
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <label>Stage : </label>
-                            <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="internInfos.internship" id="internship"
-                                       value="premier stage"/>
-                                1
-                            </label>
-                            <label>
-                                <Field type="radio" name="internInfos.internship" id="internship"
-                                       value="deuxieme stage"/>
-                                2
-                            </label>
-                        </Grid>
-                    </Grid>
-                </FormikStep>
                 <FormikStep label="ÉVALUATION" validationSchema={EvaluationCriteriasValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
@@ -288,6 +258,19 @@ export default function BusinessEvalution() {
                 <FormikStep label="OBSERVATIONS GÉNÉRALES" validationSchema={ObservationsValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
+                            <label>Stage : </label>
+                            <label style={{marginRight: "1em"}}>
+                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
+                                       value="premier stage"/>
+                                1
+                            </label>
+                            <label>
+                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
+                                       value="deuxieme stage"/>
+                                2
+                            </label>
+                        </Grid>
+                        <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>
                             <label style={{marginRight: "1em"}}>
                                 <Field type="radio" name="observations.preferedInternship" value="premier stage"/>
@@ -418,6 +401,14 @@ export default function BusinessEvalution() {
                                 label="Fichier JPG/PNG"
                                 required
                                 fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Field
+                                component={DatePicker}
+                                label="Date d'évaluation"
+                                format="MM/dd/yyyy"
+                                name="signature.date"
                             />
                         </Grid>
                     </Grid>

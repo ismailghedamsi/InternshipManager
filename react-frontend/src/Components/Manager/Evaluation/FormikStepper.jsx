@@ -31,21 +31,23 @@ export function FormikStepper({application, initialValues, children}) {
             validateOnBlur={false}
             validateOnChange={false}
             validate={values => {
-                // if (!isLastStep())
-                //     return;
-                // const errors = {signature: {}};
-                // if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
-                //     errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
-                // }
-                // return errors;
+                if (!isLastStep())
+                    return {};
+                const errors = {};
+                if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
+                    errors.signature = {};
+                    errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
+                }
+                return errors;
             }}
             onSubmit={async values => {
+                console.log("halo")
                 if (isLastStep()) {
                     const dto = {...values};
                     dto.contract = application.contract;
-                    dto.signature.image = await readFile(values.signature.image)
+                    dto.signature.image = await readFile(values.signature.image);
                     api.post("/businessEvaluation", dto)
-                        .then(() => history.push("/dashboard/offerList"))
+                        .then(() => history.push("/dashboard/offerList"));
                     setCompleted(true);
                 } else {
                     setStep(s => s + 1);
