@@ -7,7 +7,7 @@ import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
 
 const sleep = time => new Promise(acc => setTimeout(acc, time))
 
-export function FormikStepper({contract, children, initialValues}) {
+export function FormikStepper({application, initialValues, children}) {
     const history = useHistory()
     const childrenArray = React.Children.toArray(children)
     const readFile = useFileReader()
@@ -33,23 +33,23 @@ export function FormikStepper({contract, children, initialValues}) {
                 validationSchema={currentChild.props.validationSchema}
                 validateOnBlur={false}
                 validateOnChange={false}
-                //     validate={values => {
-                //     if (!isLastStep())
-                //         return {};
+                validate={values => {
+                    if (!isLastStep())
+                        return {};
 
-                //     const errors = {signature: {}};
-                //     if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
-                //         errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
-                //     }
-                //     if (values.signature.image.length === 0) {
-                //         errors.signature.image = "Aucun fichier selectionné ou le fichier est vide"
-                //     }
-                //     return errors;
-                // }}
+                    const errors = {};
+                    if (values.signature.image.type !== "image/png" && values.signature.image.type !== "image/jpeg") {
+                        errors.signature.image = "Le fichier doit être de type PNG ou JPEG"
+                    }
+                    if (values.signature.image.length === 0) {
+                        errors.signature.image = "Aucun fichier selectionné ou le fichier est vide"
+                    }
+                    return errors;
+                }}
                 onSubmit={async values => {
                     if (isLastStep()) {
                         var dto = {...values}
-                        dto.contract = contract
+                        dto.contract = application.contract
                         dto.signature.image = await readFile(values.signature.image)
                         console.log("approuve")
                         await sleep(3000);
@@ -90,14 +90,17 @@ export function FormikStepper({contract, children, initialValues}) {
                         {isLastStep() &&
                         <Grid item>
                             <Button
-                                disabled={isSubmitting}
-                                variant="contained"
-                                color="primary"
-                                onClick={() => {
-                                    setData(values);
-                                    setValidationButtonClick(true)
-                                    openEvalationModal()
-                                }}
+                                    disabled={isSubmitting}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={async () => {
+                                        var dto = {...values}
+                                        dto.application = application
+                                        dto.signature.image = await readFile(values.signature.image)
+                                        setData(dto);
+                                        setValidationButtonClick(true)
+                                        openEvalationModal()
+                                    }}
                             >
                                 Valider evaluation
                             </Button>

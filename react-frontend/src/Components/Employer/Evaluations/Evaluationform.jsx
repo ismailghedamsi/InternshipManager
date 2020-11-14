@@ -95,7 +95,6 @@ export default function Evaluationform() {
     }),
     signature: yup.object().shape({
       name: yup.string().required().min(5, tooShortError).max(50, tooBigError),
-      image: yup.string().min(1),
       date: yup.date().min(new Date(), "Date doit etre au present"),
     }),
     infos: yup.object().shape({
@@ -108,7 +107,7 @@ export default function Evaluationform() {
           <Card>
             <CardContent>
               <FormikStepper
-                      contract={location.state.contract}
+                      application={location.state}
                       initialValues={{
                         infos: {
                           fullname:
