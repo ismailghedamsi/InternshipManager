@@ -20,7 +20,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private InternshipCount internshipCount;
+
     private EvaluationCriterias evaluationCriterias;
     private Observations observations;
     private Signature signature;
@@ -31,6 +31,7 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @Data
     @Embeddable
     public static class EvaluationCriterias {
+        private InternshipCount internshipCount;
         private Opinion workAsAnnoncement;
         private Opinion easyIntigration;
         private Opinion sufficientTime;
