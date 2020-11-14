@@ -102,7 +102,6 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
         assertThat(response, is(notNullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
         assertThat(offers, is(notNullValue()));
-        System.err.println(offers.get(0).keySet());
         assertThat(offers.get(0).get("semester"), is(equalTo("a2020h2021")));
     }
 
@@ -120,7 +119,6 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
         assertThat(response, is(notNullValue()));
         assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
         assertThat(offers, is(notNullValue()));
-        System.err.println(offers.get(0).keySet());
         assertThat(offers.get(0).get("semester"), is(equalTo("a2021h2022")));
     }
 }
