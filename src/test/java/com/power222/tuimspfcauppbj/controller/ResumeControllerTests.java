@@ -51,7 +51,6 @@ class ResumeControllerTests {
                 .id(1L)
                 .username("student")
                 .password("password")
-                .role("student")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")

@@ -103,44 +103,44 @@ export default function Login() {
                                             required
                                                 fullWidth
                                             />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Field
-                                                component={TextField}
-                                                name="password"
-                                                id="password"
-                                                variant="outlined"
-                                                label="Mot de passe"
-                                                type={"password"}
-                                                required
-                                                fullWidth
-                                            />
-                                        </Grid>
                                     </Grid>
-                                    <br/>
-                                    {isSubmitting && <LinearProgress/>}
-                                    <Button
-                                        type={"submit"}
-                                        fullWidth
-                                        variant="contained"
-                                        color="primary"
-                                        size={"large"}
-                                        className={classes.submit}
-                                        disabled={isSubmitting}
-                                    >
-                                        Se connecter
-                                    </Button>
-                                </Form>
+                                    <Grid item xs={12}>
+                                        <Field
+                                            component={TextField}
+                                            name="password"
+                                            id="password"
+                                            variant="outlined"
+                                            label="Mot de passe"
+                                            type={"password"}
+                                            required
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <br/>
+                                {isSubmitting && <LinearProgress/>}
+                                <Button
+                                    type={"submit"}
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    size={"large"}
+                                    className={classes.submit}
+                                    disabled={isSubmitting}
+                                >
+                                    Se connecter
+                                </Button>
+                            </Form>
                         }
-                        </Formik>
-                        <Grid container justify="flex-end" className={classes.link}>
-                            <Grid item>
-                                <Link component={RouterLink} to={"/register"} variant="body2">
-                                    Vous n'avez pas de compte? S'enregister
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Container>
+                    </Formik>
+                <Grid container justify="flex-end" className={classes.link}>
+                    <Grid item>
+                        <Link component={RouterLink} to={"/register"} variant="body2">
+                            Vous n'avez pas de compte? S'enregister
+                        </Link>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Container>
+        </Grid>
+    </Grid>
 }

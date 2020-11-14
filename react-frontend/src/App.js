@@ -27,26 +27,24 @@ function App() {
             .then(r => setSemester(r ? r.data : ''));
     }, [])
 
-    return (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <ModalContext.Provider value={{open: openErrorModal}}>
-                <SemesterContext.Provider value={{semester, setSemester}}>
-                    <div className="App">
-                        <CssBaseline/>
-                        <Router>
-                            <Switch>
-                                <Route exact path="/" component={Login}/>
-                                <Route exact path="/register" component={RegisteringManager}/>
-                                <Route exact path="/passwordChange" component={PasswordChange}/>
-                                <BasicProtectedRoute exact={false} path="/dashboard" component={Dashboard}/>
-                            </Switch>
-                        </Router>
-                        <ErrorModal isOpen={isErrorModalOpen} hide={closeErrorModal}/>
-                    </div>
-                </SemesterContext.Provider>
-            </ModalContext.Provider>
-        </MuiPickersUtilsProvider>
-    );
+    return <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <ModalContext.Provider value={{open: openErrorModal}}>
+            <SemesterContext.Provider value={{semester, setSemester}}>
+                <div className="App">
+                    <CssBaseline/>
+                    <Router>
+                        <Switch>
+                            <Route exact path="/" component={Login}/>
+                            <Route exact path="/register" component={RegisteringManager}/>
+                            <Route exact path="/passwordChange" component={PasswordChange}/>
+                            <BasicProtectedRoute exact={false} path="/dashboard" component={Dashboard}/>
+                        </Switch>
+                    </Router>
+                    <ErrorModal isOpen={isErrorModalOpen} hide={closeErrorModal}/>
+                </div>
+            </SemesterContext.Provider>
+        </ModalContext.Provider>
+    </MuiPickersUtilsProvider>;
 }
 
 export default App;

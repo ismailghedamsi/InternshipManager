@@ -1,5 +1,5 @@
 package com.power222.tuimspfcauppbj.util;
 
-public enum UserTypes {
+public enum UserType {
     ADMIN, EMPLOYER, STUDENT
 }

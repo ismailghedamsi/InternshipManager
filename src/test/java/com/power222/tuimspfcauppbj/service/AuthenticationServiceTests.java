@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.util.PasswordDTO;
 import com.power222.tuimspfcauppbj.util.PasswordUpdateStatus;
@@ -36,9 +37,8 @@ public class AuthenticationServiceTests {
     void beforeEach() {
         userRepo.deleteAll();
         expectedUser = userRepo.saveAndFlush(
-                User.builder()
+                Admin.builder()
                         .username("admin")
-                        .role("admin")
                         .password(encoder.encode("password"))
                         .passwordExpired(true)
                         .build());

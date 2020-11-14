@@ -97,7 +97,6 @@ class InternshipOfferServiceTests {
 
         expectedEmployer = Employer.builder()
                 .username("employeur")
-                .role("employer")
                 .offers(new ArrayList<>())
                 .build();
 
@@ -105,7 +104,6 @@ class InternshipOfferServiceTests {
                 .id(1L)
                 .username("student")
                 .password("password")
-                .role("student")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
@@ -208,7 +206,7 @@ class InternshipOfferServiceTests {
     @Test
     void updateOffer() {
         var initialId = expectedOffer.getId();
-        var alteredId = 100L;
+        final var alteredId = 100L;
         var alteredResume = expectedOffer.toBuilder().id(alteredId).build();
         when(offerRepository.findById(initialId)).thenReturn(Optional.ofNullable(expectedOffer));
         when(offerRepository.saveAndFlush(expectedOffer)).thenReturn(expectedOffer);
@@ -233,7 +231,7 @@ class InternshipOfferServiceTests {
     }
 
     @Test
-    void removeStudentFromOffer() {
+    void deleteStudentFromOffer() {
         expectedOffer.getAllowedStudents().add(expectedStudent);
         expectedOffer2 = expectedOffer.toBuilder().build();
         expectedOffer2.setAllowedStudents(Collections.emptyList());

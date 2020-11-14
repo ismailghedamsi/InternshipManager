@@ -61,105 +61,101 @@ export function Rescheduleinterview(props) {
         interviewDate: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
     });
 
-    return (
-        <Grid
-            className={classes.viewbox}
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{minHeight: '100vh'}}
-        >
-            <Grid item xs={12} sm={7} lg={5}>
-                <Container component="main" maxWidth="sm" className={classes.container}>
-                    <Formik
-                        onSubmit={async (values) => {
-                            updateInterview(values)
-                        }
-                        }
-                        validateOnBlur={false}
-                        validateOnChange={false}
-                        enableReinitialize={true}
-                        validationSchema={validationSchema}
-                        initialValues={initialValues}
-                    >
-                        {({isSubmitting}) => (
-                            <Form className={classes.form}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Field
-                                            component={TextField}
-                                            name="studentFirstName"
-                                            id="studentFirstName"
-                                            variant="outlined"
-                                            label="Nom de l'étudiant"
-                                            required
-                                            fullWidth
-                                            autoFocus
-                                            disabled
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Field
-                                            component={TextField}
-                                            name="studentLastName"
-                                            id="studentLastName"
-                                            variant="outlined"
-                                            label="Prénom de l'étudiant"
-                                            disabled
-                                            required
-                                            fullWidth
-                                            autoFocus
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Field
-                                            component={DateTimePicker}
-                                            name="interviewDate"
-                                            variant="outlined"
-                                            label="Date et heure de l'entrevue "
-                                            required
-                                            fullWidth
-                                            format="MM/dd/yyyy"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Field
-                                            component={TextField}
-                                            name="email"
-                                            id="email"
-                                            variant="outlined"
-                                            label="Addresse courriel"
-                                            type={"email"}
-                                            disabled
-                                            required
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <ErrorMessage name={"file"}>
-                                        {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
-                                        </p>}
-                                    </ErrorMessage>
-                                </Grid>
-                                <br/>
-                                {isSubmitting && <LinearProgress/>}
-                                <Button
-                                    type={"submit"}
+    return <Grid
+        className={classes.viewbox}
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{minHeight: '100vh'}}
+    >
+        <Grid item xs={12} sm={7} lg={5}>
+            <Container component="main" maxWidth="sm" className={classes.container}>
+                <Formik
+                    onSubmit={async values => {
+                        updateInterview(values)
+                    }
+                    }
+                    validateOnBlur={false}
+                    validateOnChange={false}
+                    enableReinitialize={true}
+                    validationSchema={validationSchema}
+                    initialValues={initialValues}
+                >
+                    {({isSubmitting}) => <Form className={classes.form}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Field
+                                    component={TextField}
+                                    name="studentFirstName"
+                                    id="studentFirstName"
+                                    variant="outlined"
+                                    label="Nom de l'étudiant"
+                                    required
                                     fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    size={"large"}
-                                    className={classes.submit}
-                                    disabled={isSubmitting}
-                                >
-                                    Reprogrammer l'entrevue
-                                </Button>
-                            </Form>
-                        )}
-                    </Formik>
-                </Container>
-            </Grid>
+                                    autoFocus
+                                    disabled
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Field
+                                    component={TextField}
+                                    name="studentLastName"
+                                    id="studentLastName"
+                                    variant="outlined"
+                                    label="Prénom de l'étudiant"
+                                    disabled
+                                    required
+                                    fullWidth
+                                    autoFocus
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    component={DateTimePicker}
+                                    name="interviewDate"
+                                    variant="outlined"
+                                    label="Date et heure de l'entrevue "
+                                    required
+                                    fullWidth
+                                    format="MM/dd/yyyy"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    component={TextField}
+                                    name="email"
+                                    id="email"
+                                    variant="outlined"
+                                    label="Addresse courriel"
+                                    type={"email"}
+                                    disabled
+                                    required
+                                    fullWidth
+                                />
+                            </Grid>
+                            <ErrorMessage name={"file"}>
+                                {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
+                                </p>}
+                            </ErrorMessage>
+                        </Grid>
+                        <br/>
+                        {isSubmitting && <LinearProgress/>}
+                        <Button
+                            type={"submit"}
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            size={"large"}
+                            className={classes.submit}
+                            disabled={isSubmitting}
+                        >
+                            Reprogrammer l'entrevue
+                        </Button>
+                    </Form>}
+                </Formik>
+            </Container>
         </Grid>
-    )
+    </Grid>
 }

@@ -16,7 +16,7 @@ export default function ApplicationList() {
 
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
-            .then((r) => setOffer(r.data))
+            .then(r => setOffer(r.data))
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function studentApplicationState(i) {
@@ -85,7 +85,7 @@ export default function ApplicationList() {
 
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
-                            title={(<span>Application<br/>{offer.title}</span>)}>
+                            title={<span>Application<br/>{offer.title}</span>}>
             {(i, setCurrent) =>
                 <div key={i}>
                     <button
