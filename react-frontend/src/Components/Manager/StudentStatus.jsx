@@ -24,11 +24,7 @@ function ResumeStatus(props) {
             return <span style={{color: "blue"}}>En attente</span>
         else if (resume.reviewState === "DENIED")
             return <span style={{color: "red"}}>Rejeté<span
-<<<<<<< HEAD
-                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>;
-=======
                 style={{color: "black"}}> : {resume.reasonForRejection} </span></span>
->>>>>>> ade312267a2764ab98321ba0aa5a2c3a008582cf
         else
             return <span style={{color: "green"}}>Approuvé</span>
     }
