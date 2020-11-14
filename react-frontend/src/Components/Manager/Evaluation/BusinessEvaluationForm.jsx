@@ -200,11 +200,12 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label>Stage : </label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="internDate.internship" id="internship" value="1"/>
+                                <Field type="radio" name="internDate.internship" id="internship" value="premier stage"/>
                                 1
                             </label>
                             <label>
-                                <Field type="radio" name="internDate.internship" id="internship" value="2"/>
+                                <Field type="radio" name="internDate.internship" id="internship"
+                                       value="deuxieme stage"/>
                                 2
                             </label>
                         </Grid>
@@ -369,11 +370,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.whichInternship" value="premierStage"/>
+                                <Field type="radio" name="observations.whichInternship" value="premier stage"/>
                                 Premier stage
                             </label>
                             <label>
-                                <Field type="radio" name="observations.whichInternship" value="deuxiemeStage"/>
+                                <Field type="radio" name="observations.whichInternship" value="deuxieme stage"/>
                                 Deuxième stage
                             </label>
                         </Grid>
@@ -387,22 +388,22 @@ export default function BusinessEvalution() {
                             <label style={{marginRight: "2em"}}>Ce milieu désire accueillir le même stagiaire pour un
                                 prochain stage</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.welcomeSameIntern" value="oui"/>
+                                <Field type="radio" name="observations.welcomeSameIntern" value="yes"/>
                                 oui
                             </label>
                             <label>
-                                <Field type="radio" name="observations.welcomeSameIntern" value="non"/>
+                                <Field type="radio" name="observations.welcomeSameIntern" value="no"/>
                                 non
                             </label>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.variablesQuarters" value="oui"/>
+                                <Field type="radio" name="observations.variablesQuarters" value="yes"/>
                                 oui
                             </label>
                             <label>
-                                <Field type="radio" name="observations.variablesQuarters" value="non"/>
+                                <Field type="radio" name="observations.variablesQuarters" value="no"/>
                                 non
                             </label>
                         </Grid>
@@ -524,7 +525,7 @@ export default function BusinessEvalution() {
                                    variant="outlined"
                                    label="Nom :"
                                    required
-                                   fullWitdh
+                                   fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -536,7 +537,7 @@ export default function BusinessEvalution() {
                                 variant="outlined"
                                 label="Fichier JPG/PNG"
                                 required
-                                fullwidth
+                                fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>

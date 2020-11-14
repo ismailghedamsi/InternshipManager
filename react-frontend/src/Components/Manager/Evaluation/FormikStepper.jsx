@@ -2,10 +2,11 @@ import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@materia
 import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
-import {useFileReader, useModal} from "../../Utils/Hooks";
+import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
 
 export function FormikStepper({contract, children, initialValues}) {
     const history = useHistory()
+    const api = useApi()
     const childrenArray = React.Children.toArray(children)
     const readFile = useFileReader()
     const [step, setStep] = useState(0)
@@ -42,8 +43,8 @@ export function FormikStepper({contract, children, initialValues}) {
                     const dto = {...values};
                     dto.contract = contract;
                     dto.signature.image = await readFile(values.signature.image)
-
-                    console.log(dto)
+                    api.post("/businessEvaluation", dto)
+                        .then(() => history.push("/dashboard/offerList"))
                     setCompleted(true);
                 } else {
                     setStep(s => s + 1);
