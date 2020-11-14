@@ -3,12 +3,12 @@ package com.power222.tuimspfcauppbj.util;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum SimpleNumbers {
-    @JsonProperty("Un")
+    @JsonProperty("Un stagiaire")
     ONE,
-    @JsonProperty("Deux")
+    @JsonProperty("Deux stagiaires")
     TWO,
-    @JsonProperty("Trois")
+    @JsonProperty("Trois stagiaires")
     THREE,
-    @JsonProperty("Plus")
+    @JsonProperty("Plus de trois")
     MORE
 }
