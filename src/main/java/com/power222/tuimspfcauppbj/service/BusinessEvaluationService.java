@@ -5,7 +5,6 @@ import com.power222.tuimspfcauppbj.model.BusinessEvaluation;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +18,6 @@ public class BusinessEvaluationService {
     }
 
     public BusinessEvaluation createAndSaveNewBusinessEvaluation(BusinessEvaluation businessEvaluation) {
-        businessEvaluation.getSignature().setDate(LocalDate.now());
-        businessEvaluation.getInternInfos().setInternDate(
-                businessEvaluation.getContract().getStudentApplication()
-                        .getOffer().getDetails().getInternshipStartDate());
         return businessEvaluationRepo.saveAndFlush(businessEvaluation);
     }
 
@@ -39,7 +34,6 @@ public class BusinessEvaluationService {
         return businessEvaluationRepo.findById(id)
                 .map(oldBusinessEvaluation -> {
                     businessEvaluation.setId(oldBusinessEvaluation.getId());
-                    businessEvaluation.getSignature().setDate(oldBusinessEvaluation.getSignature().getDate());
                     businessEvaluation.setSemester(businessEvaluation.getSemester());
                     return Optional.of(businessEvaluationRepo.saveAndFlush(businessEvaluation));
                 })

@@ -1,13 +1,12 @@
 package com.power222.tuimspfcauppbj.model;
 
-import com.power222.tuimspfcauppbj.util.Internship;
+import com.power222.tuimspfcauppbj.util.InternshipCount;
 import com.power222.tuimspfcauppbj.util.Opinion;
 import com.power222.tuimspfcauppbj.util.SimpleNumbers;
 import com.power222.tuimspfcauppbj.util.SimpleResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @Entity
@@ -21,34 +20,13 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private BusinessInfos businessInfos;
-    private InternInfos internInfos;
+    private InternshipCount internshipCount;
     private EvaluationCriterias evaluationCriterias;
     private Observations observations;
     private Signature signature;
 
     @OneToOne
     private Contract contract;
-
-    @Data
-    @Embeddable
-    public static class BusinessInfos {
-        private String companyName;
-        private String employerName;
-        private String address;
-        private String phone;
-        private String city;
-        private String fax;
-        private String postalCode;
-    }
-
-    @Data
-    @Embeddable
-    public static class InternInfos {
-        private String internName;
-        private LocalDate internDate;
-        private Internship internship;
-    }
 
     @Data
     @Embeddable
@@ -73,15 +51,15 @@ public class BusinessEvaluation extends SemesterDiscriminatedEntity {
     @Data
     @Embeddable
     public static class Observations {
-        private Internship whichInternship;
+        private InternshipCount preferedInternship;
         private SimpleNumbers numbersOfInterns;
         private SimpleResponse welcomeSameIntern;
-        private SimpleResponse variablesQuarters;
-        private float startQuartersOne;
-        private float startQuartersTwo;
-        private float startQuartersThree;
-        private float endQuartersOne;
-        private float endQuartersTwo;
-        private float endQuartersThree;
+        private SimpleResponse variablesShifts;
+        private float startShiftsOne;
+        private float startShiftsTwo;
+        private float startShiftsThree;
+        private float endShiftsOne;
+        private float endShiftsTwo;
+        private float endShiftsThree;
     }
 }
