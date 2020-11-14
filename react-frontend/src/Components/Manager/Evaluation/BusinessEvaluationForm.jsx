@@ -30,22 +30,8 @@ export default function BusinessEvalution() {
         "Plus de trois"
     ];
 
-    const BusinessInfosValidation = yup.object().shape({
-        businessInfos: yup.object().shape({
-            companyName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
-            employerName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
-            address: yup.string().trim().min(5, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
-            phone: yup.string().trim().min(10, tooLittleError).max(10, tooBigError).required(requiredFieldMsg),
-            city: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
-            fax: yup.string().trim().min(7, tooLittleError).max(10, tooBigError),
-            postalCode: yup.string().trim().min(6, tooShortError).max(6, tooLongError).required(requiredFieldMsg)
-        }),
-    });
     const InternInfosValidation = yup.object().shape({
-        internInfos: yup.object().shape({
-            internName: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
-            internship: yup.string().required(requiredFieldMsg)
-        }),
+        internship: yup.string().required(requiredFieldMsg)
     });
     const EvaluationCriteriasValidation = yup.object().shape({
         evaluationCriterias: yup.object().shape({
@@ -57,13 +43,13 @@ export default function BusinessEvalution() {
     });
     const ObservationsValidation = yup.object().shape({
         observations: yup.object().shape({
-            whichInternship: yup.string().required(requiredFieldMsg),
+            preferedInternship: yup.string().required(requiredFieldMsg),
             welcomeSameIntern: yup.string().required(requiredFieldMsg),
             variablesQuarters: yup.string().required(requiredFieldMsg),
-            startQuartersOne: yup.number().required().min(1, tooLittleError).required(requiredFieldMsg),
-            startQuartersTwo: yup.number().required().min(0, tooLittleError),
-            startQuartersThree: yup.number().required().min(0, tooLittleError),
-            endQuartersOne: yup.number().required().min(yup.ref("startQuartersOne"), tooLittleError).required(requiredFieldMsg),
+            startShiftsOne: yup.number().required().min(1, tooLittleError).required(requiredFieldMsg),
+            startShiftsTwo: yup.number().required().min(0, tooLittleError),
+            startShiftsThree: yup.number().required().min(0, tooLittleError),
+            endShiftsOne: yup.number().required().min(yup.ref("startQuartersOne"), tooLittleError).required(requiredFieldMsg),
             endQuartersTwo: yup.number().required().min(yup.ref("startQuartersTwo"), tooLittleError),
             endQuartersThree: yup.number().required().min(yup.ref("startQuartersThree"), tooLittleError),
         }),
@@ -80,19 +66,7 @@ export default function BusinessEvalution() {
             <FormikStepper
                 application={location.state}
                 initialValues={{
-                    businessInfos: {
-                        companyName: "",
-                        employerName: "",
-                        address: "",
-                        phone: "",
-                        city: "",
-                        fax: "",
-                        postalCode: ""
-                    },
-                    internInfos: {
-                        internName: location.state.student.firstName + " " + location.state.student.lastName,
-                        internship: ""
-                    },
+                    internship: "",
                     evaluationCriterias: {
                         workAsAnnoncement: evaluationAnswers[0],
                         easyIntigration: evaluationAnswers[0],
@@ -111,16 +85,16 @@ export default function BusinessEvalution() {
                         comment: ""
                     },
                     observations: {
-                        whichInternship: "",
+                        preferedInternship: "",
                         numbersOfInterns: traineesNumber[0],
                         welcomeSameIntern: "",
-                        variablesQuarters: "",
-                        startQuartersOne: 0,
-                        startQuartersTwo: 0,
-                        startQuartersThree: 0,
-                        endQuartersOne: 0,
-                        endQuartersTwo: 0,
-                        endQuartersThree: 0,
+                        variablesShifts: "",
+                        startShiftsOne: 0,
+                        startShiftsTwo: 0,
+                        startShiftsThree: 0,
+                        endShiftsOne: 0,
+                        endShiftsTwo: 0,
+                        endShiftsThree: 0,
                     },
                     signature: {
                         image: "",
@@ -128,87 +102,6 @@ export default function BusinessEvalution() {
                     }
                 }}
                 evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
-                <FormikStep label="IDENTIFICATION DE L’ENTREPRISE" validationSchema={BusinessInfosValidation}>
-                    <Grid container alignItems="flex-start" justify="center" spacing={2}>
-                        <Grid item xs={12}>
-                            <Field
-                                component={TextField}
-                                name="businessInfos.companyName"
-                                id="companyName"
-                                variant="outlined"
-                                label="Nom de l’entreprise"
-                                required
-                                autoFocus
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field
-                                component={TextField}
-                                name="businessInfos.employerName"
-                                id="employerName"
-                                variant="outlined"
-                                label="Personne contact"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="businessInfos.address"
-                                id="address"
-                                variant="outlined"
-                                label="Adresse"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="businessInfos.phone"
-                                id="phone"
-                                variant="outlined"
-                                label="Téléphone"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="businessInfos.city"
-                                id="city"
-                                variant="outlined"
-                                label="Ville"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="businessInfos.fax"
-                                id="fax"
-                                variant="outlined"
-                                label="Télécopieur"
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field
-                                component={TextField}
-                                name="businessInfos.postalCode"
-                                id="postalCode"
-                                variant="outlined"
-                                label="Code postal"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                    </Grid>
-                </FormikStep>
                 <FormikStep label="IDENTIFICATION DU STAGIAIRE" validationSchema={InternInfosValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
@@ -397,11 +290,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.whichInternship" value="premier stage"/>
+                                <Field type="radio" name="observations.preferedInternship" value="premier stage"/>
                                 Premier stage
                             </label>
                             <label>
-                                <Field type="radio" name="observations.whichInternship" value="deuxieme stage"/>
+                                <Field type="radio" name="observations.preferedInternship" value="deuxieme stage"/>
                                 Deuxième stage
                             </label>
                         </Grid>
@@ -426,19 +319,19 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.variablesQuarters" value="yes"/>
+                                <Field type="radio" name="observations.variablesShifts" value="yes"/>
                                 oui
                             </label>
                             <label>
-                                <Field type="radio" name="observations.variablesQuarters" value="no"/>
+                                <Field type="radio" name="observations.variablesShifts" value="no"/>
                                 non
                             </label>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="observations.startQuartersOne"
-                                id="startQuartersOne"
+                                name="observations.startShiftsOne"
+                                id="startShiftsOne"
                                 variant="outlined"
                                 label="De"
                                 required
@@ -449,8 +342,8 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="observations.endQuartersOne"
-                                id="endQuartersOne"
+                                name="observations.endShiftsOne"
+                                id="endShiftsOne"
                                 variant="outlined"
                                 label="À"
                                 required
@@ -461,8 +354,8 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="observations.startQuartersTwo"
-                                id="startQuartersTwo"
+                                name="observations.startShiftsTwo"
+                                id="startShiftsTwo"
                                 variant="outlined"
                                 label="De"
                                 fullWidth
@@ -472,8 +365,8 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="observations.endQuartersTwo"
-                                id="endQuartersTwo"
+                                name="observations.endShiftsTwo"
+                                id="endShiftsTwo"
                                 variant="outlined"
                                 label="À"
                                 fullWidth
@@ -483,8 +376,8 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="observations.startQuartersThree"
-                                id="startQuartersThree"
+                                name="observations.startShiftsThree"
+                                id="startShiftsThree"
                                 variant="outlined"
                                 label="De"
                                 fullWidth
@@ -494,8 +387,8 @@ export default function BusinessEvalution() {
                         <Grid item xs={12} sm={6}>
                             <Field
                                 component={TextField}
-                                name="observations.endQuartersThree"
-                                id="endQuartersThree"
+                                name="observations.endShiftsThree"
+                                id="endShiftsThree"
                                 variant="outlined"
                                 label="À"
                                 fullWidth
