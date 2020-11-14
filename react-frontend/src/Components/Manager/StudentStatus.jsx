@@ -138,45 +138,68 @@ export default function StudentStatus() {
                     <div key={i}>
                         <button
                             type={"button"}
-                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
-                            onClick={() => setCurrentSubtab(0)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                CVs
+                            className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                            onClick={() => {
+                                setCurrentIndex(i);
+                            }}>
+                            <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                                {students[i].firstName} {students[i].lastName}
                             </Typography>
                         </button>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
-                            onClick={() => setCurrentSubtab(1)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                Offres de stage
-                            </Typography>
-                        </button>
+                        {currentIndex === i &&
+                        <div>
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
+                                onClick={() => setCurrentSubtab(0)}>
+                                <Typography color={"textSecondary"} variant={"body2"}>
+                                    CVs
+                                </Typography>
+                            </button>
+                            <button
+                                type={"button"}
+                                className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
+                                onClick={() => setCurrentSubtab(1)}>
+                                <Typography color={"textSecondary"} variant={"body2"}>
+                                    Offres de stage
+                                </Typography>
+                            </button>
+                        </div>
+                        }
+                        <hr/>
                     </div>
-                    }
-                    <hr/>
-                </div>
-            )}
-        </Grid>
-        <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === 0 && students[currentIndex].resumes && (students[currentIndex].resumes.length > 0 ? students[currentIndex].resumes.map((resume, index) =>
-                <ResumeStatus key={index}
-                              classes={classes}
-                              resume={resume}
-                              onClick={() => {
-                                  setCurrentDoc(resume.file);
-                                  openPdf();
-                              }}/>
-            ) : "L'étudiant n'a téléversé aucun CV")}
-            {currentSubtab === 1 && students[currentIndex].allowedOffers && (students[currentIndex].allowedOffers.length > 0 ? students[currentIndex].allowedOffers.map((offer, index) =>
-                <OfferStatus key={index}
-                             classes={classes}
-                             offer={offer}
-                             currentStudent={students[currentIndex]}
-                             onClick={() => {
-                                 setCurrentDoc(offer.file);
-                                 openPdf();
-                             }}/>
-            ) : "L'étudiant n'a accès à aucune offre de stage")}
+                )}
+            </Grid>
+            <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
+                {currentSubtab === 0 && students[currentIndex].resumes && (students[currentIndex].resumes.length > 0 ? students[currentIndex].resumes.map((resume, index) =>
+                    <ResumeStatus key={index}
+                                  classes={classes}
+                                  resume={resume}
+                                  onClick={() => {
+                                      setCurrentDoc(resume.file);
+                                      openPdf();
+                                  }}/>
+                ) : "L'étudiant n'a téléversé aucun CV")}
+                {currentSubtab === 1 && students[currentIndex].allowedOffers && (students[currentIndex].allowedOffers.length > 0 ? students[currentIndex].allowedOffers.map((offer, index) =>
+                    <OfferStatus key={index}
+                                 classes={classes}
+                                 offer={offer}
+                                 currentStudent={students[currentIndex]}
+                                 onClick={() => {
+                                     setCurrentDoc(offer.file);
+                                     openPdf();
+                                 }}/>
+                ) : "L'étudiant n'a accès à aucune offre de stage")}
+            </Grid>
+            <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
+                <DialogContent className={classes.viewbox}>
+                    <PdfDocument document={currentDoc}/>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closePdf} color="primary">
+                        Fermer
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Grid>
 }
