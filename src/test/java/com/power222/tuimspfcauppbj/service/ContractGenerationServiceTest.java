@@ -27,6 +27,9 @@ public class ContractGenerationServiceTest {
     private MailSendingService mailService;
 
     @Mock
+    private AuthenticationService authService;
+
+    @Mock
     private ContractService contractService;
 
     @Mock
@@ -40,10 +43,11 @@ public class ContractGenerationServiceTest {
     private Contract contract;
     private ContractSignatureDTO signatureDto;
     private ContractSignatureDTO deniedSignatureDto;
+    private Admin contractAdmin;
 
     @BeforeEach
     void setUp() {
-        contractDto = ContractDTO.builder().adminName("Zack de la rocha")
+        contractDto = ContractDTO.builder()
                 .engagementCollege("Engagement College")
                 .engagementCompany("Engagement company")
                 .engagementStudent("Engagement Etudiant")
@@ -78,9 +82,12 @@ public class ContractGenerationServiceTest {
                 .student(student)
                 .build();
 
+        contractAdmin = Admin.builder().id(1L).name("Simon Longpré-Landry").build();
+
         contract = Contract.builder()
                 .id(1L)
                 .signatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE)
+                .admin(contractAdmin)
                 .file("data:application/pdf;base64," +
                         "JVBERi0xLjcKJeLjz9MKNSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDc5Pj5z" +
                         "dHJlYW0KeJwr5HIK4dJ3M1QwMlAISeMytDTVM7FUMLa01LOwUAhJ4TJSCCniMtAzAwJzhXIuDWd/" +
@@ -152,12 +159,12 @@ public class ContractGenerationServiceTest {
     void updateContractSignatureApprovedByEmployerTest() {
         contract.setSignatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE);
 
-        var expectedContractWithModdedState = contract.toBuilder()
+        var modifiedContract = contract.toBuilder()
                 .signatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE)
                 .build();
 
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
-        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(modifiedContract));
 
         var actual = contractGenerationService.signContract(signatureDto);
 
@@ -170,12 +177,12 @@ public class ContractGenerationServiceTest {
     void updateContractSignatureApprovedByStudentTest() {
         contract.setSignatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE);
 
-        var expectedContractWithModdedState = contract.toBuilder()
+        var modifiedContract = contract.toBuilder()
                 .signatureState(ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE)
                 .build();
 
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
-        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(modifiedContract));
 
         var actual = contractGenerationService.signContract(signatureDto);
 
@@ -188,12 +195,12 @@ public class ContractGenerationServiceTest {
     void updateContractSignatureApprovedByAdminTest() {
         contract.setSignatureState(ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE);
 
-        var expectedContractWithModdedState = contract.toBuilder()
+        var modifiedContract = contract.toBuilder()
                 .signatureState(ContractSignatureState.SIGNED)
                 .build();
 
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
-        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(modifiedContract));
 
         var actual = contractGenerationService.signContract(signatureDto);
 
@@ -206,12 +213,12 @@ public class ContractGenerationServiceTest {
     void updateContractSignaturePendingForAdminTest() {
         contract.setSignatureState(ContractSignatureState.PENDING_FOR_ADMIN_REVIEW);
 
-        var expectedContractWithModdedState = contract.toBuilder()
+        var modifiedContract = contract.toBuilder()
                 .signatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE)
                 .build();
 
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
-        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(modifiedContract));
 
         var actual = contractGenerationService.signContract(signatureDto);
 
@@ -223,10 +230,6 @@ public class ContractGenerationServiceTest {
     @Test
     void updateContractSignatureNotApprovedNoContractTest() {
         contract.setSignatureState(ContractSignatureState.PENDING_FOR_ADMIN_REVIEW);
-
-        var expectedContractWithModdedState = contract.toBuilder()
-                .signatureState(ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE)
-                .build();
 
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
         when(contractService.updateContract(anyLong(), any())).thenReturn(Optional.empty());
@@ -243,13 +246,13 @@ public class ContractGenerationServiceTest {
         signatureDto.setApproved(false);
         signatureDto.setReasonForRejection(reasonForRejection);
 
-        var expectedContractWithModdedState = contract.toBuilder()
+        var modifiedContract = contract.toBuilder()
                 .signatureState(ContractSignatureState.REJECTED_BY_EMPLOYER)
                 .reasonForRejection(reasonForRejection)
                 .build();
 
         when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
-        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(expectedContractWithModdedState));
+        when(contractService.updateContract(eq(contract.getId()), any(Contract.class))).thenReturn(Optional.of(modifiedContract));
 
         var actual = contractGenerationService.signContract(signatureDto);
 
@@ -265,9 +268,19 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
-    public void successfulPdfGenerationTest() {
+    public void successfulPdfGenerationTestForActiveAdminAsEmployer() {
+        when(authService.getCurrentUser()).thenReturn(Employer.builder().id(1L).build());
+
+        boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
+
+        assertThat(generatePdfSuccess).isFalse();
+    }
+
+    @Test
+    public void successfulPdfGenerationTestForActiveAdminAsAdmin() {
         when(contractGenerationService.getStudentApplication(contractDto)).thenReturn(Optional.of(expectedStudentApplication));
         when(studentApplicationService.getApplicationById(contractDto.getStudentApplicationId())).thenReturn(Optional.ofNullable(expectedStudentApplication));
+        when(authService.getCurrentUser()).thenReturn(contractAdmin);
 
         boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
 
@@ -275,18 +288,19 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
+    public void successfulPdfGenerationTestForGivenAdmin() {
+        when(contractGenerationService.getStudentApplication(contractDto)).thenReturn(Optional.of(expectedStudentApplication));
+        when(studentApplicationService.getApplicationById(contractDto.getStudentApplicationId())).thenReturn(Optional.ofNullable(expectedStudentApplication));
+
+        boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto, contractAdmin);
+
+        assertThat(generatePdfSuccess).isTrue();
+    }
+
+    @Test
     public void getStudentApplicationWithWrongDtoTest() {
-        boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
+        boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto, contractAdmin);
 
         assertThat(generatePdfSuccess).isFalse();
     }
-
-//    @Test
-//    public void getStudentApplicationWithWrongIdTest() {
-//        contractDto.setStudentApplicationId(258L);
-//
-//        boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
-//
-//        assertThat(generatePdfSuccess).isFalse();
-//    }
 }

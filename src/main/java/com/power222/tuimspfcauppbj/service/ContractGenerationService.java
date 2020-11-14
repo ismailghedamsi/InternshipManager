@@ -17,6 +17,7 @@ import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
+import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
@@ -38,7 +39,8 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static com.itextpdf.io.codec.Base64.encodeBytes;
-import static com.power222.tuimspfcauppbj.util.ContractSignatureState.*;
+import static com.power222.tuimspfcauppbj.util.ContractSignatureState.PENDING_FOR_ADMIN_REVIEW;
+import static com.power222.tuimspfcauppbj.util.ContractSignatureState.getNextState;
 
 @SuppressWarnings("MagicNumber")
 @Service
@@ -51,11 +53,13 @@ public class ContractGenerationService {
     private final ContractService contractService;
     private final StudentApplicationService applicationService;
     private final MailSendingService mailService;
+    private final AuthenticationService authService;
 
-    public ContractGenerationService(ContractService contractService, StudentApplicationService applicationService, MailSendingService mailService) {
+    public ContractGenerationService(ContractService contractService, StudentApplicationService applicationService, MailSendingService mailService, final AuthenticationService authService) {
         this.contractService = contractService;
         this.applicationService = applicationService;
         this.mailService = mailService;
+        this.authService = authService;
     }
 
     private static UserType getSignerFromState(ContractSignatureState state) {
@@ -69,18 +73,13 @@ public class ContractGenerationService {
         }
     }
 
-    private static UserTypes getSignerFromStateEmails(ContractSignatureState state) {
-        switch (state) {
-            case WAITING_FOR_STUDENT_SIGNATURE:
-                return UserTypes.EMPLOYER;
-            case WAITING_FOR_ADMIN_SIGNATURE:
-                return UserTypes.STUDENT;
-            default:
-                return UserTypes.ADMIN;
-        }
+    public boolean generateContract(ContractDTO contractDto) {
+        if (!(authService.getCurrentUser() instanceof Admin))
+            return false;
+        return generateContract(contractDto, (Admin) authService.getCurrentUser());
     }
 
-    public boolean generateContract(ContractDTO contractDto) {
+    public boolean generateContract(ContractDTO contractDto, Admin admin) {
         Optional<StudentApplication> optionalApplication = getStudentApplication(contractDto);
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {
@@ -96,7 +95,7 @@ public class ContractGenerationService {
             Paragraph paragraph = new Paragraph(new Text("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES \n\n").setBold()
             ).setPaddingTop(30f)
                     .add(new Text("Dans le cadre de la formule ATE, les parties citées ci-dessous:\n\n"))
-                    .add("Le gestionnaire de stage, " + contractDto.getAdminName() + "\n\n")
+                    .add("Le gestionnaire de stage, " + admin.getName() + "\n\n")
                     .add(new Text("et\n\n\n").setBold())
                     .add(new Text("L'employeur, " + studentApplication.getOffer().getEmployer().getCompanyName() + "\n\n"))
                     .add(new Text("et\n\n\n").setBold())
@@ -114,7 +113,7 @@ public class ContractGenerationService {
             document.close();
             String fileBase64 = encodeBytes(stream.toByteArray());
             contractDto.setFile("data:application/pdf;base64," + fileBase64);
-            contractService.createAndSaveNewContract(contractDtoToContract(contractDto, studentApplication));
+            contractService.createAndSaveNewContract(contractDtoToContract(contractDto, studentApplication, admin));
         }
         return stream != null;
     }
@@ -211,9 +210,9 @@ public class ContractGenerationService {
         return applicationService.getApplicationById(contract.getStudentApplicationId());
     }
 
-    private Contract contractDtoToContract(ContractDTO contractDto, StudentApplication application) {
+    private Contract contractDtoToContract(ContractDTO contractDto, StudentApplication application, Admin admin) {
         Contract contract = new Contract();
-        contract.getAdmin().setName(contractDto.getAdminName());
+        contract.setAdmin(admin);
         contract.setFile(contractDto.getFile());
         contract.setEngagementCollege(contractDto.getEngagementCollege());
         contract.setEngagementCompany(contractDto.getEngagementCompany());

@@ -47,14 +47,12 @@ export default function ContractForm() {
                     enableReinitialize={true}
                     validationSchema={yup.object()
                         .shape({
-                            adminName: yup.string().trim().min(3, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
                             engagementCollege: yup.string().trim().min(20, tooShortError).required(requiredFieldMsg),
                             engagementCompany: yup.string().trim().min(20, tooShortError).required(requiredFieldMsg),
                             engagementStudent: yup.string().trim().min(20, tooShortError).required(requiredFieldMsg),
                             totalHoursPerWeek: yup.number().min(1).max(40).required(requiredFieldMsg)
                         })}
                     initialValues={{
-                        adminName: "",
                         engagementCollege: "",
                         engagementCompany: "",
                         engagementStudent: "",
@@ -67,18 +65,6 @@ export default function ContractForm() {
                                 <Typography variant="h1" className={classes.formTitle} style={{display: "block"}}>
                                     Genérer un contrat
                                 </Typography>
-                                <Grid item xs={12} sm={6}>
-                                    <Field
-                                        component={TextField}
-                                        name="adminName"
-                                        id="adminName"
-                                        variant="outlined"
-                                        label="Nom du gestionnaire de stage"
-                                        required
-                                        fullWidth
-                                        autoFocus
-                                    />
-                                </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <Field
                                         component={TextField}

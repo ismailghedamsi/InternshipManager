@@ -30,6 +30,9 @@ public class ContractServiceTests {
     @Mock
     private AuthenticationService authSvc;
 
+    @Mock
+    private MailSendingService mailSvc;
+
     @InjectMocks
     private ContractService contractSvc;
 
@@ -57,6 +60,8 @@ public class ContractServiceTests {
 
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expectedContract);
+
+        verify(mailSvc, times(1)).notifyAboutCreation(expectedContract);
     }
 
     @Test
@@ -157,11 +162,24 @@ public class ContractServiceTests {
     }
 
     @Test
-    void deleteContractByIdTest() {
+    void deleteContractByInvalidIdTest() {
         var idToDelete = expectedContract.getId();
+        when(contractSvc.getContractById(idToDelete)).thenReturn(Optional.empty());
 
         contractSvc.deleteContractById(idToDelete);
 
+        verify(mailSvc, times(0)).notifyAboutDeletion(expectedContract);
+        verify(contractRepo, times(0)).deleteById(idToDelete);
+    }
+
+    @Test
+    void deleteContractByIdTest() {
+        var idToDelete = expectedContract.getId();
+        when(contractSvc.getContractById(idToDelete)).thenReturn(Optional.of(expectedContract));
+
+        contractSvc.deleteContractById(idToDelete);
+
+        verify(mailSvc, times(1)).notifyAboutDeletion(expectedContract);
         verify(contractRepo, times(1)).deleteById(idToDelete);
     }
 }
