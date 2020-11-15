@@ -57,7 +57,7 @@ export default function BusinessEvalution() {
         })
     });
 
-    return <Card>
+    return <Card style={{overflow: "auto", height: "auto"}}>
         <CardContent>
             <FormikStepper
                 application={location.state}
