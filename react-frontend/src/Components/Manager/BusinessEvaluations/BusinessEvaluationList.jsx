@@ -1,6 +1,6 @@
+import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
-import Grid from "@material-ui/core/Grid";
 import {useApi} from "../../Utils/Hooks";
 import useStyles from "../../Utils/useStyles";
 
@@ -13,15 +13,15 @@ export default function BusinessEvaluationList() {
     useEffect(() => {
         api.get("/businessEvaluation")
             .then(r => setBusinessEvaluations(r ? r.data : []))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function deleteBusinessEvaluation(index) {
         const nextState = [...businessEvaluations];
         return api.delete("/businessEvaluation/" + nextState[index].id)
             .then(() => {
-                nextState.splice(index, 1)
+                nextState.splice(index, 1);
                 setBusinessEvaluations(nextState)
-            })
+            });
     }
 
     return <Grid

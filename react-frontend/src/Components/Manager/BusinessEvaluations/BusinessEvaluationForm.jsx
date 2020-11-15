@@ -1,11 +1,11 @@
 import {Card, CardContent, Grid} from '@material-ui/core';
 import {ErrorMessage, Field} from 'formik';
 import {SimpleFileUpload, TextField} from 'formik-material-ui';
+import {DatePicker} from "formik-material-ui-pickers";
 import React from 'react';
+import {useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import {FormikStepper} from './FormikStepper';
-import {useLocation} from 'react-router-dom';
-import {DatePicker} from "formik-material-ui-pickers";
 
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min;
 const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max;

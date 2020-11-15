@@ -2,22 +2,22 @@ import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@materia
 import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
+import AuthenticationService from "../../../Services/AuthenticationService";
+import EvaluationModal from '../../Employer/Evaluations/EvaluationModal';
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
 import BusinessEvaluationModal from "./BusinessEvaluationModal";
-import EvaluationModal from '../../Employer/Evaluations/EvaluationModal';
-import AuthenticationService from "../../../Services/AuthenticationService";
 
 export function FormikStepper({application, initialValues, children}) {
-    const history = useHistory()
-    const childrenArray = React.Children.toArray(children)
-    const api = useApi()
-    const readFile = useFileReader()
-    const [step, setStep] = useState(0)
-    const currentChild = childrenArray[step]
-    const [completed, setCompleted] = useState(false)
-    const [data, setData] = useState({})
-    const [validationButtonClick, setValidationButtonClick] = useState(false)
-    const [isEvaluationModalOpen, openEvalationModal, closeEvaluationModal] = useModal()
+    const history = useHistory();
+    const childrenArray = React.Children.toArray(children);
+    const api = useApi();
+    const readFile = useFileReader();
+    const [step, setStep] = useState(0);
+    const currentChild = childrenArray[step];
+    const [completed, setCompleted] = useState(false);
+    const [data, setData] = useState({});
+    const [validationButtonClick, setValidationButtonClick] = useState(false);
+    const [isEvaluationModalOpen, openEvalationModal, closeEvaluationModal] = useModal();
     const [isBusinessEvaluationModalOpen, openBusinessEvaluationModal, closeBusinessEvaluationModal] = useModal();
 
     function isLastStep() {
@@ -41,16 +41,16 @@ export function FormikStepper({application, initialValues, children}) {
     function directionModal() {
         if (AuthenticationService.getCurrentUserRole() === "admin")
             return <BusinessEvaluationModal isOpen={isBusinessEvaluationModalOpen} data={data}
-                                            hide={closeBusinessEvaluationModal}/>
+                                            hide={closeBusinessEvaluationModal}/>;
         else
-            return <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>
+            return <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>;
     }
 
     function openModal() {
         if (AuthenticationService.getCurrentUserRole() === "admin")
-            return openBusinessEvaluationModal()
+            return openBusinessEvaluationModal();
         else
-            return openEvalationModal()
+            return openEvalationModal();
     }
 
     return <>
@@ -115,9 +115,9 @@ export function FormikStepper({application, initialValues, children}) {
                                 variant="contained"
                                 color="primary"
                                 onClick={async () => {
-                                    const dto = {...values}
+                                    const dto = {...values};
                                     setData(dto);
-                                    setValidationButtonClick(true)
+                                    setValidationButtonClick(true);
                                     openModal()
                                 }}
                             >
