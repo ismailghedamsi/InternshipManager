@@ -4,22 +4,31 @@ import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
 import BusinessEvaluationModal from "./BusinessEvaluationModal";
+import EvaluationModal from '../../Employer/Evaluations/EvaluationModal';
 import AuthenticationService from "../../../Services/AuthenticationService";
 
 export function FormikStepper({application, initialValues, children}) {
     const history = useHistory()
-    const api = useApi()
     const childrenArray = React.Children.toArray(children)
+    const api = useApi()
     const readFile = useFileReader()
     const [step, setStep] = useState(0)
     const currentChild = childrenArray[step]
     const [completed, setCompleted] = useState(false)
     const [data, setData] = useState({})
     const [validationButtonClick, setValidationButtonClick] = useState(false)
+    const [isEvaluationModalOpen, openEvalationModal, closeEvaluationModal] = useModal()
     const [isBusinessEvaluationModalOpen, openBusinessEvaluationModal, closeBusinessEvaluationModal] = useModal();
 
     function isLastStep() {
         return step === childrenArray.length - 1;
+    }
+
+    function postEndPoint() {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return "/businessEvaluation";
+        else
+            return "/internEvaluation";
     }
 
     function pageRedirection() {
@@ -29,7 +38,7 @@ export function FormikStepper({application, initialValues, children}) {
             return "/dashboard/evaluationList";
     }
 
-    function openModal() {
+    function directionModal() {
         if (AuthenticationService.getCurrentUserRole() === "admin")
             return <BusinessEvaluationModal isOpen={isBusinessEvaluationModalOpen} data={data}
                                             hide={closeBusinessEvaluationModal}/>
@@ -37,9 +46,16 @@ export function FormikStepper({application, initialValues, children}) {
             return <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>
     }
 
+    function openModal() {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return openBusinessEvaluationModal()
+        else
+            return openEvalationModal()
+    }
+
     return <>
         {validationButtonClick ?
-            openModal() : ""}
+            directionModal() : ""}
         <Formik
             initialValues={initialValues}
             validationSchema={currentChild.props.validationSchema}
@@ -60,7 +76,7 @@ export function FormikStepper({application, initialValues, children}) {
                     const dto = {...values};
                     dto.contract = application.contract;
                     dto.signature.image = await readFile(values.signature.image);
-                    api.post("/businessEvaluation", dto)
+                    api.post(postEndPoint(), dto)
                         .then(() => history.push(pageRedirection()));
                     setCompleted(true);
                 } else {
@@ -103,7 +119,7 @@ export function FormikStepper({application, initialValues, children}) {
                                     dto.application = application;
                                     setData(dto);
                                     setValidationButtonClick(true)
-                                    openBusinessEvaluationModal();
+                                    openModal()
                                 }}
                             >
                                 Valider évaluation

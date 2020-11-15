@@ -107,16 +107,6 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                         De {data.observations.startShiftsTwo}h à {data.observations.endShiftsTwo}h
                         De {data.observations.startShiftsThree}h à {data.observations.endShiftsThree}h
                     </Typography>
-                    <Typography>
-                        <strong style={{"color": "blue"}}>
-                            Signature de l’enseignant responsable:
-                        </strong> {data.signature.name}
-                    </Typography>
-                    <Typography>
-                        <strong style={{"color": "blue"}}>
-                            Date:
-                        </strong> {data.signature.date}
-                    </Typography>
                 </div>
                 : ""
             }
