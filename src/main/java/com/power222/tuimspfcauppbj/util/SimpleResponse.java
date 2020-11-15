@@ -3,10 +3,10 @@ package com.power222.tuimspfcauppbj.util;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum SimpleResponse {
-    @JsonProperty("yes")
+    @JsonProperty("Oui")
     YES,
-    @JsonProperty("no")
+    @JsonProperty("Non")
     NO,
-    @JsonProperty("maybe")
+    @JsonProperty("Peut-être")
     MAYBE
 }

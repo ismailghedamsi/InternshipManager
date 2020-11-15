@@ -3,8 +3,8 @@ package com.power222.tuimspfcauppbj.util;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum InternshipCount {
-    @JsonProperty("premier stage")
+    @JsonProperty("Premier stage")
     INTERNSHIP_ONE,
-    @JsonProperty("deuxieme stage")
+    @JsonProperty("Deuxieme stage")
     INTERNSHIP_TWO
 }
