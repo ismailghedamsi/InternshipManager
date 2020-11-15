@@ -95,6 +95,7 @@ export default function Evaluationform() {
     }),
     signature: yup.object().shape({
       name: yup.string().required().min(5, tooShortError).max(50, tooBigError),
+      image: yup.string().min(1),
       date: yup.date().min(new Date(), "Date doit etre au present"),
     }),
     infos: yup.object().shape({
@@ -579,7 +580,7 @@ export default function Evaluationform() {
                         <Field
                                 type="radio"
                                 name="appreciation.discussedWithIntern"
-                                value="yes"
+                                value="Oui"
 
                         />
                         Oui
@@ -588,7 +589,7 @@ export default function Evaluationform() {
                         <Field
                                 type="radio"
                                 name="appreciation.discussedWithIntern"
-                                value="no"
+                                value="Non"
                         />
                         Non
                       </label>
@@ -627,15 +628,15 @@ export default function Evaluationform() {
                         STAGE
                       </label>
                       <label>
-                        <Field type="radio" name="feedback.hireAgain" value="yes"/>
+                        <Field type="radio" name="feedback.hireAgain" value="Oui"/>
                         Oui
                       </label>
                       <label>
-                        <Field type="radio" name="feedback.hireAgain" value="no"/>
+                        <Field type="radio" name="feedback.hireAgain" value="Non"/>
                         Non
                       </label>
                       <label>
-                        <Field type="radio" name="feedback.hireAgain" value="maybe"/>
+                        <Field type="radio" name="feedback.hireAgain" value="Peut-être"/>
                         Peut-être
                       </label>
                     </Grid>

@@ -2,8 +2,9 @@ import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@materia
 import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
-import EvaluationModal from '../../Utils/EvaluationModal';
+import AuthenticationService from '../../../Services/AuthenticationService';
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
+import EvaluationModal from './EvaluationModal';
 
 const sleep = time => new Promise(acc => setTimeout(acc, time))
 
@@ -21,6 +22,13 @@ export function FormikStepper({application, initialValues, children}) {
 
     function isLastStep() {
         return step === childrenArray.length - 1;
+    }
+
+    function pageRedirection() {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return "/dashboard/offerList"
+        else
+            return "/dashboard/evaluationList"
     }
 
     console.log(currentChild.props.validationSchema)
@@ -51,10 +59,8 @@ export function FormikStepper({application, initialValues, children}) {
                         var dto = {...values}
                         dto.contract = application.contract
                         dto.signature.image = await readFile(values.signature.image)
-                        console.log("approuve")
-                        await sleep(3000);
                         api.post("/internEvaluation", dto)
-                                .then(() => history.push("/dashboard/listoffer"))
+                                .then(() => history.push(pageRedirection()))
                         setCompleted(true);
                     } else {
                     setStep(s => s + 1);
@@ -96,7 +102,6 @@ export function FormikStepper({application, initialValues, children}) {
                                     onClick={async () => {
                                         var dto = {...values}
                                         dto.application = application
-                                        dto.signature.image = await readFile(values.signature.image)
                                         setData(dto);
                                         setValidationButtonClick(true)
                                         openEvalationModal()
