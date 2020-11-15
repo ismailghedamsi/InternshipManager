@@ -117,11 +117,6 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                             Date:
                         </strong> {data.signature.date}
                     </Typography>
-                    <Typography>
-                        {data.signature.image.length !== 0 && changerFile() &&
-                        <img src={data.signature.image} alt="signature"/>
-                        }
-                    </Typography>
                 </div>
                 : ""
             }

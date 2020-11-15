@@ -29,10 +29,17 @@ export function FormikStepper({application, initialValues, children}) {
             return "/dashboard/evaluationList";
     }
 
+    function openModal() {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return <BusinessEvaluationModal isOpen={isBusinessEvaluationModalOpen} data={data}
+                                            hide={closeBusinessEvaluationModal}/>
+        else
+            return <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>
+    }
+
     return <>
         {validationButtonClick ?
-            <BusinessEvaluationModal isOpen={isBusinessEvaluationModalOpen} data={data}
-                                     hide={closeBusinessEvaluationModal}/> : ""}
+            openModal() : ""}
         <Formik
             initialValues={initialValues}
             validationSchema={currentChild.props.validationSchema}

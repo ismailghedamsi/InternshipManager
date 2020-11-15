@@ -7,7 +7,6 @@ import useStyles from "../../Utils/useStyles";
 export default function BusinessEvaluationList() {
     const classes = useStyles();
     const api = useApi();
-    const [currentSubtab, setCurrentSubtab] = useState(0);
     const [businessEvaluations, setBusinessEvaluations] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -46,16 +45,14 @@ export default function BusinessEvaluationList() {
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                         onClick={() => {
                             setCurrentIndex(i);
-                            setCurrentSubtab(0);
                         }}>
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {businessEvaluations[i].contract.adminName}
+                            {businessEvaluations[i].contract.admin.name}
                         </Typography>
                     </button>
                     {currentIndex === i &&
                     <div>
                         {businessEvaluations[i].contract.studentApplication.offer.employer.companyName} - {businessEvaluations[i].contract.studentApplication.offer.employer.contactName}
-                        {console.log(businessEvaluations[currentIndex].evaluationCriterias.accessiblePlace)}
                     </div>
                     }
                     <hr/>
