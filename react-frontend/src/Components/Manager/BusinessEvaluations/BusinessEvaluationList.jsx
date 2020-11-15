@@ -47,12 +47,12 @@ export default function BusinessEvaluationList() {
                             setCurrentIndex(i);
                         }}>
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {businessEvaluations[i].contract.admin.name}
+                            {item.contract.admin.name}
                         </Typography>
                     </button>
                     {currentIndex === i &&
                     <div>
-                        {businessEvaluations[i].contract.studentApplication.offer.employer.companyName} - {businessEvaluations[i].contract.studentApplication.offer.employer.contactName}
+                        {item.contract.studentApplication.offer.employer.companyName} - {item.contract.studentApplication.offer.employer.contactName}
                     </div>
                     }
                     <hr/>
@@ -75,24 +75,24 @@ export default function BusinessEvaluationList() {
                             <Typography>
                                 <strong
                                     style={{"color": "blue"}}>Nom de
-                                    l’entreprise:</strong> {businessEvaluations[i].contract.studentApplication.offer.employer.companyName}
+                                    l’entreprise:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.companyName}
                             </Typography>
                             <Typography>
                                 <strong
                                     style={{"color": "blue"}}>Personne
-                                    contact:</strong> {businessEvaluations[i].contract.studentApplication.offer.employer.contactName}
+                                    contact:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.contactName}
                             </Typography>
                             <Typography>
                                 <strong
-                                    style={{"color": "blue"}}>Adresse:</strong> {businessEvaluations[i].contract.studentApplication.offer.employer.address}
+                                    style={{"color": "blue"}}>Adresse:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.address}
                             </Typography>
                             <Typography>
                                 <strong
-                                    style={{"color": "blue"}}>email:</strong> {businessEvaluations[i].contract.studentApplication.offer.employer.email}
+                                    style={{"color": "blue"}}>email:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.email}
                             </Typography>
                             <Typography>
                                 <strong
-                                    style={{"color": "blue"}}>Téléphone:</strong> {businessEvaluations[i].contract.studentApplication.offer.employer.phoneNumber}
+                                    style={{"color": "blue"}}>Téléphone:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.phoneNumber}
                             </Typography>
                             <hr/>
                             <Typography variant="h5">
@@ -101,16 +101,16 @@ export default function BusinessEvaluationList() {
                             <Typography>
                                 <strong
                                     style={{"color": "blue"}}>Nom du stagiaire:
-                                </strong> {businessEvaluations[i].contract.studentApplication.student.firstName} {businessEvaluations[i].contract.studentApplication.student.lastName}
+                                </strong> {businessEvaluations[currentIndex].contract.studentApplication.student.firstName} {businessEvaluations[currentIndex].contract.studentApplication.student.lastName}
                             </Typography>
                             <Typography>
                                 <strong
                                     style={{"color": "blue"}}>Date du stage:
-                                </strong> {businessEvaluations[i].contract.studentApplication.offer.details.internshipStartDate}
+                                </strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.details.internshipStartDate}
                             </Typography>
                             <Typography>
                                 <strong
-                                    style={{"color": "blue"}}>Stage:</strong> {businessEvaluations[i].evaluationCriterias.internshipCount}
+                                    style={{"color": "blue"}}>Stage:</strong> {businessEvaluations[currentIndex].evaluationCriterias.internshipCount}
                             </Typography>
                             <hr/>
                             <Typography variant="h5">
@@ -120,62 +120,65 @@ export default function BusinessEvaluationList() {
                                 <strong style={{"color": "blue"}}>Les tâches confiées au stagiaire sont conformes aux
                                     tâches
                                     annoncées dans l’entente de
-                                    stage:</strong> {businessEvaluations[i].evaluationCriterias.workAsAnnoncement}
+                                    stage:</strong> {businessEvaluations[currentIndex].evaluationCriterias.workAsAnnoncement}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>Des mesures d’accueil facilitent l’intégration du
                                     nouveau
-                                    stagiaire:</strong> {businessEvaluations[i].evaluationCriterias.easyIntigration}
+                                    stagiaire:</strong> {businessEvaluations[currentIndex].evaluationCriterias.easyIntigration}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>Le temps réel consacré à l’encadrement du stagiaire
                                     est
-                                    suffisant:</strong> {businessEvaluations[i].evaluationCriterias.sufficientTime}
+                                    suffisant:</strong> {businessEvaluations[currentIndex].evaluationCriterias.sufficientTime}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>L’environnement de travail respecte les normes
                                     d’hygiène et de
                                     sécurité au
-                                    travail:</strong> {businessEvaluations[i].evaluationCriterias.securityWorkPlace}
+                                    travail:</strong> {businessEvaluations[currentIndex].evaluationCriterias.securityWorkPlace}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>Le climat de travail est
-                                    agréable:</strong> {businessEvaluations[i].evaluationCriterias.pleasantEnvironnement}
+                                    agréable:</strong> {businessEvaluations[currentIndex].evaluationCriterias.pleasantEnvironnement}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>Le milieu de stage est accessible par transport en
-                                    commun:</strong> {businessEvaluations[i].evaluationCriterias.accessiblePlace}
+                                    commun:</strong> {businessEvaluations[currentIndex].evaluationCriterias.accessiblePlace}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>Le salaire
-                                    offert {businessEvaluations[i].evaluationCriterias.salary} est
+                                    offert {businessEvaluations[currentIndex].evaluationCriterias.salary} est
                                     intéressant pour le
-                                    stagiaire:</strong> {businessEvaluations[i].evaluationCriterias.goodSalary}
+                                    stagiaire:</strong> {businessEvaluations[currentIndex].evaluationCriterias.goodSalary}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>La communication avec le superviseur de stage facilite
                                     le
                                     déroulement du
-                                    stage:</strong> {businessEvaluations[i].evaluationCriterias.supervisorFacilitatesIntern}
+                                    stage:</strong> {businessEvaluations[currentIndex].evaluationCriterias.supervisorFacilitatesIntern}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>L’équipement fourni est adéquat pour réaliser les
                                     tâches
-                                    confiées:</strong> {businessEvaluations[i].evaluationCriterias.adequateEquipement}
+                                    confiées:</strong> {businessEvaluations[currentIndex].evaluationCriterias.adequateEquipement}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>Le volume de travail est
-                                    acceptable:</strong> {businessEvaluations[i].evaluationCriterias.accetableWorkload}
+                                    acceptable:</strong> {businessEvaluations[currentIndex].evaluationCriterias.accetableWorkload}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>Préciser le nombre d’heures/semaine: </strong>
-                                Premier mois: {businessEvaluations[i].evaluationCriterias.hoursOfWeekFirstMonth}h.
-                                Deuxième mois: {businessEvaluations[i].evaluationCriterias.hoursOfWeekFirstMonth}h.
-                                Troisième mois: {businessEvaluations[i].evaluationCriterias.hoursOfWeekFirstMonth}h.
+                                Premier
+                                mois: {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
+                                Deuxième
+                                mois: {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
+                                Troisième
+                                mois: {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
                             </Typography>
                             <Typography>
                                 <strong
-                                    style={{"color": "blue"}}>Commentaires:</strong> {businessEvaluations[i].evaluationCriterias.comment}
+                                    style={{"color": "blue"}}>Commentaires:</strong> {businessEvaluations[currentIndex].evaluationCriterias.comment}
                             </Typography>
                             <hr/>
                             <Typography variant="h5">
@@ -184,28 +187,28 @@ export default function BusinessEvaluationList() {
                             <Typography>
                                 <strong style={{"color": "blue"}}>
                                     Ce milieu est à privilégier pour le:
-                                </strong> {businessEvaluations[i].observations.preferedInternship}
+                                </strong> {businessEvaluations[currentIndex].observations.preferedInternship}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>
                                     Ce milieu est ouvert à accueillir:
-                                </strong> {businessEvaluations[i].observations.numbersOfInterns}
+                                </strong> {businessEvaluations[currentIndex].observations.numbersOfInterns}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>
                                     Ce milieu désire accueillir le même stagiaire pour un prochain stage:
-                                </strong> {businessEvaluations[i].observations.welcomeSameIntern}
+                                </strong> {businessEvaluations[currentIndex].observations.welcomeSameIntern}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>
                                     Ce milieu offre des quarts de travail variables:
-                                </strong> {businessEvaluations[i].observations.variablesShifts}.
-                                De {businessEvaluations[i].observations.startShiftsOne}h
-                                à {businessEvaluations[i].observations.endShiftsOne}h
-                                De {businessEvaluations[i].observations.startShiftsTwo}h
-                                à {businessEvaluations[i].observations.endShiftsTwo}h
-                                De {businessEvaluations[i].observations.startShiftsThree}h
-                                à {businessEvaluations[i].observations.endShiftsThree}h
+                                </strong> {businessEvaluations[currentIndex].observations.variablesShifts}.
+                                De {businessEvaluations[currentIndex].observations.startShiftsOne}h
+                                à {businessEvaluations[currentIndex].observations.endShiftsOne}h
+                                De {businessEvaluations[currentIndex].observations.startShiftsTwo}h
+                                à {businessEvaluations[currentIndex].observations.endShiftsTwo}h
+                                De {businessEvaluations[currentIndex].observations.startShiftsThree}h
+                                à {businessEvaluations[currentIndex].observations.endShiftsThree}h
                             </Typography>
                             <hr/>
                             <Typography variant="h5">
@@ -214,15 +217,15 @@ export default function BusinessEvaluationList() {
                             <Typography>
                                 <strong style={{"color": "blue"}}>
                                     Signature de l’enseignant responsable:
-                                </strong> {businessEvaluations[i].signature.name}
+                                </strong> {businessEvaluations[currentIndex].signature.name}
                             </Typography>
                             <Typography>
                                 <strong style={{"color": "blue"}}>
                                     Date:
-                                </strong> {businessEvaluations[i].signature.date}
+                                </strong> {businessEvaluations[currentIndex].signature.date}
                             </Typography>
                             <Typography>
-                                <img src={businessEvaluations[i].signature.image} alt="signature"/>
+                                <img src={businessEvaluations[currentIndex].signature.image} alt="signature"/>
                             </Typography>
                         </div>
                         }
