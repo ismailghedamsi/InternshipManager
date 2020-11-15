@@ -26,8 +26,8 @@ import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
 import {RoleProtectedRoute} from "./Utils/Routes";
-import BusinessEvaluationForm from "./Manager/BusinessEvaluation/BusinessEvaluationForm";
-import BusinessEvaluationList from "./Manager/BusinessEvaluation/BusinessEvaluationList";
+import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm";
+import BusinessEvaluationList from "./Manager/BusinessEvaluations/BusinessEvaluationList";
 
 
 const useStyles = makeStyles(() => ({
