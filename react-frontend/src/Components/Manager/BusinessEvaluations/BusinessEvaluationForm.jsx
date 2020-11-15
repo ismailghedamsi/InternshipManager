@@ -11,6 +11,7 @@ const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " +
 const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
 const requiredRadioMsg = "Cliquez votre choix";
+const requiredSelectMsg = "Option séléctionné invalide";
 export default function BusinessEvalution() {
     const location = useLocation();
 
@@ -34,7 +35,17 @@ export default function BusinessEvalution() {
             internshipCount: yup.string().required(requiredRadioMsg),
             hoursOfWeekFirstMonth: yup.number().required().min(1, tooLittleError).max(100, tooBigError).required(requiredFieldMsg),
             hoursOfWeekSecondMonth: yup.number().required().min(1, tooLittleError).max(100, tooBigError).required(requiredFieldMsg),
-            hoursOfWeekThirdMonth: yup.number().required().min(1, tooLittleError).max(100, tooBigError).required(requiredFieldMsg)
+            hoursOfWeekThirdMonth: yup.number().required().min(1, tooLittleError).max(100, tooBigError).required(requiredFieldMsg),
+            workAsAnnoncement: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            easyIntigration: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            sufficientTime: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            securityWorkPlace: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            pleasantEnvironnement: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            accessiblePlace: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            goodSalary: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            supervisorFacilitatesIntern: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            adequateEquipement: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
+            accetableWorkload: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required()
         })
     });
     const ObservationsValidation = yup.object().shape({
@@ -48,6 +59,7 @@ export default function BusinessEvalution() {
             endShiftsOne: yup.number().required().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
             endShiftsTwo: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
             endShiftsThree: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
+            numbersOfInterns: yup.string().oneOf(traineesNumber, requiredSelectMsg).required()
         })
     });
     const SignatureValidation = yup.object().shape({
@@ -123,6 +135,9 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.workAsAnnoncement">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.workAsAnnoncement"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Des mesures d’accueil facilitent l’intégration du
@@ -130,6 +145,9 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.easyIntigration">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.easyIntigration"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le temps réel consacré à l’encadrement du stagiaire est
@@ -137,6 +155,9 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.sufficientTime">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.sufficientTime"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>L’environnement de travail respecte les normes d’hygiène
@@ -144,12 +165,18 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.securityWorkPlace">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.securityWorkPlace"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le climat de travail est agréable</label>
                             <Field as="select" name="evaluationCriterias.pleasantEnvironnement">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.pleasantEnvironnement"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le milieu de stage est accessible par transport en
@@ -157,6 +184,9 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.accessiblePlace">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.accessiblePlace"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le salaire offert est intéressant pour le
@@ -180,6 +210,9 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.goodSalary">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.goodSalary"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>La communication avec le superviseur de stage facilite
@@ -187,6 +220,9 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.supervisorFacilitatesIntern">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.supervisorFacilitatesIntern"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>L’équipement fourni est adéquat pour réaliser les tâches
@@ -194,12 +230,18 @@ export default function BusinessEvalution() {
                             <Field as="select" name="evaluationCriterias.adequateEquipement">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.adequateEquipement"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Le volume de travail est acceptable</label>
                             <Field as="select" name="evaluationCriterias.accetableWorkload">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"evaluationCriterias.accetableWorkload"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Préciser le nombre d’heures/semaine :</label>
@@ -290,6 +332,9 @@ export default function BusinessEvalution() {
                             <Field as="select" name="observations.numbersOfInterns">
                                 {traineesNumber.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
+                            <ErrorMessage name={"observations.numbersOfInterns"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu désire accueillir le même stagiaire pour un

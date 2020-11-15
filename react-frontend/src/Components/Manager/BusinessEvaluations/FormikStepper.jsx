@@ -116,7 +116,6 @@ export function FormikStepper({application, initialValues, children}) {
                                 color="primary"
                                 onClick={async () => {
                                     const dto = {...values}
-                                    dto.application = application;
                                     setData(dto);
                                     setValidationButtonClick(true)
                                     openModal()
