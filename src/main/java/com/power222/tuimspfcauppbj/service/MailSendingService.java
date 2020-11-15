@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.model.Contract;
+import com.power222.tuimspfcauppbj.model.InternEvaluation;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import com.power222.tuimspfcauppbj.util.EmailContentsType;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,10 @@ public class MailSendingService {
         sendEmail(EmailContentsType.NOTIFY_ABOUT_NEW_CONTRACT, contract, contract.getStudentApplication().getOffer().getEmployer().getEmail());
     }
 
+    public void notifyAboutCreation(final InternEvaluation internEvaluation) {
+        sendEmail(EmailContentsType.NOTIFY_ABOUT_EVALUATION_CREATED, internEvaluation.getContract(), internEvaluation.getContract().getAdmin().getEmail());
+    }
+
     public void notifyAboutDeletion(final Contract contract) {
         sendEmail(EmailContentsType.NOTIFY_ABOUT_CONTRACT_DELETION, contract, contract.getStudentApplication().getStudent().getEmail());
         sendEmail(EmailContentsType.NOTIFY_ABOUT_CONTRACT_DELETION, contract, contract.getStudentApplication().getOffer().getEmployer().getEmail());
@@ -85,12 +90,14 @@ public class MailSendingService {
         } catch (MessagingException e) {
             log.error("Impossible d'envoyer l'email: {}", e.getMessage());
         }
-
         return mimeMessage;
     }
 
     public String getAppropriateEmailSubject(final Contract contract, final EmailContentsType emailType) {
-        String subjectSuffix = " - Offre \"" + contract.getStudentApplication().getOffer().getTitle() + "\" - " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName();
+        String subjectSuffix = (emailType == EmailContentsType.NOTIFY_ABOUT_EVALUATION_CREATED ? "" :
+                " - Offre \"" + contract.getStudentApplication().getOffer().getTitle() + "\"") + " - "
+                + contract.getStudentApplication().getStudent().getLastName() + " "
+                + contract.getStudentApplication().getStudent().getFirstName();
 
         switch (emailType) {
             case NOTIFY_ABOUT_NEW_CONTRACT:
@@ -104,8 +111,10 @@ public class MailSendingService {
             case NOTIFY_ABOUT_CONTRACT_REJECTION:
                 return "CONTRAT REJETÉ" + subjectSuffix;
             case NOTIFY_AND_ATTACH_SIGNED_CONTRACT:
-            default:
                 return "CONTRAT SIGNÉ" + subjectSuffix;
+            case NOTIFY_ABOUT_EVALUATION_CREATED:
+            default:
+                return "NOUVELLE ÉVALUATION DE STAGE" + subjectSuffix;
         }
     }
 
@@ -133,11 +142,15 @@ public class MailSendingService {
                         + "a été rejeté par l'employeur pour la raison suivante :"
                         + "<br/>    " + contract.getReasonForRejection();
             case NOTIFY_AND_ATTACH_SIGNED_CONTRACT:
-            default:
                 return "Le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
                         + "pour l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName()
                         + "a été signé par tous les partis et est prêt."
                         + "<br/>Vous le trouverez ci-joint.";
+            case NOTIFY_ABOUT_EVALUATION_CREATED:
+            default:
+                return "Une évaluation a été remplie pour l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName() + "."
+                        + "<br/>Veuillez consulter l'évaluation sur notre application.";
+
         }
     }
 }

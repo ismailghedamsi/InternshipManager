@@ -12,13 +12,17 @@ import java.util.Optional;
 public class InternEvaluationService {
 
     private final InternEvaluationRepository InterEvaluationRepo;
+    private final MailSendingService mailSvc;
 
-    public InternEvaluationService(InternEvaluationRepository interEvaliationRepo) {
+    public InternEvaluationService(InternEvaluationRepository interEvaliationRepo, final MailSendingService mailSvc) {
         this.InterEvaluationRepo = interEvaliationRepo;
+        this.mailSvc = mailSvc;
     }
 
     public InternEvaluation createAndSaveNewInternEvaluation(InternEvaluation internEvaluation) {
-        return InterEvaluationRepo.saveAndFlush(internEvaluation);
+        var save = InterEvaluationRepo.saveAndFlush(internEvaluation);
+        mailSvc.notifyAboutCreation(save);
+        return save;
     }
 
     public List<InternEvaluation> getAllInternEvaluation() {
