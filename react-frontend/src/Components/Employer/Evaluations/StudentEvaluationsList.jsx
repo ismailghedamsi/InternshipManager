@@ -55,14 +55,14 @@ export default function StudentStatus() {
                                     <div>
                                         <div className={classes.evaluationSections}>
                                             <Typography>
-                                                {" "}
+
                                                 <span className={classes.evaluationCriterias}>Programme d’études :</span> {e.infos ? e.infos.studentProgram : ""}
                                             </Typography>
                                             <Typography> <span
                                                     className={classes.evaluationCriterias}>Nom de l'entrprise : {e.contract ? e.contract.studentApplication.companyName : ""}</span>
                                             </Typography>
                                             <Typography>
-                                                {" "}
+
                                                 <span className={classes.evaluationCriterias}>Nom du superviseur :</span> {e.application ? e.application.contract.adminName : ""}
                                             </Typography>
                                             <Typography> <span

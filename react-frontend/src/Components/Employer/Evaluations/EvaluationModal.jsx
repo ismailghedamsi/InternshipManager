@@ -30,13 +30,13 @@ export default function EvaluationModal({isOpen, data, hide}) {
                                   className={classes.evaluationCriterias}>Nom de l’élève :</span> {data.infos.fullname}
                           </Typography>
                           <Typography>
-                            {" "}
+
                             <span className={classes.evaluationCriterias}>Programme d’études :</span> {data.infos.studentProgram}
                           </Typography>
                           <Typography> <span className={classes.evaluationCriterias}>Nom de l'entrprise :</span>
                           </Typography>
                           <Typography>
-                            {" "}
+
                             <span className={classes.evaluationCriterias}>Nom du superviseur :</span> {data.application.contract.adminName}
                           </Typography>
                           <Typography> <span
