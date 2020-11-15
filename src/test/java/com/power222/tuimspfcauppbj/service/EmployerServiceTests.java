@@ -41,7 +41,6 @@ public class EmployerServiceTests {
                 .id(1L)
                 .username("employer")
                 .password("password")
-                .role("employer")
                 .companyName("Cal Inc.")
                 .contactName("Simon Longpré")
                 .phoneNumber("5144816959")
@@ -93,7 +92,8 @@ public class EmployerServiceTests {
     @Test
     void createEmployer() {
         expectedEmployer.setPassword("encodedPassword");
-        var dto = expectedEmployer.toBuilder().role(null).password("password").build();
+        var dto = expectedEmployer;
+        dto.setPassword("password");
         when(employerRepo.saveAndFlush(expectedEmployer)).thenReturn(expectedEmployer);
         when(passwordEncoder.encode(dto.getPassword())).thenReturn("encodedPassword");
 
@@ -122,7 +122,8 @@ public class EmployerServiceTests {
     void updateEmployerWithModifiedId() {
         var initialId = expectedEmployer.getId();
         var alteredId = 5L;
-        var alteredIdEmployer = expectedEmployer.toBuilder().id(alteredId).build();
+        var alteredIdEmployer = expectedEmployer;
+        alteredIdEmployer.setId(alteredId);
         when(employerRepo.findById(initialId)).thenReturn(Optional.of(expectedEmployer));
         when(employerRepo.saveAndFlush(expectedEmployer)).thenReturn(expectedEmployer);
 

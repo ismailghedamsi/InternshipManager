@@ -8,8 +8,8 @@ import {TextField} from "formik-material-ui";
 import AuthenticationService from "../Services/AuthenticationService";
 import {ModalContext} from "../App";
 
-const tooShortError = (value) => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = (value) => "Doit avoir au plus " + value.max + " caractères";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+const tooLongError = value => "Doit avoir au plus " + value.max + " caractères";
 const requiredFieldMsg = "Ce champs est requis";
 
 export default function RegisterStudent(props) {
@@ -39,140 +39,136 @@ export default function RegisterStudent(props) {
         address: "",
     }
 
-    return (
-        <Formik
-            onSubmit={async (values, {setFieldError}) =>
-                AuthenticationService.registerUser("/students", values, setFieldError, open, props.history)
-            }
+    return <Formik
+        onSubmit={async (values, {setFieldError}) =>
+            AuthenticationService.registerUser("/students", values, setFieldError, open, props.history)
+        }
 
-            validateOnBlur={false}
-            validateOnChange={false}
-            enableReinitialize={true}
-            validationSchema={validationSchema}
-            initialValues={initialValues}
-        >
-            {({isSubmitting}) => (
-                <Form className={props.classes.form}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="firstName"
-                                id="firstName"
-                                variant="outlined"
-                                label="Prénom"
-                                required
-                                fullWidth
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="lastName"
-                                id="lastName"
-                                variant="outlined"
-                                label="Nom de famille"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field
-                                component={TextField}
-                                name="address"
-                                id="address"
-                                variant="outlined"
-                                label="Addresse"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="studentId"
-                                id="studentId"
-                                variant="outlined"
-                                label="Numéro d'étudiant"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="phoneNumber"
-                                id="phoneNumber"
-                                variant="outlined"
-                                label="Numéro de téléphone"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="username"
-                                id="username"
-                                variant="outlined"
-                                label="Nom d'utilisateur"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="email"
-                                id="email"
-                                variant="outlined"
-                                label="Addresse courriel"
-                                type={"email"}
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="password"
-                                id="password"
-                                variant="outlined"
-                                label="Mot de passe"
-                                type={"password"}
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                name="passwordConfirm"
-                                id="passwordConfirm"
-                                variant="outlined"
-                                label="Confirmez"
-                                type={"password"}
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                    </Grid>
-                    <br/>
-                    {isSubmitting && <LinearProgress/>}
-                    <Button
-                        type={"submit"}
+        validateOnBlur={false}
+        validateOnChange={false}
+        enableReinitialize={true}
+        validationSchema={validationSchema}
+        initialValues={initialValues}
+    >
+        {({isSubmitting}) => <Form className={props.classes.form}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="firstName"
+                        id="firstName"
+                        variant="outlined"
+                        label="Prénom"
+                        required
                         fullWidth
-                        variant="contained"
-                        color="primary"
-                        size={"large"}
-                        className={props.classes.submit}
-                        disabled={isSubmitting}
-                    >
-                        S'enregistrer
-                    </Button>
-                </Form>
-            )}
-        </Formik>
-    );
+                        autoFocus
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="lastName"
+                        id="lastName"
+                        variant="outlined"
+                        label="Nom de famille"
+                        required
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <Field
+                        component={TextField}
+                        name="address"
+                        id="address"
+                        variant="outlined"
+                        label="Addresse"
+                        required
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="studentId"
+                        id="studentId"
+                        variant="outlined"
+                        label="Numéro d'étudiant"
+                        required
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        variant="outlined"
+                        label="Numéro de téléphone"
+                        required
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="username"
+                        id="username"
+                        variant="outlined"
+                        label="Nom d'utilisateur"
+                        required
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="email"
+                        id="email"
+                        variant="outlined"
+                        label="Addresse courriel"
+                        type={"email"}
+                        required
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="password"
+                        id="password"
+                        variant="outlined"
+                        label="Mot de passe"
+                        type={"password"}
+                        required
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Field
+                        component={TextField}
+                        name="passwordConfirm"
+                        id="passwordConfirm"
+                        variant="outlined"
+                        label="Confirmez"
+                        type={"password"}
+                        required
+                        fullWidth
+                    />
+                </Grid>
+            </Grid>
+            <br/>
+            {isSubmitting && <LinearProgress/>}
+            <Button
+                type={"submit"}
+                fullWidth
+                variant="contained"
+                color="primary"
+                size={"large"}
+                className={props.classes.submit}
+                disabled={isSubmitting}
+            >
+                S'enregistrer
+            </Button>
+        </Form>}
+    </Formik>;
 }

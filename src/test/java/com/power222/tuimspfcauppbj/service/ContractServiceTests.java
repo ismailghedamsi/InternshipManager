@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
+import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.model.User;
@@ -29,18 +30,17 @@ public class ContractServiceTests {
     @Mock
     private AuthenticationService authSvc;
 
+    @Mock
+    private MailSendingService mailSvc;
+
     @InjectMocks
     private ContractService contractSvc;
 
-    private User expectedUser;
     private Contract expectedContract;
 
     @BeforeEach
     void setUp() {
-        expectedUser = User.builder()
-                .id(1L)
-                .role("admin")
-                .build();
+        final User expectedAdmin = Admin.builder().id(1L).build();
 
         StudentApplication expectedStudentApplication = StudentApplication.builder()
                 .id(1L)
@@ -60,6 +60,8 @@ public class ContractServiceTests {
 
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expectedContract);
+
+        verify(mailSvc, times(1)).notifyAboutCreation(expectedContract);
     }
 
     @Test
@@ -142,7 +144,7 @@ public class ContractServiceTests {
     @Test
     void updateContractTest() {
         var initialId = expectedContract.getId();
-        var alteredId = 123L;
+        final var alteredId = 123L;
         var alteredContract = expectedContract.toBuilder().id(alteredId).build();
         when(contractRepo.findById(initialId)).thenReturn(Optional.of(expectedContract));
         when(contractRepo.saveAndFlush(alteredContract)).thenReturn(expectedContract);
@@ -160,11 +162,24 @@ public class ContractServiceTests {
     }
 
     @Test
-    void deleteContractByIdTest() {
+    void deleteContractByInvalidIdTest() {
         var idToDelete = expectedContract.getId();
+        when(contractSvc.getContractById(idToDelete)).thenReturn(Optional.empty());
 
         contractSvc.deleteContractById(idToDelete);
 
+        verify(mailSvc, times(0)).notifyAboutDeletion(expectedContract);
+        verify(contractRepo, times(0)).deleteById(idToDelete);
+    }
+
+    @Test
+    void deleteContractByIdTest() {
+        var idToDelete = expectedContract.getId();
+        when(contractSvc.getContractById(idToDelete)).thenReturn(Optional.of(expectedContract));
+
+        contractSvc.deleteContractById(idToDelete);
+
+        verify(mailSvc, times(1)).notifyAboutDeletion(expectedContract);
         verify(contractRepo, times(1)).deleteById(idToDelete);
     }
 }

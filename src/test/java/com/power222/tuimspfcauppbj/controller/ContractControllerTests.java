@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
+import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractService;
@@ -24,8 +25,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -47,9 +46,13 @@ public class ContractControllerTests {
 
     @BeforeEach
     void beforeEach() {
+        Admin admin = Admin.builder()
+                .name("Reda")
+                .build();
+
         expectedContract = Contract.builder()
                 .id(1L)
-                .adminName("Reda")
+                .admin(admin)
                 .engagementCollege("College")
                 .engagementCompany("Company")
                 .engagementStudent("Student")
@@ -171,30 +174,6 @@ public class ContractControllerTests {
 
         assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
     }
-
-//    @Test
-//    void updateContractSignatureStateTest() throws Exception {
-//        when(svc.updateContractSignature(expectedContract.getId(), expectedDto)).thenReturn(Optional.ofNullable(expectedContract));
-//
-//        MvcResult result = mvc.perform(put("/api/contract/sign/" + expectedContract.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(expectedDto)))
-//                .andReturn();
-//
-//        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-//        verify(svc, times(1)).updateContractSignature(expectedContract.getId(), expectedDto);
-//    }
-//
-//    @Test
-//    void updateContractSignatureStateTestWithInvalidId() throws Exception {
-//        MvcResult result = mvc.perform(put("/api/contract/sign/" + expectedContract.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(expectedDto)))
-//                .andReturn();
-//
-//        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
-//        verify(svc, times(1)).updateContractSignature(expectedContract.getId(), expectedDto);
-//    }
 
     @Test
     void deleteContractTest() throws Exception {

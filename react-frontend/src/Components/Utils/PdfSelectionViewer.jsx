@@ -29,20 +29,18 @@ export default function PdfSelectionViewer(props) {
         return currentDoc >= props.documents.length ? 0 : currentDoc
     }
 
-    return (
-        <Grid
-            container
-            spacing={0}
-            className={classes.main}>
-            <Grid item xs={5} className={classes.list}>
-                <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                    {props.title}
-                </Typography>
-                {childs.length > 0 ? childs : "Aucun élément à afficher"}
-            </Grid>
-            <Grid item xs={7} className={classes.viewbox} align="center">
-                <PdfDocument document={props.documents[getCurrentDoc()] ? props.documents[getCurrentDoc()] : ""}/>
-            </Grid>
+    return <Grid
+        container
+        spacing={0}
+        className={classes.main}>
+        <Grid item xs={5} className={classes.list}>
+            <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
+                {props.title}
+            </Typography>
+            {childs.length > 0 ? childs : "Aucun élément à afficher"}
         </Grid>
-    )
+        <Grid item xs={7} className={classes.viewbox} align="center">
+            <PdfDocument document={props.documents[getCurrentDoc()] ? props.documents[getCurrentDoc()] : ""}/>
+        </Grid>
+    </Grid>
 }

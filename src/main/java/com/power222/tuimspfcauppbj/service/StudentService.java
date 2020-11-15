@@ -37,7 +37,6 @@ public class StudentService {
             return Optional.empty();
 
         student.setPassword(passwordEncoder.encode(student.getPassword()));
-        student.setRole("student");
         student.setResumes(Collections.emptyList());
         student.setApplications(Collections.emptyList());
         return Optional.of(studentRepo.saveAndFlush(student));

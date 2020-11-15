@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.User;
 import com.power222.tuimspfcauppbj.util.SemesterContext;
@@ -29,7 +30,7 @@ class SemesterServiceTest {
 
     @Test
     void unaffectedUserTest() {
-        var u = new User();
+        var u = new Admin();
         semesterSvc.registerUserInSemester(u);
 
         verify(userRepo, times(0)).saveAndFlush(any());

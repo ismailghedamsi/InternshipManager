@@ -12,8 +12,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 export default function TextboxModal({isOpen, hide, title, onSubmit}) {
 
-    return isOpen ? (
-        <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
+    return isOpen ? <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
             <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description" component={"div"}>
@@ -28,33 +27,31 @@ export default function TextboxModal({isOpen, hide, title, onSubmit}) {
                         validateOnChange={false}
                         enableReinitialize={true}
                         initialValues={{message: ""}}>
-                        {({isSubmitting}) => (
-                            <Form>
-                                <Field
-                                    component={TextField}
-                                    multiline
-                                    rows={5}
-                                    name="message"
-                                    id="message"
-                                    variant="outlined"
-                                    label="Entrez votre message ici"
-                                    required
-                                    fullWidth
-                                />
-                                <br/>
-                                {isSubmitting && <LinearProgress/>}
-                                <Button
-                                    type={"submit"}
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    size={"large"}
-                                    disabled={isSubmitting}
-                                >
-                                    Envoyer
-                                </Button>
-                            </Form>
-                        )}
+                        {({isSubmitting}) => <Form>
+                            <Field
+                                component={TextField}
+                                multiline
+                                rows={5}
+                                name="message"
+                                id="message"
+                                variant="outlined"
+                                label="Entrez votre message ici"
+                                required
+                                fullWidth
+                            />
+                            <br/>
+                            {isSubmitting && <LinearProgress/>}
+                            <Button
+                                type={"submit"}
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                size={"large"}
+                                disabled={isSubmitting}
+                            >
+                                Envoyer
+                            </Button>
+                        </Form>}
                     </Formik>
                 </DialogContentText>
             </DialogContent>
@@ -63,6 +60,5 @@ export default function TextboxModal({isOpen, hide, title, onSubmit}) {
                     Annuler
                 </Button>
             </DialogActions>
-        </Dialog>
-    ) : null;
+        </Dialog> : null;
 }

@@ -40,7 +40,7 @@ export default function ResumeUpload() {
         <Grid item xs={12} sm={7} lg={5}>
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
-                    onSubmit={async (values) => readFileAsync(values.file).then((file) => {
+                    onSubmit={async values => readFileAsync(values.file).then(file => {
                         let dto = {...values};
                         dto.file = file;
                         return api.post("/resumes", dto)
@@ -51,7 +51,7 @@ export default function ResumeUpload() {
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
-                    validate={(values) => {
+                    validate={values => {
                         const errors = {};
                         if (values.file.type !== "application/pdf") {
                             errors.file = "Le fichier doit être de type PDF"
@@ -67,56 +67,55 @@ export default function ResumeUpload() {
                         file: ""
                     }}
                 >
-                    {({submitForm, isSubmitting}) =>
-                        <Form>
-                            <Grid container
-                                  alignItems="start"
-                                  justify="center"
-                                  spacing={2}>
-                                <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
-                                    Télécharger un nouveau CV
-                                </Typography>
-                                <Grid item xs={12} sm={6}>
-                                    <Field
-                                        component={TextField}
-                                        name="name"
-                                        id="name"
-                                        variant="outlined"
-                                        label="Nom du fichier"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <Field
-                                        component={SimpleFileUpload}
-                                        type={"file"}
-                                        name="file"
-                                        id="file"
-                                        variant="outlined"
-                                        label="Fichier PDF"
-                                        fullwidth
-                                        required
-                                    />
-                                    <ErrorMessage name={"file"}>
-                                        {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span>
-                                        </p>}
-                                    </ErrorMessage>
-                                </Grid>
-                                {isSubmitting && <LinearProgress/>}
-                                <Button
-                                    id="buttonSubmit"
-                                    type={"submit"}
-                                    variant="contained"
+                    {({submitForm, isSubmitting}) => <Form>
+                        <Grid container
+                              alignItems="start"
+                              justify="center"
+                              spacing={2}>
+                            <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
+                                Télécharger un nouveau CV
+                            </Typography>
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    component={TextField}
+                                    name="name"
+                                    id="name"
+                                    variant="outlined"
+                                    label="Nom du fichier"
                                     fullWidth
-                                    size={"large"}
-                                    color="primary"
-                                    disabled={isSubmitting}
-                                    onClick={submitForm}
-                                >
-                                    Téléverser le CV
-                                </Button>
+                                />
                             </Grid>
-                        </Form>}
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    component={SimpleFileUpload}
+                                    type={"file"}
+                                    name="file"
+                                    id="file"
+                                    variant="outlined"
+                                    label="Fichier PDF"
+                                    fullwidth
+                                    required
+                                />
+                                <ErrorMessage name={"file"}>
+                                    {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span>
+                                    </p>}
+                                </ErrorMessage>
+                            </Grid>
+                            {isSubmitting && <LinearProgress/>}
+                            <Button
+                                id="buttonSubmit"
+                                type={"submit"}
+                                variant="contained"
+                                fullWidth
+                                size={"large"}
+                                color="primary"
+                                disabled={isSubmitting}
+                                onClick={submitForm}
+                            >
+                                Téléverser le CV
+                            </Button>
+                        </Grid>
+                    </Form>}
                 </Formik>
             </Container>
         </Grid>

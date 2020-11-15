@@ -54,9 +54,9 @@ export default function StudentStatus() {
 
     function hiredStudentsNames(o) {
         return o.reviewState === "APPROVED" ?
-            o.applications.map((elem, i) =>
-                <Typography key={i}
-                            style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
+            o.applications.map(elem =>
+                <Typography
+                    style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
             )
             : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>;
     }

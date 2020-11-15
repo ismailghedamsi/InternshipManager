@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Employer extends User implements SemesterAware {
@@ -25,7 +25,6 @@ public class Employer extends User implements SemesterAware {
     private String contactName;
     private String phoneNumber;
     private String address;
-    private String email;
 
     @ElementCollection
     private List<String> semesters;

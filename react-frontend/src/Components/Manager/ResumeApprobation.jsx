@@ -33,53 +33,49 @@ export default function ResumeApprobation() {
             })
     }
 
-    return (
-        <div style={{height: "100%"}}>
-            <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Approbation des CVs"}>
-                {(i, setCurrent) => (
-                    <div key={i}>
-                        <div className={classes.buttonDiv}>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton].join(' ')}
-                                onClick={() => sendDecision(i, "APPROVED")}
-                                style={{marginRight: 5}}
-                            ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton].join(' ')}
-                                onClick={() => {
-                                    setCurrentIndex(i)
-                                    openReasonModal()
-                                }}
-                            ><i className="fa fa-ban" style={{color: "red"}}/></button>
-                        </div>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
-                            autoFocus={i === 0}
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                setCurrent(i)
-                            }}
-                        >
-                            <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                                {" " + resumes[i].name + " "}
-                            </Typography>
-                            <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                                {resumes[i].owner.firstName} {resumes[i].owner.lastName}
-                            </Typography>
-                        </button>
-                        <hr/>
-                    </div>
-                )}
-            </PdfSelectionViewer>
-            <TextboxModal
-                isOpen={isReasonModalOpen}
-                hide={closeReasonModal}
-                title={"Justifiez le refus"}
-                onSubmit={async (values) => sendDecision(currentIndex, "DENIED", values.message)}
-            />
-        </div>
-    )
+    return <div style={{height: "100%"}}>
+        <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Approbation des CVs"}>
+            {(i, setCurrent) => <div key={i}>
+                <div className={classes.buttonDiv}>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton].join(' ')}
+                        onClick={() => sendDecision(i, "APPROVED")}
+                        style={{marginRight: 5}}
+                    ><i className="fa fa-check-square" style={{color: "green"}}/></button>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton].join(' ')}
+                        onClick={() => {
+                            setCurrentIndex(i)
+                            openReasonModal()
+                        }}
+                    ><i className="fa fa-ban" style={{color: "red"}}/></button>
+                </div>
+                <button
+                    type={"button"}
+                    className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                    autoFocus={i === 0}
+                    onClick={() => {
+                        setCurrentIndex(i)
+                        setCurrent(i)
+                    }}
+                >
+                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                        {" " + resumes[i].name + " "}
+                    </Typography>
+                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                        {resumes[i].owner.firstName} {resumes[i].owner.lastName}
+                    </Typography>
+                </button>
+                <hr/>
+            </div>}
+        </PdfSelectionViewer>
+        <TextboxModal
+            isOpen={isReasonModalOpen}
+            hide={closeReasonModal}
+            title={"Justifiez le refus"}
+            onSubmit={async values => sendDecision(currentIndex, "DENIED", values.message)}
+        />
+    </div>
 }

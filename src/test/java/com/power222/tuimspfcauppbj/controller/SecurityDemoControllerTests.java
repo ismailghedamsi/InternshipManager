@@ -1,7 +1,7 @@
 package com.power222.tuimspfcauppbj.controller;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
-import com.power222.tuimspfcauppbj.model.User;
+import com.power222.tuimspfcauppbj.model.Admin;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,30 +32,21 @@ public class SecurityDemoControllerTests {
 
     @Test
     void helloWorldTest() throws Exception {
-        mvc.perform(get("/api/hello").contentType(MediaType.TEXT_PLAIN))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Hello, world!")));
+        mvc.perform(get("/api/hello").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk()).andExpect(content().string(containsString("Hello, world!")));
     }
 
     @Test
     void unauthenticatedPrivateHelloWorldTest() throws Exception {
         when(userRepo.findByUsername(any())).thenReturn(Optional.empty());
 
-        mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN))
-                .andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser("test")
     void authenticatedPrivateHelloWorldTest() throws Exception {
-        when(userRepo.findByUsername(any())).thenReturn(Optional.of(User.builder()
-                .username("admin")
-                .role("admin")
-                .password("password")
-                .build()));
+        when(userRepo.findByUsername(any())).thenReturn(Optional.of(Admin.builder().username("admin").password("password").build()));
 
-        mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Hello, private world!")));
+        mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk()).andExpect(content().string(containsString("Hello, private world!")));
     }
 }

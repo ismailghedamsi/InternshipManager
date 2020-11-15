@@ -31,8 +31,6 @@ public class Contract extends SemesterDiscriminatedEntity {
     @Lob
     private String engagementStudent;
 
-    private String adminName;
-
     private float totalHoursPerWeek;
     private String reasonForRejection;
 
@@ -41,6 +39,10 @@ public class Contract extends SemesterDiscriminatedEntity {
 
     @OneToOne
     private StudentApplication studentApplication;
+
+    @ManyToOne
+    @JsonIgnoreProperties("contracts")
+    private Admin admin;
 
     @OneToOne(mappedBy = "contract")
     @JsonIgnoreProperties("contract")

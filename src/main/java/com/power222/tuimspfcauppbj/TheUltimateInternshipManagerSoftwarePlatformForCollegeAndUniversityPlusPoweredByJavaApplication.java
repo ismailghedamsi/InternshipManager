@@ -57,16 +57,16 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         @Override
         @Transactional
         public void run(String... args) throws IOException {
-            User admin = User.builder()
+            var admin = Admin.builder()
                     .username("admin")
-                    .role("admin")
                     .password(passwordEncoder.encode("password"))
+                    .email("andrei.belkin.0@pm.me")
+                    .name("Jacob Blake")
                     .build();
 
             userRepo.save(admin);
 
             var employer = userRepo.save(Employer.builder()
-                    .role("employer")
                     .username("employeur")
                     .password(passwordEncoder.encode("password"))
                     .companyName("Dacima")
@@ -77,7 +77,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var student = userRepo.save(Student.builder()
-                    .role("student")
                     .username("etudiant")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Bob")
@@ -89,7 +88,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var student2 = userRepo.save(Student.builder()
-                    .role("student")
                     .username("etudiant2")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Roméo")
@@ -101,7 +99,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var student3 = userRepo.save(Student.builder()
-                    .role("student")
                     .username("etudiant3")
                     .password(passwordEncoder.encode("password"))
                     .firstName("Bob")
@@ -114,7 +111,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             for (int i = 4; i < 30; i++) {
                 userRepo.save(Student.builder()
-                        .role("student")
                         .username("etudiant" + i)
                         .password(passwordEncoder.encode("password"))
                         .firstName("Loop " + i)
@@ -211,7 +207,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             var contractDto = ContractDTO.builder()
                     .studentApplicationId(studentApplication.getId())
-                    .adminName("Jacob Blake")
                     .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
                     .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
                     .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
@@ -220,7 +215,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             var contractDto2 = ContractDTO.builder()
                     .studentApplicationId(studentApplication2.getId())
-                    .adminName("Jacob Blake")
                     .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
                     .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
                     .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
@@ -229,7 +223,6 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             var contractDto3 = ContractDTO.builder()
                     .studentApplicationId(studentApplication3.getId())
-                    .adminName("Jacob Blake")
                     .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
                     .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
                     .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
@@ -237,7 +230,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build();
 
 
-            contractGenSvc.generateContract(contractDto);
+            contractGenSvc.generateContract(contractDto, admin);
             var contract = contractRepo.findById(1L);
 
             if (contract.isPresent()) {
@@ -252,7 +245,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 contractGenSvc.signContract(signatureDto);
             }
 
-            contractGenSvc.generateContract(contractDto2);
+            contractGenSvc.generateContract(contractDto2, admin);
             var contract2 = contractRepo.findById(2L);
 
             if (contract2.isPresent()) {
@@ -268,7 +261,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 contractGenSvc.signContract(signatureDto);
             }
 
-            contractGenSvc.generateContract(contractDto3);
+            contractGenSvc.generateContract(contractDto3, admin);
             var contract3 = contractRepo.findById(3L);
 
             if (contract3.isPresent()) {
