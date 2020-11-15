@@ -1,5 +1,5 @@
 import {Card, CardContent, Grid} from '@material-ui/core';
-import {Field} from 'formik';
+import {ErrorMessage, Field} from 'formik';
 import {SimpleFileUpload, TextField} from 'formik-material-ui';
 import React from 'react';
 import * as yup from "yup";
@@ -7,12 +7,10 @@ import {FormikStepper} from './FormikStepper';
 import {useLocation} from 'react-router-dom';
 import {DatePicker} from "formik-material-ui-pickers";
 
-
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = value => "Doit avoir moins que " + value.max + " caractères";
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min;
 const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
+const requiredRadioMsg = "Cliquez votre choix";
 export default function BusinessEvalution() {
     const location = useLocation();
 
@@ -31,35 +29,34 @@ export default function BusinessEvalution() {
         "Plus de trois"
     ];
 
-    const InternInfosValidation = yup.object().shape({});
     const EvaluationCriteriasValidation = yup.object().shape({
         evaluationCriterias: yup.object().shape({
-            hoursOfWeekFirstMonth: yup.number().required().max(100, tooBigError).required(requiredFieldMsg),
-            hoursOfWeekSecondMonth: yup.number().required().max(100, tooBigError).required(requiredFieldMsg),
-            hoursOfWeekThirdMonth: yup.number().required().max(100, tooBigError).required(requiredFieldMsg),
-            salary: yup.number().required().min(12.5, tooLittleError).required(requiredFieldMsg)
-        }),
+            internshipCount: yup.string().required(requiredRadioMsg),
+            hoursOfWeekFirstMonth: yup.number().required().min(1, tooLittleError).max(100, tooBigError).required(requiredFieldMsg),
+            hoursOfWeekSecondMonth: yup.number().required().min(1, tooLittleError).max(100, tooBigError).required(requiredFieldMsg),
+            hoursOfWeekThirdMonth: yup.number().required().min(1, tooLittleError).max(100, tooBigError).required(requiredFieldMsg)
+        })
     });
     const ObservationsValidation = yup.object().shape({
         observations: yup.object().shape({
-            preferedInternship: yup.string().required(requiredFieldMsg),
-            welcomeSameIntern: yup.string().required(requiredFieldMsg),
-            variablesShifts: yup.string().required(requiredFieldMsg),
+            preferedInternship: yup.string().required(requiredRadioMsg),
+            welcomeSameIntern: yup.string().required(requiredRadioMsg),
+            variablesShifts: yup.string().required(requiredRadioMsg),
             startShiftsOne: yup.number().required().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
             startShiftsTwo: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
             startShiftsThree: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
             endShiftsOne: yup.number().required().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
             endShiftsTwo: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
             endShiftsThree: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
-        }),
+        })
     });
     const SignatureValidation = yup.object().shape({
         signature: yup.object().shape({
-            name: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required(requiredFieldMsg),
+            name: yup.string().trim().min(2, "Doit avoir au moins 2 caractères").max(255, "Doit avoir moins que 255 caractères").required(requiredFieldMsg),
             date: yup.date().min(new Date(), "Date doit être au present"),
-        }),
+        })
     });
-    console.log(location.state)
+
     return <Card>
         <CardContent>
             <FormikStepper
@@ -97,12 +94,29 @@ export default function BusinessEvalution() {
                     },
                     signature: {
                         image: "",
-                        name: ""
+                        name: "",
+                        date: new Date()
                     }
                 }}
                 evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
                 <FormikStep label="ÉVALUATION" validationSchema={EvaluationCriteriasValidation}>
                     <Grid container justify="space-between" spacing={2}>
+                        <Grid item xs={12}>
+                            <label>Stage : </label>
+                            <label style={{marginRight: "1em"}}>
+                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
+                                       value="premier stage"/>
+                                1
+                            </label>
+                            <label>
+                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
+                                       value="deuxieme stage"/>
+                                2
+                            </label>
+                            <ErrorMessage name={"evaluationCriterias.internshipCount"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
+                        </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Les tâches confiées au stagiaire sont conformes aux
                                 tâches annoncées dans l’entente de stage</label>
@@ -258,19 +272,6 @@ export default function BusinessEvalution() {
                 <FormikStep label="OBSERVATIONS GÉNÉRALES" validationSchema={ObservationsValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
-                            <label>Stage : </label>
-                            <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
-                                       value="premier stage"/>
-                                1
-                            </label>
-                            <label>
-                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
-                                       value="deuxieme stage"/>
-                                2
-                            </label>
-                        </Grid>
-                        <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>
                             <label style={{marginRight: "1em"}}>
                                 <Field type="radio" name="observations.preferedInternship" value="premier stage"/>
@@ -280,6 +281,9 @@ export default function BusinessEvalution() {
                                 <Field type="radio" name="observations.preferedInternship" value="deuxieme stage"/>
                                 Deuxième stage
                             </label>
+                            <ErrorMessage name={"observations.preferedInternship"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est ouvert à accueillir</label>
@@ -298,6 +302,9 @@ export default function BusinessEvalution() {
                                 <Field type="radio" name="observations.welcomeSameIntern" value="no"/>
                                 non
                             </label>
+                            <ErrorMessage name={"observations.welcomeSameIntern"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
@@ -309,6 +316,9 @@ export default function BusinessEvalution() {
                                 <Field type="radio" name="observations.variablesShifts" value="no"/>
                                 non
                             </label>
+                            <ErrorMessage name={"observations.variablesShifts"}>
+                                {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
+                            </ErrorMessage>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
@@ -403,7 +413,7 @@ export default function BusinessEvalution() {
                                 fullWidth
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={6}>
                             <Field
                                 component={DatePicker}
                                 label="Date d'évaluation"

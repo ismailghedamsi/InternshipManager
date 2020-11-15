@@ -57,11 +57,6 @@ const Links = {
         {
             title: 'Rapports',
             url: '/dashboard/reports',
-        },
-        //todo effacer après avoir finir le story eq3 - 87
-        {
-            title: 'Évaluation',
-            url: '/dashboard/businessEvaluation',
         }
     ],
     student: [

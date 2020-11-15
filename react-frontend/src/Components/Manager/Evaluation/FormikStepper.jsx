@@ -41,7 +41,6 @@ export function FormikStepper({application, initialValues, children}) {
                 return errors;
             }}
             onSubmit={async values => {
-                console.log("halo")
                 if (isLastStep()) {
                     const dto = {...values};
                     dto.contract = application.contract;
@@ -84,8 +83,10 @@ export function FormikStepper({application, initialValues, children}) {
                                 disabled={isSubmitting}
                                 variant="contained"
                                 color="primary"
-                                onClick={() => {
-                                    setData(values);
+                                onClick={async () => {
+                                    const dto = {...values}
+                                    dto.application = application;
+                                    setData(dto);
                                     setValidationButtonClick(true)
                                     openBusinessEvaluationModal();
                                 }}
