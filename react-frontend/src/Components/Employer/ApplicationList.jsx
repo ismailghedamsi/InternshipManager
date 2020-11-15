@@ -90,6 +90,13 @@ export default function ApplicationList() {
             return "/dashboard/evaluateStudent";
     }
 
+    function roleCondition(i) {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return offer.applications[i].contract.businessEvaluation === null;
+        else
+            return offer.applications[i].contract.internEvaluation === null;
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
                             title={<span>Application<br/>{offer.title}</span>}>
@@ -128,7 +135,7 @@ export default function ApplicationList() {
                             Convoquer l'étudiant pour un entrevue
                         </Link>
                         }
-                        {offer.applications[i].contract.businessEvaluation === null &&
+                        {offer.applications[i].contract !== null && offer.applications[i].contract.signatureState === "SIGNED" && roleCondition(i) &&
                         <Link variant={"body1"}
                               to={{
                                   pathname: evaluationDirection(),
