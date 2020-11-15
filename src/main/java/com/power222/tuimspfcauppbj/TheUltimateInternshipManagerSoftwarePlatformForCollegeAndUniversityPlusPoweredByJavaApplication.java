@@ -244,7 +244,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                         .build();
 
-                contractGenSvc.signContract(signatureDto);
+//                contractGenSvc.signContract(signatureDto);
             }
 
             contractGenSvc.generateContract(contractDto2, admin);
@@ -259,8 +259,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                         .build();
 
-                contractGenSvc.signContract(signatureDto);
-                contractGenSvc.signContract(signatureDto);
+//                contractGenSvc.signContract(signatureDto);
+//                contractGenSvc.signContract(signatureDto);
             }
 
             contractGenSvc.generateContract(contractDto3, admin);
@@ -275,9 +275,9 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                         .build();
 
-                contractGenSvc.signContract(signatureDto);
-                contractGenSvc.signContract(signatureDto);
-                contractGenSvc.signContract(signatureDto);
+//                contractGenSvc.signContract(signatureDto);
+//                contractGenSvc.signContract(signatureDto);
+//                contractGenSvc.signContract(signatureDto);
             }
 
             userRepo.flush();
