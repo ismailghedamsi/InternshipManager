@@ -114,6 +114,14 @@ export default function useStyles() {
             '&:hover': {
                 backgroundColor: "#00000055",
             }
+        },
+        evaluationSections: {
+            border: "2px solid black",
+            marginBottom: "3em"
+        },
+        evaluationCriterias: {
+            fontWeight: "bold"
         }
+
     }))();
 };

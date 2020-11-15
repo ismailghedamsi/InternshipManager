@@ -28,7 +28,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         SpringApplication.run(TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication.class, args);
     }
 
-    @SuppressWarnings("MagicNumber")
+    @SuppressWarnings({"MagicNumber", "ConstructorWithTooManyParameters", "unused", "OverlyCoupledClass", "OverlyLongMethod"})
     @Profile("!noBootstrappingTests")
     @Component
     public static class BootstrapConfig implements CommandLineRunner {
@@ -42,8 +42,10 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final ContractRepository contractRepo;
         private final InterviewRepository interviewRepo;
 
-        @SuppressWarnings("ConstructorWithTooManyParameters")
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo, ContractGenerationService contractGenSvc, ContractRepository contractRepo, InterviewRepository interviewRepo) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo,
+                               InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo,
+                               ContractGenerationService contractGenSvc, ContractRepository contractRepo,
+                               InterviewRepository interviewRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;

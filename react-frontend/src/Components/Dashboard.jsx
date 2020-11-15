@@ -4,12 +4,14 @@ import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import AuthenticationService from '../Services/AuthenticationService';
 import ApplicationList from "./Employer/ApplicationList";
+import Evaluationform from "./Employer/Evaluations/Evaluationform";
+import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList";
 import InterviewConvocation from './Employer/Interview/InterviewConvocation';
 import Interviewlist from './Employer/Interview/InterviewList';
 import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
-import SignContract from './Employer/SignContract';
+import SignContract from './Employer/SignContract'
 import SignForm from "./Employer/SignForm";
 import ContractForm from "./Manager/ContractForm";
 import ContractList from './Manager/ContractList';
@@ -147,8 +149,16 @@ export default function Dashboard() {
                                     component={SignContract}
                                     role={"employer"}/>
                 <RoleProtectedRoute exact={true}
+                                    path="/dashboard/evaluateStudent"
+                                    component={Evaluationform}
+                                    role={"employer"}/>
+                <RoleProtectedRoute exact={true}
                                     path="/dashboard/signFormEmployer"
                                     component={SignForm}
+                                    role={"employer"}/>
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/evaluationList"
+                                    component={StudentEvaluationsList}
                                     role={"employer"}/>
                 {/* Etudiant */}
                 <RoleProtectedRoute exact={true}
