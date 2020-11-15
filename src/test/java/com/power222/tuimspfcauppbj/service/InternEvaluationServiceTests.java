@@ -21,6 +21,9 @@ public class InternEvaluationServiceTests {
     @Mock
     private InternEvaluationRepository internRepo;
 
+    @Mock
+    private MailSendingService mailSvc;
+
     @InjectMocks
     private InternEvaluationService internSvc;
 
