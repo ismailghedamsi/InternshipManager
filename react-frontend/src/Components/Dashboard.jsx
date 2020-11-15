@@ -26,7 +26,8 @@ import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
 import {RoleProtectedRoute} from "./Utils/Routes";
-import BusinessEvaluationForm from "./Manager/Evaluation/BusinessEvaluationForm";
+import BusinessEvaluationForm from "./Manager/BusinessEvaluation/BusinessEvaluationForm";
+import BusinessEvaluationList from "./Manager/BusinessEvaluation/BusinessEvaluationList";
 
 
 const useStyles = makeStyles(() => ({
@@ -111,6 +112,10 @@ export default function Dashboard() {
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/businessEvaluation"
                                     component={BusinessEvaluationForm}
+                                    role={"admin"}/>
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/businessEvaluationList"
+                                    component={BusinessEvaluationList}
                                     role={"admin"}/>
                 {/* Employeur */}
                 <RoleProtectedRoute exact={true}

@@ -105,12 +105,12 @@ export default function BusinessEvalution() {
                             <label>Stage : </label>
                             <label style={{marginRight: "1em"}}>
                                 <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
-                                       value="premier stage"/>
+                                       value="Premier stage"/>
                                 1
                             </label>
                             <label>
                                 <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
-                                       value="deuxieme stage"/>
+                                       value="Deuxieme stage"/>
                                 2
                             </label>
                             <ErrorMessage name={"evaluationCriterias.internshipCount"}>
@@ -274,11 +274,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.preferedInternship" value="premier stage"/>
+                                <Field type="radio" name="observations.preferedInternship" value="Premier stage"/>
                                 Premier stage
                             </label>
                             <label>
-                                <Field type="radio" name="observations.preferedInternship" value="deuxieme stage"/>
+                                <Field type="radio" name="observations.preferedInternship" value="Deuxieme stage"/>
                                 Deuxième stage
                             </label>
                             <ErrorMessage name={"observations.preferedInternship"}>
@@ -295,11 +295,11 @@ export default function BusinessEvalution() {
                             <label style={{marginRight: "2em"}}>Ce milieu désire accueillir le même stagiaire pour un
                                 prochain stage</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.welcomeSameIntern" value="yes"/>
+                                <Field type="radio" name="observations.welcomeSameIntern" value="Oui"/>
                                 oui
                             </label>
                             <label>
-                                <Field type="radio" name="observations.welcomeSameIntern" value="no"/>
+                                <Field type="radio" name="observations.welcomeSameIntern" value="Non"/>
                                 non
                             </label>
                             <ErrorMessage name={"observations.welcomeSameIntern"}>
@@ -309,11 +309,11 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="observations.variablesShifts" value="yes"/>
+                                <Field type="radio" name="observations.variablesShifts" value="Oui"/>
                                 oui
                             </label>
                             <label>
-                                <Field type="radio" name="observations.variablesShifts" value="no"/>
+                                <Field type="radio" name="observations.variablesShifts" value="Non"/>
                                 non
                             </label>
                             <ErrorMessage name={"observations.variablesShifts"}>

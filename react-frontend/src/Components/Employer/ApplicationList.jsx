@@ -88,7 +88,6 @@ export default function ApplicationList() {
             return "/dashboard/businessEvaluation";
         else
             return "/dashboard/evaluateStudent";
-
     }
 
     return <div style={{height: "100%"}}>

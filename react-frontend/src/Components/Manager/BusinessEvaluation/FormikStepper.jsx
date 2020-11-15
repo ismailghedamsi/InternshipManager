@@ -3,7 +3,8 @@ import {Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
-import BusinessEvaluationModal from "../../Utils/BusinessEvaluationModal";
+import BusinessEvaluationModal from "./BusinessEvaluationModal";
+import AuthenticationService from "../../../Services/AuthenticationService";
 
 export function FormikStepper({application, initialValues, children}) {
     const history = useHistory()
@@ -19,6 +20,13 @@ export function FormikStepper({application, initialValues, children}) {
 
     function isLastStep() {
         return step === childrenArray.length - 1;
+    }
+
+    function pageRedirection() {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return "/dashboard/businessEvaluationList";
+        else
+            return "/dashboard/evaluationList";
     }
 
     return <>
@@ -46,7 +54,7 @@ export function FormikStepper({application, initialValues, children}) {
                     dto.contract = application.contract;
                     dto.signature.image = await readFile(values.signature.image);
                     api.post("/businessEvaluation", dto)
-                        .then(() => history.push("/dashboard/offerList"));
+                        .then(() => history.push(pageRedirection()));
                     setCompleted(true);
                 } else {
                     setStep(s => s + 1);

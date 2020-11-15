@@ -5,10 +5,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import useStyles from "./useStyles";
+import useStyles from "../../Utils/useStyles";
+import {useFileReader} from "../../Utils/Hooks";
 
 export default function BusinessEvaluationModal({isOpen, data, hide}) {
     const classes = useStyles();
+    const readFile = useFileReader()
+
+    async function changerFile() {
+        data.signature.image = await readFile(data.signature.image);
+    }
+
     return <Dialog open={isOpen} onClose={hide} fullWidth={true} fullScreen={true} maxWidth={'md'}>
         <DialogTitle id="alert-dialog-title">{"ÉVALUATION DU MILIEU DE STAGE"}</DialogTitle>
         <DialogContent>
@@ -99,6 +106,21 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                         De {data.observations.startShiftsOne}h à {data.observations.endShiftsOne}h
                         De {data.observations.startShiftsTwo}h à {data.observations.endShiftsTwo}h
                         De {data.observations.startShiftsThree}h à {data.observations.endShiftsThree}h
+                    </Typography>
+                    <Typography>
+                        <strong style={{"color": "blue"}}>
+                            Signature de l’enseignant responsable:
+                        </strong> {data.signature.name}
+                    </Typography>
+                    <Typography>
+                        <strong style={{"color": "blue"}}>
+                            Date:
+                        </strong> {data.signature.date}
+                    </Typography>
+                    <Typography>
+                        {data.signature.image.length !== 0 && changerFile() &&
+                        <img src={data.signature.image} alt="signature"/>
+                        }
                     </Typography>
                 </div>
                 : ""
