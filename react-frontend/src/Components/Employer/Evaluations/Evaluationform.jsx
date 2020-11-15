@@ -1,5 +1,5 @@
 import {Card, CardContent, Grid, Typography} from "@material-ui/core";
-import {Field} from "formik";
+import {ErrorMessage, Field} from "formik";
 import {SimpleFileUpload, TextField} from "formik-material-ui";
 import {DatePicker} from "formik-material-ui-pickers";
 import React from "react";
@@ -15,6 +15,10 @@ const tooLittleError = (valueNumber) =>
 const tooBigError = (valueNumber) =>
         "Doit être plus petit que ou égal à " + valueNumber.max;
 const requiredFieldMsg = "Ce champs est requis";
+
+const requiredRadioMsg = "Aucun bouton radio a été sélécionner";
+
+const invalidSelectOption = "Option séléctionné invalide";
 
 export default function Evaluationform() {
   const classes = useStyles();
@@ -55,30 +59,139 @@ export default function Evaluationform() {
   const validationSchemaStep2 = yup.object().shape({
     productivity: yup.object().shape({
       comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
+      efficiency: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      comprehension: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      rythm: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      priorities: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      deadlines: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
     }),
   });
 
   const validationSchemaStep3 = yup.object().shape({
     quality: yup.object().shape({
-      comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
+      comment: yup
+              .string()
+              .trim()
+              .required(requiredFieldMsg)
+              .min(20, tooLittleError),
+      followsInstructions: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      detailsAttention: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      doubleChecks: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      strivesForPerfection: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      problemAnalysis: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
     }),
   });
 
   const validationSchemaStep4 = yup.object().shape({
     relationships: yup.object().shape({
-      comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
+      comment: yup
+              .string()
+              .trim()
+              .required(requiredFieldMsg)
+              .min(20, tooLittleError),
+      connectsEasily: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      teamworkContribution: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      culturalAdaptation: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      acceptsCriticism: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      respectsOthers: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      activelyListens: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
     }),
   });
 
   const validationSchemaStep5 = yup.object().shape({
     skills: yup.object().shape({
-      comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
+      comment: yup
+              .string()
+              .trim()
+              .required(requiredFieldMsg)
+              .min(20, tooLittleError),
+      showsInterest: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      expressesOwnIdeas: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      showsInitiative: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      worksSafely: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      dependable: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
+      punctual: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(evaluationAnswers, invalidSelectOption),
     }),
   });
 
   const validationSchemaStep6 = yup.object().shape({
     appreciation: yup.object().shape({
-      comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
+      comment: yup
+              .string()
+              .trim()
+              .required(requiredFieldMsg)
+              .min(20, tooLittleError),
+      discussedWithIntern: yup.string().required(requiredRadioMsg),
+      expectations: yup
+              .string()
+              .required(requiredFieldMsg)
+              .oneOf(globalAppreciations, invalidSelectOption),
     }),
   });
 
@@ -90,13 +203,16 @@ export default function Evaluationform() {
 
   const validationSchemaStep8 = yup.object().shape({
     feedback: yup.object().shape({
-      hireAgain: yup.string().required(),
-      technicalFormationOpinion: yup.string().required().min(20, tooShortError),
+      technicalFormationOpinion: yup
+              .string()
+              .trim()
+              .required()
+              .min(20, tooShortError),
+      hireAgain: yup.string().trim().required(requiredRadioMsg),
     }),
     signature: yup.object().shape({
       name: yup.string().required().min(5, tooShortError).max(50, tooBigError),
-      image: yup.string().min(1),
-      date: yup.date().min(new Date(), "Date doit etre au present"),
+      image: yup.string().required(),
     }),
     infos: yup.object().shape({
       supervisorRole: yup.string().required().min(5).max(50),
@@ -119,16 +235,16 @@ export default function Evaluationform() {
                           supervisorRole: "",
                           phoneNumber: "",
                         },
-            productivity: {
-              efficiency: evaluationAnswers[0],
-              comprehension: evaluationAnswers[0],
-              rythm: evaluationAnswers[0],
-              priorities: evaluationAnswers[0],
-              deadlines: evaluationAnswers[0],
-              comment: "",
-            },
-            quality: {
-              followsInstructions: evaluationAnswers[0],
+                        productivity: {
+                          efficiency: evaluationAnswers[0],
+                          comprehension: evaluationAnswers[0],
+                          rythm: evaluationAnswers[0],
+                          priorities: evaluationAnswers[0],
+                          deadlines: evaluationAnswers[0],
+                          comment: "",
+                        },
+                        quality: {
+                          followsInstructions: evaluationAnswers[0],
               detailsAttention: evaluationAnswers[0],
               doubleChecks: evaluationAnswers[0],
               strivesForPerfection: evaluationAnswers[0],
@@ -153,16 +269,16 @@ export default function Evaluationform() {
               punctual: evaluationAnswers[0],
               comment: "",
             },
-            appreciation: {
-              expectations: globalAppreciations[0],
-              comment: "",
-              discussedWithIntern: false,
-            },
-            feedback: {
-              weeklySupervisionHours: 0,
-              hireAgain: "",
-              technicalFormationOpinion: "",
-            },
+                        appreciation: {
+                          expectations: globalAppreciations[0],
+                          comment: "",
+                          discussedWithIntern: "",
+                        },
+                        feedback: {
+                          weeklySupervisionHours: 0,
+                          hireAgain: "",
+                          technicalFormationOpinion: "",
+                        },
                         signature: {
                           image: "",
                           date: new Date(),
@@ -234,6 +350,13 @@ export default function Evaluationform() {
                                 </option>
                         ))}
                       </Field>
+                      <ErrorMessage name="productivity.efficiency">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label style={{marginRight: "2em"}}>
@@ -249,6 +372,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="productivity.comprehension">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label style={{marginRight: "2em"}}>
@@ -259,6 +389,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="productivity.rhythm">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label style={{marginRight: "2em"}}>
@@ -269,6 +406,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="productivity.priorities">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label style={{marginRight: "2em"}}>
@@ -279,6 +423,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="productivity.deadlines">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <Field
@@ -317,6 +468,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="quality.followsInstruction">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>
@@ -328,6 +486,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="quality.detailsAttention">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>
@@ -338,6 +503,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="quality.doubleChecks">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>d - rechercher des occasions de se perfectionner</label>
@@ -346,6 +518,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="quality.strivesForPerfection">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>
@@ -356,6 +535,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="quality.problemAnalysis">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <Field
@@ -394,6 +580,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="relationships.connectsEasily">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>b - contribuer activement au travail d’équipe</label>
@@ -402,6 +595,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="relationships.teamworkContribution">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>
@@ -412,14 +612,28 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="relationships.culturalAdaptation">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>d - accepter les critiques constructives</label>
-                      <Field as="select" name="relationships..acceptsCriticism">
+                      <Field as="select" name="relationships.acceptsCriticism">
                         {evaluationAnswers.map((e, k) => (
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="relationships.acceptsCriticism">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>e - être respectueux envers les gens</label>
@@ -428,6 +642,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="relationships.respectsOthers">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>
@@ -439,6 +660,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="relationships.activelyListens">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <Field
@@ -479,6 +707,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="skills.showsInterest">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>b - exprimer clairement ses idées</label>
@@ -487,6 +722,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="skills.expressesOwnIdeas">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>c - faire preuve d’initiative</label>
@@ -495,6 +737,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="skills.showsInitiative">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>d - travailler de façon sécuritaire</label>
@@ -503,6 +752,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="skills.worksSafely">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>
@@ -514,6 +770,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="skills.dependable">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                     <Grid item xs={12}>
                       <label>f - être ponctuel et assidu à son travail</label>
@@ -522,8 +785,14 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="skills.puntual">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
-
                     <Grid item xs={12}>
                       <Field
                               component={TextField}
@@ -556,6 +825,13 @@ export default function Evaluationform() {
                                 <option key={k}>{e}</option>
                         ))}
                       </Field>
+                      <ErrorMessage name="appreciation.expectations">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -592,6 +868,13 @@ export default function Evaluationform() {
                         />
                         Non
                       </label>
+                      <ErrorMessage name="appreciation.discussedWithIntern">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                   </Grid>
                 </FormikStep>
@@ -611,6 +894,13 @@ export default function Evaluationform() {
                         d’encadrement accordé au stagiaire :
                       </label>
                       <Field type="number" name="feedback.weeklySupervisionHours"/>
+                      <ErrorMessage name="feedback.weeklySupervisionHours">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
                   </Grid>
                 </FormikStep>
@@ -642,8 +932,14 @@ export default function Evaluationform() {
                         />
                         Peut-être
                       </label>
+                      <ErrorMessage name="feedback.hireAgain">
+                        {(msg) => (
+                                <p className="msgError">
+                                  <span style={{color: "red"}}>{msg}</span>
+                                </p>
+                        )}
+                      </ErrorMessage>
                     </Grid>
-
                     <Grid item xs={12}>
                       <Field
                               component={TextField}
@@ -691,9 +987,6 @@ export default function Evaluationform() {
                     <Grid item xs={12} sm={6}>
                       <Field
                               component={SimpleFileUpload}
-                              onChange={(e) => {
-                                console.log(e);
-                              }}
                               type={"file"}
                               name="signature.image"
                               id="file"
@@ -706,6 +999,7 @@ export default function Evaluationform() {
                     <Grid item xs={12}>
                       <Field
                               component={DatePicker}
+                              disabled
                               label="Date d'évaluation"
                               format="MM/dd/yyyy"
                               name="signature.date"
@@ -720,5 +1014,5 @@ export default function Evaluationform() {
 }
 
 export function FormikStep({children}) {
-  return <>{children}</>;
+  return <>{children}</>
 }
