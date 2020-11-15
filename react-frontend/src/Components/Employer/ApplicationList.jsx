@@ -83,6 +83,13 @@ export default function ApplicationList() {
         }
     }
 
+    function evaluationDirection() {
+        if (AuthenticationService.getCurrentUserRole() === "admin")
+            return "/dashboard/businessEvaluation";
+        else
+            return "/dashboard/evaluateStudent";
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
                             title={<span>Application<br/>{offer.title}</span>}>
@@ -97,48 +104,45 @@ export default function ApplicationList() {
                             setCurrentIndex(i)
                         }}>
                         <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
-                                {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
-                            </Typography>
-                        </button>
-                        {currentIndex === i &&
-                        <div>
-                            <Typography color={"textPrimary"} variant={"body1"}>
-                                {offer.applications[i].student.phoneNumber} {offer.applications[i].student.email}
-                            </Typography>
-                            <Typography color={"textPrimary"} variant={"body1"}>
-                                {offer.applications[i].student.address}
-                            </Typography>
-                            {studentApplicationState(i)}
-                            {AuthenticationService.getCurrentUserRole() === "employer" &&
-                            offer.applications[i].state !== "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER" &&
-                            <Link variant={"body1"}
-                                  to={{
-                                      pathname: "/dashboard/interviewConvocation",
-                                      state: {...offer.applications[i]}
-                                  }}
-                                  style={{display: "block"}}
-                            >
-                                Convoquer l'étudiant pour un entrevue
-                            </Link>
-                            }
-                            {console.log(offer.applications[i])}
-                            {offer.applications[i].contract.internEvaluation === null &&
-                            <Link
-                                    variant={"body1"}
-                                    to={{
-                                        pathname: "/dashboard/evaluateStudent",
-                                        state: {...offer.applications[i]},
-                                    }}
-                                    style={{display: "block"}}
-                            >
-                                Évaluer l'étudiant
-                            </Link>
-                            }
-                        </div>
+                            {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
+                        </Typography>
+                    </button>
+                    {currentIndex === i &&
+                    <div>
+                        <Typography color={"textPrimary"} variant={"body1"}>
+                            {offer.applications[i].student.phoneNumber} {offer.applications[i].student.email}
+                        </Typography>
+                        <Typography color={"textPrimary"} variant={"body1"}>
+                            {offer.applications[i].student.address}
+                        </Typography>
+                        {studentApplicationState(i)}
+                        {AuthenticationService.getCurrentUserRole() === "employer" &&
+                        offer.applications[i].state !== "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER" &&
+                        <Link variant={"body1"}
+                              to={{
+                                  pathname: "/dashboard/interviewConvocation",
+                                  state: {...offer.applications[i]}
+                              }}
+                              style={{display: "block"}}
+                        >
+                            Convoquer l'étudiant pour un entrevue
+                        </Link>
                         }
-                        <hr/>
+                        {offer.applications[i].contract.businessEvaluation === null &&
+                        <Link variant={"body1"}
+                              to={{
+                                  pathname: evaluationDirection(),
+                                  state: {...offer.applications[i]}
+                              }}
+                              style={{display: "block"}}
+                        >
+                            {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
+                        </Link>
+                        }
                     </div>
-            }
-            </PdfSelectionViewer>
-        </div>
+                    }
+                    <hr/>
+                </div>}
+        </PdfSelectionViewer>
+    </div>
 }
