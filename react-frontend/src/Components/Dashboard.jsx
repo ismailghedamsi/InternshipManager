@@ -5,6 +5,7 @@ import {Redirect, Route, Switch} from 'react-router-dom';
 import AuthenticationService from '../Services/AuthenticationService';
 import ApplicationList from "./Employer/ApplicationList";
 import Evaluationform from "./Employer/Evaluations/Evaluationform";
+import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList";
 import InterviewConvocation from './Employer/Interview/InterviewConvocation';
 import Interviewlist from './Employer/Interview/InterviewList';
 import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
@@ -144,6 +145,10 @@ export default function Dashboard() {
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/signFormEmployer"
                                     component={SignForm}
+                                    role={"employer"}/>
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/evaluationList"
+                                    component={StudentEvaluationsList}
                                     role={"employer"}/>
                 {/* Etudiant */}
                 <RoleProtectedRoute exact={true}
