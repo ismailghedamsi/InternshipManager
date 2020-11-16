@@ -6,13 +6,13 @@ import {useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import {FormikStepper} from './FormikStepper';
 
-const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min;
-const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max;
-const requiredFieldMsg = "Ce champs est requis";
-const requiredRadioMsg = "Cliquez votre choix";
-const requiredSelectMsg = "Option séléctionné invalide";
+const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min
+const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max
+const requiredFieldMsg = "Ce champs est requis"
+const requiredRadioMsg = "Cliquez votre choix"
+const requiredSelectMsg = "Option séléctionné invalide"
 export default function BusinessEvalution() {
-    const location = useLocation();
+    const location = useLocation()
 
     const evaluationAnswers = [
         "Totalement en accord",
@@ -20,14 +20,14 @@ export default function BusinessEvalution() {
         "Plutôt en désaccord",
         "Totalement en désaccord",
         "N/A"
-    ];
+    ]
 
     const traineesNumber = [
         "Un stagiaire",
         "Deux stagiaires",
         "Trois stagiaires",
         "Plus de trois"
-    ];
+    ]
 
     const EvaluationCriteriasValidation = yup.object().shape({
         evaluationCriterias: yup.object().shape({
@@ -46,7 +46,8 @@ export default function BusinessEvalution() {
             adequateEquipement: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required(),
             accetableWorkload: yup.string().oneOf(evaluationAnswers, requiredSelectMsg).required()
         })
-    });
+    })
+
     const ObservationsValidation = yup.object().shape({
         observations: yup.object().shape({
             preferedInternship: yup.string().required(requiredRadioMsg),
@@ -60,12 +61,13 @@ export default function BusinessEvalution() {
             endShiftsThree: yup.number().required().min(0, tooLittleError).max(23, tooBigError),
             numbersOfInterns: yup.string().oneOf(traineesNumber, requiredSelectMsg).required()
         })
-    });
+    })
+
     const SignatureValidation = yup.object().shape({
         signature: yup.object().shape({
             name: yup.string().trim().min(2, "Doit avoir au moins 2 caractères").max(255, "Doit avoir moins que 255 caractères").required(requiredFieldMsg)
         })
-    });
+    })
 
     return <Card style={{overflow: "auto", height: "auto"}}>
         <CardContent>
@@ -114,14 +116,20 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label>Stage : </label>
                             <label style={{marginRight: "1em"}}>
-                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
-                                       value="Premier stage"/>
-                                1
+                                <Field
+                                    type="radio"
+                                    name="evaluationCriterias.internshipCount"
+                                    id="internship"
+                                    value="Premier stage"
+                                /> 1
                             </label>
                             <label>
-                                <Field type="radio" name="evaluationCriterias.internshipCount" id="internship"
-                                       value="Deuxieme stage"/>
-                                2
+                                <Field
+                                    type="radio"
+                                    name="evaluationCriterias.internshipCount"
+                                    id="internship"
+                                    value="Deuxieme stage"
+                                /> 2
                             </label>
                             <ErrorMessage name={"evaluationCriterias.internshipCount"}>
                                 {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
@@ -130,7 +138,10 @@ export default function BusinessEvalution() {
                         <Grid item xs={12}>
                             <label style={{marginRight: "2em"}}>Les tâches confiées au stagiaire sont conformes aux
                                 tâches annoncées dans l’entente de stage</label>
-                            <Field as="select" name="evaluationCriterias.workAsAnnoncement">
+                            <Field
+                                as="select"
+                                name="evaluationCriterias.workAsAnnoncement"
+                            >
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
                             <ErrorMessage name={"evaluationCriterias.workAsAnnoncement"}>
@@ -464,5 +475,5 @@ export default function BusinessEvalution() {
 }
 
 export function FormikStep({children}) {
-    return <>{children}</>;
+    return <>{children}</>
 }

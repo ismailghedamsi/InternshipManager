@@ -5,23 +5,23 @@ import {useApi} from "../../Utils/Hooks";
 import useStyles from "../../Utils/useStyles";
 
 export default function BusinessEvaluationList() {
-    const classes = useStyles();
-    const api = useApi();
-    const [businessEvaluations, setBusinessEvaluations] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const classes = useStyles()
+    const api = useApi()
+    const [businessEvaluations, setBusinessEvaluations] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
         api.get("/businessEvaluation")
             .then(r => setBusinessEvaluations(r ? r.data : []))
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function deleteBusinessEvaluation(index) {
-        const nextState = [...businessEvaluations];
+        const nextState = [...businessEvaluations]
         return api.delete("/businessEvaluation/" + nextState[index].id)
             .then(() => {
-                nextState.splice(index, 1);
+                nextState.splice(index, 1)
                 setBusinessEvaluations(nextState)
-            });
+            })
     }
 
     return <Grid
@@ -44,7 +44,7 @@ export default function BusinessEvaluationList() {
                         type={"button"}
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                         onClick={() => {
-                            setCurrentIndex(i);
+                            setCurrentIndex(i)
                         }}>
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                             {item.contract.admin.name}
@@ -73,128 +73,121 @@ export default function BusinessEvaluationList() {
                                 IDENTIFICATION DE L’ENTREPRISE
                             </Typography>
                             <Typography>
-                                <strong>Nom de
-                                    l’entreprise:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.companyName}
+                                <strong>Nom de l’entreprise: </strong>
+                                {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.companyName}
                             </Typography>
                             <Typography>
-                                <strong>Personne
-                                    contact:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.contactName}
+                                <strong>Personne contact: </strong>
+                                {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.contactName}
                             </Typography>
                             <Typography>
-                                <strong>Adresse:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.address}
+                                <strong>Adresse: </strong>
+                                {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.address}
                             </Typography>
                             <Typography>
-                                <strong>email:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.email}
+                                <strong>email: </strong>
+                                {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.email}
                             </Typography>
                             <Typography>
-                                <strong>Téléphone:</strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.phoneNumber}
+                                <strong>Téléphone: </strong>
+                                {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.phoneNumber}
                             </Typography>
                             <hr/>
                             <Typography variant="h5">
                                 IDENTIFICATION DU STAGIAIRE
                             </Typography>
                             <Typography>
-                                <strong
-                                >Nom du stagiaire:
-                                </strong> {businessEvaluations[currentIndex].contract.studentApplication.student.firstName} {businessEvaluations[currentIndex].contract.studentApplication.student.lastName}
+                                <strong>Nom du stagiaire: </strong>
+                                {businessEvaluations[currentIndex].contract.studentApplication.student.firstName} {businessEvaluations[currentIndex].contract.studentApplication.student.lastName}
                             </Typography>
                             <Typography>
-                                <strong>Date du stage:
-                                </strong> {businessEvaluations[currentIndex].contract.studentApplication.offer.details.internshipStartDate}
+                                <strong>Date du stage: </strong>
+                                {businessEvaluations[currentIndex].contract.studentApplication.offer.details.internshipStartDate}
                             </Typography>
                             <Typography>
-                                <strong>Stage:</strong> {businessEvaluations[currentIndex].evaluationCriterias.internshipCount}
+                                <strong>Stage: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.internshipCount}
                             </Typography>
                             <hr/>
                             <Typography variant="h5">
                                 ÉVALUATION
                             </Typography>
                             <Typography>
-                                <strong>Les tâches confiées au stagiaire sont conformes aux
-                                    tâches
-                                    annoncées dans l’entente de
-                                    stage:</strong> {businessEvaluations[currentIndex].evaluationCriterias.workAsAnnoncement}
+                                <strong>Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans
+                                    l’entente de stage: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.workAsAnnoncement}
                             </Typography>
                             <Typography>
-                                <strong>Des mesures d’accueil facilitent l’intégration du
-                                    nouveau
-                                    stagiaire:</strong> {businessEvaluations[currentIndex].evaluationCriterias.easyIntigration}
+                                <strong>Des mesures d’accueil facilitent l’intégration du nouveau stagiaire: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.easyIntigration}
                             </Typography>
                             <Typography>
-                                <strong>Le temps réel consacré à l’encadrement du stagiaire
-                                    est
-                                    suffisant:</strong> {businessEvaluations[currentIndex].evaluationCriterias.sufficientTime}
+                                <strong>Le temps réel consacré à l’encadrement du stagiaire est suffisant: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.sufficientTime}
                             </Typography>
                             <Typography>
-                                <strong>L’environnement de travail respecte les normes
-                                    d’hygiène et de
-                                    sécurité au
-                                    travail:</strong> {businessEvaluations[currentIndex].evaluationCriterias.securityWorkPlace}
+                                <strong>L’environnement de travail respecte les normes d’hygiène et de sécurité au
+                                    travail: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.securityWorkPlace}
                             </Typography>
                             <Typography>
-                                <strong>Le climat de travail est
-                                    agréable:</strong> {businessEvaluations[currentIndex].evaluationCriterias.pleasantEnvironnement}
+                                <strong>Le climat de travail est agréable: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.pleasantEnvironnement}
                             </Typography>
                             <Typography>
-                                <strong>Le milieu de stage est accessible par transport en
-                                    commun:</strong> {businessEvaluations[currentIndex].evaluationCriterias.accessiblePlace}
+                                <strong>Le milieu de stage est accessible par transport en commun: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.accessiblePlace}
                             </Typography>
                             <Typography>
-                                <strong>Le salaire
-                                    offert {businessEvaluations[currentIndex].evaluationCriterias.salary} est
-                                    intéressant pour le
-                                    stagiaire:</strong> {businessEvaluations[currentIndex].evaluationCriterias.goodSalary}
+                                <strong>Le salaire offert {businessEvaluations[currentIndex].evaluationCriterias.salary}
+                                    est intéressant pour le stagiaire: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.goodSalary}
                             </Typography>
                             <Typography>
-                                <strong>La communication avec le superviseur de stage facilite
-                                    le
-                                    déroulement du
-                                    stage:</strong> {businessEvaluations[currentIndex].evaluationCriterias.supervisorFacilitatesIntern}
+                                <strong>La communication avec le superviseur de stage facilite le déroulement du
+                                    stage: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.supervisorFacilitatesIntern}
                             </Typography>
                             <Typography>
-                                <strong>L’équipement fourni est adéquat pour réaliser les
-                                    tâches
-                                    confiées:</strong> {businessEvaluations[currentIndex].evaluationCriterias.adequateEquipement}
+                                <strong>L’équipement fourni est adéquat pour réaliser les tâches confiées: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.adequateEquipement}
                             </Typography>
                             <Typography>
-                                <strong>Le volume de travail est
-                                    acceptable:</strong> {businessEvaluations[currentIndex].evaluationCriterias.accetableWorkload}
+                                <strong>Le volume de travail est acceptable: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.accetableWorkload}
                             </Typography>
                             <Typography>
                                 <strong>Préciser le nombre d’heures/semaine: </strong>
-                                Premier
-                                mois: {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
-                                Deuxième
-                                mois: {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
-                                Troisième
-                                mois: {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
+                                Premier mois:
+                                {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
+                                Deuxième mois:
+                                {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
+                                Troisième mois:
+                                {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
                             </Typography>
                             <Typography>
-                                <strong>Commentaires:</strong> {businessEvaluations[currentIndex].evaluationCriterias.comment}
+                                <strong>Commentaires: </strong>
+                                {businessEvaluations[currentIndex].evaluationCriterias.comment}
                             </Typography>
                             <hr/>
                             <Typography variant="h5">
                                 OBSERVATIONS GÉNÉRALES
                             </Typography>
                             <Typography>
-                                <strong>
-                                    Ce milieu est à privilégier pour le:
-                                </strong> {businessEvaluations[currentIndex].observations.preferedInternship}
+                                <strong>Ce milieu est à privilégier pour le: </strong>
+                                {businessEvaluations[currentIndex].observations.preferedInternship}
                             </Typography>
                             <Typography>
-                                <strong>
-                                    Ce milieu est ouvert à accueillir:
-                                </strong> {businessEvaluations[currentIndex].observations.numbersOfInterns}
+                                <strong>Ce milieu est ouvert à accueillir: </strong>
+                                {businessEvaluations[currentIndex].observations.numbersOfInterns}
                             </Typography>
                             <Typography>
-                                <strong>
-                                    Ce milieu désire accueillir le même stagiaire pour un prochain stage:
-                                </strong> {businessEvaluations[currentIndex].observations.welcomeSameIntern}
+                                <strong>Ce milieu désire accueillir le même stagiaire pour un prochain stage: </strong>
+                                {businessEvaluations[currentIndex].observations.welcomeSameIntern}
                             </Typography>
                             <Typography>
-                                <strong>
-                                    Ce milieu offre des quarts de travail variables:
-                                </strong> {businessEvaluations[currentIndex].observations.variablesShifts}.
+                                <strong>Ce milieu offre des quarts de travail variables: </strong>
+                                {businessEvaluations[currentIndex].observations.variablesShifts}.
                                 De {businessEvaluations[currentIndex].observations.startShiftsOne}h
                                 à {businessEvaluations[currentIndex].observations.endShiftsOne}h
                                 De {businessEvaluations[currentIndex].observations.startShiftsTwo}h
@@ -207,14 +200,12 @@ export default function BusinessEvaluationList() {
                                 Signature du gestionnaire du stage
                             </Typography>
                             <Typography>
-                                <strong>
-                                    Signature de l’enseignant responsable:
-                                </strong> {businessEvaluations[currentIndex].signature.name}
+                                <strong>Signature de l’enseignant responsable: </strong>
+                                {businessEvaluations[currentIndex].signature.name}
                             </Typography>
                             <Typography>
-                                <strong>
-                                    Date:
-                                </strong> {businessEvaluations[currentIndex].signature.date}
+                                <strong>Date: </strong>
+                                {businessEvaluations[currentIndex].signature.date}
                             </Typography>
                             <Typography>
                                 <img src={businessEvaluations[currentIndex].signature.image} alt="signature"/>

@@ -8,15 +8,16 @@ import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import useStyles from "../Utils/useStyles";
 
 export default function ApplicationList() {
-    const classes = useStyles();
-    const location = useLocation();
-    const api = useApi();
-    const [offer, setOffer] = useState({});
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const classes = useStyles()
+    const location = useLocation()
+    const api = useApi()
+    const [offer, setOffer] = useState({})
+    const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
-        api.get("/offers/" + location.state.offerId).then(r => setOffer(r.data));
-    }, [location.state.offerId]); // eslint-disable-line react-hooks/exhaustive-deps
+        api.get("/offers/" + location.state.offerId)
+            .then(r => setOffer(r.data))
+    }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function studentApplicationState(i) {
         switch (offer.applications[i].state) {
@@ -24,51 +25,36 @@ export default function ApplicationList() {
             case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
             case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
             case "STUDENT_HIRED_BY_EMPLOYER":
-                if (
-                    AuthenticationService.getCurrentUserRole() === "admin" &&
-                    offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"
-                ) {
-                    return <Typography variant={"body1"} style={{color: "green"}}>
-                        Application acceptée
-                    </Typography>;
-                }
+                if (AuthenticationService.getCurrentUserRole() === "admin" && offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER")
+                    return <Typography variant={"body1"} style={{color: "green"}}>Application acceptée</Typography>
+
                 return <Typography>
                     Application acceptée:
                     <Checkbox
                         value="state"
-                        checked={
-                            offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"
-                        }
+                        checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
                         onChange={() => {
-                            var copy = {...offer};
-                            copy.applications[i].state =
-                                copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"
-                                    ? "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION"
-                                    : "STUDENT_HIRED_BY_EMPLOYER";
-                            api
-                                .put(
-                                    `applications/state/${offer.applications[i].id}`,
-                                    offer.applications[i]
-                                )
+                            var copy = {...offer}
+                            copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
+                                "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
+                            api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
                                 .then(r => {
-                                    if (r) {
-                                        copy.applications[i].state = r.data.state;
-                                    }
-                                    setOffer(copy);
-                                });
+                                    if (r) copy.applications[i].state = r.data.state
+                                    setOffer(copy)
+                                })
                         }}
                         inputProps={{"aria-label": "state"}}
                     />
-                </Typography>;
+                </Typography>
             case "APPLICATION_REJECTED_BY_EMPLOYER":
             case "STUDENT_REJECTED_BY_EMPLOYER":
                 return <Typography variant={"body1"} style={{color: "red"}}>
                     L'employeur a refusé la demande
-                </Typography>;
+                </Typography>
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return <Typography variant={"body1"} style={{color: "blue"}}>
                     En attente de la décision de l'étudiant
-                </Typography>;
+                </Typography>
             case "JOB_OFFER_ACCEPTED_BY_STUDENT":
                 return <Typography variant={"body1"} style={{color: "green"}}>
                     L'étudiant a été embauché
@@ -83,40 +69,29 @@ export default function ApplicationList() {
                     >
                         Genérer le contrat
                     </Link>}
-                </Typography>;
+                </Typography>
             case "JOB_OFFER_DENIED_BY_STUDENT":
                 return <Typography variant={"body1"} style={{color: "red"}}>
                     L'étudiant a refusé l'offre de stage
-                </Typography>;
+                </Typography>
             default:
-                return "";
+                return ""
         }
     }
 
     function evaluationDirection() {
-        if (AuthenticationService.getCurrentUserRole() === "admin")
-            return "/dashboard/businessEvaluation";
-        else return "/dashboard/evaluateStudent";
+        return (AuthenticationService.getCurrentUserRole() === "admin") ? "/dashboard/businessEvaluation" : "/dashboard/evaluateStudent"
     }
 
     function roleCondition(i) {
-        if (AuthenticationService.getCurrentUserRole() === "admin")
-            return offer.applications[i].contract.businessEvaluation === null;
-        else return offer.applications[i].contract.internEvaluation === null;
+        return (AuthenticationService.getCurrentUserRole() === "admin") ?
+            offer.applications[i].contract.businessEvaluation === null : offer.applications[i].contract.internEvaluation === null
     }
 
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer
-            documents={(offer.applications ? offer.applications : []).map(
-                (o) => o.resume.file
-            )}
-            title={
-                <span>
-            Application
-            <br/>
-                    {offer.title}
-          </span>
-            }
+            documents={(offer.applications ? offer.applications : []).map((o) => o.resume.file)}
+            title={<span>Application<br/>{offer.title}</span>}
         >
             {(i, setCurrent) => <div key={i}>
                 <button
@@ -124,15 +99,11 @@ export default function ApplicationList() {
                     className={[classes.linkButton, classes.fileButton].join(" ")}
                     autoFocus={i === 0}
                     onClick={() => {
-                        setCurrent(i);
-                        setCurrentIndex(i);
+                        setCurrent(i)
+                        setCurrentIndex(i)
                     }}
                 >
-                    <Typography
-                        color={"textPrimary"}
-                        variant={"h5"}
-                        style={{display: "block"}}
-                    >
+                    <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
                         {offer.applications[i].student.firstName}
                         {offer.applications[i].student.lastName}
                     </Typography>
@@ -166,13 +137,11 @@ export default function ApplicationList() {
                         }}
                         style={{display: "block"}}
                     >
-                        {AuthenticationService.getCurrentUserRole() === "admin"
-                            ? "Évaluer l'entreprise"
-                            : "Évaluer l'étudiant"}
+                        {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
                     </Link>}
                 </div>}
                 <hr/>
             </div>}
         </PdfSelectionViewer>
-    </div>;
+    </div>
 }

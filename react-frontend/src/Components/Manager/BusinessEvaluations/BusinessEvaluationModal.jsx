@@ -8,64 +8,68 @@ import React from "react";
 import useStyles from "../../Utils/useStyles";
 
 export default function BusinessEvaluationModal({isOpen, data, hide}) {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return <Dialog open={isOpen} onClose={hide} fullWidth={true} fullScreen={true} maxWidth={'md'}>
         <DialogTitle id="alert-dialog-title">{"ÉVALUATION DU MILIEU DE STAGE"}</DialogTitle>
         <DialogContent>
             {data ? <div>
                 <div className={classes.evaluationSections}>
-                    <Typography variant="h5">
-                        ÉVALUATION
+                    <Typography variant="h5">ÉVALUATION</Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
+                            Stage:
+                        </span> {data.evaluationCriterias.internshipCount}
                     </Typography>
                     <Typography>
-                        <span
-                            className={classes.evaluationCriterias}>Stage:</span> {data.evaluationCriterias.internshipCount}
+                        <span className={classes.evaluationCriterias}>
+                            Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage:
+                        </span> {data.evaluationCriterias.workAsAnnoncement}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Les tâches confiées au stagiaire sont conformes aux tâches
-                            annoncées dans l’entente de
-                            stage:</span> {data.evaluationCriterias.workAsAnnoncement}
+                        <span className={classes.evaluationCriterias}>
+                            Des mesures d’accueil facilitent l’intégration du nouveau stagiaire:
+                        </span> {data.evaluationCriterias.easyIntigration}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Des mesures d’accueil facilitent l’intégration du nouveau
-                            stagiaire:</span> {data.evaluationCriterias.easyIntigration}
+                        <span className={classes.evaluationCriterias}>
+                            Le temps réel consacré à l’encadrement du stagiaire est suffisant:
+                        </span> {data.evaluationCriterias.sufficientTime}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Le temps réel consacré à l’encadrement du stagiaire est
-                            suffisant:</span> {data.evaluationCriterias.sufficientTime}
+                        <span className={classes.evaluationCriterias}>
+                            L’environnement de travail respecte les normes d’hygiène et de sécurité au travail:
+                        </span> {data.evaluationCriterias.securityWorkPlace}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>L’environnement de travail respecte les normes d’hygiène et de
-                            sécurité au
-                            travail:</span> {data.evaluationCriterias.securityWorkPlace}
+                        <span className={classes.evaluationCriterias}>
+                            Le climat de travail est agréable:
+                        </span> {data.evaluationCriterias.pleasantEnvironnement}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Le climat de travail est
-                            agréable:</span> {data.evaluationCriterias.pleasantEnvironnement}
+                        <span className={classes.evaluationCriterias}>
+                            Le milieu de stage est accessible par transport en commun:
+                        </span> {data.evaluationCriterias.accessiblePlace}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Le milieu de stage est accessible par transport en
-                            commun:</span> {data.evaluationCriterias.accessiblePlace}
+                        <span className={classes.evaluationCriterias}>
+                            Le salaire offert {data.evaluationCriterias.salary} est intéressant pour le stagiaire:
+                        </span> {data.evaluationCriterias.goodSalary}
                     </Typography>
                     <Typography>
-                        <span
-                            className={classes.evaluationCriterias}>Le salaire offert {data.evaluationCriterias.salary} est
-                            intéressant pour le
-                            stagiaire:</span> {data.evaluationCriterias.goodSalary}
+                        <span className={classes.evaluationCriterias}>
+                            La communication avec le superviseur de stage facilite le déroulement du stage:
+                        </span> {data.evaluationCriterias.supervisorFacilitatesIntern}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>La communication avec le superviseur de stage facilite le
-                            déroulement du
-                            stage:</span> {data.evaluationCriterias.supervisorFacilitatesIntern}
+                        <span className={classes.evaluationCriterias}>
+                            L’équipement fourni est adéquat pour réaliser les tâches confiées:
+                        </span> {data.evaluationCriterias.adequateEquipement}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>L’équipement fourni est adéquat pour réaliser les tâches
-                            confiées:</span> {data.evaluationCriterias.adequateEquipement}
-                    </Typography>
-                    <Typography>
-                        <span className={classes.evaluationCriterias}>Le volume de travail est
-                            acceptable:</span> {data.evaluationCriterias.accetableWorkload}
+                        <span className={classes.evaluationCriterias}>
+                            Le volume de travail est acceptable:
+                        </span> {data.evaluationCriterias.accetableWorkload}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>Préciser le nombre d’heures/semaine: </span>
@@ -74,8 +78,9 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                         Troisième mois: {data.evaluationCriterias.hoursOfWeekFirstMonth}h.
                     </Typography>
                     <Typography>
-                        <span
-                            className={classes.evaluationCriterias}>Commentaires:</span> {data.evaluationCriterias.comment}
+                        <span className={classes.evaluationCriterias}>
+                            Commentaires:
+                        </span> {data.evaluationCriterias.comment}
                     </Typography>
                 </div>
                 <div className={classes.evaluationSections}>
