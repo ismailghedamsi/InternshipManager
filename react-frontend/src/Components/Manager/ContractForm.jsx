@@ -12,7 +12,6 @@ import {useApi} from "../Utils/Hooks";
 import useStyles from "../Utils/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = value => "Doit avoir moins que " + value.max + " caractères";
 const requiredFieldMsg = "Ce champs est requis";
 export default function ContractForm() {
     const classes = useStyles();

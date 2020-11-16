@@ -68,11 +68,11 @@ function DataTable() {
     const [isEditModalOpen, openEditModal, closeEditModal] = useModal()
 
     useEffect(() => {
-        // api.get("/admins?page=" + currentPage + "&itemsPerPage=" + rowsPerPage)
-        //     .then(response => {
-        //         setRows(response.data.content)
-        //         setItemCount(response.data.totalElements)
-        //     })
+        api.get("/admins?page=" + currentPage + "&itemsPerPage=" + rowsPerPage)
+            .then(response => {
+                setRows(response.data.content)
+                setItemCount(response.data.totalElements)
+            })
     }, [currentPage, rowsPerPage]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return <ThemeProvider theme={createMuiTheme(locales['frFR'])}>
@@ -107,15 +107,14 @@ function EditManager({manager, isOpen, hide, setRows}) {
     const classes = useStyles()
 
     function toggleManagerDisabledState(manager) {
-        console.log("TOGGLE MANAGER DISABLED STATE")
-        return api.put("admins/toggleDisabled/" + manager.id, {})
+        return api.put("admins/toggle/" + manager.id, {})
             .then(() => {
                 hide()
             })
     }
 
     return isOpen && <Dialog open={isOpen} onClose={hide}>
-            <DialogTitle id="manager-modal-title">{"Modifier gestionnaire de stage"}</DialogTitle>
+            <DialogTitle>{"Modifier gestionnaire de stage"}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     <Formik onSubmit={toggleManagerDisabledState} initialValues={{}}>
@@ -220,6 +219,100 @@ function EditManager({manager, isOpen, hide, setRows}) {
                 </Button>
             </DialogActions>
         </Dialog>;
+}
+
+function CreateManager({isOpen, hide, setRows}) {
+    const api = useApi()
+    const classes = useStyles()
+
+    return isOpen && <Dialog open={isOpen} onClose={hide}>
+        <DialogTitle>{"Créer gestionnaire de stage"}</DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                <Formik
+                    onSubmit={async values =>
+                        api.post("admins", values)
+                        .then(hide)
+                    }
+
+                    validationSchema={yup.object()
+                    .shape({
+                        username: yup.string().trim().required(requiredFieldMsg),
+                        newPassword: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
+                        newConfirm: yup.string()
+                        .oneOf([yup.ref('newPassword'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
+                    })}
+                    validateOnBlur={false}
+                    validateOnChange={false}
+                    enableReinitialize={true}
+                    initialValues={{
+                        username: manager.username,
+                        newPassword: '',
+                        newConfirm: ''
+                    }}
+                >
+                    {({isSubmitting}) => <Form className={classes.form}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Field
+                                    component={TextField}
+                                    name="username"
+                                    id="username"
+                                    variant="outlined"
+                                    label="Nom d'utilisateur"
+                                    disabled
+                                    required
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Field
+                                    component={TextField}
+                                    name="newPassword"
+                                    id="newPassword"
+                                    variant="outlined"
+                                    label="Nouveau mot de passe"
+                                    type={"password"}
+                                    required
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Field
+                                    component={TextField}
+                                    name="newConfirm"
+                                    id="newConfirm"
+                                    variant="outlined"
+                                    label="Confirmez"
+                                    type={"password"}
+                                    required
+                                    fullWidth
+                                />
+                            </Grid>
+                        </Grid>
+                        <br/>
+                        {isSubmitting && <LinearProgress/>}
+                        <Button
+                            type={"submit"}
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            size={"large"}
+                            className={classes.submit}
+                            disabled={isSubmitting}
+                        >
+                            Changer le mot de passe
+                        </Button>
+                    </Form>}
+                </Formik>
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={hide} color="primary">
+                Annuler
+            </Button>
+        </DialogActions>
+    </Dialog>;
 }
 
 EditManager.propTypes = {
