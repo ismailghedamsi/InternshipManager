@@ -94,10 +94,10 @@ public class MailSendingService {
     }
 
     public String getAppropriateEmailSubject(final Contract contract, final EmailContentsType emailType) {
-        String subjectSuffix = (emailType == EmailContentsType.NOTIFY_ABOUT_EVALUATION_CREATED ? "" :
-                " - Offre \"" + contract.getStudentApplication().getOffer().getTitle() + "\"") + " - "
-                + contract.getStudentApplication().getStudent().getLastName() + " "
-                + contract.getStudentApplication().getStudent().getFirstName();
+        String subjectSuffix = (emailType == EmailContentsType.NOTIFY_ABOUT_EVALUATION_CREATED) ? "" :
+                (" - Offre \"" + contract.getStudentApplication().getOffer().getTitle() + "\"" + " - "
+                        + contract.getStudentApplication().getStudent().getLastName() + " "
+                        + contract.getStudentApplication().getStudent().getFirstName());
         switch (emailType) {
             case NOTIFY_ABOUT_NEW_CONTRACT:
                 return "NOUVEAU CONTRAT" + subjectSuffix;
@@ -147,7 +147,7 @@ public class MailSendingService {
                         + "<br/>Vous le trouverez ci-joint.";
             case NOTIFY_ABOUT_EVALUATION_CREATED:
             default:
-                return "Une évaluation a été remplie pour l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName() + "."
+                return "Une évaluation a été remplie pour l'étudiant " + "."
                         + "<br/>Veuillez consulter l'évaluation sur notre application.";
 
         }

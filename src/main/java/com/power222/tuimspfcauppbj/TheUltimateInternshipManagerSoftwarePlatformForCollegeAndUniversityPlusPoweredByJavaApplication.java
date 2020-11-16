@@ -62,7 +62,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
             var admin = Admin.builder()
                     .username("admin")
                     .password(passwordEncoder.encode("password"))
-                    .email("andrei.belkin.0@pm.me")
+                    .email("projetemployeur@gmail.com")
                     .name("Jacob Blake")
                     .build();
 
