@@ -1,7 +1,6 @@
 import {Card, CardContent, Grid, Typography} from "@material-ui/core";
 import {ErrorMessage, Field} from "formik";
 import {SimpleFileUpload, TextField} from "formik-material-ui";
-import {DatePicker} from "formik-material-ui-pickers";
 import React from "react";
 import {useLocation} from "react-router-dom";
 import * as yup from "yup";
@@ -870,23 +869,14 @@ export default function Evaluationform() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Field
-                                component={SimpleFileUpload}
-                                type={"file"}
-                                name="signature.image"
-                                id="file"
-                                variant="outlined"
-                                label="Fichier JPG/PNG"
-                                fullwidth
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field
-                                component={DatePicker}
-                                disabled
-                                label="Date d'évaluation"
-                                format="MM/dd/yyyy"
-                                name="signature.date"
+                                    component={SimpleFileUpload}
+                                    type={"file"}
+                                    name="signature.image"
+                                    id="file"
+                                    variant="outlined"
+                                    label="Fichier signature JPG/PNG"
+                                    fullwidth
+                                    required
                             />
                         </Grid>
                     </Grid>

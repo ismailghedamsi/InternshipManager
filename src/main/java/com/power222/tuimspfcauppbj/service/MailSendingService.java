@@ -98,7 +98,6 @@ public class MailSendingService {
                 " - Offre \"" + contract.getStudentApplication().getOffer().getTitle() + "\"") + " - "
                 + contract.getStudentApplication().getStudent().getLastName() + " "
                 + contract.getStudentApplication().getStudent().getFirstName();
-
         switch (emailType) {
             case NOTIFY_ABOUT_NEW_CONTRACT:
                 return "NOUVEAU CONTRAT" + subjectSuffix;
