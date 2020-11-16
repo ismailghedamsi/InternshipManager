@@ -143,7 +143,7 @@ DataTableBody.propTypes = {
 
 function DataTable({report}) {
     const api = useApi()
-    const [itemCount, setItemCount] = useState(-1)
+    const [itemCount, setItemCount] = useState(0)
     const [currentPage, setCurrentPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [rows, setRows] = useState([])
@@ -195,8 +195,8 @@ export default function Reports() {
     const [report, setReport] = useState(0)
 
     return <div className={classes.main} style={{overflowY: "auto"}}>
-        <Typography variant={"h5"}>
-            Rapport:&ensp;
+        <Typography variant={"h5"} display={"block"} style={{marginTop: 10}}>
+            &ensp;Rapport:&ensp;
             <Button onClick={() => setDrawerOpen(true)}>
                 <Typography variant={"button"}>
                     <i className="fa fa-bars"/>&ensp;{reports[report]}

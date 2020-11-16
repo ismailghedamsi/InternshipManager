@@ -1,202 +1,241 @@
-import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Hooks";
-import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PdfDocument";
-import useStyles from "../Utils/useStyles";
+import { Button, Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import * as locales from '@material-ui/core/locale';
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import TableCell from "@material-ui/core/TableCell";
+import Typography from "@material-ui/core/Typography";
+import ThemeProvider from "@material-ui/styles/ThemeProvider";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import PropTypes from 'prop-types';
+import { default as React, useEffect, useState } from 'react';
+import * as yup from "yup";
+import { useApi, useModal } from "../Utils/Hooks";
+import useStyles from "../Utils/useStyles";
 
-export default function ManagerStatus() {
-    const offersTabIndex = 0;
-    const interviewsTabIndex = 1;
-    const classes = useStyles();
-    const api = useApi();
-    const parseDate = useDateParser();
-    const parseTimeFromDate = useTimeParserFromDate();
-    const [employers, setEmployers] = useState([{}]);
-    const [currentEmployerOffers, setCurrentEmployerOffers] = useState([{}]);
-    const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([{}]);
-    const [currentEmployerIndex, setCurrentEmployerIndex] = useState(0);
-    const [isPdfOpen, openPdf, closePdf] = useModal();
-    const [currentDoc, setCurrentDoc] = useState('');
-    const [currentSubtab, setCurrentSubtab] = useState(0);
+const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+
+function DataTableHeader() {
+    return <TableRow>
+        <TableCell>Nom</TableCell>
+        <TableCell>Adresse courriel</TableCell>
+        <TableCell>État du compte</TableCell>
+        <TableCell>Modifier</TableCell>
+    </TableRow>
+}
+
+function DataTableBody({rows, setCurrentManager, openEditModal}) {
+    const classes = useStyles()
+
+    return rows.map(admin =>
+        <TableRow key={admin.id}>
+            <TableCell>{admin.name}</TableCell>
+            <TableCell>{admin.email}</TableCell>
+            <TableCell>{admin.disabled ? "Inactif" : "Actif"}</TableCell>
+            <TableCell>
+                <Button type={"button"} className={classes.linkButton} onClick={() => {
+                    setCurrentManager(admin)
+                    openEditModal()
+                }}>
+                    <i className={"fa fa-pencil-square-o"}/>
+                </Button>
+            </TableCell>
+        </TableRow>
+    )
+}
+
+DataTableBody.propTypes = {
+    rows: PropTypes.array.isRequired,
+    setCurrentManager: PropTypes.func.isRequired,
+    openEditModal: PropTypes.func.isRequired
+}
+
+function DataTable() {
+    const api = useApi()
+    const [itemCount, setItemCount] = useState(0)
+    const [currentPage, setCurrentPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rows, setRows] = useState([])
+    const [currentManager, setCurrentManager] = useState({})
+    const [isEditModalOpen, openEditModal, closeEditModal] = useModal()
 
     useEffect(() => {
-        api.get("employers").then(resp => {
-            setEmployers(resp ? resp.data : [])
-        })
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+        // api.get("/admins?page=" + currentPage + "&itemsPerPage=" + rowsPerPage)
+        //     .then(response => {
+        //         setRows(response.data.content)
+        //         setItemCount(response.data.totalElements)
+        //     })
+    }, [currentPage, rowsPerPage]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        api.get("/offers/employer/" + employers[currentEmployerIndex].username)
-            .then(r => {
-                setCurrentEmployerOffers(r.data);
+    return <ThemeProvider theme={createMuiTheme(locales['frFR'])}>
+        <TableContainer>
+            <Table>
+                <TableHead>
+                    <DataTableHeader/>
+                </TableHead>
+                <TableBody>
+                    <DataTableBody rows={rows} setCurrentManager={setCurrentManager} openEditModal={openEditModal}/>
+                </TableBody>
+                <TableFooter>
+                    <tr>
+                        <TablePagination
+                            component="td"
+                            count={itemCount}
+                            page={currentPage}
+                            onChangePage={(e, page) => setCurrentPage(page)}
+                            rowsPerPage={rowsPerPage}
+                            onChangeRowsPerPage={({target: {value}}) => setRowsPerPage(parseInt(value))}
+                        />
+                    </tr>
+                </TableFooter>
+            </Table>
+        </TableContainer>
+        <EditManager manager={currentManager} isOpen={isEditModalOpen} hide={closeEditModal} setRows={setRows}/>
+    </ThemeProvider>
+}
+
+function EditManager({manager, isOpen, hide, setRows}) {
+    const api = useApi()
+    const classes = useStyles()
+
+    function toggleManagerDisabledState(manager) {
+        console.log("TOGGLE MANAGER DISABLED STATE")
+        return api.put("admins/toggleDisabled/" + manager.id, {})
+            .then(() => {
+                hide()
             })
-    }, [currentEmployerIndex, employers]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        if (typeof employers[currentEmployerIndex].id !== "undefined") {
-            api.get("/interviews/employer/" + employers[currentEmployerIndex].id)
-                .then(r => {
-                    setCurrentEmployerInterviews(r ? r.data : []);
-                })
-        }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-
-    function getCurrentEmployerInterviews(index) {
-        api.get("/interviews/employer/" + employers[index].id)
-            .then(r => {
-                setCurrentEmployerInterviews(r ? r.data : []);
-            })
     }
 
-    function hiredStudentsNames(o) {
-        return o.reviewState === "APPROVED" ?
-            o.applications.map(elem =>
-                <Typography
-                    style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
-            )
-            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>;
-    }
-
-    function printOfferStatus(offer) {
-        if (offer.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
-        else if (offer.reviewState === "DENIED")
-            return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>;
-        else
-            return <span style={{color: "green"}}>Approuvé</span>;
-    }
-
-    function InterviewStatus(props) {
-        function getInterviewState(interview) {
-            if (interview.reviewState === "PENDING")
-                return <span style={{color: "blue"}}>En attente</span>;
-            else if (interview.reviewState === "DENIED")
-                return <span style={{color: "red"}}>Rejeté<span
-                    style={{color: "black"}}> : {interview.reasonForRejection} </span></span>;
-            else
-                return <span style={{color: "green"}}>Approuvé</span>;
-        }
-
-        return <div>
-            <Typography>
-                Entrevue pour
-                l'étudiant {props.interview.studentApplication ? props.interview.studentApplication.student.firstName + " " + props.interview.studentApplication.student.lastName : ""}
-            </Typography>
-            <Typography>
-                Date : {props.interview ? parseDate(props.interview.date) : ""}
-            </Typography>
-            <Typography>
-                Heure : {props.interview ? parseTimeFromDate(props.interview.date) : ""}
-            </Typography>
-            <Typography>Titre de l'offre :
-                {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
-            <Typography>
-                État : {getInterviewState(props.interview)}
-            </Typography>
-        </div>;
-    }
-
-    return <Grid
-        container
-        spacing={2}
-        className={classes.main}
-    >
-        <Grid item xs={5} className={classes.list}>
-            <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                État des employeurs
-            </Typography>
-            {employers.map((item, i) =>
-                <div key={i}>
-                    <button type={"button"}
-                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(' ')}
-                            onClick={() => {
-                                setCurrentEmployerIndex(i);
-                            }}
-                    >
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {employers[i].companyName}
-                        </Typography>
-                    </button>
-                    {currentEmployerIndex === i &&
-                    <div>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
-                            onClick={() => setCurrentSubtab(0)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                Offers
-                            </Typography>
-                        </button>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
-                            onClick={() => {
-                                setCurrentSubtab(1)
-                                getCurrentEmployerInterviews(currentEmployerIndex)
-                            }
-                            }>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                Inteviews
-                            </Typography>
-                        </button>
-                    </div>
-                    }
-                </div>
-            )}
-        </Grid>
-        <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
-            {
-                currentSubtab === offersTabIndex ?
-                    currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                            return <div>
-                                <Typography>
-                                    <button type={"button"} className={[classes.linkButton].join(" ")}
-                                            onClick={() => {
-                                                setCurrentDoc(o.file);
-                                                openPdf();
-                                            }}
+    return isOpen && <Dialog open={isOpen} onClose={hide}>
+            <DialogTitle id="manager-modal-title">{"Modifier gestionnaire de stage"}</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    <Formik onSubmit={toggleManagerDisabledState} initialValues={{}}>
+                        {({isSubmitting}) =>
+                            <Form>
+                                    État du compte : {manager.disabled}
+                                    <Button type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        disabled={isSubmitting}
                                     >
-                                        {o.title}
-                                    </button>
-                                </Typography>
-                                <OfferDetails key={k} offer={o}/>
-                                <Typography>
-                                    <span>Liste des étudiants selectionnés</span>
-                                </Typography>
-                                {hiredStudentsNames(o)}
-                                {printOfferStatus(o)}
-                                <hr/>
-                            </div>
-                        })
-                        : "L'employeur n'a aucune offre"
-                    : ""
-            }
-            {
-                currentSubtab === interviewsTabIndex ?
-                    currentSubtab === interviewsTabIndex && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
-                            return <div>
-                                <InterviewStatus key={index} classes={classes} interview={interview}/>
-                                <hr/>
-                            </div>
-                        })
-                        : "L'employeur n'a programmé aucune entrevue"
-                    : ""
-            }
-        </Grid>
-        <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-            <DialogContent className={classes.viewbox}>
-                <PdfDocument document={currentDoc}/>
+                                        {manager.disabled ? "Activer" : "Désactiver"}
+                                        {isSubmitting && <CircularProgress size={18}/>}
+                                    </Button>
+                                </Form>
+                        }
+                    </Formik>
+                    <br/>
+                    Changer le mot de passe :
+                    <Formik
+                        onSubmit={async values =>
+                            api.put("admins/password", values)
+                                .then(hide)
+                        }
+
+                        validationSchema={yup.object()
+                            .shape({
+                                username: yup.string().trim().required(requiredFieldMsg),
+                                newPassword: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
+                                newConfirm: yup.string()
+                                    .oneOf([yup.ref('newPassword'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
+                            })}
+                        validateOnBlur={false}
+                        validateOnChange={false}
+                        enableReinitialize={true}
+                        initialValues={{
+                            username: manager.username,
+                            newPassword: '',
+                            newConfirm: ''
+                        }}
+                    >
+                        {({isSubmitting}) => <Form className={classes.form}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Field
+                                        component={TextField}
+                                        name="username"
+                                        id="username"
+                                        variant="outlined"
+                                        label="Nom d'utilisateur"
+                                        disabled
+                                        required
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Field
+                                        component={TextField}
+                                        name="newPassword"
+                                        id="newPassword"
+                                        variant="outlined"
+                                        label="Nouveau mot de passe"
+                                        type={"password"}
+                                        required
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Field
+                                        component={TextField}
+                                        name="newConfirm"
+                                        id="newConfirm"
+                                        variant="outlined"
+                                        label="Confirmez"
+                                        type={"password"}
+                                        required
+                                        fullWidth
+                                    />
+                                </Grid>
+                            </Grid>
+                            <br/>
+                            {isSubmitting && <LinearProgress/>}
+                            <Button
+                                type={"submit"}
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                size={"large"}
+                                className={classes.submit}
+                                disabled={isSubmitting}
+                            >
+                                Changer le mot de passe
+                            </Button>
+                        </Form>}
+                    </Formik>
+                </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={closePdf} color="primary">
-                    Fermer
+                <Button onClick={hide} color="primary">
+                    Annuler
                 </Button>
             </DialogActions>
-        </Dialog>
-    </Grid>;
+        </Dialog>;
+}
+
+EditManager.propTypes = {
+    manager: PropTypes.object.isRequired,
+    isOpen: PropTypes.any.isRequired,
+    hide: PropTypes.func.isRequired,
+    setRows: PropTypes.func.isRequired
+}
+
+export default function Managers() {
+    const classes = useStyles();
+
+    return <div className={classes.main} style={{overflowY: "auto"}}>
+        <Typography variant={"h5"} display={"block"} style={{marginTop: 10}}>
+            &ensp;Gestionnaires de stage
+        </Typography>
+        <DataTable/>
+    </div>
 }
