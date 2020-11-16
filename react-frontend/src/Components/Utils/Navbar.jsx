@@ -106,7 +106,7 @@ const Links = {
             url: '/dashboard/signContract'
         },
         {
-            title: 'Liste des evaluations de stagiaire',
+            title: 'Liste des évaluations de stagiaire',
             url: '/dashboard/evaluationList'
         }
     ]
