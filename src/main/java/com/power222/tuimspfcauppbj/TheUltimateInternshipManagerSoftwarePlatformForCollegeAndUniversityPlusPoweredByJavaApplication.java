@@ -28,7 +28,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         SpringApplication.run(TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplication.class, args);
     }
 
-    @SuppressWarnings({"MagicNumber", "ConstructorWithTooManyParameters", "unused", "OverlyCoupledClass", "OverlyLongMethod"})
+    @SuppressWarnings({"MagicNumber", "ConstructorWithTooManyParameters", "OverlyCoupledClass", "OverlyLongMethod"})
     @Profile("!noBootstrappingTests")
     @Component
     public static class BootstrapConfig implements CommandLineRunner {
@@ -147,7 +147,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
             var internshipOffer = internshipRepo.save(InternshipOffer.builder()
                     .title("Offre de stage bootstrappée")
-                    .details(InternshipOfferDetails.builder()
+                    .details(InternshipOffer.InternshipOfferDetails.builder()
                             .description("Description bootstrappée - Développement d'applications Web trois tiers.")
                             .salary(15.98)
                             .creationDate(LocalDate.now())

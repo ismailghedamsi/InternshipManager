@@ -28,7 +28,7 @@ export default function StudentStatus() {
                 gutterBottom={true}
                 className={classes.title}
             >
-                Liste des évalautions des étudiants
+                Liste des évaluations des étudiants
             </Typography>
             {evaluations.map((item, i) => <div key={i}>
                 <button

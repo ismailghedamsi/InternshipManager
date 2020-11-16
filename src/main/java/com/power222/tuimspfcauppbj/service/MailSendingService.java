@@ -113,7 +113,7 @@ public class MailSendingService {
                 return "CONTRAT SIGNÉ" + subjectSuffix;
             case NOTIFY_ABOUT_EVALUATION_CREATED:
             default:
-                return "NOUVELLE ÉVALUATION DE STAGE" + subjectSuffix;
+                return "NOUVELLE ÉVALUATION DE STAGE";
         }
     }
 
@@ -137,17 +137,17 @@ public class MailSendingService {
                         + "<br/>Veuillez consulter le contract sur notre application.";
             case NOTIFY_ABOUT_CONTRACT_REJECTION:
                 return "Le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                        + "pour l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName()
+                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName()
                         + "a été rejeté par l'employeur pour la raison suivante :"
                         + "<br/>    " + contract.getReasonForRejection();
             case NOTIFY_AND_ATTACH_SIGNED_CONTRACT:
                 return "Le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                        + "pour l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName()
+                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName()
                         + "a été signé par tous les partis et est prêt."
                         + "<br/>Vous le trouverez ci-joint.";
             case NOTIFY_ABOUT_EVALUATION_CREATED:
             default:
-                return "Une évaluation a été remplie pour l'étudiant " + "."
+                return "Une évaluation a été remplie pour l'étudiant."
                         + "<br/>Veuillez consulter l'évaluation sur notre application.";
 
         }

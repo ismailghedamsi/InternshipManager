@@ -76,6 +76,7 @@ export function FormikStepper({application, initialValues, children}) {
                     const dto = {...values};
                     dto.contract = application.contract;
                     dto.signature.image = await readFile(values.signature.image);
+                    console.log(dto)
                     api.post(postEndPoint(), dto)
                         .then(() => history.push(pageRedirection()));
                     setCompleted(true);
