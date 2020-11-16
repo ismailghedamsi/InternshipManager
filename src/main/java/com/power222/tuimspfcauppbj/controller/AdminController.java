@@ -34,7 +34,7 @@ public class AdminController {
     @RequestMapping("/toggle/{adminId}")
     public ResponseEntity<Void> disableAdmin(@PathVariable long adminId) {
         return svc.toggleDisabledAdmin(adminId)
-                .map(v -> ResponseEntity.status(HttpStatus.CREATED).<Void>build())
+                .map(v -> ResponseEntity.ok().<Void>build())
                 .orElse(ResponseEntity.notFound().build());
     }
 
