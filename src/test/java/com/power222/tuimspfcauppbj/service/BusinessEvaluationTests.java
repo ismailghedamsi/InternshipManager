@@ -80,26 +80,6 @@ public class BusinessEvaluationTests {
     }
 
     @Test
-    void updatBusinessEvaluationTest() {
-        var initialId = expectedBusinessEvaluation.getId();
-        var alteredId = 100;
-        var alteredIntern = expectedBusinessEvaluation.toBuilder().id(alteredId).build();
-        when(businessEvaluationRepository.findById(initialId)).thenReturn(Optional.of(expectedBusinessEvaluation));
-        when(businessEvaluationRepository.saveAndFlush(alteredIntern)).thenReturn(expectedBusinessEvaluation);
-
-        var actual = businessEvaluationService.updateBusinessEvaluation(initialId, alteredIntern);
-
-        assertThat(actual).contains(expectedBusinessEvaluation);
-    }
-
-    @Test
-    void updateBusinessEvaluationWithNonexistentIdTest() {
-        var actual = businessEvaluationService.updateBusinessEvaluation(expectedBusinessEvaluation.getId(), expectedBusinessEvaluation);
-
-        assertThat(actual).isEmpty();
-    }
-
-    @Test
     void deleteBusinessEvaluationByIdTest() {
         var idToDelete = expectedBusinessEvaluation.getId();
 

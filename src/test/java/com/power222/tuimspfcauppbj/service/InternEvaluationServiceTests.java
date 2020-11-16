@@ -79,26 +79,6 @@ public class InternEvaluationServiceTests {
     }
 
     @Test
-    void updateInternEvaluationTest() {
-        var initialId = expectedInternEvaluation.getId();
-        var alteredId = 100;
-        var alteredEvaluation = expectedInternEvaluation.toBuilder().id(alteredId).build();
-        when(internRepo.findById(initialId)).thenReturn(Optional.of(expectedInternEvaluation));
-        when(internRepo.saveAndFlush(alteredEvaluation)).thenReturn(expectedInternEvaluation);
-
-        var actual = internSvc.updateInternEvaluation(initialId, alteredEvaluation);
-
-        assertThat(actual).contains(expectedInternEvaluation);
-    }
-
-    @Test
-    void updateInterEvaluationWithNonexistentIdTest() {
-        var actual = internSvc.updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation);
-
-        assertThat(actual).isEmpty();
-    }
-
-    @Test
     void deleteInterEvaluationByIdTest() {
         var idToDelete = expectedInternEvaluation.getId();
 
