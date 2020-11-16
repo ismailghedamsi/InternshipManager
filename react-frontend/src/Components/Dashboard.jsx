@@ -32,7 +32,6 @@ import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
 import {RoleProtectedRoute} from "./Utils/Routes";
 
-
 const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
