@@ -30,16 +30,6 @@ public class BusinessEvaluationService {
         return businessEvaluationRepo.findById(id);
     }
 
-    public Optional<BusinessEvaluation> updateBusinessEvaluation(long id, BusinessEvaluation businessEvaluation) {
-        return businessEvaluationRepo.findById(id)
-                .map(oldBusinessEvaluation -> {
-                    businessEvaluation.setId(oldBusinessEvaluation.getId());
-                    businessEvaluation.setSemester(businessEvaluation.getSemester());
-                    return Optional.of(businessEvaluationRepo.saveAndFlush(businessEvaluation));
-                })
-                .orElse(Optional.empty());
-    }
-
     @Transactional
     public void deleteBusinessEvaluationById(long id) {
         businessEvaluationRepo.deleteById(id);

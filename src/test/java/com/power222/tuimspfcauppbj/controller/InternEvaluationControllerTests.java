@@ -112,29 +112,6 @@ public class InternEvaluationControllerTests {
     }
 
     @Test
-    void updateInterEvaluationTest() throws Exception {
-        when(svc.updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation)).thenReturn(Optional.ofNullable(expectedInternEvaluation));
-
-        MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedInternEvaluation)))
-                .andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        verify(svc, times(1)).updateInternEvaluation(expectedInternEvaluation.getId(), expectedInternEvaluation);
-    }
-
-    @Test
-    void updateInterEvaluationNoValidIdTest() throws Exception {
-        MvcResult result = mvc.perform(put("/api/internEvaluation/" + expectedInternEvaluation.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedInternEvaluation)))
-                .andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
-    }
-
-    @Test
     void deleteInterEvaluationTest() throws Exception {
         MvcResult result = mvc.perform(delete("/api/internEvaluation/1")).andReturn();
 

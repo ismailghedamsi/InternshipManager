@@ -34,12 +34,6 @@ public class InternEvaluationController {
         return svc.createAndSaveNewInternEvaluation(newInternEvaluation);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<InternEvaluation> updateInternEvaluation(@PathVariable long id, @RequestBody InternEvaluation requestBody) {
-        return svc.updateInternEvaluation(id, requestBody).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @DeleteMapping("/{id}")
     public void deleteInternEvaluationByid(@PathVariable long id) {
         svc.deleteInternEvaluationById(id);

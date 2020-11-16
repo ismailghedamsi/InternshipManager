@@ -111,28 +111,6 @@ public class BusinessEvaluationControllerTests {
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
-    @Test
-    void updateBusinessEvaluationTest() throws Exception {
-        when(svc.updateBusinessEvaluation(expectedBusinessEvaluation.getId(), expectedBusinessEvaluation)).thenReturn(Optional.ofNullable(expectedBusinessEvaluation));
-
-        MvcResult result = mvc.perform(put("/api/businessEvaluation/" + expectedBusinessEvaluation.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedBusinessEvaluation)))
-                .andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        verify(svc, times(1)).updateBusinessEvaluation(expectedBusinessEvaluation.getId(), expectedBusinessEvaluation);
-    }
-
-    @Test
-    void updateBusinessEvaluationNoValidIdTest() throws Exception {
-        MvcResult result = mvc.perform(put("/api/businessEvaluation/" + expectedBusinessEvaluation.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedBusinessEvaluation)))
-                .andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
-    }
 
     @Test
     void deleteBusinessEvaluationTest() throws Exception {
