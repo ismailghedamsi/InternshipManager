@@ -34,16 +34,6 @@ public class InternEvaluationService {
         return InterEvaluationRepo.findById(id);
     }
 
-    public Optional<InternEvaluation> updateInternEvaluation(long id, InternEvaluation internEvaluation) {
-        return InterEvaluationRepo.findById(id)
-                .map(oldInternEvaluation -> {
-                    internEvaluation.setId(oldInternEvaluation.getId());
-                    internEvaluation.setSemester(oldInternEvaluation.getSemester());
-                    return Optional.of(InterEvaluationRepo.saveAndFlush(internEvaluation));
-                })
-                .orElse(Optional.empty());
-    }
-
     @Transactional
     public void deleteInternEvaluationById(long id) {
         InterEvaluationRepo.deleteById(id);

@@ -22,7 +22,7 @@ export default function Evaluationform() {
         "Plutôt en désaccord",
         "Totalement en désaccord",
         "N/A"
-    ];
+    ]
 
     const globalAppreciations = [
         "Les habiletés démontrées dépassent de beaucoup les attentes",
@@ -30,22 +30,22 @@ export default function Evaluationform() {
         "Les habiletés démontrées répondent pleinement aux attentes",
         "Les habiletés démontrées répondent partiellement aux attentes",
         "Les habiletés démontrées ne répondent pas aux attentes"
-    ];
+    ]
 
     const validationSchemaStep1 = yup.object().shape({
         infos: yup.object().shape({
             studentProgram: yup
-                .string()
-                .trim()
-                .min(5, tooLittleError)
-                .max(50, tooBigError)
-                .required(),
+                    .string()
+                    .trim()
+                    .min(5, tooLittleError)
+                    .max(50, tooBigError)
+                    .required(),
             fullname: yup
-                .string()
-                .trim()
-                .min(5, tooLittleError)
-                .max(50, tooBigError)
-                .required(),
+                    .string()
+                    .trim()
+                    .min(5, tooLittleError)
+                    .max(50, tooBigError)
+                    .required(),
         })
     });
 
@@ -53,138 +53,138 @@ export default function Evaluationform() {
         productivity: yup.object().shape({
             comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
             efficiency: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             comprehension: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             rythm: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             priorities: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             deadlines: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
         })
     });
 
     const validationSchemaStep3 = yup.object().shape({
         quality: yup.object().shape({
             comment: yup
-                .string()
-                .trim()
-                .required(requiredFieldMsg)
-                .min(20, tooLittleError),
+                    .string()
+                    .trim()
+                    .required(requiredFieldMsg)
+                    .min(20, tooLittleError),
             followsInstructions: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             detailsAttention: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             doubleChecks: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             strivesForPerfection: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             problemAnalysis: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
         })
     });
 
     const validationSchemaStep4 = yup.object().shape({
         relationships: yup.object().shape({
             comment: yup
-                .string()
-                .trim()
-                .required(requiredFieldMsg)
-                .min(20, tooLittleError),
+                    .string()
+                    .trim()
+                    .required(requiredFieldMsg)
+                    .min(20, tooLittleError),
             connectsEasily: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             teamworkContribution: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             culturalAdaptation: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             acceptsCriticism: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             respectsOthers: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             activelyListens: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
         })
     });
 
     const validationSchemaStep5 = yup.object().shape({
         skills: yup.object().shape({
             comment: yup
-                .string()
-                .trim()
-                .required(requiredFieldMsg)
-                .min(20, tooLittleError),
+                    .string()
+                    .trim()
+                    .required(requiredFieldMsg)
+                    .min(20, tooLittleError),
             showsInterest: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             expressesOwnIdeas: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             showsInitiative: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             worksSafely: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             dependable: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
             punctual: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(evaluationAnswers, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(evaluationAnswers, invalidSelectOption),
         })
     });
 
     const validationSchemaStep6 = yup.object().shape({
         appreciation: yup.object().shape({
             comment: yup
-                .string()
-                .trim()
-                .required(requiredFieldMsg)
-                .min(20, tooLittleError),
+                    .string()
+                    .trim()
+                    .required(requiredFieldMsg)
+                    .min(20, tooLittleError),
             discussedWithIntern: yup.string().required(requiredRadioMsg),
             expectations: yup
-                .string()
-                .required(requiredFieldMsg)
-                .oneOf(globalAppreciations, invalidSelectOption),
+                    .string()
+                    .required(requiredFieldMsg)
+                    .oneOf(globalAppreciations, invalidSelectOption),
         })
     });
 
@@ -197,10 +197,10 @@ export default function Evaluationform() {
     const validationSchemaStep8 = yup.object().shape({
         feedback: yup.object().shape({
             technicalFormationOpinion: yup
-                .string()
-                .trim()
-                .required()
-                .min(20, tooShortError),
+                    .string()
+                    .trim()
+                    .required()
+                    .min(20, tooShortError),
             hireAgain: yup.string().trim().required(requiredRadioMsg),
         }),
         signature: yup.object().shape({
@@ -216,112 +216,112 @@ export default function Evaluationform() {
     return <Card style={{flow: "auto", height: "auto"}}>
         <CardContent>
             <FormikStepper
-                application={location.state}
-                initialValues={{
-                    infos: {
-                        fullname:
-                            location.state.student.firstName +
-                            " " +
-                            location.state.student.lastName,
-                        studentProgram: "",
-                        supervisorRole: "",
-                        phoneNumber: "",
-                    },
-                    productivity: {
-                        efficiency: evaluationAnswers[0],
-                        comprehension: evaluationAnswers[0],
-                        rythm: evaluationAnswers[0],
-                        priorities: evaluationAnswers[0],
-                        deadlines: evaluationAnswers[0],
-                        comment: "",
-                    },
-                    quality: {
-                        followsInstructions: evaluationAnswers[0],
-                        detailsAttention: evaluationAnswers[0],
-                        doubleChecks: evaluationAnswers[0],
-                        strivesForPerfection: evaluationAnswers[0],
-                        problemAnalysis: evaluationAnswers[0],
-                        comment: "",
-                    },
-                    relationships: {
-                        connectsEasily: evaluationAnswers[0],
-                        teamworkContribution: evaluationAnswers[0],
-                        culturalAdaptation: evaluationAnswers[0],
-                        acceptsCriticism: evaluationAnswers[0],
-                        respectsOthers: evaluationAnswers[0],
-                        activelyListens: evaluationAnswers[0],
-                        comment: "",
-                    },
-                    skills: {
-                        showsInterest: evaluationAnswers[0],
-                        expressesOwnIdeas: evaluationAnswers[0],
-                        showsInitiative: evaluationAnswers[0],
-                        worksSafely: evaluationAnswers[0],
-                        dependable: evaluationAnswers[0],
-                        punctual: evaluationAnswers[0],
-                        comment: "",
-                    },
-                    appreciation: {
-                        expectations: globalAppreciations[0],
-                        comment: "",
-                        discussedWithIntern: "",
-                    },
-                    feedback: {
-                        weeklySupervisionHours: 0,
-                        hireAgain: "",
-                        technicalFormationOpinion: "",
-                    },
-                    signature: {
-                        image: "",
-                        date: new Date(),
-                        name: "",
-                    },
-                }}
-                evaluationAnswers={evaluationAnswers}
-                globalAppreciations={globalAppreciations}
+                    application={location.state}
+                    initialValues={{
+                        infos: {
+                            fullname:
+                                    location.state.student.firstName +
+                                    " " +
+                                    location.state.student.lastName,
+                            studentProgram: "",
+                            supervisorRole: "",
+                            phoneNumber: "",
+                        },
+                        productivity: {
+                            efficiency: evaluationAnswers[0],
+                            comprehension: evaluationAnswers[0],
+                            rythm: evaluationAnswers[0],
+                            priorities: evaluationAnswers[0],
+                            deadlines: evaluationAnswers[0],
+                            comment: "",
+                        },
+                        quality: {
+                            followsInstructions: evaluationAnswers[0],
+                            detailsAttention: evaluationAnswers[0],
+                            doubleChecks: evaluationAnswers[0],
+                            strivesForPerfection: evaluationAnswers[0],
+                            problemAnalysis: evaluationAnswers[0],
+                            comment: "",
+                        },
+                        relationships: {
+                            connectsEasily: evaluationAnswers[0],
+                            teamworkContribution: evaluationAnswers[0],
+                            culturalAdaptation: evaluationAnswers[0],
+                            acceptsCriticism: evaluationAnswers[0],
+                            respectsOthers: evaluationAnswers[0],
+                            activelyListens: evaluationAnswers[0],
+                            comment: "",
+                        },
+                        skills: {
+                            showsInterest: evaluationAnswers[0],
+                            expressesOwnIdeas: evaluationAnswers[0],
+                            showsInitiative: evaluationAnswers[0],
+                            worksSafely: evaluationAnswers[0],
+                            dependable: evaluationAnswers[0],
+                            punctual: evaluationAnswers[0],
+                            comment: "",
+                        },
+                        appreciation: {
+                            expectations: globalAppreciations[0],
+                            comment: "",
+                            discussedWithIntern: "",
+                        },
+                        feedback: {
+                            weeklySupervisionHours: 0,
+                            hireAgain: "",
+                            technicalFormationOpinion: "",
+                        },
+                        signature: {
+                            image: "",
+                            date: new Date(),
+                            name: "",
+                        },
+                    }}
+                    evaluationAnswers={evaluationAnswers}
+                    globalAppreciations={globalAppreciations}
             >
                 <FormikStep
-                    label="Information Generale"
-                    validationSchema={validationSchemaStep1}
+                        label="Information Generale"
+                        validationSchema={validationSchemaStep1}
                 >
                     <Grid
-                        container
-                        alignItems="flex-start"
-                        justify="center"
-                        spacing={2}
+                            container
+                            alignItems="flex-start"
+                            justify="center"
+                            spacing={2}
                     >
                         <Typography variant={"h1"} className={classes.formTitle}>
                             Évaluation du stagiaire
                         </Typography>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                name="infos.fullname"
-                                id="fullname"
-                                variant="outlined"
-                                label="Nom de l’étudiant :"
-                                disabled
-                                required
-                                fullWidth
+                                    component={TextField}
+                                    name="infos.fullname"
+                                    id="fullname"
+                                    variant="outlined"
+                                    label="Nom de l’étudiant :"
+                                    disabled
+                                    required
+                                    fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                name="infos.studentProgram"
-                                id="studentProgram"
-                                variant="outlined"
-                                label="Programme d’études :"
-                                required
-                                fullWidth
-                                autoFocus
+                                    component={TextField}
+                                    name="infos.studentProgram"
+                                    id="studentProgram"
+                                    variant="outlined"
+                                    label="Programme d’études :"
+                                    required
+                                    fullWidth
+                                    autoFocus
                             />
                         </Grid>
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation productivité"
-                    validationSchema={validationSchemaStep2}
+                        label="Evaluation productivité"
+                        validationSchema={validationSchemaStep2}
                 >
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
@@ -331,9 +331,9 @@ export default function Evaluationform() {
                                 a - planifier et organiser son travail de façon efficace
                             </label>
                             <Field
-                                as="select"
-                                variant="outlined"
-                                name="productivity.efficiency"
+                                    as="select"
+                                    variant="outlined"
+                                    name="productivity.efficiency"
                             >
                                 {evaluationAnswers.map((e, k) => <option defaultValue={e} key={k}>
                                     {e}
@@ -351,9 +351,9 @@ export default function Evaluationform() {
                                 travail
                             </label>
                             <Field
-                                variant="outlined"
-                                as="select"
-                                name="productivity.comprehension"
+                                    variant="outlined"
+                                    as="select"
+                                    name="productivity.comprehension"
                             >
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -404,26 +404,26 @@ export default function Evaluationform() {
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                style={{backgroundColor: "#F2F3F4"}}
-                                rows={4}
-                                fullWidth
-                                multiline
-                                label="Commentaires"
-                                name="productivity.comment"
+                                    component={TextField}
+                                    style={{backgroundColor: "#F2F3F4"}}
+                                    rows={4}
+                                    fullWidth
+                                    multiline
+                                    label="Commentaires"
+                                    name="productivity.comment"
                             ></Field>
                         </Grid>
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation qualité du travail"
-                    validationSchema={validationSchemaStep3}
+                        label="Evaluation qualité du travail"
+                        validationSchema={validationSchemaStep3}
                 >
                     <Grid
-                        container
-                        alignItems="flex-start"
-                        justify="center"
-                        spacing={2}
+                            container
+                            alignItems="flex-start"
+                            justify="center"
+                            spacing={2}
                     >
                         <Grid item xs={12}>
                             <h1>
@@ -494,26 +494,26 @@ export default function Evaluationform() {
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                style={{backgroundColor: "#F2F3F4"}}
-                                rows={4}
-                                fullWidth
-                                multiline
-                                label="Commentaires"
-                                name="quality.comment"
+                                    component={TextField}
+                                    style={{backgroundColor: "#F2F3F4"}}
+                                    rows={4}
+                                    fullWidth
+                                    multiline
+                                    label="Commentaires"
+                                    name="quality.comment"
                             ></Field>
                         </Grid>
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation QUALITÉS DES RELATIONS INTERPERSONNELLES"
-                    validationSchema={validationSchemaStep4}
+                        label="Evaluation QUALITÉS DES RELATIONS INTERPERSONNELLES"
+                        validationSchema={validationSchemaStep4}
                 >
                     <Grid
-                        container
-                        alignItems="flex-start"
-                        justify="center"
-                        spacing={2}
+                            container
+                            alignItems="flex-start"
+                            justify="center"
+                            spacing={2}
                     >
                         <Grid item xs={12}>
                             <h1>
@@ -593,28 +593,28 @@ export default function Evaluationform() {
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                style={{
-                                    backgroundColor: "#F2F3F4",
-                                }}
-                                rows={4}
-                                fullWidth
-                                multiline
-                                label="Commentaires"
-                                name="relationships.comment"
+                                    component={TextField}
+                                    style={{
+                                        backgroundColor: "#F2F3F4",
+                                    }}
+                                    rows={4}
+                                    fullWidth
+                                    multiline
+                                    label="Commentaires"
+                                    name="relationships.comment"
                             ></Field>
                         </Grid>
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="HABILETÉS PERSONNELLES"
-                    validationSchema={validationSchemaStep5}
+                        label="HABILETÉS PERSONNELLES"
+                        validationSchema={validationSchemaStep5}
                 >
                     <Grid
-                        container
-                        alignItems="flex-start"
-                        justify="center"
-                        spacing={2}
+                            container
+                            alignItems="flex-start"
+                            justify="center"
+                            spacing={2}
                     >
                         <Grid item xs={12}>
                             <h1>
@@ -694,26 +694,26 @@ export default function Evaluationform() {
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                style={{backgroundColor: "#F2F3F4"}}
-                                rows={4}
-                                fullWidth
-                                multiline
-                                label="Commentaires"
-                                name="skills.comment"
+                                    component={TextField}
+                                    style={{backgroundColor: "#F2F3F4"}}
+                                    rows={4}
+                                    fullWidth
+                                    multiline
+                                    label="Commentaires"
+                                    name="skills.comment"
                             ></Field>
                         </Grid>
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="APPRÉCIATION GLOBALE DU STAGIAIRE"
-                    validationSchema={validationSchemaStep6}
+                        label="APPRÉCIATION GLOBALE DU STAGIAIRE"
+                        validationSchema={validationSchemaStep6}
                 >
                     <Grid
-                        container
-                        alignItems="flex-start"
-                        justify="center"
-                        spacing={2}
+                            container
+                            alignItems="flex-start"
+                            justify="center"
+                            spacing={2}
                     >
                         <Grid item xs={12}>
                             <label>APPRÉCIATION GLOBALE DU STAGIAIRE</label>
@@ -729,13 +729,13 @@ export default function Evaluationform() {
 
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                style={{backgroundColor: "#F2F3F4"}}
-                                rows={4}
-                                fullWidth
-                                multiline
-                                label="PRÉCISEZ VOTRE APPRÉCIATION:"
-                                name="appreciation.comment"
+                                    component={TextField}
+                                    style={{backgroundColor: "#F2F3F4"}}
+                                    rows={4}
+                                    fullWidth
+                                    multiline
+                                    label="PRÉCISEZ VOTRE APPRÉCIATION:"
+                                    name="appreciation.comment"
                             ></Field>
                         </Grid>
 
@@ -745,17 +745,17 @@ export default function Evaluationform() {
                             </label>
                             <label>
                                 <Field
-                                    type="radio"
-                                    name="appreciation.discussedWithIntern"
-                                    value="Oui"
+                                        type="radio"
+                                        name="appreciation.discussedWithIntern"
+                                        value="Oui"
                                 />
                                 Oui
                             </label>
                             <label>
                                 <Field
-                                    type="radio"
-                                    name="appreciation.discussedWithIntern"
-                                    value="Non"
+                                        type="radio"
+                                        name="appreciation.discussedWithIntern"
+                                        value="Non"
                                 />
                                 Non
                             </label>
@@ -768,14 +768,14 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Nombre d'heure de supervision par semaine"
-                    validationSchema={validationSchemaStep7}
+                        label="Nombre d'heure de supervision par semaine"
+                        validationSchema={validationSchemaStep7}
                 >
                     <Grid
-                        container
-                        alignItems="flex-start"
-                        justify="center"
-                        spacing={2}
+                            container
+                            alignItems="flex-start"
+                            justify="center"
+                            spacing={2}
                     >
                         <Grid item xs={12}>
                             <label>
@@ -793,10 +793,10 @@ export default function Evaluationform() {
                 </FormikStep>
                 <FormikStep label="Decision" validationSchema={validationSchemaStep8}>
                     <Grid
-                        container
-                        alignItems="flex-start"
-                        justify="center"
-                        spacing={2}
+                            container
+                            alignItems="flex-start"
+                            justify="center"
+                            spacing={2}
                     >
                         <Grid item xs={12}>
                             <label>
@@ -813,9 +813,9 @@ export default function Evaluationform() {
                             </label>
                             <label>
                                 <Field
-                                    type="radio"
-                                    name="feedback.hireAgain"
-                                    value="Peut-être"
+                                        type="radio"
+                                        name="feedback.hireAgain"
+                                        value="Peut-être"
                                 />
                                 Peut-être
                             </label>
@@ -827,44 +827,44 @@ export default function Evaluationform() {
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                style={{backgroundColor: "#F2F3F4"}}
-                                rows={4}
-                                fullWidth
-                                multiline
-                                label="La formation technique du stagiaire était-elle suffisante pour accomplir le
+                                    component={TextField}
+                                    style={{backgroundColor: "#F2F3F4"}}
+                                    rows={4}
+                                    fullWidth
+                                    multiline
+                                    label="La formation technique du stagiaire était-elle suffisante pour accomplir le
                             mandat de stage?"
-                                name="feedback.technicalFormationOpinion"
+                                    name="feedback.technicalFormationOpinion"
                             ></Field>
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                variant="outlined"
-                                label="Nom :"
-                                name="signature.name"
+                                    component={TextField}
+                                    variant="outlined"
+                                    label="Nom :"
+                                    name="signature.name"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                name="infos.supervisorRole"
-                                id="supervisorRole"
-                                variant="outlined"
-                                label="Fonction du superviseur:"
-                                required
-                                fullWidth
+                                    component={TextField}
+                                    name="infos.supervisorRole"
+                                    id="supervisorRole"
+                                    variant="outlined"
+                                    label="Fonction du superviseur:"
+                                    required
+                                    fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <Field
-                                component={TextField}
-                                name="infos.phoneNumber"
-                                id="phoneNumber"
-                                variant="outlined"
-                                label="Numero de telephone"
-                                required
-                                fullWidth
+                                    component={TextField}
+                                    name="infos.phoneNumber"
+                                    id="phoneNumber"
+                                    variant="outlined"
+                                    label="Numero de telephone"
+                                    required
+                                    fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>

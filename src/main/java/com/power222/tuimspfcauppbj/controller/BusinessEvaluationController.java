@@ -34,12 +34,6 @@ public class BusinessEvaluationController {
         return svc.createAndSaveNewBusinessEvaluation(newBusinessEvaluation);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BusinessEvaluation> updateBusinessEvaluation(@PathVariable long id, @RequestBody BusinessEvaluation requestBody) {
-        return svc.updateBusinessEvaluation(id, requestBody).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @DeleteMapping("/{id}")
     public void deleteBusinessEvaluationByid(@PathVariable long id) {
         svc.deleteBusinessEvaluationById(id);

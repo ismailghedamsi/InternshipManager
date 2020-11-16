@@ -142,7 +142,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
             var internshipOffer = internshipRepo.save(InternshipOffer.builder()
                     .semester("a2020h2021")
                     .title("Offre de stage bootstrappée")
-                    .details(InternshipOffer.InternshipOfferDetails.builder()
+                    .details(InternshipOfferDetails.builder()
                             .description("Description bootstrappée - Développement d'applications Web trois tiers.")
                             .salary(15.98)
                             .creationDate(LocalDate.now())

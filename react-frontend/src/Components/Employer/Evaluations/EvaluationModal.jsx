@@ -10,15 +10,15 @@ import useStyles from "../../Utils/useStyles";
 export default function EvaluationModal({isOpen, data, hide}) {
     const classes = useStyles();
     return <Dialog
-        open={isOpen}
-        onClose={hide}
-        fullWidth={true}
-        fullScreen={true}
-        maxWidth={"md"}
+            open={isOpen}
+            onClose={hide}
+            fullWidth={true}
+            fullScreen={true}
+            maxWidth={"md"}
     >
         <DialogTitle id="alert-dialog-title">{"Sommaire evaluation"}</DialogTitle>
         <DialogContent>
-            {data ? <div>
+            {data && <div>
                 <div className={classes.evaluationSections}>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
@@ -246,12 +246,12 @@ export default function EvaluationModal({isOpen, data, hide}) {
                         {data.feedback.technicalFormationOpinion}
                     </Typography>
                 </div>
-            </div> : ""}
+            </div>}
         </DialogContent>
         <DialogActions>
             <Button color="primary" onClick={hide}>
                 Valider evaluation
             </Button>
         </DialogActions>
-    </Dialog>;
+    </Dialog>
 }
