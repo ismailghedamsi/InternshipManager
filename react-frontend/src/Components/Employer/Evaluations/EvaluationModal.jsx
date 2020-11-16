@@ -10,11 +10,11 @@ import useStyles from "../../Utils/useStyles";
 export default function EvaluationModal({isOpen, data, hide}) {
     const classes = useStyles();
     return <Dialog
-            open={isOpen}
-            onClose={hide}
-            fullWidth={true}
-            fullScreen={true}
-            maxWidth={"md"}
+        open={isOpen}
+        onClose={hide}
+        fullWidth={true}
+        fullScreen={true}
+        maxWidth={"md"}
     >
         <DialogTitle id="alert-dialog-title">{"Sommaire evaluation"}</DialogTitle>
         <DialogContent>
@@ -107,7 +107,6 @@ export default function EvaluationModal({isOpen, data, hide}) {
                         {data.quality.comment}
                     </Typography>
                 </div>
-
                 <div className={classes.evaluationSections}>
                     QUALITÉS DES RELATIONS INTERPERSONNELLES
                     <Typography>
