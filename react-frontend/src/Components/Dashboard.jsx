@@ -58,9 +58,7 @@ export default function Dashboard() {
                         to={function () {
                             if (AuthenticationService.getCurrentUserRole() === "student")
                                 return "/dashboard/stagelist";
-                            else if (
-                                AuthenticationService.getCurrentUserRole() === "employer"
-                            )
+                            else if (AuthenticationService.getCurrentUserRole() === "employer")
                                 return "/dashboard/listoffer";
                             else return "/dashboard/approbation/offres";
                         }()}
