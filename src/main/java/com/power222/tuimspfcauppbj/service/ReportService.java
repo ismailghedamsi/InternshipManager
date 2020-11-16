@@ -7,12 +7,10 @@ import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
-import com.power222.tuimspfcauppbj.util.StudentApplicationState;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.Iterator;
 
 @Service
 public class ReportService {
@@ -28,7 +26,7 @@ public class ReportService {
     }
 
     public Page<Student> registeredStudents(int page, int itemPerPage) {
-        return studentRepo.findAll(PageRequest.of(page, itemPerPage));
+        return studentRepo.findAllBySemesters(SemesterContext.getCurrent(), PageRequest.of(page, itemPerPage));
     }
 
     public Page<Student> studentsWithoutResume(int page, int itemPerPage) {
@@ -56,20 +54,7 @@ public class ReportService {
     }
 
     public Page<InternshipOffer> offersWithoutHired(int page, int itemPerPage) {
-        final var offerPage = offerRepo.findAll(PageRequest.of(page, itemPerPage));
-        var itr = offerPage.iterator();
-
-        while (itr.hasNext())
-            if (containsHiredStudent(itr)) {
-                itr.remove();
-                break;
-            }
-
-        return offerPage;
-    }
-
-    private boolean containsHiredStudent(Iterator<? extends InternshipOffer> itr) {
-        return itr.next().getApplications().stream().anyMatch(appli -> appli.getState().equals(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT));
+        return offerRepo.findAllByApplicationsStateNotAccepted(PageRequest.of(page, itemPerPage));
     }
 
     public Page<Contract> contractsWaitingStudent(int page, int itemPerPage) {
