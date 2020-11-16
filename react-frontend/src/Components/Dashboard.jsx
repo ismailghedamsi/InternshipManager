@@ -16,6 +16,7 @@ import SignForm from "./Employer/SignForm";
 import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm";
 import BusinessEvaluationList from "./Manager/BusinessEvaluations/BusinessEvaluationList";
 import ContractForm from "./Manager/ContractForm";
+import Managers from "./Manager/Managers";
 import ContractList from "./Manager/ContractList";
 import Employerstatus from "./Manager/EmployerStatus";
 import OfferApprobation from "./Manager/OfferApprobation";
@@ -29,7 +30,8 @@ import ResumeList from "./Student/ResumeList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
-import {RoleProtectedRoute} from "./Utils/Routes";
+import { RoleProtectedRoute } from "./Utils/Routes";
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -154,6 +156,11 @@ export default function Dashboard() {
                         path="/dashboard/evaluationListAdmin"
                         component={StudentEvaluationsList}
                         role={"admin"}
+                />
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/managers"
+                                    component={Managers}
+                                    role={"admin"}
                 />
                 {/* Employeur */}
                 <RoleProtectedRoute

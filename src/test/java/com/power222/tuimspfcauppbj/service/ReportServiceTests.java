@@ -3,10 +3,8 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
-import com.power222.tuimspfcauppbj.model.InternshipOffer;
-import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
-import com.power222.tuimspfcauppbj.util.StudentApplicationState;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,12 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -49,7 +44,8 @@ public class ReportServiceTests {
 
     @Test
     void registeredStudentsTest() {
-        when(studentRepo.findAll(pageRequest)).thenReturn(page);
+        SemesterContext.setCurrent("fakeSemester");
+        when(studentRepo.findAllBySemesters(anyString(), eq(pageRequest))).thenReturn(page);
 
         var actual = svc.registeredStudents(PAGE, PAGE_SIZE);
 
@@ -112,60 +108,11 @@ public class ReportServiceTests {
 
     @Test
     void offersWithoutHiredTest() {
-        var hired = StudentApplication.builder()
-                .state(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT)
-                .build();
-        var pendingStudent = StudentApplication.builder()
-                .state(StudentApplicationState.WAITING_FOR_STUDENT_HIRING_FINAL_DECISION)
-                .build();
-        var rejected = StudentApplication.builder()
-                .state(StudentApplicationState.APPLICATION_REJECTED_BY_EMPLOYER)
-                .build();
-
-        List<InternshipOffer> offers = new ArrayList<>(3);
-        offers.add(InternshipOffer.builder()
-                .applications(Arrays.asList(hired, rejected))
-                .build());
-        offers.add(InternshipOffer.builder()
-                .applications(Arrays.asList(rejected, pendingStudent))
-                .build());
-        offers.add(InternshipOffer.builder()
-                .applications(Collections.singletonList(pendingStudent))
-                .build());
-
-        when(offerRepo.findAll(pageRequest)).thenReturn(page);
-        when(page.iterator()).thenReturn(offers.iterator());
-        when(page.get()).thenReturn(offers.stream());
+        when(offerRepo.findAllByApplicationsStateNotAccepted(pageRequest)).thenReturn(page);
 
         var actual = svc.offersWithoutHired(PAGE, PAGE_SIZE);
 
-        assertThat(actual.get()).hasSize(2);
-    }
-
-    @Test
-    void offersWithoutHiredEmptyListTest() {
-        List<InternshipOffer> offers = new ArrayList<>(1);
-
-        when(offerRepo.findAll(pageRequest)).thenReturn(page);
-        when(page.iterator()).thenReturn(offers.iterator());
-        when(page.get()).thenReturn(offers.stream());
-
-        var actual = svc.offersWithoutHired(PAGE, PAGE_SIZE);
-
-        assertThat(actual.get()).hasSize(0);
-    }
-
-    @Test
-    void offersWithoutHiredNullItrTest() {
-        List<InternshipOffer> offers = new ArrayList<>(1);
-
-        when(offerRepo.findAll(pageRequest)).thenReturn(page);
-        when(page.iterator()).thenReturn(offers.iterator());
-        when(page.get()).thenReturn(offers.stream());
-
-        var actual = svc.offersWithoutHired(PAGE, PAGE_SIZE);
-
-        assertThat(actual.get()).hasSize(0);
+        assertThat(actual).isEqualTo(page);
     }
 
     @Test

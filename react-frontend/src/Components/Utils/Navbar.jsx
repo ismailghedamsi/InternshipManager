@@ -41,6 +41,10 @@ const Links = {
             url: "/dashboard/employersStatus",
         },
         {
+            title: 'Gestionnaires de stage',
+            url: "/dashboard/managers"
+        },
+        {
             title: <Divider/>
         },
         {
@@ -161,11 +165,14 @@ export default function Navbar() {
             </Button>
             <div className={classes.spacer}/>
             {AuthenticationService.getCurrentUserRole() === "admin" &&
-            <Button className={classes.linkButton}
-                    onClick={() => history.push("/dashboard/setSemester")}
-            >
-                <i className="fa fa-calendar"/>&ensp;{semester}
-            </Button>
+                <>
+                    <Button className={classes.linkButton}
+                            onClick={() => history.push("/dashboard/setSemester")}
+                    >
+                        <i className="fa fa-calendar"/>&ensp;{semester}
+                    </Button>
+                    &ensp;
+                </>
             }
             <Button className={classes.linkButton}
                     onClick={() => {

@@ -18,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getClass().getSimpleName().toLowerCase()));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getClass().getSimpleName().toUpperCase()));
     }
 
     @Override
@@ -48,6 +48,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.isDisabled();
     }
 }
