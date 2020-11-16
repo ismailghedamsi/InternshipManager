@@ -138,27 +138,33 @@ export default function Dashboard() {
                     role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/businessEvaluation"
-                    component={BusinessEvaluationForm}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/businessEvaluation"
+                        component={BusinessEvaluationForm}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/businessEvaluationList"
-                    component={BusinessEvaluationList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/businessEvaluationList"
+                        component={BusinessEvaluationList}
+                        role={"admin"}
+                />
+                <RoleProtectedRoute
+                        exact={true}
+                        path="/dashboard/evaluationListAdmin"
+                        component={StudentEvaluationsList}
+                        role={"admin"}
                 />
                 {/* Employeur */}
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/createstage"
-                    component={OfferCreation}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/createstage"
+                        component={OfferCreation}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/listoffer"
+                        exact={true}
+                        path="/dashboard/listoffer"
                     component={OfferList}
                     role={"employer"}
                 />

@@ -62,8 +62,12 @@ const Links = {
             title: <Divider/>
         },
         {
-            title: 'Évaluations',
+            title: 'Liste des évaluations d\'entrprise',
             url: '/dashboard/businessEvaluationList',
+        },
+        {
+            title: 'Liste des évaluations de stagiaire',
+            url: '/dashboard/evaluationListAdmin'
         }
     ],
     student: [
