@@ -107,7 +107,6 @@ export default function EvaluationModal({isOpen, data, hide}) {
                         {data.quality.comment}
                     </Typography>
                 </div>
-
                 <div className={classes.evaluationSections}>
                     QUALITÉS DES RELATIONS INTERPERSONNELLES
                     <Typography>
