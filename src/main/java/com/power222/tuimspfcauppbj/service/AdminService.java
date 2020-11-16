@@ -41,7 +41,8 @@ public class AdminService {
                 .map(a -> {
                     a.setDisabled(!a.isDisabled());
                     return a;
-                });
+                })
+                .map(repo::saveAndFlush);
     }
 
     public Optional<Admin> updateUserPassword(PasswordDTO dto) {
