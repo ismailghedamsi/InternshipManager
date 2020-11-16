@@ -51,7 +51,7 @@ export default function Evaluationform() {
 
     const validationSchemaStep2 = yup.object().shape({
         productivity: yup.object().shape({
-            comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
+            comment: yup.string().required(requiredFieldMsg),
             efficiency: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -80,8 +80,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             followsInstructions: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -110,8 +109,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             connectsEasily: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -144,8 +142,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             showsInterest: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -178,8 +175,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             discussedWithIntern: yup.string().required(requiredRadioMsg),
             expectations: yup
                     .string()
