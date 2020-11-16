@@ -13,7 +13,7 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
     return <Dialog open={isOpen} onClose={hide} fullWidth={true} fullScreen={true} maxWidth={'md'}>
         <DialogTitle id="alert-dialog-title">{"ÉVALUATION DU MILIEU DE STAGE"}</DialogTitle>
         <DialogContent>
-            {data ? <div>
+            {data && <div>
                 <div className={classes.evaluationSections}>
                     <Typography variant="h5">ÉVALUATION</Typography>
                     <Typography>
@@ -111,7 +111,7 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                         De {data.observations.startShiftsThree}h à {data.observations.endShiftsThree}h
                     </Typography>
                 </div>
-            </div> : ""}
+            </div>}
         </DialogContent>
         <DialogActions>
             <Button onClick={hide} color="primary">
