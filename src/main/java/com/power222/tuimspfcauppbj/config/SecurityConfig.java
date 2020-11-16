@@ -62,6 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //Semesters
                 .antMatchers(HttpMethod.GET, "/api/semesters", "/api/semesters/present").permitAll()
 
+                .antMatchers("/api/admins", "/api/admins/**").hasRole("ADMIN")
+
                 //Dev
                 .antMatchers("/h2-console/*").permitAll()
                 .antMatchers("/api/hello").permitAll()

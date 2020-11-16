@@ -1,31 +1,32 @@
-import {Container} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Container } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import React from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import AuthenticationService from '../Services/AuthenticationService';
 import ApplicationList from "./Employer/ApplicationList";
 import InterviewConvocation from './Employer/Interview/InterviewConvocation';
 import Interviewlist from './Employer/Interview/InterviewList';
-import {Rescheduleinterview} from './Employer/Interview/RescheduleInterview';
+import { Rescheduleinterview } from './Employer/Interview/RescheduleInterview';
 import OfferCreation from "./Employer/OfferCreation";
 import OfferList from "./Employer/OfferList";
-import SignContract from './Employer/SignContract'
+import SignContract from './Employer/SignContract';
+import SignForm from "./Employer/SignForm";
 import ContractForm from "./Manager/ContractForm";
 import ContractList from './Manager/ContractList';
 import Employerstatus from './Manager/EmployerStatus';
+import Managers from "./Manager/Managers";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 import Reports from "./Manager/Reports";
 import ResumeApprobation from "./Manager/ResumeApprobation";
 import SemesterSelector from "./Manager/SemesterSelector";
 import StudentStatus from "./Manager/StudentStatus";
-import SignForm from "./Employer/SignForm";
 import OfferApplication from "./Student/OfferApplication";
 import ResumeList from "./Student/ResumeList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
-import {RoleProtectedRoute} from "./Utils/Routes";
+import { RoleProtectedRoute } from "./Utils/Routes";
 
 
 const useStyles = makeStyles(() => ({
@@ -106,6 +107,10 @@ export default function Dashboard() {
                 <RoleProtectedRoute exact={true}
                                     path="/dashboard/signFormAdmin"
                                     component={SignForm}
+                                    role={"admin"}/>
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/managers"
+                                    component={Managers}
                                     role={"admin"}/>
                 {/* Employeur */}
                 <RoleProtectedRoute exact={true}

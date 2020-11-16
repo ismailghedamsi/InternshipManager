@@ -26,6 +26,7 @@ public abstract class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    private boolean passwordExpired;
     private String email;
+    private boolean passwordExpired;
+    private boolean disabled;
 }
