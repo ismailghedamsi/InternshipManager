@@ -16,9 +16,9 @@ import SignForm from "./Employer/SignForm";
 import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm";
 import BusinessEvaluationList from "./Manager/BusinessEvaluations/BusinessEvaluationList";
 import ContractForm from "./Manager/ContractForm";
-import Managers from "./Manager/Managers";
 import ContractList from "./Manager/ContractList";
 import Employerstatus from "./Manager/EmployerStatus";
+import Managers from "./Manager/Managers";
 import OfferApprobation from "./Manager/OfferApprobation";
 import OfferAssignements from "./Manager/OfferAssignements";
 import Reports from "./Manager/Reports";
@@ -30,7 +30,7 @@ import ResumeList from "./Student/ResumeList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
-import { RoleProtectedRoute } from "./Utils/Routes";
+import {RoleProtectedRoute} from "./Utils/Routes";
 
 
 const useStyles = makeStyles(() => ({
@@ -42,8 +42,8 @@ const useStyles = makeStyles(() => ({
     container: {
         flex: 1,
         height: "90vh",
-        overflow: "hidden",
-    },
+        overflow: "hidden"
+    }
 }));
 
 export default function Dashboard() {
@@ -55,89 +55,89 @@ export default function Dashboard() {
             <Switch>
                 <Route exact={true} path={"/dashboard"}>
                     <Redirect
-                        to={(function () {
-                            if (AuthenticationService.getCurrentUserRole() === "student")
-                                return "/dashboard/stagelist";
-                            else if (
-                                AuthenticationService.getCurrentUserRole() === "employer"
-                            )
-                                return "/dashboard/listoffer";
-                            else return "/dashboard/approbation/offres";
-                        })()}
+                            to={function () {
+                                if (AuthenticationService.getCurrentUserRole() === "student")
+                                    return "/dashboard/stagelist";
+                                else if (
+                                        AuthenticationService.getCurrentUserRole() === "employer"
+                                )
+                                    return "/dashboard/listoffer";
+                                else return "/dashboard/approbation/offres";
+                            }()}
                     />
                 </Route>
                 {/* Admin */}
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/approbation/cv"
-                    component={ResumeApprobation}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/approbation/cv"
+                        component={ResumeApprobation}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/approbation/offres"
-                    component={OfferApprobation}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/approbation/offres"
+                        component={OfferApprobation}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/assignement/offer"
-                    component={OfferAssignements}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/assignement/offer"
+                        component={OfferAssignements}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/status"
-                    component={StudentStatus}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/status"
+                        component={StudentStatus}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/OfferList"
-                    component={OfferList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/OfferList"
+                        component={OfferList}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/applicationsAdmin"
-                    component={ApplicationList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/applicationsAdmin"
+                        component={ApplicationList}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/employersStatus"
-                    component={Employerstatus}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/employersStatus"
+                        component={Employerstatus}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path={"/dashboard/setSemester"}
-                    component={SemesterSelector}
-                    role={"admin"}
+                        exact={true}
+                        path={"/dashboard/setSemester"}
+                        component={SemesterSelector}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/contractList"
-                    component={ContractList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/contractList"
+                        component={ContractList}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/reports"
-                    component={Reports}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/reports"
+                        component={Reports}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/contractForm"
-                    component={ContractForm}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/contractForm"
+                        component={ContractForm}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signFormAdmin"
-                    component={SignForm}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/signFormAdmin"
+                        component={SignForm}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
                         exact={true}
@@ -172,90 +172,90 @@ export default function Dashboard() {
                 <RoleProtectedRoute
                         exact={true}
                         path="/dashboard/listoffer"
-                    component={OfferList}
-                    role={"employer"}
+                        component={OfferList}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/applications"
-                    component={ApplicationList}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/applications"
+                        component={ApplicationList}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/interviewConvocation"
-                    component={InterviewConvocation}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/interviewConvocation"
+                        component={InterviewConvocation}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/listInterview"
-                    component={Interviewlist}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/listInterview"
+                        component={Interviewlist}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/rescheduleInterview"
-                    component={Rescheduleinterview}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/rescheduleInterview"
+                        component={Rescheduleinterview}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signContract"
-                    component={SignContract}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/signContract"
+                        component={SignContract}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/evaluateStudent"
-                    component={Evaluationform}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/evaluateStudent"
+                        component={Evaluationform}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signFormEmployer"
-                    component={SignForm}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/signFormEmployer"
+                        component={SignForm}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/evaluationList"
-                    component={StudentEvaluationsList}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/evaluationList"
+                        component={StudentEvaluationsList}
+                        role={"employer"}
                 />
                 {/* Etudiant */}
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/upload"
-                    component={ResumeUpload}
-                    role={"student"}
+                        exact={true}
+                        path="/dashboard/upload"
+                        component={ResumeUpload}
+                        role={"student"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/listcv"
-                    component={ResumeList}
-                    role={"student"}
+                        exact={true}
+                        path="/dashboard/listcv"
+                        component={ResumeList}
+                        role={"student"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/stagelist"
-                    component={OfferApplication}
-                    role={"student"}
+                        exact={true}
+                        path="/dashboard/stagelist"
+                        component={OfferApplication}
+                        role={"student"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signContractStudent"
-                    component={SignContract}
-                    role={"student"}
+                        exact={true}
+                        path="/dashboard/signContractStudent"
+                        component={SignContract}
+                        role={"student"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signFormStudent"
-                    component={SignForm}
-                    role={"student"}
+                        exact={true}
+                        path="/dashboard/signFormStudent"
+                        component={SignForm}
+                        role={"student"}
                 />
             </Switch>
         </Container>
         <Footer/>
-    </div>;
+    </div>
 }
