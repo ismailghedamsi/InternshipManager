@@ -43,6 +43,10 @@ export function FormikStepper({application, initialValues, children}) {
         return AuthenticationService.getCurrentUserRole() === "admin" ? openBusinessEvaluationModal() : openEvalationModal()
     }
 
+    function otherButtonContext() {
+        return isLastStep() ? 'TERMINER' : 'PAGE SUIVANTE'
+    }
+
     return <>
         {validationButtonClick ? directionModal() : ""}
         <Formik
@@ -114,7 +118,7 @@ export function FormikStepper({application, initialValues, children}) {
                                 variant="contained"
                                 color="primary"
                                 type="submit">
-                                {isSubmitting ? 'Submitting' : isLastStep() ? 'TERMINER' : 'PAGE SUIVANTE'}
+                                {isSubmitting ? 'Submitting' : otherButtonContext()}
                             </Button>
                         </Grid>
                     </Grid>
