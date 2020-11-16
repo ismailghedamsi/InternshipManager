@@ -138,6 +138,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var internshipOffer = internshipRepo.save(InternshipOffer.builder()
+                    .semester("a2020h2021")
                     .title("Offre de stage bootstrappée")
                     .details(InternshipOfferDetails.builder()
                             .description("Description bootstrappée - Développement d'applications Web trois tiers.")
@@ -154,6 +155,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .build());
 
             var internshipOffer2 = internshipRepo.save(InternshipOffer.builder()
+                    .semester("a2021h2022")
                     .title("Offre de stage bootstrappée 2022")
                     .details(InternshipOfferDetails.builder()
                             .description("Description bootstrappée - Développement d'applications Web trois tiers.")

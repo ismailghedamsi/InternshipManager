@@ -42,7 +42,7 @@ public class AdminController {
     @RequestMapping("/password")
     public ResponseEntity<Void> changePassword(@RequestBody PasswordDTO dto) {
         return svc.updateUserPassword(dto)
-                .map(v -> ResponseEntity.status(HttpStatus.CREATED).<Void>build())
+                .map(v -> ResponseEntity.ok().<Void>build())
                 .orElse(ResponseEntity.notFound().build());
     }
 }
