@@ -39,10 +39,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         private final ContractRepository contractRepo;
         private final InterviewRepository interviewRepo;
 
-        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo,
-                               InternshipOfferRepository internshipRepo, StudentApplicationRepository appliRepo,
-                               ContractGenerationService contractGenSvc, ContractRepository contractRepo,
-                               InterviewRepository interviewRepo) {
+        public BootstrapConfig(UserRepository userRepo, PasswordEncoder passwordEncoder, ResumeRepository resumeRepo, InternshipOfferRepository internshipRepo,
+                               StudentApplicationRepository appliRepo, ContractGenerationService contractGenSvc, ContractRepository contractRepo, InterviewRepository interviewRepo) {
             this.userRepo = userRepo;
             this.passwordEncoder = passwordEncoder;
             this.resumeRepo = resumeRepo;

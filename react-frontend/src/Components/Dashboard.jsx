@@ -64,7 +64,7 @@ export default function Dashboard() {
                         }()}
                     />
                 </Route>
-                {/* Admin */}
+                {/* Admin */}z
                 <RoleProtectedRoute
                     exact={true}
                     path="/dashboard/approbation/cv"
@@ -155,11 +155,10 @@ export default function Dashboard() {
                     component={StudentEvaluationsList}
                     role={"admin"}
                 />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/managers"
-                    component={Managers}
-                    role={"admin"}
+                <RoleProtectedRoute exact={true}
+                                    path="/dashboard/managers"
+                                    component={Managers}
+                                    role={"admin"}
                 />
                 {/* Employeur */}
                 <RoleProtectedRoute
