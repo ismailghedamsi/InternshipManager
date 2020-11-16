@@ -1,7 +1,6 @@
 import {Card, CardContent, Grid} from '@material-ui/core';
 import {ErrorMessage, Field} from 'formik';
 import {SimpleFileUpload, TextField} from 'formik-material-ui';
-import {DatePicker} from "formik-material-ui-pickers";
 import React from 'react';
 import {useLocation} from 'react-router-dom';
 import * as yup from "yup";
@@ -64,8 +63,7 @@ export default function BusinessEvalution() {
     });
     const SignatureValidation = yup.object().shape({
         signature: yup.object().shape({
-            name: yup.string().trim().min(2, "Doit avoir au moins 2 caractères").max(255, "Doit avoir moins que 255 caractères").required(requiredFieldMsg),
-            date: yup.date().min(new Date(), "Date doit être au present"),
+            name: yup.string().trim().min(2, "Doit avoir au moins 2 caractères").max(255, "Doit avoir moins que 255 caractères").required(requiredFieldMsg)
         })
     });
 
@@ -446,7 +444,7 @@ export default function BusinessEvalution() {
                                    fullWidth
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <Field
                                 component={SimpleFileUpload}
                                 type={"file"}
@@ -456,15 +454,6 @@ export default function BusinessEvalution() {
                                 label="Fichier JPG/PNG"
                                 required
                                 fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={DatePicker}
-                                label="Date d'évaluation"
-                                format="MM/dd/yyyy"
-                                name="signature.date"
-                                disabled
                             />
                         </Grid>
                     </Grid>

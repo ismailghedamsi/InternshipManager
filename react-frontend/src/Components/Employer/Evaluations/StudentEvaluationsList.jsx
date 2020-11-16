@@ -71,104 +71,104 @@ export default function StudentStatus() {
                     <br/>
                     <Typography variant="h5">IDENTIFICATION</Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             Programme d’études :
                         </strong>
                         {e.infos.studentProgram}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             Nom de l'entrprise :
                         </strong>
                         {e.contract.studentApplication.offer.employer.companyName}
                     </Typography>
                     <Typography>
 
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             Nom du superviseur :
                         </strong>
                         {e.contract.admin.name}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Function : </strong>
+                        <strong>Function : </strong>
                         {e.infos.supervisorRole}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Telephone : </strong>
+                        <strong>Telephone : </strong>
                         {e.infos.phoneNumber}
                     </Typography>
                     <hr/>
                     <Typography variant="h5">Productivité</Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             a) planifier et organiser son travail de façon efficace :
                         </strong>
                         {e.productivity.efficiency}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             b) comprendre rapidement les directives relatives à son
                             travail :
                         </strong>
                         {e.productivity.comprehension}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             c) maintenir un rythme de travail soutenu :
                         </strong>
                         {e.productivity.rythm}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             d) établir ses priorités :
                         </strong>
                         {e.productivity.priorities}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             e) respecter ses échéanciers :
                         </strong>
                         {e.productivity.deadlines}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Commentaire : </strong>
+                        <strong>Commentaire : </strong>
                         {e.productivity.comment}
                     </Typography>
                     <hr/>
                     <Typography variant="h5">QUALITÉ DU TRAVAIL</Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             a) respecter les mandats qui lui ont été confiés :
                         </strong>
                         {e.quality.followsInstructions}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             b) porter attention aux détails dans la réalisation de ses
                             tâches :
                         </strong>
                         {e.quality.detailsAttention}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             c) vérifier son travail, s’assurer que rien n’a été oublié :
                         </strong>
                         {e.quality.doubleChecks}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             d) rechercher des occasions de se perfectionner :
                         </strong>
                         {e.quality.strivesForPerfection}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             e) faire une bonne analyse des problèmes rencontrés :
                         </strong>
                         {e.quality.problemAnalysis}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Commentaire : </strong>
+                        <strong>Commentaire : </strong>
                         {e.quality.comment}
                     </Typography>
                     <hr/>
@@ -177,88 +177,88 @@ export default function StudentStatus() {
                     </Typography>
 
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             a) établir facilement des contacts avec les gens :
                         </strong>
                         {e.relationships.connectsEasily}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             b) contribuer activement au travail d’équipe :
                         </strong>
                         {e.relationships.teamworkContribution}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             c) s’adapter facilement à la culture de l’entreprise :
                         </strong>
                         {e.relationships.culturalAdaptation}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             d) accepter les critiques constructives :
                         </strong>
                         {e.relationships.acceptsCriticism}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             e) être respectueux envers les gens :
                         </strong>
                         {e.relationships.respectsOthers}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             f) faire preuve d’écoute active en essayant decomprendre le
                             point de vue de l’autre :
                         </strong>
                         {e.relationships.activelyListens}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Commentaire : </strong>
+                        <strong>Commentaire : </strong>
                         {e.relationships.comment}
                     </Typography>
                     <hr/>
                     <Typography variant="h5">HABILETÉS PERSONNELLES</Typography>
                     <Typography>{e.skills.connectsEasily}</Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             a) démontrer de l’intérêt et de la motivation au travail :
                         </strong>
                         {e.skills.showsInterest}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             b) exprimer clairement ses idées :
                         </strong>
                         {e.skills.expressesOwnIdeas}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             c) faire preuve d’initiative :
                         </strong>
                         {e.skills.showsInitiative}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             d) travailler de façon sécuritaire :
                         </strong>
                         {e.skills.worksSafely}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             e) démontrer un bon sens des responsabilités ne requérant
                             qu’un minimum de supervision :
                         </strong>
                         {e.skills.dependable}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             f) être ponctuel et assidu à son travail :
                         </strong>
                         {e.skills.punctual}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Commentaire</strong>
+                        <strong>Commentaire</strong>
                         {e.skills.comment}
                     </Typography>
                     <hr/>
@@ -267,24 +267,24 @@ export default function StudentStatus() {
                         APPRÉCIATION GLOBALE DU STAGIAIRE
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Expectation : </strong>
+                        <strong>Expectation : </strong>
                         {e.appreciation.expectations}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             PRÉCISEZ VOTRE APPRÉCIATION :
                         </strong>
                         {e.appreciation.comment}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             Cette évaluation a été discutée avec le stagiaire :
                         </strong>
                         {e.appreciation.discussedWithIntern}
                     </Typography>
                     <hr/>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             Le nombre d’heures réel par semaine d’encadrement accordé au
                             stagiaire :
                         </strong>
@@ -292,31 +292,31 @@ export default function StudentStatus() {
                     </Typography>
                     <hr/>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN
                             STAGE :
                         </strong>
                         {e.feedback.hireAgain}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>
+                        <strong>
                             La formation technique du stagiaire était-elle suffisante
                             pour accomplir le mandat de stage?
                         </strong>
                         {e.feedback.technicalFormationOpinion}
                     </Typography>
                     <Typography color={"textSecondary"} variant={"body2"}>
-                        <strong style={{color: "blue"}}> Nom : </strong>
+                        <strong> Nom : </strong>
                         {e.contract.studentApplication.student.firstName +
                         " " +
                         e.contract.studentApplication.student.lastName}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}>Function : </strong>
+                        <strong>Function : </strong>
                         {e.infos.supervisorRole}
                     </Typography>
                     <Typography>
-                        <strong style={{color: "blue"}}> Date : </strong>
+                        <strong> Date : </strong>
                         {e.signature.date}
                     </Typography>
                     <img src={e.signature.image} alt="signature"/>
