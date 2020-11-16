@@ -4,7 +4,9 @@ import com.power222.tuimspfcauppbj.dao.*;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.model.InternshipOffer.InternshipOfferDetails;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
-import com.power222.tuimspfcauppbj.util.*;
+import com.power222.tuimspfcauppbj.util.InterviewState;
+import com.power222.tuimspfcauppbj.util.ReviewState;
+import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -206,7 +208,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .dateTime(LocalDateTime.now().plusDays(3))
                     .build());
 
-
+/*
             var contractDto = ContractDTO.builder()
                     .studentApplicationId(studentApplication.getId())
                     .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
@@ -244,7 +246,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                         .build();
 
-//                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
             }
 
             contractGenSvc.generateContract(contractDto2, admin);
@@ -259,8 +261,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                         .build();
 
-//                contractGenSvc.signContract(signatureDto);
-//                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
             }
 
             contractGenSvc.generateContract(contractDto3, admin);
@@ -275,11 +277,11 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                         .build();
 
-//                contractGenSvc.signContract(signatureDto);
-//                contractGenSvc.signContract(signatureDto);
-//                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
             }
-
+*/
             userRepo.flush();
             resumeRepo.flush();
             internshipRepo.flush();
