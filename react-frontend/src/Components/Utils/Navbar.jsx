@@ -7,7 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import {makeStyles} from "@material-ui/core/styles";
 import MenuIcon from '@material-ui/icons/Menu';
 import axios from "axios";
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react';
 import {useHistory, useLocation} from "react-router-dom";
 import {SemesterContext} from "../../App";
 import AuthenticationService from "../../Services/AuthenticationService";
@@ -61,6 +61,17 @@ const Links = {
         {
             title: 'Rapports',
             url: '/dashboard/reports',
+        },
+        {
+            title: <Divider/>
+        },
+        {
+            title: 'Liste des évaluations d\'entrprise',
+            url: '/dashboard/businessEvaluationList',
+        },
+        {
+            title: 'Liste des évaluations de stagiaire',
+            url: '/dashboard/evaluationListAdmin'
         }
     ],
     student: [
@@ -97,6 +108,10 @@ const Links = {
         {
             title: 'Liste de contrats',
             url: '/dashboard/signContract'
+        },
+        {
+            title: 'Liste des évaluations de stagiaire',
+            url: '/dashboard/evaluationList'
         }
     ]
 }

@@ -36,6 +36,7 @@ public class MailSendingServiceTests {
     InternshipOffer offer;
     Employer employer;
     Contract contract;
+    InternEvaluation internEvaluation;
 
     @BeforeEach
     public void setUp() {
@@ -87,16 +88,30 @@ public class MailSendingServiceTests {
                                 .build()
                 )
                 .build();
+
+        internEvaluation = InternEvaluation.builder()
+                .id(1L)
+                .contract(contract)
+                .build();
     }
 
     @Test
-    public void notifyAboutCreationTest() {
+    public void notifyAboutContractCreationTest() {
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
         service.notifyAboutCreation(contract);
 
         verify(service, times(1)).sendEmail(EmailContentsType.NOTIFY_ABOUT_NEW_CONTRACT, contract, contract.getStudentApplication().getStudent().getEmail());
         verify(service, times(1)).sendEmail(EmailContentsType.NOTIFY_ABOUT_NEW_CONTRACT, contract, contract.getStudentApplication().getOffer().getEmployer().getEmail());
+    }
+
+    @Test
+    public void notifyAboutInternEvaluationCreationTest() {
+        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+
+        service.notifyAboutCreation(internEvaluation);
+
+        verify(service, times(1)).sendEmail(EmailContentsType.NOTIFY_ABOUT_EVALUATION_CREATED, contract, contract.getAdmin().getEmail());
     }
 
     @Test

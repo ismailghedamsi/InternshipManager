@@ -40,7 +40,15 @@ public class Contract extends SemesterDiscriminatedEntity {
     @OneToOne
     private StudentApplication studentApplication;
 
+    @OneToOne(mappedBy = "contract")
+    @JsonIgnoreProperties("contract")
+    private InternEvaluation internEvaluation;
+
     @ManyToOne
     @JsonIgnoreProperties("contracts")
     private Admin admin;
+
+    @OneToOne(mappedBy = "contract")
+    @JsonIgnoreProperties("contract")
+    private BusinessEvaluation businessEvaluation;
 }
