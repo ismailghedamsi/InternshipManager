@@ -374,7 +374,7 @@ export default function Evaluationform() {
                                 multiline
                                 label="Commentaires"
                                 name="productivity.comment"
-                            ></Field>
+                            />
                         </Grid>
                     </Grid>
                 </FormikStep>
@@ -475,7 +475,7 @@ export default function Evaluationform() {
                                 multiline
                                 label="Commentaires"
                                 name="quality.comment"
-                            ></Field>
+                            />
                         </Grid>
                     </Grid>
                 </FormikStep>
@@ -588,7 +588,7 @@ export default function Evaluationform() {
                                 multiline
                                 label="Commentaires"
                                 name="relationships.comment"
-                            ></Field>
+                            />
                         </Grid>
                     </Grid>
                 </FormikStep>
@@ -698,7 +698,7 @@ export default function Evaluationform() {
                                 multiline
                                 label="Commentaires"
                                 name="skills.comment"
-                            ></Field>
+                            />
                         </Grid>
                     </Grid>
                 </FormikStep>
@@ -735,7 +735,7 @@ export default function Evaluationform() {
                                 multiline
                                 label="PRÉCISEZ VOTRE APPRÉCIATION:"
                                 name="appreciation.comment"
-                            ></Field>
+                            />
                         </Grid>
 
                         <Grid item xs={8}>
@@ -840,7 +840,7 @@ export default function Evaluationform() {
                                 label="La formation technique du stagiaire était-elle suffisante pour accomplir le
                             mandat de stage?"
                                 name="feedback.technicalFormationOpinion"
-                            ></Field>
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <Field

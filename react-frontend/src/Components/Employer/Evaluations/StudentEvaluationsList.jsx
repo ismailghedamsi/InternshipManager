@@ -83,7 +83,6 @@ export default function StudentStatus() {
                         {e.contract.studentApplication.offer.employer.companyName}
                     </Typography>
                     <Typography>
-
                         <strong>
                             Nom du superviseur :
                         </strong>
@@ -173,7 +172,6 @@ export default function StudentStatus() {
                     <Typography variant="h5">
                         QUALITÉS DES RELATIONS INTERPERSONNELLES
                     </Typography>
-
                     <Typography>
                         <strong>
                             Établir facilement des contacts avec les gens :
