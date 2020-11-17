@@ -30,17 +30,17 @@ export default function StudentStatus() {
             >
                 Liste des évaluations des étudiants
             </Typography>
-            {evaluations.map((item, i) => <div key={i}>
+            {evaluations.length > 0 ? evaluations.map((item, i) => <div key={i}>
                 <button
-                    type={"button"}
-                    className={classes.linkButton}
-                    onClick={() => deleteStudentEvaluation(i)}
+                        type={"button"}
+                        className={classes.linkButton}
+                        onClick={() => deleteStudentEvaluation(i)}
                 >
                     <i className="fa fa-trash" style={{color: "red"}}/>
                 </button>
                 <button
-                    type={"button"}
-                    className={[
+                        type={"button"}
+                        className={[
                         classes.linkButton,
                         i === currentEvaluationIndex ? classes.fileButton : null,
                     ].join(" ")}
@@ -55,7 +55,7 @@ export default function StudentStatus() {
                     " " +
                     item.contract.studentApplication.student.lastName}
                 </div>}
-            </div>)}
+            </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid
             item
@@ -63,7 +63,7 @@ export default function StudentStatus() {
             align="start"
             style={{overflow: "auto", height: "100%"}}
         >
-            {evaluations.map((e, k) => <div key={k}>
+            {evaluations.length > 0 ? evaluations.map((e, k) => <div key={k}>
                 {currentEvaluationIndex === k && <div>
                     <Typography variant="h4">
                         FICHE D’ÉVALUATION DU STAGIAIRE
@@ -98,7 +98,7 @@ export default function StudentStatus() {
                         {e.infos.phoneNumber}
                     </Typography>
                     <Divider className={classes.dividers}/>
-                    <Typography variant="h5">Productivité</Typography>
+                    <Typography variant="h5">PRODUCTIVITÉ</Typography>
                     <Typography>
                         <strong>
                             Planifier et organiser son travail de façon efficace :
@@ -290,8 +290,7 @@ export default function StudentStatus() {
                     <Divider className={classes.dividers}/>
                     <Typography>
                         <strong>
-                            L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN
-                            STAGE :
+                            L’entreprise aimerait accueillir cet élève pour son prochain stage :
                         </strong>
                         {e.feedback.hireAgain}
                     </Typography>
@@ -320,7 +319,7 @@ export default function StudentStatus() {
                         {e.signature.date}
                     </Typography>
                 </div>}
-            </div>)}
+            </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
     </Grid>
 }
