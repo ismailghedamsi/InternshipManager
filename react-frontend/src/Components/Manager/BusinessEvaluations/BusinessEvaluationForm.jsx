@@ -72,7 +72,7 @@ export default function BusinessEvalution() {
     return <Card style={{overflow: "auto", height: "auto"}}>
         <CardContent>
             <FormikStepper
-                application={location.state}
+                contract={location.state}
                 initialValues={{
                     evaluationCriterias: {
                         internshipCount: "",
@@ -106,7 +106,7 @@ export default function BusinessEvalution() {
                     },
                     signature: {
                         image: "",
-                        name: "",
+                        name: location.state.admin.name,
                         date: new Date()
                     }
                 }}
@@ -121,7 +121,7 @@ export default function BusinessEvalution() {
                                     name="evaluationCriterias.internshipCount"
                                     id="internship"
                                     value="Premier stage"
-                                /> 1
+                                /> Premier stage
                             </label>
                             <label>
                                 <Field
@@ -129,7 +129,7 @@ export default function BusinessEvalution() {
                                     name="evaluationCriterias.internshipCount"
                                     id="internship"
                                     value="Deuxieme stage"
-                                /> 2
+                                /> Deuxième stage
                             </label>
                             <ErrorMessage name={"evaluationCriterias.internshipCount"}>
                                 {msg => <p className="msgError"><span style={{color: "red"}}>{msg}</span></p>}
@@ -140,6 +140,7 @@ export default function BusinessEvalution() {
                                 tâches annoncées dans l’entente de stage</label>
                             <Field
                                 as="select"
+                                align="start"
                                 name="evaluationCriterias.workAsAnnoncement"
                             >
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
@@ -205,7 +206,7 @@ export default function BusinessEvalution() {
                                 name="evaluationCriterias.salary"
                                 id="salary"
                                 variant="outlined"
-                                label="Préciser : __/l’heure."
+                                label="Préciser le taux horaire."
                                 required
                                 type={"number"}
                                 style={{marginRight: "2em"}}
@@ -253,7 +254,7 @@ export default function BusinessEvalution() {
                             </ErrorMessage>
                         </Grid>
                         <Grid item xs={12}>
-                            <label style={{marginRight: "2em"}}>Préciser le nombre d’heures/semaine :</label>
+                            <label style={{marginRight: "2em"}}>Préciser le nom d'heure par semaine :</label>
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Field
@@ -452,6 +453,7 @@ export default function BusinessEvalution() {
                                    variant="outlined"
                                    label="Nom :"
                                    required
+                                   disabled
                                    fullWidth
                             />
                         </Grid>

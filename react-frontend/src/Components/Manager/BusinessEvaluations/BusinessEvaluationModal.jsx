@@ -10,7 +10,7 @@ import useStyles from "../../Utils/useStyles";
 export default function BusinessEvaluationModal({isOpen, data, hide}) {
     const classes = useStyles()
 
-    return <Dialog open={isOpen} onClose={hide} fullWidth={true} fullScreen={true} maxWidth={'md'}>
+    return <Dialog open={isOpen} onClose={hide} fullWidth={true} maxWidth={'md'}>
         <DialogTitle id="alert-dialog-title">{"ÉVALUATION DU MILIEU DE STAGE"}</DialogTitle>
         <DialogContent>
             {data && <div>

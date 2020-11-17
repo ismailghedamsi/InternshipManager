@@ -32,7 +32,7 @@ export default function BusinessEvaluationList() {
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 Liste d'évaluation entreprise
             </Typography>
-            {businessEvaluations.map((item, i) =>
+            {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                 <div key={i}>
                     <button
                         type={"button"}
@@ -57,11 +57,11 @@ export default function BusinessEvaluationList() {
                     }
                     <hr/>
                 </div>
-            )}
+            ) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid item xs={7} align="start" style={{overflow: "auto", height: "100%"}}>
             <div>
-                {businessEvaluations.map((item, i) =>
+                {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                     <div key={i}>
                         {currentIndex === i &&
                         <div>
@@ -213,7 +213,7 @@ export default function BusinessEvaluationList() {
                         </div>
                         }
                     </div>
-                )}
+                ) : <Typography align="center">Aucun élément à afficher</Typography>}
             </div>
         </Grid>
     </Grid>

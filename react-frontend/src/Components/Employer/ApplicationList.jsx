@@ -79,20 +79,10 @@ export default function ApplicationList() {
         }
     }
 
-    function evaluationDirection() {
-        return (AuthenticationService.getCurrentUserRole() === "admin") ? "/dashboard/businessEvaluation" : "/dashboard/evaluateStudent"
-    }
-
-    function roleCondition(i) {
-        return (AuthenticationService.getCurrentUserRole() === "admin") ?
-            offer.applications[i].contract.businessEvaluation === null : offer.applications[i].contract.internEvaluation === null
-    }
-
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer
             documents={(offer.applications ? offer.applications : []).map((o) => o.resume.file)}
-            title={<span>Application<br/>{offer.title}</span>}
-        >
+            title={<span>Application<br/>{offer.title}</span>}>
             {(i, setCurrent) => <div key={i}>
                 <button
                     type={"button"}
@@ -104,14 +94,12 @@ export default function ApplicationList() {
                     }}
                 >
                     <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
-                        {offer.applications[i].student.firstName}
-                        {offer.applications[i].student.lastName}
+                        {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
                     </Typography>
                 </button>
                 {currentIndex === i && <div>
                     <Typography color={"textPrimary"} variant={"body1"}>
-                        {offer.applications[i].student.phoneNumber}
-                        {offer.applications[i].student.email}
+                        {offer.applications[i].student.phoneNumber} {offer.applications[i].student.email}
                     </Typography>
                     <Typography color={"textPrimary"} variant={"body1"}>
                         {offer.applications[i].student.address}
@@ -127,17 +115,6 @@ export default function ApplicationList() {
                         style={{display: "block"}}
                     >
                         Convoquer l'étudiant pour un entrevue
-                    </Link>}
-                    {offer.applications[i].contract !== null && offer.applications[i].contract.signatureState === "SIGNED" && roleCondition(i) &&
-                    <Link
-                        variant={"body1"}
-                        to={{
-                            pathname: evaluationDirection(),
-                            state: {...offer.applications[i]},
-                        }}
-                        style={{display: "block"}}
-                    >
-                        {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
                     </Link>}
                 </div>}
                 <hr/>

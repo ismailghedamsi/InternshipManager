@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {useApi} from "../Utils/Hooks";
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
 import useStyles from "../Utils/useStyles";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 export default function ContractList() {
     const classes = useStyles();
@@ -66,6 +67,15 @@ export default function ContractList() {
         }
     }
 
+    function evaluationDirection() {
+        return (AuthenticationService.getCurrentUserRole() === "admin") ? "/dashboard/businessEvaluation" : "/dashboard/evaluateStudent"
+    }
+
+    function roleCondition(i) {
+        return (AuthenticationService.getCurrentUserRole() === "admin") ?
+            contracts[i].businessEvaluation === null : contracts[i].internEvaluation === null
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer
             documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
@@ -124,6 +134,17 @@ export default function ContractList() {
                         }
                         {showContractState(i)}
                     </div>
+                    {contracts[i].signatureState === "SIGNED" && roleCondition(i) &&
+                    <Link
+                        variant={"body1"}
+                        to={{
+                            pathname: evaluationDirection(),
+                            state: {...contracts[i]},
+                        }}
+                        style={{display: "block"}}
+                    >
+                        {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
+                    </Link>}
                     <hr className={classes.hrStyle}/>
                 </div>}
         </PdfSelectionViewer>

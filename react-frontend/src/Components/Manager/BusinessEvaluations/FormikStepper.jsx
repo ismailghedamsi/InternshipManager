@@ -7,7 +7,7 @@ import EvaluationModal from '../../Employer/Evaluations/EvaluationModal';
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
 import BusinessEvaluationModal from "./BusinessEvaluationModal";
 
-export function FormikStepper({application, initialValues, children}) {
+export function FormikStepper({contract, initialValues, children}) {
     const history = useHistory()
     const childrenArray = React.Children.toArray(children)
     const api = useApi()
@@ -66,7 +66,7 @@ export function FormikStepper({application, initialValues, children}) {
             onSubmit={async values => {
                 if (isLastStep()) {
                     const dto = {...values}
-                    dto.contract = application.contract
+                    dto.contract = contract
                     dto.signature.image = await readFile(values.signature.image)
                     api.post(postEndPoint(), dto)
                         .then(() => history.push(pageRedirection()))
