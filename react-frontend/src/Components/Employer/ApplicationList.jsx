@@ -1,11 +1,11 @@
-import {Checkbox} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
-import {Link, useLocation} from "react-router-dom";
-import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../Utils/Hooks";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import useStyles from "../Utils/useStyles";
+import {Checkbox} from "@material-ui/core"
+import Typography from "@material-ui/core/Typography"
+import React, {useEffect, useState} from "react"
+import {Link, useLocation} from "react-router-dom"
+import AuthenticationService from "../../Services/AuthenticationService"
+import {useApi} from "../Utils/Hooks"
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
+import useStyles from "../Utils/useStyles"
 
 export default function ApplicationList() {
     const classes = useStyles()
@@ -86,7 +86,7 @@ export default function ApplicationList() {
             {(i, setCurrent) => <div key={i}>
                 <button
                     type={"button"}
-                    className={[classes.linkButton, classes.fileButton].join(" ")}
+                    className={[classes.linkButton, currentIndex === i ? classes.fileButton : ""].join(" ")}
                     autoFocus={i === 0}
                     onClick={() => {
                         setCurrent(i)
