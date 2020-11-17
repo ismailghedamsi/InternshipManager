@@ -4,11 +4,21 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import useStyles from "../../Utils/useStyles";
+import {useDateParser, useFileReader} from "../../Utils/Hooks";
 
 export default function EvaluationModal({isOpen, data, hide}) {
-    const classes = useStyles();
+    const [imageSrc, setImageSrc] = useState("")
+    const classes = useStyles()
+    const parseDate = useDateParser()
+    const imageDecoder = useFileReader()
+
+    useEffect(() => {
+        if (data.signature.image)
+            imageDecoder(data.signature.image).then(setImageSrc)
+    }, [imageDecoder])
+
     return <Dialog
         open={isOpen}
         onClose={hide}
@@ -232,8 +242,7 @@ export default function EvaluationModal({isOpen, data, hide}) {
                 <div className={classes.evaluationSections}>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN
-                  STAGE
+                   L’entreprise aimerait accueillir cet élève pour son prochain stage
                 </span>
                         : {data.feedback.hireAgain}
                     </Typography>
@@ -245,11 +254,37 @@ export default function EvaluationModal({isOpen, data, hide}) {
                         {data.feedback.technicalFormationOpinion}
                     </Typography>
                 </div>
+                <div className={classes.evaluationSections}>
+                    {data.signature.image &&
+                    <img src={imageSrc} alt="signature" className={classes.signature}/>}
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>Enseignant responsable:</span>
+                        &ensp;{data.signature.name}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>Date:</span>
+                        &ensp;{parseDate(data.signature.date)}
+                    </Typography>
+                </div>
             </div>}
         </DialogContent>
         <DialogActions>
-            <Button color="primary" onClick={hide}>
-                Valider evaluation
+            <Button color="secondary"
+                    variant="contained"
+                    onClick={() => {
+                        hide()
+                    }}
+            >
+                Revenir au formulaire
+            </Button>
+            <Button color="primary"
+                    variant="contained"
+                    onClick={() => {
+                        hide()
+                        data.submitForm()
+                    }}
+            >
+                Envoyer l'évaluation
             </Button>
         </DialogActions>
     </Dialog>

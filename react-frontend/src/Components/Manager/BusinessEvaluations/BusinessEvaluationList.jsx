@@ -1,8 +1,9 @@
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
-import {useApi} from "../../Utils/Hooks";
-import useStyles from "../../Utils/useStyles";
+import {Divider} from "@material-ui/core"
+import Grid from "@material-ui/core/Grid"
+import Typography from "@material-ui/core/Typography"
+import React, {useEffect, useState} from "react"
+import {useApi} from "../../Utils/Hooks"
+import useStyles from "../../Utils/useStyles"
 
 export default function BusinessEvaluationList() {
     const classes = useStyles()
@@ -32,7 +33,7 @@ export default function BusinessEvaluationList() {
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 Liste d'évaluation entreprise
             </Typography>
-            {businessEvaluations.map((item, i) =>
+            {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                 <div key={i}>
                     <button
                         type={"button"}
@@ -55,13 +56,13 @@ export default function BusinessEvaluationList() {
                         {item.contract.studentApplication.offer.employer.companyName} - {item.contract.studentApplication.offer.employer.contactName}
                     </div>
                     }
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                 </div>
-            )}
+            ) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid item xs={7} align="start" style={{overflow: "auto", height: "100%"}}>
             <div>
-                {businessEvaluations.map((item, i) =>
+                {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                     <div key={i}>
                         {currentIndex === i &&
                         <div>
@@ -92,7 +93,7 @@ export default function BusinessEvaluationList() {
                                 <strong>Téléphone: </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.phoneNumber}
                             </Typography>
-                            <hr/>
+                            <Divider className={classes.dividers}/>
                             <Typography variant="h5">
                                 IDENTIFICATION DU STAGIAIRE
                             </Typography>
@@ -108,7 +109,7 @@ export default function BusinessEvaluationList() {
                                 <strong>Stage: </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.internshipCount}
                             </Typography>
-                            <hr/>
+                            <Divider className={classes.dividers}/>
                             <Typography variant="h5">
                                 ÉVALUATION
                             </Typography>
@@ -169,7 +170,7 @@ export default function BusinessEvaluationList() {
                                 <strong>Commentaires: </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.comment}
                             </Typography>
-                            <hr/>
+                            <Divider className={classes.dividers}/>
                             <Typography variant="h5">
                                 OBSERVATIONS GÉNÉRALES
                             </Typography>
@@ -195,25 +196,27 @@ export default function BusinessEvaluationList() {
                                 De {businessEvaluations[currentIndex].observations.startShiftsThree}h
                                 à {businessEvaluations[currentIndex].observations.endShiftsThree}h
                             </Typography>
-                            <hr/>
+                            <Divider className={classes.dividers}/>
                             <Typography variant="h5">
                                 Signature du gestionnaire du stage
                             </Typography>
+                            <img src={businessEvaluations[currentIndex].signature.image}
+                                 alt="signature"
+                                 className={classes.signature}
+                            />
+                            <Divider className={classes.dividers}/>
                             <Typography>
-                                <strong>Signature de l’enseignant responsable: </strong>
+                                <strong>Enseignant responsable: </strong>
                                 {businessEvaluations[currentIndex].signature.name}
                             </Typography>
                             <Typography>
                                 <strong>Date: </strong>
                                 {businessEvaluations[currentIndex].signature.date}
                             </Typography>
-                            <Typography>
-                                <img src={businessEvaluations[currentIndex].signature.image} alt="signature"/>
-                            </Typography>
                         </div>
                         }
                     </div>
-                )}
+                ) : <Typography align="center">Aucun élément à afficher</Typography>}
             </div>
         </Grid>
     </Grid>

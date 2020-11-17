@@ -1,16 +1,25 @@
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
-import React from "react";
-import useStyles from "../../Utils/useStyles";
+import Button from "@material-ui/core/Button"
+import Dialog from "@material-ui/core/Dialog"
+import DialogActions from "@material-ui/core/DialogActions"
+import DialogContent from "@material-ui/core/DialogContent"
+import DialogTitle from "@material-ui/core/DialogTitle"
+import Typography from "@material-ui/core/Typography"
+import React, {useEffect, useState} from "react"
+import {useDateParser, useFileReader} from "../../Utils/Hooks"
+import useStyles from "../../Utils/useStyles"
 
 export default function BusinessEvaluationModal({isOpen, data, hide}) {
+    const [imageSrc, setImageSrc] = useState("")
     const classes = useStyles()
+    const parseDate = useDateParser()
+    const imageDecoder = useFileReader()
 
-    return <Dialog open={isOpen} onClose={hide} fullWidth={true} fullScreen={true} maxWidth={'md'}>
+    useEffect(() => {
+        if (data.signature.image)
+            imageDecoder(data.signature.image).then(setImageSrc)
+    }, [imageDecoder])
+
+    return <Dialog open={isOpen} onClose={hide} fullWidth={true} maxWidth={"md"}>
         <DialogTitle id="alert-dialog-title">{"ÉVALUATION DU MILIEU DE STAGE"}</DialogTitle>
         <DialogContent>
             {data && <div>
@@ -111,11 +120,40 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                         De {data.observations.startShiftsThree}h à {data.observations.endShiftsThree}h
                     </Typography>
                 </div>
+                <div className={classes.evaluationSections}>
+                    <Typography variant="h5">
+                        SIGNATURE
+                    </Typography>
+                    {data.signature.image &&
+                    <img src={imageSrc} alt="signature" className={classes.signature}/>}
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>Enseignant responsable:</span>
+                        &ensp;{data.signature.name}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>Date:</span>
+                        &ensp;{parseDate(data.signature.date)}
+                    </Typography>
+                </div>
             </div>}
         </DialogContent>
         <DialogActions>
-            <Button onClick={hide} color="primary">
-                J'ai compris
+            <Button color="secondary"
+                    variant="contained"
+                    onClick={() => {
+                        hide()
+                    }}
+            >
+                Revenir au formulaire
+            </Button>
+            <Button color="primary"
+                    variant="contained"
+                    onClick={() => {
+                        hide()
+                        data.submitForm()
+                    }}
+            >
+                Envoyer l'évaluation
             </Button>
         </DialogActions>
     </Dialog>
