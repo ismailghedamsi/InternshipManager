@@ -1,10 +1,10 @@
-import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@material-ui/core'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import {Form, Formik} from 'formik'
-import React, {useState} from 'react'
+import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from "@material-ui/core"
+import LinearProgress from "@material-ui/core/LinearProgress"
+import {Form, Formik} from "formik"
+import React, {useState} from "react"
 import {useHistory} from "react-router-dom"
 import AuthenticationService from "../../../Services/AuthenticationService"
-import EvaluationModal from '../../Employer/Evaluations/EvaluationModal'
+import EvaluationModal from "../../Employer/Evaluations/EvaluationModal"
 import {useApi, useFileReader, useModal} from "../../Utils/Hooks"
 import BusinessEvaluationModal from "./BusinessEvaluationModal"
 
@@ -36,20 +36,16 @@ export function FormikStepper({contract, initialValues, children}) {
     function directionModal() {
         return AuthenticationService.getCurrentUserRole() === "admin" ?
             <BusinessEvaluationModal isOpen={isBusinessEvaluationModalOpen} data={data}
-                                     hide={closeBusinessEvaluationModal}/> :
-            <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>
+                                     hide={closeBusinessEvaluationModal} /> :
+            <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal} />
     }
 
     function openModal() {
         return AuthenticationService.getCurrentUserRole() === "admin" ? openBusinessEvaluationModal() : openEvalationModal()
     }
 
-    function otherButtonContext() {
-        return isLastStep() ? 'TERMINER' : 'PAGE SUIVANTE'
-    }
-
     return <>
-        {validationButtonClick ? directionModal() : ""}
+        {validationButtonClick && directionModal()}
         <Formik
             initialValues={initialValues}
             validationSchema={currentChild.props.validationSchema}
@@ -66,65 +62,69 @@ export function FormikStepper({contract, initialValues, children}) {
             }}
             onSubmit={async values => {
                 if (isLastStep()) {
+                    setValidationButtonClick(false)
                     const dto = {...values}
                     dto.contract = contract
+                    delete dto.contract.studentApplication
                     dto.signature.image = await readFile(values.signature.image)
-                    api.post(postEndPoint(), dto)
-                        .then(() => history.push(pageRedirection()))
                     setCompleted(true)
+                    return api.post(postEndPoint(), dto)
+                        .then(() => history.push(pageRedirection()))
+
                 } else setStep(s => s + 1)
-            }}>
-            {({isSubmitting, values}) =>
-                <Form autoComplete="off">
-                    <Stepper alternativeLabel activeStep={step}>
+            }} >
+            {({isSubmitting, values, submitForm}) =>
+                <Form autoComplete="off" >
+                    <Stepper alternativeLabel activeStep={step} >
                         {childrenArray.map((child, index) =>
-                            <Step key={child.props.label} completed={step > index || completed}>
-                                <StepLabel>{child.props.label}</StepLabel>
-                            </Step>
+                            <Step key={child.props.label} completed={step > index || completed} >
+                                <StepLabel >{child.props.label}</StepLabel >
+                            </Step >
                         )}
-                    </Stepper>
+                    </Stepper >
                     {currentChild}
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} >
                         {step > 0 &&
-                        <Grid item>
+                        <Grid item >
                             <Button
                                 disabled={isSubmitting}
                                 variant="contained"
                                 color="primary"
-                                onClick={() => setStep(s => s - 1)}>
+                                onClick={() => setStep(s => s - 1)} >
                                 PAGE PRÉCÉDENTE
-                            </Button>
-                        </Grid>
+                            </Button >
+                        </Grid >
                         }
                         {isLastStep() &&
-                        <Grid item>
+                        <Grid item >
                             <Button
                                 disabled={isSubmitting}
                                 variant="contained"
                                 color="primary"
                                 onClick={async () => {
-                                    const dto = {...values}
-                                    setData(dto)
+                                    setData({...values, submitForm})
                                     setValidationButtonClick(true)
                                     openModal()
-                                }}>
+                                }} >
                                 Valider évaluation
-                            </Button>
-                        </Grid>
+                            </Button >
+                        </Grid >
                         }
-                        <Grid item>
+                        {isSubmitting && <LinearProgress />}
+                        {!isLastStep() &&
+                        <Grid item >
                             <Button
-                                startIcon={isSubmitting ? <CircularProgress size="1rem"/> : null}
+                                startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
                                 disabled={isSubmitting}
                                 variant="contained"
                                 color="primary"
-                                type="submit">
-                                {isSubmitting && <LinearProgress/> ? 'Submitting' : otherButtonContext()}
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Form>
+                                type="submit" >
+                                PAGE SUIVANTE
+                            </Button >
+                        </Grid >}
+                    </Grid >
+                </Form >
             }
-        </Formik>
+        </Formik >
     </>
 }
