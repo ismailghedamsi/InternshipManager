@@ -1,24 +1,24 @@
-import {Grid, Typography} from "@material-ui/core";
+import {Divider, Grid, Typography} from "@material-ui/core"
 import React, {useEffect, useState} from "react";
 import {useApi} from "../../Utils/Hooks";
 import useStyles from "../../Utils/useStyles";
 
 export default function StudentStatus() {
-    const classes = useStyles();
-    const api = useApi();
-    const [evaluations, setEvaluations] = useState([]);
-    const [currentEvaluationIndex, setCurrentEvaluationIndex] = useState(0);
+    const classes = useStyles()
+    const api = useApi()
+    const [evaluations, setEvaluations] = useState([])
+    const [currentEvaluationIndex, setCurrentEvaluationIndex] = useState(0)
 
     useEffect(() => {
-        api.get("/internEvaluation").then(r => setEvaluations(r ? r.data : []));
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+        api.get("/internEvaluation").then(r => setEvaluations(r ? r.data : []))
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function deleteStudentEvaluation(index) {
-        const nextState = [...evaluations];
+        const nextState = [...evaluations]
         return api.delete("/internEvaluation/" + nextState[index].id).then(() => {
-            nextState.splice(index, 1);
-            setEvaluations(nextState);
-        });
+            nextState.splice(index, 1)
+            setEvaluations(nextState)
+        })
     }
 
     return <Grid container spacing={2} className={classes.main}>
@@ -97,36 +97,35 @@ export default function StudentStatus() {
                         <strong>Telephone : </strong>
                         {e.infos.phoneNumber}
                     </Typography>
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                     <Typography variant="h5">Productivité</Typography>
                     <Typography>
                         <strong>
-                            a) planifier et organiser son travail de façon efficace :
+                            Planifier et organiser son travail de façon efficace :
                         </strong>
                         {e.productivity.efficiency}
                     </Typography>
                     <Typography>
                         <strong>
-                            b) comprendre rapidement les directives relatives à son
-                            travail :
+                            Comprendre rapidement les directives relatives à son travail :
                         </strong>
                         {e.productivity.comprehension}
                     </Typography>
                     <Typography>
                         <strong>
-                            c) maintenir un rythme de travail soutenu :
+                            Maintenir un rythme de travail soutenu :
                         </strong>
                         {e.productivity.rythm}
                     </Typography>
                     <Typography>
                         <strong>
-                            d) établir ses priorités :
+                            Établir ses priorités :
                         </strong>
                         {e.productivity.priorities}
                     </Typography>
                     <Typography>
                         <strong>
-                            e) respecter ses échéanciers :
+                            Respecter ses échéanciers :
                         </strong>
                         {e.productivity.deadlines}
                     </Typography>
@@ -134,36 +133,35 @@ export default function StudentStatus() {
                         <strong>Commentaire : </strong>
                         {e.productivity.comment}
                     </Typography>
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                     <Typography variant="h5">QUALITÉ DU TRAVAIL</Typography>
                     <Typography>
                         <strong>
-                            a) respecter les mandats qui lui ont été confiés :
+                            Respecter les mandats qui lui ont été confiés :
                         </strong>
                         {e.quality.followsInstructions}
                     </Typography>
                     <Typography>
                         <strong>
-                            b) porter attention aux détails dans la réalisation de ses
-                            tâches :
+                            Porter attention aux détails dans la réalisation de ses tâches :
                         </strong>
                         {e.quality.detailsAttention}
                     </Typography>
                     <Typography>
                         <strong>
-                            c) vérifier son travail, s’assurer que rien n’a été oublié :
+                            Vérifier son travail, s’assurer que rien n’a été oublié :
                         </strong>
                         {e.quality.doubleChecks}
                     </Typography>
                     <Typography>
                         <strong>
-                            d) rechercher des occasions de se perfectionner :
+                            Rechercher des occasions de se perfectionner :
                         </strong>
                         {e.quality.strivesForPerfection}
                     </Typography>
                     <Typography>
                         <strong>
-                            e) faire une bonne analyse des problèmes rencontrés :
+                            Faire une bonne analyse des problèmes rencontrés :
                         </strong>
                         {e.quality.problemAnalysis}
                     </Typography>
@@ -171,44 +169,44 @@ export default function StudentStatus() {
                         <strong>Commentaire : </strong>
                         {e.quality.comment}
                     </Typography>
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                     <Typography variant="h5">
                         QUALITÉS DES RELATIONS INTERPERSONNELLES
                     </Typography>
 
                     <Typography>
                         <strong>
-                            a) établir facilement des contacts avec les gens :
+                            Établir facilement des contacts avec les gens :
                         </strong>
                         {e.relationships.connectsEasily}
                     </Typography>
                     <Typography>
                         <strong>
-                            b) contribuer activement au travail d’équipe :
+                            Contribuer activement au travail d’équipe :
                         </strong>
                         {e.relationships.teamworkContribution}
                     </Typography>
                     <Typography>
                         <strong>
-                            c) s’adapter facilement à la culture de l’entreprise :
+                            S’adapter facilement à la culture de l’entreprise :
                         </strong>
                         {e.relationships.culturalAdaptation}
                     </Typography>
                     <Typography>
                         <strong>
-                            d) accepter les critiques constructives :
+                            Accepter les critiques constructives :
                         </strong>
                         {e.relationships.acceptsCriticism}
                     </Typography>
                     <Typography>
                         <strong>
-                            e) être respectueux envers les gens :
+                            Être respectueux envers les gens :
                         </strong>
                         {e.relationships.respectsOthers}
                     </Typography>
                     <Typography>
                         <strong>
-                            f) faire preuve d’écoute active en essayant decomprendre le
+                            Faire preuve d’écoute active en essayant decomprendre le
                             point de vue de l’autre :
                         </strong>
                         {e.relationships.activelyListens}
@@ -217,43 +215,43 @@ export default function StudentStatus() {
                         <strong>Commentaire : </strong>
                         {e.relationships.comment}
                     </Typography>
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                     <Typography variant="h5">HABILETÉS PERSONNELLES</Typography>
                     <Typography>{e.skills.connectsEasily}</Typography>
                     <Typography>
                         <strong>
-                            a) démontrer de l’intérêt et de la motivation au travail :
+                            Démontrer de l’intérêt et de la motivation au travail :
                         </strong>
                         {e.skills.showsInterest}
                     </Typography>
                     <Typography>
                         <strong>
-                            b) exprimer clairement ses idées :
+                            Exprimer clairement ses idées :
                         </strong>
                         {e.skills.expressesOwnIdeas}
                     </Typography>
                     <Typography>
                         <strong>
-                            c) faire preuve d’initiative :
+                            Faire preuve d’initiative :
                         </strong>
                         {e.skills.showsInitiative}
                     </Typography>
                     <Typography>
                         <strong>
-                            d) travailler de façon sécuritaire :
+                            Travailler de façon sécuritaire :
                         </strong>
                         {e.skills.worksSafely}
                     </Typography>
                     <Typography>
                         <strong>
-                            e) démontrer un bon sens des responsabilités ne requérant
+                            Démontrer un bon sens des responsabilités ne requérant
                             qu’un minimum de supervision :
                         </strong>
                         {e.skills.dependable}
                     </Typography>
                     <Typography>
                         <strong>
-                            f) être ponctuel et assidu à son travail :
+                            Être ponctuel et assidu à son travail :
                         </strong>
                         {e.skills.punctual}
                     </Typography>
@@ -261,8 +259,7 @@ export default function StudentStatus() {
                         <strong>Commentaire</strong>
                         {e.skills.comment}
                     </Typography>
-                    <hr/>
-
+                    <Divider className={classes.dividers}/>
                     <Typography variant="h5">
                         APPRÉCIATION GLOBALE DU STAGIAIRE
                     </Typography>
@@ -282,7 +279,7 @@ export default function StudentStatus() {
                         </strong>
                         {e.appreciation.discussedWithIntern}
                     </Typography>
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                     <Typography>
                         <strong>
                             Le nombre d’heures réel par semaine d’encadrement accordé au
@@ -290,7 +287,7 @@ export default function StudentStatus() {
                         </strong>
                         {e.feedback.weeklySupervisionHours}
                     </Typography>
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                     <Typography>
                         <strong>
                             L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN
@@ -305,17 +302,19 @@ export default function StudentStatus() {
                         </strong>
                         {e.feedback.technicalFormationOpinion}
                     </Typography>
-                    <Typography color={"textSecondary"} variant={"body2"}>
-                        <strong> Nom : </strong>
-                        {e.contract.studentApplication.student.firstName +
-                        " " +
-                        e.contract.studentApplication.student.lastName}
-                    </Typography>
                     <Typography>
                         <strong>Function : </strong>
                         {e.infos.supervisorRole}
                     </Typography>
-                    <img src={e.signature.image} alt="signature"/>
+                    <Divider className={classes.dividers}/>
+                    <Typography variant="h5">
+                        Signature
+                    </Typography>
+                    <img src={e.signature.image} alt="signature" className={classes.signature}/>
+                    <Typography>
+                        <strong> Nom : </strong>
+                        {e.contract.studentApplication.offer.employer.contactName}
+                    </Typography>
                     <Typography>
                         <strong> Date : </strong>
                         {e.signature.date}
@@ -323,5 +322,5 @@ export default function StudentStatus() {
                 </div>}
             </div>)}
         </Grid>
-    </Grid>;
+    </Grid>
 }

@@ -170,6 +170,7 @@ export default function Evaluationform() {
     const validationSchemaStep8 = yup.object().shape({
         feedback: yup.object().shape({
             hireAgain: yup.string().trim().required(requiredRadioMsg),
+            technicalFormationOpinion: yup.string().trim().required(requiredFieldMsg)
         }),
         signature: yup.object().shape({
             name: yup.string().required().min(2, tooShortError).max(50, tooBigError)
@@ -276,11 +277,14 @@ export default function Evaluationform() {
                 >
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
-                            <h1>Capacité d’optimiser son rendement au travail</h1>
-                            <h1>Le stagiaire a été en mesure de :</h1>
+                            <h3>Capacité d’optimiser son rendement au travail</h3>
+                        </Grid>
+                        <Grid item xs={8}>
                             <label>
                                 a - planifier et organiser son travail de façon efficace
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field
                                 as="select"
                                 variant="outlined"
@@ -296,11 +300,13 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label style={{marginRight: "2em"}}>
                                 b - comprendre rapidement les directives relatives à son
                                 travail
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field
                                 variant="outlined"
                                 as="select"
@@ -314,10 +320,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label style={{marginRight: "2em"}}>
                                 c - maintenir un rythme de travail soutenu
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="productivity.rythm">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -327,10 +335,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label style={{marginRight: "2em"}}>
                                 d - établir ses priorités
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="productivity.priorities">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -340,10 +350,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label style={{marginRight: "2em"}}>
                                 e - respecter ses échéanciers
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="productivity.deadlines">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -377,12 +389,15 @@ export default function Evaluationform() {
                         spacing={2}
                     >
                         <Grid item xs={12}>
-                            <h1>
+                            <h3>
                                 Capacité de s’acquitter des tâches sous sa responsabilité en
                                 s’imposant personnellement des normes de qualité
-                            </h1>
-                            <h1>Le stagiaire a été en mesure de :</h1>
+                            </h3>
+                        </Grid>
+                        <Grid item xs={8}>
                             <label>a - respecter les mandats qui lui ont été confiés</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="quality.followsInstruction">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -392,11 +407,13 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
                                 b - porter attention aux détails dans la réalisation de ses
                                 tâches
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="quality.detailsAttention">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -406,10 +423,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
                                 c - vérifier son travail, s’assurer que rien n’a été oublié
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="quality.doubleChecks">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -419,8 +438,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>d - rechercher des occasions de se perfectionner</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="quality.strivesForPerfection">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -430,10 +451,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
                                 e - faire une bonne analyse des problèmes rencontrés
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="quality.problemAnalysis">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -467,12 +490,15 @@ export default function Evaluationform() {
                         spacing={2}
                     >
                         <Grid item xs={12}>
-                            <h1>
+                            <h3>
                                 Capacité d’établir des interrelations harmonieuses dans son
                                 milieu de travail
-                            </h1>
-                            <h1>Le stagiaire a été en mesure de :</h1>
+                            </h3>
+                        </Grid>
+                        <Grid item xs={8}>
                             <label>a - établir facilement des contacts avec les gens</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="relationships.connectsEasily">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -482,8 +508,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>b - contribuer activement au travail d’équipe</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="relationships.teamworkContribution">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -493,10 +521,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
                                 c - s’adapter facilement à la culture de l’entreprise
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="relationships.culturalAdaptation">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -506,8 +536,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>d - accepter les critiques constructives</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="relationships.acceptsCriticism">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -517,8 +549,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>e - être respectueux envers les gens</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="relationships.respectsOthers">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -528,11 +562,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
-                                f - Faire preuve d’écoute active en essayant de comprendre le
-                                point de vue de l’autre
+                                f - Faire preuve d’écoute active en essayant de comprendre le point de vue de l’autre
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="relationships.activelyListens">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -568,14 +603,16 @@ export default function Evaluationform() {
                         spacing={2}
                     >
                         <Grid item xs={12}>
-                            <h1>
-                                Capacité de faire preuve d’attitudes ou de comportements
-                                matures et responsables
-                            </h1>
-                            <h1>Le stagiaire a été en mesure de :</h1>
+                            <h3>
+                                Capacité de faire preuve d’attitudes ou de comportements matures et responsables
+                            </h3>
+                        </Grid>
+                        <Grid item xs={8}>
                             <label>
                                 a - démontrer de l’intérêt et de la motivation au travail
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="skills.showsInterest">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -585,8 +622,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>b - exprimer clairement ses idées</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="skills.expressesOwnIdeas">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -596,8 +635,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>c - faire preuve d’initiative</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="skills.showsInitiative">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -607,8 +648,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>d - travailler de façon sécuritaire</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="skills.worksSafely">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -618,11 +661,12 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
-                                e - démontrer un bon sens des responsabilités ne requérant
-                                qu’un minimum de supervision
+                                e - démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="skills.dependable">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -632,8 +676,10 @@ export default function Evaluationform() {
                                 </p>}
                             </ErrorMessage>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>f - être ponctuel et assidu à son travail</label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field as="select" name="skills.puntual">
                                 {evaluationAnswers.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -666,8 +712,10 @@ export default function Evaluationform() {
                         justify="center"
                         spacing={2}
                     >
-                        <Grid item xs={12}>
-                            <label>APPRÉCIATION GLOBALE DU STAGIAIRE</label>
+                        <Grid item xs={6}>
+                            <label>Appréciation gloabale du stagiaire</label>
+                        </Grid>
+                        <Grid item xs={6}>
                             <Field as="select" name="appreciation.expectations">
                                 {globalAppreciations.map((e, k) => <option key={k}>{e}</option>)}
                             </Field>
@@ -690,24 +738,26 @@ export default function Evaluationform() {
                             ></Field>
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
                                 Cette évaluation a été discutée avec le stagiaire :
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Field
+                                type="radio"
+                                name="appreciation.discussedWithIntern"
+                                value="Oui"
+                            />
                             <label>
-                                <Field
-                                    type="radio"
-                                    name="appreciation.discussedWithIntern"
-                                    value="Oui"
-                                />
                                 Oui
                             </label>
+                            <Field
+                                type="radio"
+                                name="appreciation.discussedWithIntern"
+                                value="Non"
+                            />
                             <label>
-                                <Field
-                                    type="radio"
-                                    name="appreciation.discussedWithIntern"
-                                    value="Non"
-                                />
                                 Non
                             </label>
                             <ErrorMessage name="appreciation.discussedWithIntern">
@@ -728,11 +778,13 @@ export default function Evaluationform() {
                         justify="center"
                         spacing={2}
                     >
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
                                 Veuillez indiquer le nombre d’heures réel par semaine
                                 d’encadrement accordé au stagiaire :
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
                             <Field type="number" name="feedback.weeklySupervisionHours"/>
                             <ErrorMessage name="feedback.weeklySupervisionHours">
                                 {msg => <p className="msgError">
@@ -749,25 +801,26 @@ export default function Evaluationform() {
                         justify="center"
                         spacing={2}
                     >
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <label>
-                                L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN
-                                STAGE
+                                L’entreprise aimerait accueillir cet éléve pour son prochain stage
                             </label>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Field type="radio" name="feedback.hireAgain" value="Oui"/>
                             <label>
-                                <Field type="radio" name="feedback.hireAgain" value="Oui"/>
                                 Oui
                             </label>
+                            <Field type="radio" name="feedback.hireAgain" value="Non"/>
                             <label>
-                                <Field type="radio" name="feedback.hireAgain" value="Non"/>
                                 Non
                             </label>
+                            <Field
+                                type="radio"
+                                name="feedback.hireAgain"
+                                value="Peut-être"
+                            />
                             <label>
-                                <Field
-                                    type="radio"
-                                    name="feedback.hireAgain"
-                                    value="Peut-être"
-                                />
                                 Peut-être
                             </label>
                             <ErrorMessage name="feedback.hireAgain">
@@ -783,18 +836,11 @@ export default function Evaluationform() {
                                 rows={4}
                                 fullWidth
                                 multiline
+                                required
                                 label="La formation technique du stagiaire était-elle suffisante pour accomplir le
                             mandat de stage?"
                                 name="feedback.technicalFormationOpinion"
                             ></Field>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Field
-                                component={TextField}
-                                variant="outlined"
-                                label="Nom :"
-                                name="signature.name"
-                            />
                         </Grid>
                         <Grid item xs={12}>
                             <Field
@@ -816,6 +862,15 @@ export default function Evaluationform() {
                                 label="Numéro de téléphone"
                                 required
                                 fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Field
+                                component={TextField}
+                                variant="outlined"
+                                label="Nom :"
+                                name="signature.name"
+                                fullwidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
