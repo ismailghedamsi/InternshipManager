@@ -51,7 +51,7 @@ export default function Evaluationform() {
 
     const validationSchemaStep2 = yup.object().shape({
         productivity: yup.object().shape({
-            comment: yup.string().required(requiredFieldMsg).min(20, tooLittleError),
+            comment: yup.string().required(requiredFieldMsg),
             efficiency: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -80,8 +80,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             followsInstructions: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -110,8 +109,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             connectsEasily: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -144,8 +142,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             showsInterest: yup
                     .string()
                     .required(requiredFieldMsg)
@@ -178,8 +175,7 @@ export default function Evaluationform() {
             comment: yup
                     .string()
                     .trim()
-                    .required(requiredFieldMsg)
-                    .min(20, tooLittleError),
+                    .required(requiredFieldMsg),
             discussedWithIntern: yup.string().required(requiredRadioMsg),
             expectations: yup
                     .string()
@@ -199,8 +195,7 @@ export default function Evaluationform() {
             technicalFormationOpinion: yup
                     .string()
                     .trim()
-                    .required()
-                    .min(20, tooShortError),
+                    .required(requiredFieldMsg),
             hireAgain: yup.string().trim().required(requiredRadioMsg),
         }),
         signature: yup.object().shape({
@@ -706,7 +701,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                        label="APPRÉCIATION GLOBALE DU STAGIAIRE"
+                        label="Appréciation globale du stagiaire"
                         validationSchema={validationSchemaStep6}
                 >
                     <Grid
@@ -791,7 +786,7 @@ export default function Evaluationform() {
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="Decision" validationSchema={validationSchemaStep8}>
+                <FormikStep label="Décision" validationSchema={validationSchemaStep8}>
                     <Grid
                             container
                             alignItems="flex-start"
@@ -862,7 +857,7 @@ export default function Evaluationform() {
                                     name="infos.phoneNumber"
                                     id="phoneNumber"
                                     variant="outlined"
-                                    label="Numero de telephone"
+                                    label="Numéro de téléphone"
                                     required
                                     fullWidth
                             />

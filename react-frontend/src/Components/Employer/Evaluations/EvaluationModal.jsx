@@ -232,8 +232,7 @@ export default function EvaluationModal({isOpen, data, hide}) {
                 <div className={classes.evaluationSections}>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN
-                  STAGE
+                   L’entreprise aimerait accueillir cet élève pour son prochain stage
                 </span>
                         : {data.feedback.hireAgain}
                     </Typography>

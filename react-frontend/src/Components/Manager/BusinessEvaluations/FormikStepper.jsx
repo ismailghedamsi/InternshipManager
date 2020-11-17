@@ -1,11 +1,12 @@
-import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@material-ui/core';
-import {Form, Formik} from 'formik';
-import React, {useState} from 'react';
-import {useHistory} from "react-router-dom";
-import AuthenticationService from "../../../Services/AuthenticationService";
-import EvaluationModal from '../../Employer/Evaluations/EvaluationModal';
-import {useApi, useFileReader, useModal} from "../../Utils/Hooks";
-import BusinessEvaluationModal from "./BusinessEvaluationModal";
+import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from '@material-ui/core'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import {Form, Formik} from 'formik'
+import React, {useState} from 'react'
+import {useHistory} from "react-router-dom"
+import AuthenticationService from "../../../Services/AuthenticationService"
+import EvaluationModal from '../../Employer/Evaluations/EvaluationModal'
+import {useApi, useFileReader, useModal} from "../../Utils/Hooks"
+import BusinessEvaluationModal from "./BusinessEvaluationModal"
 
 export function FormikStepper({contract, initialValues, children}) {
     const history = useHistory()
@@ -118,7 +119,7 @@ export function FormikStepper({contract, initialValues, children}) {
                                 variant="contained"
                                 color="primary"
                                 type="submit">
-                                {isSubmitting ? 'Submitting' : otherButtonContext()}
+                                {isSubmitting && <LinearProgress/> ? 'Submitting' : otherButtonContext()}
                             </Button>
                         </Grid>
                     </Grid>
