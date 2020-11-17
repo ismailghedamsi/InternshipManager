@@ -315,11 +315,11 @@ export default function StudentStatus() {
                         <strong>Function : </strong>
                         {e.infos.supervisorRole}
                     </Typography>
+                    <img src={e.signature.image} alt="signature"/>
                     <Typography>
                         <strong> Date : </strong>
                         {e.signature.date}
                     </Typography>
-                    <img src={e.signature.image} alt="signature"/>
                 </div>}
             </div>)}
         </Grid>
