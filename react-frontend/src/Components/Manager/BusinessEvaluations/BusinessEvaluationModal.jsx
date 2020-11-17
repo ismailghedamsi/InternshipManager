@@ -15,135 +15,137 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
     const imageDecoder = useFileReader()
 
     useEffect(() => {
-        imageDecoder(data.signature.image).then(setImageSrc)
+        if (data.signature.image)
+            imageDecoder(data.signature.image).then(setImageSrc)
     }, [imageDecoder])
 
-    return <Dialog open={isOpen} onClose={hide} fullWidth={true} maxWidth={"md"} >
-        <DialogTitle id="alert-dialog-title" >{"ÉVALUATION DU MILIEU DE STAGE"}</DialogTitle >
-        <DialogContent >
-            {data && <div >
-                <div className={classes.evaluationSections} >
-                    <Typography variant="h5" >ÉVALUATION</Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+    return <Dialog open={isOpen} onClose={hide} fullWidth={true} maxWidth={"md"}>
+        <DialogTitle id="alert-dialog-title">{"ÉVALUATION DU MILIEU DE STAGE"}</DialogTitle>
+        <DialogContent>
+            {data && <div>
+                <div className={classes.evaluationSections}>
+                    <Typography variant="h5">ÉVALUATION</Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Stage:
-                        </span > {data.evaluationCriterias.internshipCount}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.internshipCount}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage:
-                        </span > {data.evaluationCriterias.workAsAnnoncement}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.workAsAnnoncement}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Des mesures d’accueil facilitent l’intégration du nouveau stagiaire:
-                        </span > {data.evaluationCriterias.easyIntigration}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.easyIntigration}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Le temps réel consacré à l’encadrement du stagiaire est suffisant:
-                        </span > {data.evaluationCriterias.sufficientTime}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.sufficientTime}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             L’environnement de travail respecte les normes d’hygiène et de sécurité au travail:
-                        </span > {data.evaluationCriterias.securityWorkPlace}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.securityWorkPlace}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Le climat de travail est agréable:
-                        </span > {data.evaluationCriterias.pleasantEnvironnement}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.pleasantEnvironnement}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Le milieu de stage est accessible par transport en commun:
-                        </span > {data.evaluationCriterias.accessiblePlace}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.accessiblePlace}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Le salaire offert {data.evaluationCriterias.salary} est intéressant pour le stagiaire:
-                        </span > {data.evaluationCriterias.goodSalary}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.goodSalary}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             La communication avec le superviseur de stage facilite le déroulement du stage:
-                        </span > {data.evaluationCriterias.supervisorFacilitatesIntern}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.supervisorFacilitatesIntern}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             L’équipement fourni est adéquat pour réaliser les tâches confiées:
-                        </span > {data.evaluationCriterias.adequateEquipement}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.evaluationCriterias.adequateEquipement}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Le volume de travail est acceptable:
-                        </span > {data.evaluationCriterias.accetableWorkload}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >Préciser le nombre d’heures/semaine: </span >
+                        </span> {data.evaluationCriterias.accetableWorkload}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>Préciser le nombre d’heures/semaine: </span>
                         Premier mois: {data.evaluationCriterias.hoursOfWeekFirstMonth}h.
                         Deuxième mois: {data.evaluationCriterias.hoursOfWeekFirstMonth}h.
                         Troisième mois: {data.evaluationCriterias.hoursOfWeekFirstMonth}h.
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Commentaires:
-                        </span > {data.evaluationCriterias.comment}
-                    </Typography >
-                </div >
-                <div className={classes.evaluationSections} >
-                    <Typography variant="h5" >
+                        </span> {data.evaluationCriterias.comment}
+                    </Typography>
+                </div>
+                <div className={classes.evaluationSections}>
+                    <Typography variant="h5">
                         OBSERVATIONS GÉNÉRALES
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Ce milieu est à privilégier pour le:
-                        </span > {data.observations.preferedInternship}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.observations.preferedInternship}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Ce milieu est ouvert à accueillir:
-                        </span > {data.observations.numbersOfInterns}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.observations.numbersOfInterns}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Ce milieu désire accueillir le même stagiaire pour un prochain stage:
-                        </span > {data.observations.welcomeSameIntern}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >
+                        </span> {data.observations.welcomeSameIntern}
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>
                             Ce milieu offre des quarts de travail variables:
-                        </span > {data.observations.variablesShifts}.
+                        </span> {data.observations.variablesShifts}.
                         De {data.observations.startShiftsOne}h à {data.observations.endShiftsOne}h
                         De {data.observations.startShiftsTwo}h à {data.observations.endShiftsTwo}h
                         De {data.observations.startShiftsThree}h à {data.observations.endShiftsThree}h
-                    </Typography >
-                </div >
-                <div className={classes.evaluationSections} >
-                    <Typography variant="h5" >
+                    </Typography>
+                </div>
+                <div className={classes.evaluationSections}>
+                    <Typography variant="h5">
                         SIGNATURE
-                    </Typography >
-                    <img src={imageSrc} alt="signature" className={classes.signature} />
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >Enseignant responsable:</span >
+                    </Typography>
+                    {data.signature.image &&
+                    <img src={imageSrc} alt="signature" className={classes.signature}/>}
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>Enseignant responsable:</span>
                         &ensp;{data.signature.name}
-                    </Typography >
-                    <Typography >
-                        <span className={classes.evaluationCriterias} >Date:</span >
+                    </Typography>
+                    <Typography>
+                        <span className={classes.evaluationCriterias}>Date:</span>
                         &ensp;{parseDate(data.signature.date)}
-                    </Typography >
-                </div >
-            </div >}
-        </DialogContent >
-        <DialogActions >
+                    </Typography>
+                </div>
+            </div>}
+        </DialogContent>
+        <DialogActions>
             <Button color="secondary"
                     variant="contained"
                     onClick={() => {
-                        console.log(data)
+                        hide()
                     }}
             >
                 Revenir au formulaire
-            </Button >
+            </Button>
             <Button color="primary"
                     variant="contained"
                     onClick={() => {
@@ -152,7 +154,7 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                     }}
             >
                 Envoyer l'évaluation
-            </Button >
-        </DialogActions >
-    </Dialog >
+            </Button>
+        </DialogActions>
+    </Dialog>
 }

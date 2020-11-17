@@ -138,6 +138,17 @@ export default function SignContract() {
                     {currentIndex === i &&
                     contractState(contracts[i])
                     }
+                    {contracts[i].signatureState === "SIGNED" &&
+                    <Link
+                        variant={"body1"}
+                        to={{
+                            pathname: "/dashboard/evaluateStudent",
+                            state: {...contracts[i]}
+                        }}
+                        style={{display: "block"}}
+                    >
+                        Évaluer l'étudiant
+                    </Link>}
                     <hr/>
                 </div>}
         </PdfSelectionViewer>

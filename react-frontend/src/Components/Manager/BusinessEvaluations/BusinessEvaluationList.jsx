@@ -56,7 +56,7 @@ export default function BusinessEvaluationList() {
                         {item.contract.studentApplication.offer.employer.companyName} - {item.contract.studentApplication.offer.employer.contactName}
                     </div>
                     }
-                    <Divider className={classes.dividers} />
+                    <Divider className={classes.dividers}/>
                 </div>
             ) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
@@ -89,14 +89,14 @@ export default function BusinessEvaluationList() {
                                 <strong>email: </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.email}
                             </Typography>
-                            <Typography >
-                                <strong >Téléphone: </strong >
+                            <Typography>
+                                <strong>Téléphone: </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.phoneNumber}
-                            </Typography >
-                            <Divider className={classes.dividers} />
-                            <Typography variant="h5" >
+                            </Typography>
+                            <Divider className={classes.dividers}/>
+                            <Typography variant="h5">
                                 IDENTIFICATION DU STAGIAIRE
-                            </Typography >
+                            </Typography>
                             <Typography>
                                 <strong>Nom du stagiaire: </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.student.firstName} {businessEvaluations[currentIndex].contract.studentApplication.student.lastName}
@@ -105,14 +105,14 @@ export default function BusinessEvaluationList() {
                                 <strong>Date du stage: </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.details.internshipStartDate}
                             </Typography>
-                            <Typography >
-                                <strong >Stage: </strong >
+                            <Typography>
+                                <strong>Stage: </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.internshipCount}
-                            </Typography >
-                            <Divider className={classes.dividers} />
-                            <Typography variant="h5" >
+                            </Typography>
+                            <Divider className={classes.dividers}/>
+                            <Typography variant="h5">
                                 ÉVALUATION
-                            </Typography >
+                            </Typography>
                             <Typography>
                                 <strong>Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans
                                     l’entente de stage: </strong>
@@ -166,14 +166,14 @@ export default function BusinessEvaluationList() {
                                 Troisième mois:
                                 {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
                             </Typography>
-                            <Typography >
-                                <strong >Commentaires: </strong >
+                            <Typography>
+                                <strong>Commentaires: </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.comment}
-                            </Typography >
-                            <Divider className={classes.dividers} />
-                            <Typography variant="h5" >
+                            </Typography>
+                            <Divider className={classes.dividers}/>
+                            <Typography variant="h5">
                                 OBSERVATIONS GÉNÉRALES
-                            </Typography >
+                            </Typography>
                             <Typography>
                                 <strong>Ce milieu est à privilégier pour le: </strong>
                                 {businessEvaluations[currentIndex].observations.preferedInternship}
@@ -186,8 +186,8 @@ export default function BusinessEvaluationList() {
                                 <strong>Ce milieu désire accueillir le même stagiaire pour un prochain stage: </strong>
                                 {businessEvaluations[currentIndex].observations.welcomeSameIntern}
                             </Typography>
-                            <Typography >
-                                <strong >Ce milieu offre des quarts de travail variables: </strong >
+                            <Typography>
+                                <strong>Ce milieu offre des quarts de travail variables: </strong>
                                 {businessEvaluations[currentIndex].observations.variablesShifts}.
                                 De {businessEvaluations[currentIndex].observations.startShiftsOne}h
                                 à {businessEvaluations[currentIndex].observations.endShiftsOne}h
@@ -195,25 +195,25 @@ export default function BusinessEvaluationList() {
                                 à {businessEvaluations[currentIndex].observations.endShiftsTwo}h
                                 De {businessEvaluations[currentIndex].observations.startShiftsThree}h
                                 à {businessEvaluations[currentIndex].observations.endShiftsThree}h
-                            </Typography >
-                            <Divider className={classes.dividers} />
-                            <Typography variant="h5" >
+                            </Typography>
+                            <Divider className={classes.dividers}/>
+                            <Typography variant="h5">
                                 Signature du gestionnaire du stage
-                            </Typography >
+                            </Typography>
                             <img src={businessEvaluations[currentIndex].signature.image}
                                  alt="signature"
                                  className={classes.signature}
                             />
-                            <Divider className={classes.dividers} />
-                            <Typography >
-                                <strong >Enseignant responsable: </strong >
+                            <Divider className={classes.dividers}/>
+                            <Typography>
+                                <strong>Enseignant responsable: </strong>
                                 {businessEvaluations[currentIndex].signature.name}
-                            </Typography >
-                            <Typography >
-                                <strong >Date: </strong >
+                            </Typography>
+                            <Typography>
+                                <strong>Date: </strong>
                                 {businessEvaluations[currentIndex].signature.date}
-                            </Typography >
-                        </div >
+                            </Typography>
+                        </div>
                         }
                     </div>
                 ) : <Typography align="center">Aucun élément à afficher</Typography>}
