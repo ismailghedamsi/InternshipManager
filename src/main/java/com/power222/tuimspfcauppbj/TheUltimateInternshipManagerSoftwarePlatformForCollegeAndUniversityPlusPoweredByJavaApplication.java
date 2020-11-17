@@ -4,9 +4,8 @@ import com.power222.tuimspfcauppbj.dao.*;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.model.InternshipOffer.InternshipOfferDetails;
 import com.power222.tuimspfcauppbj.service.ContractGenerationService;
-import com.power222.tuimspfcauppbj.util.ReviewState;
-import com.power222.tuimspfcauppbj.util.SemesterContext;
-import com.power222.tuimspfcauppbj.util.StudentApplicationState;
+import com.power222.tuimspfcauppbj.util.*;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @SpringBootApplication
@@ -53,7 +56,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
 
         @Override
         @Transactional
-        public void run(String... args) {
+        public void run(String... args) throws IOException {
             var admin = Admin.builder()
                     .username("admin")
                     .password(passwordEncoder.encode("password"))
@@ -175,7 +178,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .offer(internshipOffer)
                     .student(student)
                     .resume(resume)
-                    .state(StudentApplicationState.WAITING_FOR_STUDENT_HIRING_FINAL_DECISION)
+                    .state(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT)
                     .build());
 
             var studentApplication2 = appliRepo.save(StudentApplication.builder()
@@ -191,6 +194,33 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .resume(resume3)
                     .state(StudentApplicationState.STUDENT_HIRED_BY_EMPLOYER)
                     .build());
+
+            var contractDto = ContractDTO.builder()
+                    .studentApplicationId(studentApplication.getId())
+                    .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
+                    .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
+                    .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
+                    .totalHoursPerWeek(39)
+                    .build();
+
+            contractGenSvc.generateContract(contractDto, admin);
+
+            var contract = contractRepo.findById(1L);
+            if (contract.isPresent()) {
+                var signatureDto = ContractSignatureDTO.builder()
+                        .contractId(contract.get().getId())
+                        .isApproved(true)
+                        .nomSignataire("Andrei Belkin")
+                        .signatureTimestamp(LocalDateTime.now())
+                        .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
+                        .build();
+
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+                contractGenSvc.signContract(signatureDto);
+            }
+
 
             userRepo.flush();
             resumeRepo.flush();

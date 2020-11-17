@@ -157,7 +157,7 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
                         api.put("admins/password", values)
                             .then(() => {
                                 hide()
-                                if (manager.id == AuthenticationService.getCurrentUser().id) {
+                                if (manager.id === AuthenticationService.getCurrentUser().id) {
                                     AuthenticationService.logout()
                                     history.push("/")
                                 }
