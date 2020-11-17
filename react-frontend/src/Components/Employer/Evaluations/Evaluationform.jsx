@@ -501,7 +501,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                        label="Evaluation QUALITÉS DES RELATIONS INTERPERSONNELLES"
+                        label="Evaluation qualités des relations interpersonnelles"
                         validationSchema={validationSchemaStep4}
                 >
                     <Grid
@@ -795,8 +795,7 @@ export default function Evaluationform() {
                     >
                         <Grid item xs={12}>
                             <label>
-                                L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE POUR SON PROCHAIN
-                                STAGE
+                                L’entreprise aimerait accueillir cet élève pour son prochain stage
                             </label>
                             <label>
                                 <Field type="radio" name="feedback.hireAgain" value="Oui"/>
