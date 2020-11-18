@@ -38,12 +38,6 @@ public class ContractController {
         return svc.getAllContractsByStudentId(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Contract> updateContract(@PathVariable long id, @RequestBody Contract requestBody) {
-        return svc.updateContract(id, requestBody).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @DeleteMapping("/{id}")
     public void deleteContract(@PathVariable long id) {
         svc.deleteContractById(id);
