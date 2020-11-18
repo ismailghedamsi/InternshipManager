@@ -112,7 +112,7 @@ export default function BusinessEvalution() {
                     }
                 }}
                 evaluationAnswers={evaluationAnswers} traineesNumber={traineesNumber}>
-                <FormikStep label="ÉVALUATION" validationSchema={EvaluationCriteriasValidation}>
+                <FormikStep label="Évaluation" validationSchema={EvaluationCriteriasValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={12}>
                             <label>Stage : </label>
@@ -346,7 +346,7 @@ export default function BusinessEvalution() {
                         </Grid>
                     </Grid>
                 </FormikStep>
-                <FormikStep label="OBSERVATIONS GÉNÉRALES" validationSchema={ObservationsValidation}>
+                <FormikStep label="Observations générales" validationSchema={ObservationsValidation}>
                     <Grid container justify="space-between" spacing={2}>
                         <Grid item xs={8}>
                             <label style={{marginRight: "2em"}}>Ce milieu est à privilégier pour le</label>

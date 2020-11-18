@@ -733,7 +733,7 @@ export default function Evaluationform() {
                                 rows={4}
                                 fullWidth
                                 multiline
-                                label="PRÉCISEZ VOTRE APPRÉCIATION:"
+                                label="Précisez votre appréciation:"
                                 name="appreciation.comment"
                             />
                         </Grid>

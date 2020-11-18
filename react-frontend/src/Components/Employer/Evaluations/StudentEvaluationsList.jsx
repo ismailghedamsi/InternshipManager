@@ -32,29 +32,26 @@ export default function StudentStatus() {
             </Typography>
             {evaluations.length > 0 ? evaluations.map((item, i) => <div key={i}>
                 <button
-                        type={"button"}
-                        className={classes.linkButton}
-                        onClick={() => deleteStudentEvaluation(i)}
+                    type={"button"}
+                    className={classes.linkButton}
+                    onClick={() => deleteStudentEvaluation(i)}
                 >
                     <i className="fa fa-trash" style={{color: "red"}}/>
                 </button>
                 <button
-                        type={"button"}
-                        className={[
+                    type={"button"}
+                    className={[
                         classes.linkButton,
                         i === currentEvaluationIndex ? classes.fileButton : null,
                     ].join(" ")}
                     onClick={() => setCurrentEvaluationIndex(i)}
                 >
-                    <Typography color={"textSecondary"} variant={"body2"}>
-                        {item.contract.studentApplication.offer.employer.contactName}
+                    <Typography color={"textPrimary"} variant={"body1"}>
+                        {item.contract.studentApplication.student.firstName +
+                        " " + item.contract.studentApplication.student.lastName} -&ensp;
+                        {item.contract.studentApplication.offer.title}
                     </Typography>
                 </button>
-                {currentEvaluationIndex === i && <div>
-                    {item.contract.studentApplication.student.firstName +
-                    " " +
-                    item.contract.studentApplication.student.lastName}
-                </div>}
             </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid
@@ -63,7 +60,7 @@ export default function StudentStatus() {
             align="start"
             style={{overflow: "auto", height: "100%"}}
         >
-            {evaluations.length > 0 ? evaluations.map((e, k) => <div key={k}>
+            {evaluations.map((e, k) => <div key={k}>
                 {currentEvaluationIndex === k && <div>
                     <Typography variant="h4">
                         FICHE D’ÉVALUATION DU STAGIAIRE
@@ -310,14 +307,14 @@ export default function StudentStatus() {
                     <img src={e.signature.image} alt="signature" className={classes.signature}/>
                     <Typography>
                         <strong> Nom : </strong>
-                        {e.contract.studentApplication.offer.employer.contactName}
+                        {e.signature.name}
                     </Typography>
                     <Typography>
                         <strong> Date : </strong>
                         {e.signature.date}
                     </Typography>
                 </div>}
-            </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
+            </div>)}
         </Grid>
     </Grid>
 }

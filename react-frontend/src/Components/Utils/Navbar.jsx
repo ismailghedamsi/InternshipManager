@@ -66,7 +66,7 @@ const Links = {
             title: <Divider/>
         },
         {
-            title: 'Liste des évaluations d\'entrprise',
+            title: 'Le milieu de stage',
             url: '/dashboard/businessEvaluationList',
         },
         {
@@ -165,14 +165,14 @@ export default function Navbar() {
             </Button>
             <div className={classes.spacer}/>
             {AuthenticationService.getCurrentUserRole() === "admin" &&
-                <>
-                    <Button className={classes.linkButton}
-                            onClick={() => history.push("/dashboard/setSemester")}
-                    >
-                        <i className="fa fa-calendar"/>&ensp;{semester}
-                    </Button>
-                    &ensp;
-                </>
+            <>
+                <Button className={classes.linkButton}
+                        onClick={() => history.push("/dashboard/setSemester")}
+                >
+                    <i className="fa fa-calendar"/>&ensp;{semester}
+                </Button>
+                &ensp;
+            </>
             }
             <Button className={classes.linkButton}
                     onClick={() => {

@@ -17,13 +17,12 @@ export default function EvaluationModal({isOpen, data, hide}) {
     useEffect(() => {
         if (data.signature.image)
             imageDecoder(data.signature.image).then(setImageSrc)
-    }, [imageDecoder])
+    }, [imageDecoder, data.signature.image])
 
     return <Dialog
         open={isOpen}
         onClose={hide}
         fullWidth={true}
-        fullScreen={true}
         maxWidth={"md"}
     >
         <DialogTitle id="alert-dialog-title">{"Sommaire evaluation"}</DialogTitle>

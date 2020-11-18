@@ -70,7 +70,6 @@ function DataTableHeader({report}) {
             <TableCell>Ferme le</TableCell>
             <TableCell>Début</TableCell>
             <TableCell>Fin</TableCell>
-            <TableCell>Fichier PDF</TableCell>
         </TableRow>
     }
     if (reportEndpoints[report].includes("contracts")) {
@@ -78,7 +77,6 @@ function DataTableHeader({report}) {
             <TableCell>Étudiant</TableCell>
             <TableCell>Entreprise</TableCell>
             <TableCell>Gestionnaire</TableCell>
-            <TableCell>Fichier PDF</TableCell>
         </TableRow>
     }
     return header
@@ -115,7 +113,6 @@ function DataTableBody({report, rows}) {
                 <TableCell>{parseDate(offer.details.limitDateToApply)}</TableCell>
                 <TableCell>{parseDate(offer.details.internshipStartDate)}</TableCell>
                 <TableCell>{parseDate(offer.details.internshipEndDate)}</TableCell>
-                <TableCell>Show file</TableCell>
             </TableRow>
         )
     }
@@ -129,7 +126,6 @@ function DataTableBody({report, rows}) {
                 }</TableCell>
                 <TableCell>{contract.studentApplication.offer.employer.companyName}</TableCell>
                 <TableCell>{contract.admin.name}</TableCell>
-                <TableCell>Show file</TableCell>
             </TableRow>
         )
     }
