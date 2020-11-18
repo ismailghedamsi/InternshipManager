@@ -31,7 +31,7 @@ export default function BusinessEvaluationList() {
         className={classes.main}>
         <Grid item xs={5} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                Liste d'évaluation entreprise
+                Évaluations des milieux de stage
             </Typography>
             {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                 <div key={i}>
@@ -48,28 +48,25 @@ export default function BusinessEvaluationList() {
                             setCurrentIndex(i)
                         }}>
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {item.contract.admin.name}
+                            {item.contract.studentApplication.student.firstName +
+                            " " + item.contract.studentApplication.student.lastName} -&ensp;
+                            {item.contract.studentApplication.offer.employer.companyName}
+
                         </Typography>
                     </button>
                     {currentIndex === i &&
-                    <div>
-                        {item.contract.studentApplication.offer.employer.companyName} - {item.contract.studentApplication.offer.employer.contactName}
-                    </div>
-                    }
-                    <Divider className={classes.dividers}/>
+                    <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        {item.contract.studentApplication.offer.title}
+                    </Typography>}
                 </div>
             ) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid item xs={7} align="start" style={{overflow: "auto", height: "100%"}}>
             <div>
-                {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
+                {businessEvaluations.map((item, i) =>
                     <div key={i}>
                         {currentIndex === i &&
                         <div>
-                            <Typography variant="h4">
-                                ÉVALUATION DU MILIEU DE STAGE
-                            </Typography>
-                            <br/>
                             <Typography variant="h5">
                                 IDENTIFICATION DE L’ENTREPRISE
                             </Typography>
@@ -216,7 +213,7 @@ export default function BusinessEvaluationList() {
                         </div>
                         }
                     </div>
-                ) : <Typography align="center">Aucun élément à afficher</Typography>}
+                )}
             </div>
         </Grid>
     </Grid>

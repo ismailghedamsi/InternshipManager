@@ -1,18 +1,18 @@
-import {Card, CardContent, Grid, Typography} from "@material-ui/core";
-import {ErrorMessage, Field} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import React from "react";
-import {useLocation} from "react-router-dom";
-import * as yup from "yup";
-import {FormikStepper} from "../../Manager/BusinessEvaluations/FormikStepper";
-import useStyles from "../../Utils/useStyles";
+import {Card, CardContent, Grid, Typography} from "@material-ui/core"
+import {ErrorMessage, Field} from "formik"
+import {SimpleFileUpload, TextField} from "formik-material-ui"
+import React from "react"
+import {useLocation} from "react-router-dom"
+import * as yup from "yup"
+import {FormikStepper} from "../../Manager/BusinessEvaluations/FormikStepper"
+import useStyles from "../../Utils/useStyles"
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min
 const tooBigError = valueNumber => "Doit être plus petit que ou égal à " + valueNumber.max
-const requiredFieldMsg = "Ce champs est requis"
-const requiredRadioMsg = "Aucun bouton radio a été sélécionner"
-const invalidSelectOption = "Option séléctionné invalide"
+const requiredFieldMsg = "Ce champ est requis"
+const requiredRadioMsg = "Veuillez choisir une option"
+const invalidSelectOption = "Option séléctionnée invalide"
 export default function Evaluationform() {
     const classes = useStyles()
     const location = useLocation()
@@ -180,7 +180,6 @@ export default function Evaluationform() {
             phoneNumber: yup.string().required().min(10),
         })
     })
-    console.log(location.state)
     return <Card style={{flow: "auto", height: "auto"}}>
         <CardContent>
             <FormikStepper
@@ -236,16 +235,16 @@ export default function Evaluationform() {
                         technicalFormationOpinion: "",
                     },
                     signature: {
+                        name: location.state.studentApplication.offer.employer.contactName,
                         image: "",
-                        date: new Date(),
-                        name: "",
+                        date: new Date()
                     },
                 }}
                 evaluationAnswers={evaluationAnswers}
                 globalAppreciations={globalAppreciations}
             >
                 <FormikStep
-                    label="Information Generale"
+                    label="Informations générales"
                     validationSchema={validationSchemaStep1}
                 >
                     <Grid
@@ -272,7 +271,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation productivité"
+                    label="Productivité"
                     validationSchema={validationSchemaStep2}
                 >
                     <Grid container justify="space-between" spacing={2}>
@@ -379,7 +378,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation qualité du travail"
+                    label="Qualité du travail"
                     validationSchema={validationSchemaStep3}
                 >
                     <Grid
@@ -480,7 +479,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation QUALITÉS DES RELATIONS INTERPERSONNELLES"
+                    label="Relations interpersonnelles"
                     validationSchema={validationSchemaStep4}
                 >
                     <Grid
@@ -593,7 +592,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="HABILETÉS PERSONNELLES"
+                    label="Habiletés"
                     validationSchema={validationSchemaStep5}
                 >
                     <Grid
@@ -703,7 +702,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Appréciation globale du stagiaire"
+                    label="Appréciation globale"
                     validationSchema={validationSchemaStep6}
                 >
                     <Grid
@@ -733,7 +732,7 @@ export default function Evaluationform() {
                                 rows={4}
                                 fullWidth
                                 multiline
-                                label="PRÉCISEZ VOTRE APPRÉCIATION:"
+                                label="Précisez votre appréciation:"
                                 name="appreciation.comment"
                             />
                         </Grid>
@@ -769,7 +768,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Nombre d'heure de supervision par semaine"
+                    label="Supervision"
                     validationSchema={validationSchemaStep7}
                 >
                     <Grid
@@ -845,10 +844,21 @@ export default function Evaluationform() {
                         <Grid item xs={12}>
                             <Field
                                 component={TextField}
+                                variant="outlined"
+                                label="Nom du superviseur"
+                                name="signature.name"
+                                fullWidth
+                                disabled
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Field
+                                component={TextField}
                                 name="infos.supervisorRole"
                                 id="supervisorRole"
                                 variant="outlined"
-                                label="Fonction du superviseur:"
+                                label="Fonction du superviseur"
                                 required
                                 fullWidth
                             />
@@ -864,16 +874,7 @@ export default function Evaluationform() {
                                 fullWidth
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Field
-                                component={TextField}
-                                variant="outlined"
-                                label="Nom :"
-                                name="signature.name"
-                                fullwidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <Field
                                 component={SimpleFileUpload}
                                 type={"file"}

@@ -1,26 +1,26 @@
-import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import {makeStyles} from "@material-ui/core/styles";
-import MenuIcon from '@material-ui/icons/Menu';
-import axios from "axios";
-import React, {useContext, useEffect, useState} from 'react';
-import {useHistory, useLocation} from "react-router-dom";
-import {SemesterContext} from "../../App";
-import AuthenticationService from "../../Services/AuthenticationService";
+import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core"
+import AppBar from "@material-ui/core/AppBar"
+import Divider from "@material-ui/core/Divider"
+import Drawer from "@material-ui/core/Drawer"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemText from "@material-ui/core/ListItemText"
+import {makeStyles} from "@material-ui/core/styles"
+import MenuIcon from "@material-ui/icons/Menu"
+import axios from "axios"
+import React, {useContext, useEffect, useState} from "react"
+import {useHistory, useLocation} from "react-router-dom"
+import {SemesterContext} from "../../App"
+import AuthenticationService from "../../Services/AuthenticationService"
 
 const Links = {
     admin: [
         {
-            title: 'Approbation des CV',
-            url: '/dashboard/approbation/cv',
+            title: "Approbation des CV",
+            url: "/dashboard/approbation/cv"
         },
         {
-            title: 'Approbation des offres',
-            url: '/dashboard/approbation/offres',
+            title: "Approbation des offres",
+            url: "/dashboard/approbation/offres"
         },
         {
             title: <Divider/>
@@ -66,12 +66,12 @@ const Links = {
             title: <Divider/>
         },
         {
-            title: 'Liste des évaluations d\'entrprise',
-            url: '/dashboard/businessEvaluationList',
+            title: "Évaluations des milieux de stage",
+            url: "/dashboard/businessEvaluationList"
         },
         {
-            title: 'Liste des évaluations de stagiaire',
-            url: '/dashboard/evaluationListAdmin'
+            title: "Évaluations des stagiaires",
+            url: "/dashboard/evaluationListAdmin"
         }
     ],
     student: [
@@ -84,12 +84,12 @@ const Links = {
             url: '/dashboard/listcv'
         },
         {
-            title: 'Offre de stages',
-            url: '/dashboard/stagelist'
+            title: "Offres de stage",
+            url: "/dashboard/stagelist"
         },
         {
-            title: 'Liste de contrats',
-            url: '/dashboard/signContractStudent'
+            title: "Contrats",
+            url: "/dashboard/signContractStudent"
         }
     ],
     employer: [
@@ -98,20 +98,20 @@ const Links = {
             url: '/dashboard/createstage'
         },
         {
-            title: 'Liste des offres',
-            url: '/dashboard/listoffer'
+            title: "Mes offres",
+            url: "/dashboard/listoffer"
         },
         {
-            title: 'Liste des entrevues',
-            url: '/dashboard/listInterview'
+            title: "Entrevues",
+            url: "/dashboard/listInterview"
         },
         {
-            title: 'Liste de contrats',
-            url: '/dashboard/signContract'
+            title: "Contrats",
+            url: "/dashboard/signContract"
         },
         {
-            title: 'Liste des évaluations de stagiaire',
-            url: '/dashboard/evaluationList'
+            title: "Évaluations des stagiaire",
+            url: "/dashboard/evaluationList"
         }
     ]
 }
@@ -165,14 +165,14 @@ export default function Navbar() {
             </Button>
             <div className={classes.spacer}/>
             {AuthenticationService.getCurrentUserRole() === "admin" &&
-                <>
-                    <Button className={classes.linkButton}
-                            onClick={() => history.push("/dashboard/setSemester")}
-                    >
-                        <i className="fa fa-calendar"/>&ensp;{semester}
-                    </Button>
-                    &ensp;
-                </>
+            <>
+                <Button className={classes.linkButton}
+                        onClick={() => history.push("/dashboard/setSemester")}
+                >
+                    <i className="fa fa-calendar"/>&ensp;{semester}
+                </Button>
+                &ensp;
+            </>
             }
             <Button className={classes.linkButton}
                     onClick={() => {

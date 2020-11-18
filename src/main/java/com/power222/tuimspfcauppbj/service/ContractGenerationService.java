@@ -120,10 +120,10 @@ public class ContractGenerationService {
 
     public Optional<Contract> signContract(ContractSignatureDTO signatureDto) {
         return contractService.getContractById(signatureDto.getContractId())
-                .flatMap(contract -> getSignedContract(contract, signatureDto));
+                .flatMap(contract -> performSignature(contract, signatureDto));
     }
 
-    private Optional<Contract> getSignedContract(Contract contract, ContractSignatureDTO signatureDto) {
+    private Optional<Contract> performSignature(Contract contract, ContractSignatureDTO signatureDto) {
         if (contract.getSignatureState() != PENDING_FOR_ADMIN_REVIEW) {
             if (signatureDto.isApproved())
                 contract.setFile(getContractFileWithSignature(contract, signatureDto));
