@@ -1,7 +1,7 @@
 import {Divider, Grid, Typography} from "@material-ui/core"
-import React, {useEffect, useState} from "react";
-import {useApi} from "../../Utils/Hooks";
-import useStyles from "../../Utils/useStyles";
+import React, {useEffect, useState} from "react"
+import {useApi} from "../../Utils/Hooks"
+import useStyles from "../../Utils/useStyles"
 
 export default function StudentStatus() {
     const classes = useStyles()
@@ -28,7 +28,7 @@ export default function StudentStatus() {
                 gutterBottom={true}
                 className={classes.title}
             >
-                Liste des évaluations des étudiants
+                Évaluations des stagiaires
             </Typography>
             {evaluations.length > 0 ? evaluations.map((item, i) => <div key={i}>
                 <button

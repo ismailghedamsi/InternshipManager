@@ -31,7 +31,7 @@ export default function BusinessEvaluationList() {
         className={classes.main}>
         <Grid item xs={5} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                Évaluation du milieu de stage
+                Évaluations des milieux de stage
             </Typography>
             {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                 <div key={i}>

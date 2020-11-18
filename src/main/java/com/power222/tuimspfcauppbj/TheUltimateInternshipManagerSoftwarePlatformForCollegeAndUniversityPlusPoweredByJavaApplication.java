@@ -122,22 +122,39 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .semesters(Collections.singletonList("a2021h2022"))
                     .build());
 
+            for (int i = 5; i < 30; i++) {
+                userRepo.save(Student.builder()
+                        .username("etudiant" + i)
+                        .password(passwordEncoder.encode("password"))
+                        .firstName(i + " Gaston")
+                        .lastName("Lagaffe")
+                        .studentId("1234567")
+                        .email("projetemployeur@gmail.com")
+                        .phoneNumber("911")
+                        .address("9310 Lasalle")
+                        .semesters(Collections.singletonList("a2021h2022"))
+                        .build());
+            }
+
             var resume = resumeRepo.save(Resume.builder()
                     .name("Résumé bootstrappé")
                     .reviewState(ReviewState.APPROVED)
                     .owner(student)
+                    .file(("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/1.pdf")).readAllBytes()))))
                     .build());
 
             var resume2 = resumeRepo.save(Resume.builder()
                     .name("Résumé bootstrappé 2")
                     .reviewState(ReviewState.PENDING)
                     .owner(student2)
+                    .file(("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/2.pdf")).readAllBytes()))))
                     .build());
 
             var resume3 = resumeRepo.save(Resume.builder()
                     .name("Résumé bootstrappé 3")
                     .reviewState(ReviewState.PENDING)
                     .owner(student3)
+                    .file(("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/3.pdf")).readAllBytes()))))
                     .build());
 
             var internshipOffer = internshipRepo.save(InternshipOffer.builder()
@@ -155,6 +172,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .reviewState(ReviewState.APPROVED)
                     .employer(employer)
                     .allowedStudents(Collections.singletonList(student))
+                    .file(("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/4.pdf")).readAllBytes()))))
                     .build());
 
             var internshipOffer2 = internshipRepo.save(InternshipOffer.builder()
@@ -172,6 +190,7 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                     .reviewState(ReviewState.APPROVED)
                     .employer(employer)
                     .allowedStudents(Collections.singletonList(student))
+                    .file(("data:application/pdf;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/5.pdf")).readAllBytes()))))
                     .build());
 
             var studentApplication = appliRepo.save(StudentApplication.builder()
@@ -221,6 +240,26 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                 contractGenSvc.signContract(signatureDto);
             }
 
+            var contractDto2 = ContractDTO.builder()
+                    .studentApplicationId(studentApplication2.getId())
+                    .engagementStudent("Je m'engage à procrastiner, à ne rien faire et à énerver mon employeur et mes collègues.")
+                    .engagementCompany("Nous nous engageons à exploiter le stagiaire et de le placer dans des conditions d'esclavage.")
+                    .engagementCollege("Le Collège s'engage à ignorer toutes les plaintes du stagiaire.")
+                    .totalHoursPerWeek(39)
+                    .build();
+
+            contractGenSvc.generateContract(contractDto2, admin);
+
+            var contract2 = contractRepo.findById(1L);
+            if (contract.isPresent()) {
+                var signatureDto = ContractSignatureDTO.builder()
+                        .contractId(contract.get().getId())
+                        .isApproved(true)
+                        .nomSignataire("Andrei Belkin")
+                        .signatureTimestamp(LocalDateTime.now())
+                        .imageSignature("data:image/png;base64," + new String(Base64.encodeBase64(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
+                        .build();
+            }
 
             userRepo.flush();
             resumeRepo.flush();
