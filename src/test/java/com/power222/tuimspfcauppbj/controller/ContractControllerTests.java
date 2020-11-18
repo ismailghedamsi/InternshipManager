@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,7 +25,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import(TestsWithoutSecurityConfig.class)
@@ -150,29 +150,6 @@ public class ContractControllerTests {
         var actual = mvc.perform(get("/api/contract/5")).andReturn();
 
         assertThat(actual.getResponse().getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
-
-    @Test
-    void updateContractTest() throws Exception {
-        when(svc.updateContract(expectedContract.getId(), expectedContract)).thenReturn(Optional.ofNullable(expectedContract));
-
-        MvcResult result = mvc.perform(put("/api/contract/" + expectedContract.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedContract)))
-                .andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-        verify(svc, times(1)).updateContract(expectedContract.getId(), expectedContract);
-    }
-
-    @Test
-    void updateContractNoValidIdTest() throws Exception {
-        MvcResult result = mvc.perform(put("/api/contract/" + expectedContract.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(expectedContract)))
-                .andReturn();
-
-        assertEquals(result.getResponse().getStatus(), HttpStatus.NOT_FOUND.value());
     }
 
     @Test

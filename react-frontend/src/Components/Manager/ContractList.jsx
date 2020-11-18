@@ -17,13 +17,13 @@ export default function ContractList() {
             .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    function sendDecision(index, contractState) {
+    function sendDecision(index, isApproved) {
         const nextState = [...contracts]
-        const contract = nextState[index]
-        contract.signatureState = contractState
-        delete contract.studentApplication.contract
-        delete contract.studentApplication.resume
-        return api.put("/contract/" + contract.id, contract)
+        const signDto = {}
+        signDto.contractId = nextState[index].id
+        signDto.isApproved = isApproved
+        
+        return api.put("/contractGeneration/sign", signDto)
             .then(r => {
                 nextState.splice(index, 1, r.data)
                 setContracts(nextState)
@@ -114,7 +114,7 @@ export default function ContractList() {
                             <button
                                 type={"button"}
                                 className={classes.linkButton}
-                                onClick={() => sendDecision(i, "WAITING_FOR_EMPLOYER_SIGNATURE")}
+                                onClick={() => sendDecision(i, true)}
                             >
                                 <i className="fa fa-check-square" style={{color: "green"}} />
                                 <Typography display={"inline"} >
