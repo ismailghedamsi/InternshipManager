@@ -111,7 +111,7 @@ function DataTable() {
             </Table>
         </TableContainer>
         <Button onClick={openCreateModal}
-                style={{marginLeft: "10"}}
+                style={{marginLeft: "1em"}}
                 type="button"
                 variant="contained"
                 color="primary"
