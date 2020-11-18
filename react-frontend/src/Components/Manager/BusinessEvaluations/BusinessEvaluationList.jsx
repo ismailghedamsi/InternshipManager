@@ -50,9 +50,14 @@ export default function BusinessEvaluationList() {
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                             {item.contract.studentApplication.student.firstName +
                             " " + item.contract.studentApplication.student.lastName} -&ensp;
-                            {item.contract.studentApplication.offer.title}
+                            {item.contract.studentApplication.offer.employer.companyName}
+
                         </Typography>
                     </button>
+                    {currentIndex === i &&
+                    <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        {item.contract.studentApplication.offer.title}
+                    </Typography>}
                 </div>
             ) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
