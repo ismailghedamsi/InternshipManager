@@ -53,7 +53,6 @@ export default function BusinessEvaluationList() {
                             {item.contract.studentApplication.offer.title}
                         </Typography>
                     </button>
-                    <Divider className={classes.dividers}/>
                 </div>
             ) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>

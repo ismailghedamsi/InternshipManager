@@ -102,6 +102,7 @@ export default function PasswordChange() {
                                         label="Nom d'utilisateur"
                                         required
                                         fullWidth
+                                        disabled
                                     />
                                 </Grid>
                                 <Grid item xs={6}>

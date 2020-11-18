@@ -245,7 +245,7 @@ export default function Evaluationform() {
                 globalAppreciations={globalAppreciations}
             >
                 <FormikStep
-                    label="Information Generale"
+                    label="Informations Générales"
                     validationSchema={validationSchemaStep1}
                 >
                     <Grid
@@ -272,7 +272,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation productivité"
+                    label="Productivité"
                     validationSchema={validationSchemaStep2}
                 >
                     <Grid container justify="space-between" spacing={2}>
@@ -379,7 +379,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation qualité du travail"
+                    label="Qualité du travail"
                     validationSchema={validationSchemaStep3}
                 >
                     <Grid
@@ -480,7 +480,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Evaluation QUALITÉS DES RELATIONS INTERPERSONNELLES"
+                    label="Relations Interpersonnelles"
                     validationSchema={validationSchemaStep4}
                 >
                     <Grid
@@ -593,7 +593,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="HABILETÉS PERSONNELLES"
+                    label="Habiletés"
                     validationSchema={validationSchemaStep5}
                 >
                     <Grid
@@ -703,7 +703,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Appréciation globale du stagiaire"
+                    label="Appréciation globale"
                     validationSchema={validationSchemaStep6}
                 >
                     <Grid
@@ -769,7 +769,7 @@ export default function Evaluationform() {
                     </Grid>
                 </FormikStep>
                 <FormikStep
-                    label="Nombre d'heure de supervision par semaine"
+                    label="Supervision"
                     validationSchema={validationSchemaStep7}
                 >
                     <Grid
