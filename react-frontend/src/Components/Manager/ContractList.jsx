@@ -6,7 +6,7 @@ import {useApi} from "../Utils/Hooks"
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
 import useStyles from "../Utils/useStyles"
 
-export default function ContractList() {
+export default function ContractList({count}) {
     const classes = useStyles()
     const api = useApi()
     const [contracts, setContracts] = useState([])
@@ -17,12 +17,16 @@ export default function ContractList() {
             .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        count(contracts.length)
+    })
+
     function sendDecision(index, isApproved) {
         const nextState = [...contracts]
         const signDto = {}
         signDto.contractId = nextState[index].id
         signDto.isApproved = isApproved
-        
+
         return api.put("/contractGeneration/sign", signDto)
             .then(r => {
                 nextState.splice(index, 1, r.data)
@@ -79,19 +83,19 @@ export default function ContractList() {
     return <div style={{height: "100%"}} >
         <PdfSelectionViewer
             documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
-            title={"Contrats"} >
+            title={"Contrats en attente"}>
             {(i, setCurrent) =>
-                <div key={i} >
-                    <div className={classes.buttonDiv} >
+                <div key={i}>
+                    <div className={classes.buttonDiv}>
                         {contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
                         <button
                             type={"button"}
                             className={classes.linkButton}
-                            onClick={() => deleteContract(i)} >
-                            <i className="fa fa-trash" style={{color: "red"}} />
-                        </button >
+                            onClick={() => deleteContract(i)}>
+                            <i className="fa fa-trash" style={{color: "red"}}/>
+                        </button>
                         }
-                    </div >
+                    </div>
                     <button
                         type={"button"}
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}

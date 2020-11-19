@@ -15,6 +15,13 @@ import AuthenticationService from "../../Services/AuthenticationService"
 const Links = {
     admin: [
         {
+            title: "Accueil",
+            url: "/dashboard"
+        },
+        {
+            title: <Divider/>
+        },
+        {
             title: "Approbation des CV",
             url: "/dashboard/approbation/cv"
         },
@@ -178,11 +185,11 @@ export default function Navbar() {
                     onClick={() => {
                         AuthenticationService.logout()
                         axios.get("http://localhost:8080/api/semesters/present")
-                            .then(r => setSemester(r ? r.data : ''));
+                            .then(r => setSemester(r ? r.data : ""))
                         history.push("/")
                     }}
             >
-                <i className="fa fa-sign-out"/>&ensp;Déconnexion
+                <i className="fa fa-sign-out"/>&ensp;Déconnexion - {AuthenticationService.getCurrentUser().username}
             </Button>
         </Toolbar>
         <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)} style={{width: 250}}>

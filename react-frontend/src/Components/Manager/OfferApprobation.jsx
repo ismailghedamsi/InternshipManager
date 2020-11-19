@@ -1,28 +1,32 @@
-import {Typography} from "@material-ui/core";
-import React, {useEffect, useState} from 'react';
-import {useApi, useModal} from "../Utils/Hooks";
-import OfferDetails from "../Utils/OfferDetails";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import TextboxModal from "../Utils/TextboxModal";
-import useStyles from "../Utils/useStyles";
+import {Typography} from "@material-ui/core"
+import React, {useEffect, useState} from "react"
+import {useApi, useModal} from "../Utils/Hooks"
+import OfferDetails from "../Utils/OfferDetails"
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
+import TextboxModal from "../Utils/TextboxModal"
+import useStyles from "../Utils/useStyles"
 
-export default function OfferApprobation() {
-    const classes = useStyles();
-    const api = useApi();
-    const [offers, setOffers] = useState([]);
-    const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
-    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
+export default function OfferApprobation({count}) {
+    const classes = useStyles()
+    const api = useApi()
+    const [offers, setOffers] = useState([])
+    const [currentOfferIndex, setCurrentOfferIndex] = useState(0)
+    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
 
     useEffect(() => {
         api.get("/offers/pending")
             .then(r => setOffers(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        count(offers.length)
+    })
+
     function sendDecision(index, reviewState, reason = "") {
-        const nextState = [...offers];
-        delete nextState[index].applications;
-        nextState[index].reviewState = reviewState;
-        nextState[index].reasonForRejection = reason;
+        const nextState = [...offers]
+        delete nextState[index].applications
+        nextState[index].reviewState = reviewState
+        nextState[index].reasonForRejection = reason
         return api.put("/offers/" + nextState[index].id, nextState[index])
             .then(() => {
                 nextState.splice(index, 1)
@@ -36,7 +40,7 @@ export default function OfferApprobation() {
     }
 
     return <div style={{height: "100%"}}>
-        <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage en attente d'approbation"}>
+        <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage en attente"}>
             {(i, setCurrent) =>
                 <div key={i}>
                     <div className={classes.buttonDiv}>
