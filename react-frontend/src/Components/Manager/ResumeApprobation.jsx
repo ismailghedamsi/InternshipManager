@@ -1,5 +1,6 @@
 import {Typography} from "@material-ui/core"
 import Button from "@material-ui/core/Button"
+import Divider from "@material-ui/core/Divider"
 import Grid from "@material-ui/core/Grid"
 import React, {useEffect, useState} from "react"
 import {useApi, useModal} from "../Utils/Hooks"
@@ -85,7 +86,7 @@ export default function ResumeApprobation({count}) {
                         </Button>
                     </Grid>
                 </Grid>
-                <hr/>
+                <Divider/>
             </div>}
         </PdfSelectionViewer>
         <TextboxModal

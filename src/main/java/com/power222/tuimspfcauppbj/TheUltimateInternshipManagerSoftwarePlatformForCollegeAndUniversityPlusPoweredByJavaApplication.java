@@ -34,9 +34,8 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         @Transactional
         public void run(String... args) {
             userRepo.saveAndFlush(Admin.builder()
-                    .username("admin")
-                    .password(passwordEncoder.encode("password"))
                     .email("projetemployeur@gmail.com")
+                    .password(passwordEncoder.encode("password"))
                     .name("Default Admin")
                     .build());
 

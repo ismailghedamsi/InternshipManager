@@ -5,7 +5,7 @@ export default function TabPanel(props) {
     const {children, value, index, ...other} = props
 
     return <div hidden={value !== index} {...other} style={{height: "100%"}}>
-        {value === index && children}
+        {children}
     </div>
 }
 

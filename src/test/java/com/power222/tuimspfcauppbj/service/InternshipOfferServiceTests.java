@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +48,7 @@ class InternshipOfferServiceTests {
 
     @BeforeEach
     void setUp() {
-        Employer employer = Employer.builder().username("mark").email("a@gmail.com").build();
+        Employer employer = Employer.builder().email("a@gmail.com").build();
         String pdfContent = "yvDquEQNiEAAAAABJRU5ErkJggg==";
 
         expectedOffer = InternshipOffer.builder()
@@ -60,8 +61,8 @@ class InternshipOfferServiceTests {
                         .limitDateToApply(LocalDate.parse("2020-08-31"))
                         .internshipStartDate(LocalDate.parse("2020-11-01"))
                         .internshipEndDate(LocalDate.parse("2021-04-01"))
-                        .startTime(8)
-                        .endTime(16)
+                        .startTime(LocalTime.of(8, 30))
+                        .endTime(LocalTime.of(16, 0))
                         .salary(20)
                         .build())
                 .employer(employer)
@@ -79,8 +80,8 @@ class InternshipOfferServiceTests {
                         .limitDateToApply(LocalDate.parse("2020-08-31"))
                         .internshipStartDate(LocalDate.parse("2020-11-01"))
                         .internshipEndDate(LocalDate.parse("2021-05-01"))
-                        .startTime(8)
-                        .endTime(16)
+                        .startTime(LocalTime.of(8, 30))
+                        .endTime(LocalTime.of(16, 0))
                         .salary(20)
                         .build())
                 .employer(employer)
@@ -96,18 +97,17 @@ class InternshipOfferServiceTests {
         expectedOffersOfEmployer.add(expectedOffer);
 
         expectedEmployer = Employer.builder()
-                .username("employeur")
+                .email("employeur@gmail.com")
                 .offers(new ArrayList<>())
                 .build();
 
         expectedStudent = Student.builder()
                 .id(1L)
-                .username("student")
                 .password("password")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
-                .email("simon@cal.qc.ca")
+                .email("student@cal.qc.ca")
                 .phoneNumber("5144816959")
                 .address("6600 St-Jacques Ouest")
                 .build();
@@ -197,7 +197,7 @@ class InternshipOfferServiceTests {
 
     @Test
     void getInternshipOffersOfEmployer() {
-        when(offerRepository.findByEmployerUsername("a@gmail.com")).thenReturn(expectedOffersOfEmployer);
+        when(offerRepository.findByEmployerEmail("a@gmail.com")).thenReturn(expectedOffersOfEmployer);
         List<InternshipOffer> offers = service.getInternshipOffersOfEmployer("a@gmail.com");
         assertThat(expectedOffersOfEmployer.size()).isEqualTo(offers.size());
         assertThat(offers.get(0)).isEqualTo(expectedOffersOfEmployer.get(0));

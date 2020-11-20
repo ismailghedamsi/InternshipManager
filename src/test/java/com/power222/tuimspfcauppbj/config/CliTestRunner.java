@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj.config;
 
 import com.power222.tuimspfcauppbj.dao.InternshipOfferRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
+import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.Student;
@@ -37,24 +38,28 @@ public class CliTestRunner implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws IOException {
+        userRepo.saveAndFlush(Admin.builder()
+                .name("Test admin")
+                .email("admin@cal.qc.ca")
+                .password(passwordEncoder.encode("password"))
+                .build());
+
 
         var employer = userRepo.save(Employer.builder()
-                .username("employeur")
                 .password(passwordEncoder.encode("password"))
                 .companyName("Dacima")
                 .contactName("Zack")
                 .phoneNumber("5144317713")
                 .address("1300 rue ducas")
-                .email("projetemployeur@gmail.com")
+                .email("employeur@gmail.com")
                 .build());
 
         var student = userRepo.save(Student.builder()
-                .username("etudiant")
                 .password(passwordEncoder.encode("password"))
                 .firstName("Bob")
                 .lastName("Brutus")
                 .studentId("1234567")
-                .email("projetemployeur@gmail.com")
+                .email("etudiant@gmail.com")
                 .phoneNumber("911")
                 .address("9310 Lasalle")
                 .build());

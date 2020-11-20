@@ -1,31 +1,30 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import './ResumeUpload.css'
-import LinearProgress from "@material-ui/core/LinearProgress";
-import * as yup from "yup";
-import useStyles from "../../Utils/useStyles";
-import {useApi} from "../../Utils/Hooks";
-import {useHistory} from "react-router-dom";
-
+import Button from "@material-ui/core/Button"
+import Container from "@material-ui/core/Container"
+import Grid from "@material-ui/core/Grid"
+import LinearProgress from "@material-ui/core/LinearProgress"
+import Typography from "@material-ui/core/Typography"
+import {ErrorMessage, Field, Form, Formik} from "formik"
+import {SimpleFileUpload, TextField} from "formik-material-ui"
+import React from "react"
+import {useHistory} from "react-router-dom"
+import * as yup from "yup"
+import {useApi} from "../../Utils/Hooks"
+import useStyles from "../../Utils/useStyles"
+import "./ResumeUpload.css"
 
 export default function ResumeUpload() {
-    const classes = useStyles();
-    const api = useApi();
-    const history = useHistory();
+    const classes = useStyles()
+    const api = useApi()
+    const history = useHistory()
 
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
-            let reader = new FileReader();
+            let reader = new FileReader()
             reader.onload = () => {
                 resolve(reader.result)
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(file)
         })
     }
 
@@ -35,28 +34,27 @@ export default function ResumeUpload() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{minHeight: '100%'}}
+        style={{minHeight: "100%"}}
     >
         <Grid item xs={12} sm={7} lg={5}>
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
-                    onSubmit={async values => readFileAsync(values.file).then(file => {
-                        let dto = {...values};
-                        dto.file = file;
-                        return api.post("/resumes", dto)
-                            .then(() => history.push("/dashboard/listcv"))
-                    })
-                    }
-
+                    onSubmit={async values => readFileAsync(values.file)
+                        .then(file => {
+                            let dto = {...values}
+                            dto.file = file
+                            return api.post("/resumes", dto)
+                                .then(() => history.push("/dashboard/listcv"))
+                        })}
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
                     validate={values => {
-                        const errors = {};
+                        const errors = {}
                         if (values.file.type !== "application/pdf") {
                             errors.file = "Le fichier doit être de type PDF"
                         }
-                        return errors;
+                        return errors
                     }}
                     validationSchema={yup.object()
                         .shape({
@@ -69,7 +67,6 @@ export default function ResumeUpload() {
                 >
                     {({submitForm, isSubmitting}) => <Form>
                         <Grid container
-                              alignItems="start"
                               justify="center"
                               spacing={2}>
                             <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>

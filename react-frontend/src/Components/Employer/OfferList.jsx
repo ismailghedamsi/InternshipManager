@@ -1,23 +1,23 @@
-import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
-import AuthenticationService from '../../Services/AuthenticationService';
-import {useApi} from "../Utils/Hooks";
-import OfferDetails from "../Utils/OfferDetails";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import useStyles from "../Utils/useStyles";
+import Link from "@material-ui/core/Link"
+import Typography from "@material-ui/core/Typography"
+import React, {useEffect, useState} from "react"
+import {useHistory} from "react-router-dom"
+import AuthenticationService from "../../Services/AuthenticationService"
+import {useApi} from "../Utils/Hooks"
+import OfferDetails from "../Utils/OfferDetails"
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
+import useStyles from "../Utils/useStyles"
 
 export default function OfferList() {
-    const classes = useStyles();
-    const api = useApi();
-    const history = useHistory();
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [offers, setOffers] = useState([]);
+    const classes = useStyles()
+    const api = useApi()
+    const history = useHistory()
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [offers, setOffers] = useState([])
 
     useEffect(() => {
         if (AuthenticationService.getCurrentUserRole() === "employer") {
-            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
+            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().email)
                 .then(r => setOffers(r ? r.data : []))
         } else if (AuthenticationService.getCurrentUserRole() === "admin") {
             api.get("/offers/approved")

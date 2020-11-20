@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,8 +65,8 @@ public class ContractGenerationServiceTest {
                 .employer(employer)
                 .details(InternshipOfferDetails.builder()
                         .description("The coolest internship")
-                        .startTime(8)
-                        .endTime(16)
+                        .startTime(LocalTime.of(8, 30))
+                        .endTime(LocalTime.of(16, 0))
                         .internshipEndDate(LocalDate.parse("2020-11-01"))
                         .internshipStartDate(LocalDate.parse("2020-11-02"))
                         .build())

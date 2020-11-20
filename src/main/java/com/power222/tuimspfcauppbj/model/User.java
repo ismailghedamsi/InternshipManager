@@ -21,12 +21,11 @@ public abstract class User {
     private Long id;
 
     @Column(unique = true)
-    private String username;
+    private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    private String email;
     private boolean passwordExpired;
     private boolean disabled;
 }

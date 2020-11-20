@@ -189,7 +189,7 @@ export default function Navbar() {
                         history.push("/")
                     }}
             >
-                <i className="fa fa-sign-out"/>&ensp;Déconnexion - {AuthenticationService.getCurrentUser().username}
+                <i className="fa fa-sign-out"/>&ensp;Déconnexion - {AuthenticationService.getCurrentUser().email}
             </Button>
         </Toolbar>
         <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)} style={{width: 250}}>

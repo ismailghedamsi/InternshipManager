@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -61,7 +62,7 @@ public class InternshipOffer extends SemesterDiscriminatedEntity {
         private LocalDate internshipEndDate;
         private double salary;
         private int nbStudentToHire;
-        private int startTime;
-        private int endTime;
+        private LocalTime startTime;
+        private LocalTime endTime;
     }
 }

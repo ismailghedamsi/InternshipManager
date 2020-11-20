@@ -4,44 +4,44 @@ import React, {useEffect, useRef, useState} from "react"
 import PdfDocument from "./PdfDocument"
 import useStyles from "./useStyles"
 
-export default function PdfSelectionViewer(props) {
+export default function PdfSelectionViewer({documents, title, children}) {
     const classes = useStyles()
     const [currentDoc, setCurrentDoc] = useState(null)
     const [childs, setChilds] = useState([])
     const container = useRef()
 
     useEffect(() => {
-        if (props.documents) {
-            if (props.documents[currentDoc] !== "" && props.documents[currentDoc] !== undefined && props.documents[currentDoc] !== null)
+        if (documents) {
+            if (documents[currentDoc] && documents[currentDoc] !== "")
                 setCurrentDoc(currentDoc)
-            else if (props.documents[0] !== "" && props.documents[0] !== undefined && props.documents[0] !== null)
+            else if (documents[0] && documents[0] !== "")
                 setCurrentDoc(0)
         } else
             setCurrentDoc(null)
-    }, [props.documents, currentDoc])
+    }, [documents, currentDoc])
 
-    useEffect(() => setChilds(props.documents.map((item, i) => props.children(i, setCurrent))), [props])
+    useEffect(() => setChilds(documents.map((item, i) => children(i, setCurrent))), [children, documents])
 
     function setCurrent(index) {
         setCurrentDoc(index)
     }
 
     function getCurrentDoc() {
-        return currentDoc >= props.documents.length ? 0 : currentDoc
+        return currentDoc >= documents.length ? 0 : currentDoc
     }
 
     return <Grid
         container
         spacing={0}
         className={classes.main}>
-        <Grid item xs={3} className={classes.list}>
+        <Grid item xs={4} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
-                {props.title}
+                {title}
             </Typography>
             {childs.length > 0 ? childs : "Aucun élément à afficher"}
         </Grid>
-        <Grid item xs={9} className={classes.viewbox} align="center" ref={container}>
-            <PdfDocument document={props.documents[getCurrentDoc()] ? props.documents[getCurrentDoc()] : ""}
+        <Grid item xs={8} className={classes.viewbox} align="center" ref={container}>
+            <PdfDocument document={documents[getCurrentDoc()] ? documents[getCurrentDoc()] : ""}
                          container={container}/>
         </Grid>
     </Grid>

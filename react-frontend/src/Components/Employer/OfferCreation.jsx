@@ -1,32 +1,31 @@
-import {Typography} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import {DatePicker} from 'formik-material-ui-pickers';
-import React from "react";
-import {useHistory} from 'react-router-dom';
-import * as yup from "yup";
-import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import {Typography} from "@material-ui/core"
+import Button from "@material-ui/core/Button"
+import Container from "@material-ui/core/Container"
+import Grid from "@material-ui/core/Grid"
+import LinearProgress from "@material-ui/core/LinearProgress"
+import {Field, Form, Formik} from "formik"
+import {SimpleFileUpload, TextField} from "formik-material-ui"
+import {DatePicker, TimePicker} from "formik-material-ui-pickers"
+import React from "react"
+import {useHistory} from "react-router-dom"
+import * as yup from "yup"
+import AuthenticationService from "../../Services/AuthenticationService"
+import {useApi} from "../Utils/Hooks"
+import useStyles from "../Utils/useStyles"
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLittleError = valueNumber => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
-const tooBigError = valueNumber => "Doit être un nombre plus petit que ou égal à " + valueNumber.max;
-const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const tooLittleError = valueNumber => "Doit être un nombre plus grand que ou égal à " + valueNumber.min
+const requiredFieldMsg = "Ce champs est requis"
 
 export default function OfferCreation() {
-    const classes = useStyles();
-    const api = useApi();
-    const history = useHistory();
+    const classes = useStyles()
+    const api = useApi()
+    const history = useHistory()
     const validationSchema = yup.object().shape({
-        title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
+        title: yup.string().trim().min(5, tooShortError).required(requiredFieldMsg),
         description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-        salary: yup.number().min(0, tooLittleError).required(requiredFieldMsg),
-        nbStudentToHire: yup.number().min(0, tooLittleError).required(
+        salary: yup.number().min(12.5, tooLittleError).required(requiredFieldMsg),
+        nbStudentToHire: yup.number().min(1, tooLittleError).required(
             requiredFieldMsg),
         limitDateToApply: yup.date().required().when(
             "creationDate",
@@ -43,21 +42,31 @@ export default function OfferCreation() {
                 (internshipStartDate, schema) => internshipStartDate && schema.min(
                     internshipStartDate,
                     "La date de début doit être avant la date de fin")),
-        startTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
-        endTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg)
     });
     const initialValues = {
-        title: '',
-        description: '',
-        salary: '',
+        title: "",
+        description: "",
+        salary: 12.5,
         creationDate: new Date(),
-        internshipStartDate: new Date(),
-        internshipEndDate: new Date(),
-        nbStudentToHire: '',
-        limitDateToApply: new Date(),
+        limitDateToApply: function () {
+            const date = new Date()
+            date.setMonth(date.getMonth() + 1)
+            return date
+        }(),
+        internshipStartDate: function () {
+            const date = new Date()
+            date.setMonth(date.getMonth() + 3)
+            return date
+        }(),
+        internshipEndDate: function () {
+            const date = new Date()
+            date.setMonth(date.getMonth() + 6)
+            return date
+        }(),
+        nbStudentToHire: 1,
         file: "",
-        startTime: '',
-        endTime: ''
+        startTime: Date.parse("Thu, 01 Jan 1970 08:00:00"),
+        endTime: Date.parse("Thu, 01 Jan 1970 16:00:00")
     }
 
     function readFileAsync(file) {
@@ -92,17 +101,19 @@ export default function OfferCreation() {
         <Grid item xs={12} sm={7} lg={5}>
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
-                    onSubmit={async values => sendOfferToBackEnd(values)
-                        .then(() => history.push("/dashboard/listoffer"))
-                    }
-
+                    onSubmit={async values => {
+                        const dto = {...values}
+                        dto.startTime = new Date(values.startTime).toTimeString().split(" ")[0]
+                        dto.endTime = new Date(values.endTime).toTimeString().split(" ")[0]
+                        return sendOfferToBackEnd(dto).then(() => history.push("/dashboard/listoffer"))
+                    }}
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
                     validationSchema={validationSchema}
                     initialValues={initialValues}
                     validate={values => {
-                        const errors = {};
+                        const errors = {}
                         if (values.file.type !== "application/pdf") {
                             errors.file = "Le fichier doit être de type PDF"
                         }
@@ -112,10 +123,9 @@ export default function OfferCreation() {
                         return errors;
                     }}
                 >
-                    {({isSubmitting}) =>
+                    {({isSubmitting, setFieldValue}) =>
                         <Form className={classes.form}>
                             <Grid container
-                                  alignItems="start"
                                   justify="center"
                                   spacing={2}>
                                 <Typography variant={"h1"} className={classes.formTitle}>
@@ -125,12 +135,11 @@ export default function OfferCreation() {
                                     <Field
                                         component={TextField}
                                         name="title"
-                                        id="title"
+                                        id="offerTitle"
                                         variant="outlined"
                                         label="Titre"
                                         required
                                         fullWidth
-                                        autoFocus
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -154,7 +163,7 @@ export default function OfferCreation() {
                                         required
                                         fullWidth
                                         type={"number"}
-                                        InputProps={{inputProps: {min: 0}}}
+                                        InputProps={{inputProps: {min: 1}}}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -163,37 +172,35 @@ export default function OfferCreation() {
                                         name="salary"
                                         id="salary"
                                         variant="outlined"
-                                        label="Salaire"
+                                        label="Taux horaire"
                                         required
                                         fullWidth
                                         type={"number"}
-                                        InputProps={{inputProps: {min: 0}}}
+                                        InputProps={{inputProps: {min: 12.5}}}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <Field
-                                        component={TextField}
+                                        component={TimePicker}
                                         name="startTime"
                                         id="startTime"
                                         variant="outlined"
-                                        label="Horaire de début"
+                                        label="Début de quart"
+                                        ampm={false}
                                         required
                                         fullWidth
-                                        type={"number"}
-                                        InputProps={{inputProps: {min: 0}}}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <Field
-                                        component={TextField}
+                                        component={TimePicker}
                                         name="endTime"
                                         id="endTime"
                                         variant="outlined"
-                                        label="Horaire de fin"
+                                        label="Fin de quart"
+                                        ampm={false}
                                         required
                                         fullWidth
-                                        type={"number"}
-                                        InputProps={{inputProps: {min: 0}}}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -205,7 +212,7 @@ export default function OfferCreation() {
                                         label="Début de stage"
                                         required
                                         fullWidth
-                                        format="MM/dd/yyyy"
+                                        format="dd MMM yyyy"
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -217,7 +224,7 @@ export default function OfferCreation() {
                                         label="Fin de stage"
                                         required
                                         fullWidth
-                                        format="MM/dd/yyyy"
+                                        format="dd MMM yyyy"
                                     />
                                 </Grid>
 
@@ -228,7 +235,7 @@ export default function OfferCreation() {
                                         id="limitDateToApply"
                                         variant="outlined"
                                         label="Date limite pour appliquer"
-                                        format="MM/dd/yyyy"
+                                        format="dd MMM yyyy"
                                         required
                                         fullWidth
                                     />
@@ -245,10 +252,6 @@ export default function OfferCreation() {
                                         required
                                     />
                                 </Grid>
-                                <ErrorMessage name={"file"}>
-                                    {msg => <p id="msgError"><span style={{color: "red"}}>{msg}</span>
-                                    </p>}
-                                </ErrorMessage>
                             </Grid>
                             <br/>
                             {isSubmitting && <LinearProgress/>}

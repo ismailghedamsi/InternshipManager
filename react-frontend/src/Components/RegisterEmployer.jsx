@@ -1,30 +1,29 @@
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import React, {useContext} from "react";
-import {Field, Form, Formik} from "formik";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import * as yup from "yup";
-import {TextField} from "formik-material-ui";
-import AuthenticationService from "../Services/AuthenticationService";
-import {ModalContext} from "../App";
+import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
+import LinearProgress from "@material-ui/core/LinearProgress"
+import {Field, Form, Formik} from "formik"
+import {TextField} from "formik-material-ui"
+import React, {useContext} from "react"
+import * as yup from "yup"
+import {ModalContext} from "../App"
+import AuthenticationService from "../Services/AuthenticationService"
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = value => "Doit avoir au plus " + value.max + " caractères";
-const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const tooLongError = value => "Doit avoir au plus " + value.max + " caractères"
+const requiredFieldMsg = "Ce champs est requis"
 
 export default function RegisterEmployer(props) {
-    const {open} = useContext(ModalContext);
+    const {open} = useContext(ModalContext)
     const validationSchema = yup.object()
         .shape({
             companyName: yup.string().trim().min(5, tooShortError).required(requiredFieldMsg),
             address: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
             contactName: yup.string().trim().min(5, tooShortError).max(50, tooLongError).required(requiredFieldMsg),
             phoneNumber: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            username: yup.string().trim().min(5, tooShortError).max(30, tooLongError).required(requiredFieldMsg),
             email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
             passwordConfirm: yup.string()
-                .oneOf([yup.ref('password'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg),
+                .oneOf([yup.ref("password"), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
         });
     const initialValues = {
         companyName: '',
@@ -32,7 +31,6 @@ export default function RegisterEmployer(props) {
         phoneNumber: '',
         address: '',
         email: '',
-        username: '',
         password: '',
         passwordConfirm: '',
     }
@@ -95,22 +93,11 @@ export default function RegisterEmployer(props) {
                         fullWidth
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Field
-                        component={TextField}
-                        name="username"
-                        id="username"
-                        variant="outlined"
-                        label="Nom d'utilisateur"
-                        required
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                     <Field
                         component={TextField}
                         name="email"
-                        id="email"
+                        id="emailEmployer"
                         variant="outlined"
                         label="Addresse courriel"
                         type={"email"}

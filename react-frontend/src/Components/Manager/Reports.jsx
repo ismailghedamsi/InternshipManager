@@ -1,20 +1,17 @@
-import {Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import * as locales from '@material-ui/core/locale';
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import TableCell from "@material-ui/core/TableCell";
-import Typography from "@material-ui/core/Typography";
-import ThemeProvider from "@material-ui/styles/ThemeProvider";
-import PropTypes from 'prop-types';
-import React, {useEffect, useMemo, useState} from 'react';
-import {useApi, useDateParser} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import {Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow} from "@material-ui/core"
+import Button from "@material-ui/core/Button"
+import Divider from "@material-ui/core/Divider"
+import Drawer from "@material-ui/core/Drawer"
+import List from "@material-ui/core/List"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemText from "@material-ui/core/ListItemText"
+import ListSubheader from "@material-ui/core/ListSubheader"
+import TableCell from "@material-ui/core/TableCell"
+import Typography from "@material-ui/core/Typography"
+import PropTypes from "prop-types"
+import React, {useEffect, useMemo, useState} from "react"
+import {useApi, useDateParser} from "../Utils/Hooks"
+import useStyles from "../Utils/useStyles"
 
 const reports = [
     "Étudiants inscrits",
@@ -145,7 +142,7 @@ function DataTable({report}) {
     const [rows, setRows] = useState([])
     //To prevent undefineds caused by rerender on report, before rows are updated
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const bodyMemo = useMemo(() => <DataTableBody rows={rows} report={report}/>, [rows]);
+    const bodyMemo = useMemo(() => <DataTableBody rows={rows} report={report}/>, [rows])
 
     useEffect(() => {
         api.get("/reports/" + reportEndpoints[report] + "?page=" + currentPage + "&itemsPerPage=" + rowsPerPage)
@@ -155,30 +152,28 @@ function DataTable({report}) {
             })
     }, [currentPage, rowsPerPage, report]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    return <ThemeProvider theme={createMuiTheme(locales['frFR'])}>
-        <TableContainer>
-            <Table>
-                <TableHead>
-                    <DataTableHeader report={report}/>
-                </TableHead>
-                <TableBody>
-                    {bodyMemo}
-                </TableBody>
-                <TableFooter>
-                    <tr>
-                        <TablePagination
-                            component="td"
-                            count={itemCount}
-                            page={currentPage}
-                            onChangePage={(e, page) => setCurrentPage(page)}
-                            rowsPerPage={rowsPerPage}
-                            onChangeRowsPerPage={({target: {value}}) => setRowsPerPage(parseInt(value))}
-                        />
-                    </tr>
-                </TableFooter>
-            </Table>
+    return <TableContainer>
+        <Table>
+            <TableHead>
+                <DataTableHeader report={report}/>
+            </TableHead>
+            <TableBody>
+                {bodyMemo}
+            </TableBody>
+            <TableFooter>
+                <tr>
+                    <TablePagination
+                        component="td"
+                        count={itemCount}
+                        page={currentPage}
+                        onChangePage={(e, page) => setCurrentPage(page)}
+                        rowsPerPage={rowsPerPage}
+                        onChangeRowsPerPage={({target: {value}}) => setRowsPerPage(parseInt(value))}
+                    />
+                </tr>
+            </TableFooter>
+        </Table>
         </TableContainer>
-    </ThemeProvider>
 }
 
 DataTable.propTypes = {

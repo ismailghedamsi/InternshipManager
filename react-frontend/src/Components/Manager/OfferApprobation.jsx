@@ -1,4 +1,7 @@
 import {Typography} from "@material-ui/core"
+import Button from "@material-ui/core/Button"
+import Divider from "@material-ui/core/Divider"
+import Grid from "@material-ui/core/Grid"
 import React, {useEffect, useState} from "react"
 import {useApi, useModal} from "../Utils/Hooks"
 import OfferDetails from "../Utils/OfferDetails"
@@ -24,7 +27,7 @@ export default function OfferApprobation({count}) {
 
     function sendDecision(index, reviewState, reason = "") {
         const nextState = [...offers]
-        delete nextState[index].applications
+        nextState[index].applications = undefined
         nextState[index].reviewState = reviewState
         nextState[index].reasonForRejection = reason
         return api.put("/offers/" + nextState[index].id, nextState[index])
@@ -43,29 +46,13 @@ export default function OfferApprobation({count}) {
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage en attente"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <div className={classes.buttonDiv}>
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
-                            onClick={() => sendDecision(i, "APPROVED")}
-                            style={{marginRight: 5}}
-                        ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
-                            onClick={() => {
-                                setCurrentOfferIndex(i)
-                                openReasonModal()
-                            }}
-                        ><i className="fa fa-ban" style={{color: "red"}}/></button>
-                    </div>
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(" ")}
                         autoFocus={i === 0}
                         onClick={() => {
-                            setCurrent(i);
-                            setCurrentOfferIndex(i);
+                            setCurrent(i)
+                            setCurrentOfferIndex(i)
                         }}>
                         <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                             {" " + offers[i].title + " "}
@@ -74,8 +61,37 @@ export default function OfferApprobation({count}) {
                             {offers[i].employer.companyName} {offers[i].employer.contactName}
                         </Typography>
                     </button>
-                    {currentOfferIndex === i && <OfferDetails offer={offers[i]}/>}
-                    <hr/>
+                    {currentOfferIndex === i && <>
+                        <OfferDetails offer={offers[i]}/>
+                        <Grid container spacing={1} className={classes.buttonDiv}>
+                            <Grid item xs={6}>
+                                <Button
+                                    onClick={() => sendDecision(i, "APPROVED")}
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    fullWidth
+                                    style={{backgroundColor: "green"}}
+                                >
+                                    <i className="fa fa-check-square" style={{color: "white"}}/>&ensp;Approuver
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    onClick={() => {
+                                        setCurrentOfferIndex(i)
+                                        openReasonModal()
+                                    }}
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    fullWidth
+                                    style={{backgroundColor: "red"}}
+                                >
+                                    <i className="fa fa-ban" style={{color: "white"}}/>&ensp;Refuser
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </>}
+                    <Divider/>
                 </div>
             }
         </PdfSelectionViewer>

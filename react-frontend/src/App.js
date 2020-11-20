@@ -1,7 +1,11 @@
 import DateFnsUtils from "@date-io/date-fns"
 import CssBaseline from "@material-ui/core/CssBaseline"
+import * as locales from "@material-ui/core/locale"
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
 import {MuiPickersUtilsProvider} from "@material-ui/pickers"
+import ThemeProvider from "@material-ui/styles/ThemeProvider"
 import axios from "axios"
+import {frCA} from "date-fns/locale"
 import React, {useEffect, useState} from "react"
 import {pdfjs} from "react-pdf"
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
@@ -24,27 +28,29 @@ function App() {
 
     useEffect(() => {
         axios.get("http://localhost:8080/api/semesters/present")
-            .then(r => setSemester(r ? r.data : ''));
+            .then(r => setSemester(r ? r.data : ""))
     }, [])
 
-    return <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <ModalContext.Provider value={{open: openErrorModal}}>
-            <SemesterContext.Provider value={{semester, setSemester}}>
-                <div className="App">
-                    <CssBaseline/>
-                    <Router>
-                        <Switch>
-                            <Route exact path="/" component={Login}/>
-                            <Route exact path="/register" component={RegisteringManager}/>
-                            <Route exact path="/passwordChange" component={PasswordChange}/>
-                            <BasicProtectedRoute exact={false} path="/dashboard" component={RouteSelector}/>
-                        </Switch>
-                    </Router>
-                    <ErrorModal isOpen={isErrorModalOpen} hide={closeErrorModal}/>
-                </div>
-            </SemesterContext.Provider>
-        </ModalContext.Provider>
-    </MuiPickersUtilsProvider>;
+    return <ThemeProvider theme={createMuiTheme(locales["frFR"])}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={frCA}>
+            <ModalContext.Provider value={{open: openErrorModal}}>
+                <SemesterContext.Provider value={{semester, setSemester}}>
+                    <div className="App">
+                        <CssBaseline/>
+                        <Router>
+                            <Switch>
+                                <Route exact path="/" component={Login}/>
+                                <Route exact path="/register" component={RegisteringManager}/>
+                                <Route exact path="/passwordChange" component={PasswordChange}/>
+                                <BasicProtectedRoute exact={false} path="/dashboard" component={RouteSelector}/>
+                            </Switch>
+                        </Router>
+                        <ErrorModal isOpen={isErrorModalOpen} hide={closeErrorModal}/>
+                    </div>
+                </SemesterContext.Provider>
+            </ModalContext.Provider>
+        </MuiPickersUtilsProvider>
+    </ThemeProvider>
 }
 
-export default App;
+export default App

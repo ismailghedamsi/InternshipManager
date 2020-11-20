@@ -39,12 +39,11 @@ public class StudentServiceTests {
     void beforeEach() {
         expectedStudent = Student.builder()
                 .id(1L)
-                .username("student")
                 .password("password")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
-                .email("simon@cal.qc.ca")
+                .email("student@cal.qc.ca")
                 .phoneNumber("5144816959")
                 .address("6600 St-Jacques Ouest")
                 .applications(Collections.emptyList())
@@ -106,7 +105,7 @@ public class StudentServiceTests {
 
     @Test
     void createStudentWithExistingUsername() {
-        when(userRepo.existsByUsername(expectedStudent.getUsername())).thenReturn(true);
+        when(userRepo.existsByEmail(expectedStudent.getEmail())).thenReturn(true);
 
         var actual = svc.persistNewStudent(expectedStudent);
 

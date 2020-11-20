@@ -53,10 +53,10 @@ public class AuthenticationControllerTests {
     }
 
     @Test
-    @WithMockUser("etudiant")
+    @WithMockUser("etudiant@gmail.com")
     void getUserInfos() throws Exception {
         User u = Student.builder()
-                .username("etudiant")
+                .email("etudiant@gmail.com")
                 .password(new BCryptPasswordEncoder().encode("password"))
                 .build();
 
@@ -65,7 +65,7 @@ public class AuthenticationControllerTests {
         mvc.perform(get("/api/auth/user").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.username").value("etudiant"));
+                .andExpect(jsonPath("$.email").value("etudiant@gmail.com"));
     }
 
     @Test
