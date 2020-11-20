@@ -27,6 +27,10 @@ import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import com.power222.tuimspfcauppbj.util.UserType;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -125,9 +129,12 @@ public class ContractGenerationService {
 
     private Optional<Contract> performSignature(Contract contract, ContractSignatureDTO signatureDto) {
         if (contract.getSignatureState() != PENDING_FOR_ADMIN_REVIEW) {
-            if (signatureDto.isApproved())
-                contract.setFile(getContractFileWithSignature(contract, signatureDto));
-            else
+            if (signatureDto.isApproved()) {
+                final String signedFile = getContractFileWithSignature2(contract, signatureDto);
+                if (signedFile == null)
+                    return Optional.empty();
+                contract.setFile(signedFile);
+            } else
                 contract.setReasonForRejection(signatureDto.getReasonForRejection());
         }
 
@@ -137,6 +144,29 @@ public class ContractGenerationService {
         signedContract.ifPresent(mailService::notifyConcernedUsers);
 
         return signedContract;
+    }
+
+    private String getContractFileWithSignature2(Contract contract, ContractSignatureDTO signatureDto) {
+        PDDocument document = null;
+
+        try {
+            document = PDDocument.load(new ByteArrayInputStream(contract.getFile().getBytes()));
+            PDPage page = document.getPage(document.getNumberOfPages() - 1);
+            PDImageXObject image = PDImageXObject.createFromByteArray(document, signatureDto.getImageSignature().getBytes(), "signature");
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.beginText();
+            contentStream.drawImage((PDImageXObject) null, 75, 250);
+            contentStream.close();
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            document.save(out);
+            document.close();
+
+            return "data:application/pdf;base64," + encodeBytes(out.toByteArray());
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     private String getContractFileWithSignature(Contract contract, ContractSignatureDTO signatureDto) {
