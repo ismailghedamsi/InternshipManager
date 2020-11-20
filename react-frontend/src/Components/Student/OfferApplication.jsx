@@ -19,39 +19,39 @@ import TextboxModal from "../Utils/TextboxModal";
 import useStyles from "../Utils/useStyles";
 
 export default function OfferApplication() {
-    const classes = useStyles();
-    const api = useApi();
-    const [offers, setOffers] = useState([]);
-    const [resumes, setResumes] = useState([]);
-    const [interviews, setInterviews] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isResumeModalOpen, openResumeModal, closeResumeModal] = useModal();
-    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
-    const [isReasonOfInterviewModalOpen, openReasonOfInterviewModal, closeReasonOfInterviewModal] = useModal();
+    const classes = useStyles()
+    const api = useApi()
+    const [offers, setOffers] = useState([])
+    const [resumes, setResumes] = useState([])
+    const [interviews, setInterviews] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [isResumeModalOpen, openResumeModal, closeResumeModal] = useModal()
+    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
+    const [isReasonOfInterviewModalOpen, openReasonOfInterviewModal, closeReasonOfInterviewModal] = useModal()
 
     function sendInterviewDecision(index, studentDecision, reason = "") {
-        const nextState = [...interviews];
-        const interview = nextState[index];
-        interview.studentAcceptanceState = studentDecision;
-        interview.reasonForRejectionByStudent = reason;
+        const nextState = [...interviews]
+        const interview = nextState[index]
+        interview.studentAcceptanceState = studentDecision
+        interview.reasonForRejectionByStudent = reason
         return api.put("/interviews/" + nextState[index].id, nextState[index])
             .then(result => {
                 if (result)
-                    nextState[index] = result.data;
-                setInterviews(nextState);
+                    nextState[index] = result.data
+                setInterviews(nextState)
                 closeReasonOfInterviewModal()
             })
     }
 
     function sendDecision(index, studentDecision, reason = "") {
-        const nextState = [...offers];
-        const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id);
-        application.reasonForRejection = reason;
-        application.state = studentDecision;
+        const nextState = [...offers]
+        const application = nextState[index].applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id)
+        application.reasonForRejection = reason
+        application.state = studentDecision
         return api.put("/applications/state/" + application.id, application)
             .then(result => {
-                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data);
-                setOffers(nextState);
+                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data)
+                setOffers(nextState)
                 closeReasonModal()
             })
     }
@@ -59,17 +59,17 @@ export default function OfferApplication() {
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
             .then(result => setResumes(result ? result.data : []))
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
             .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.details.limitDateToApply) >= new Date()) : []))
-    }, []);// eslint-disable-line react-hooks/exhaustive-deps
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         api.get("/interviews/student/" + AuthenticationService.getCurrentUser().id)
             .then(result => setInterviews(result ? result.data : []))
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0
@@ -77,13 +77,13 @@ export default function OfferApplication() {
 
     function hasEmployeurAcceptedStudentToInterview(i) {
         if (interviews[i]) {
-            return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id;
+            return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id
         }
-        return false;
+        return false
     }
 
     function hasEmployeurAcceptedStudentOnOffer(offer, student) {
-        return offer.applications.find(a => a.student.id === student.id && a.state === "STUDENT_HIRED_BY_EMPLOYER") !== undefined && offer.applications.length !== 0;
+        return offer.applications.find(a => a.student.id === student.id && a.state === "STUDENT_HIRED_BY_EMPLOYER") !== undefined && offer.applications.length !== 0
     }
 
     function getStudentDecision(offer, student) {
@@ -98,9 +98,9 @@ export default function OfferApplication() {
     function getStudentDecisionForInterview(i) {
         if (interviews[i]) {
             if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT") {
-                return " Vous avez accepté l'entrevue";
+                return " Vous avez accepté l'entrevue"
             } else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
-                return " Vous avez refusé l'entrevue";
+                return " Vous avez refusé l'entrevue"
             }
         }
         return ""
@@ -116,24 +116,23 @@ export default function OfferApplication() {
     }
 
     function generateMenuItems() {
-        let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED");
+        let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
         if (filteredResumes.length === 1) {
-            filteredResumes = filteredResumes[0];
-            return <MenuItem value={filteredResumes.id}>{filteredResumes.name}</MenuItem>
+            return <MenuItem value={filteredResumes[0].id}>{filteredResumes[0].name}</MenuItem>
         } else if (filteredResumes.length !== 0) {
             filteredResumes = filteredResumes.map((item, i) =>
-                <MenuItem key={i} value={item.id}>{item.name}</MenuItem>);
+                <MenuItem key={i} value={item.id}>{item.name}</MenuItem>)
             filteredResumes.push(
                 <MenuItem key={filteredResumes.length} value={-1} disabled>Veuillez choisir un CV</MenuItem>
-            );
-            return filteredResumes;
+            )
+            return filteredResumes
         } else
-            return <MenuItem value={-1} disabled>Aucun CV n'a été approuvé</MenuItem>;
+            return <MenuItem value={-1} disabled>Aucun CV n'a été approuvé</MenuItem>
     }
 
     function setFirstCV() {
-        let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED");
-        return filteredResumes.length === 1 ? filteredResumes[0].id : -1;
+        let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
+        return filteredResumes.length === 1 ? filteredResumes[0].id : -1
     }
 
     return <div style={{height: "100%"}}>
@@ -147,8 +146,8 @@ export default function OfferApplication() {
                             className={classes.linkButton}
                             style={{marginRight: 5}}
                             onClick={() => {
-                                setCurrentIndex(i);
-                                openResumeModal();
+                                setCurrentIndex(i)
+                                openResumeModal()
                             }}
                         >
                             <i className="fa fa-share-square-o"/>
@@ -165,7 +164,7 @@ export default function OfferApplication() {
                         type={"button"}
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                         onClick={() => {
-                            setCurrentIndex(i);
+                            setCurrentIndex(i)
                             setCurrent(i)
                         }}
                     >
@@ -241,10 +240,10 @@ export default function OfferApplication() {
                         onSubmit={async values => {
                             return api.post("/applications/" + offers[currentIndex].id + "/" + values.resumeId, {})
                                 .then(r => {
-                                    const nextState = [...offers];
-                                    nextState[currentIndex].applications.push(r.data);
-                                    setOffers(nextState);
-                                    closeResumeModal();
+                                    const nextState = [...offers]
+                                    nextState[currentIndex].applications.push(r.data)
+                                    setOffers(nextState)
+                                    closeResumeModal()
                                 })
                         }}
                         validateOnBlur={false}
@@ -306,5 +305,5 @@ export default function OfferApplication() {
             title={"Justifiez le refus"}
             onSubmit={async values => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
         />
-    </div>;
+    </div>
 }
