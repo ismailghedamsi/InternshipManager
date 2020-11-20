@@ -76,9 +76,8 @@ export default function OfferApplication() {
     }
 
     function hasEmployeurAcceptedStudentToInterview(i) {
-        if (interviews[i]) {
+        if (interviews[i])
             return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id
-        }
         return false
     }
 
@@ -87,39 +86,36 @@ export default function OfferApplication() {
     }
 
     function getStudentDecision(offer, student) {
-        if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")) {
+        if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT"))
             return " Vous avez accepté cette offre"
-        } else if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_DENIED_BY_STUDENT")) {
+        else if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_DENIED_BY_STUDENT"))
             return " Vous avez refusé cette offre"
-        }
         return ""
     }
 
     function getStudentDecisionForInterview(i) {
         if (interviews[i]) {
-            if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT") {
+            if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
                 return " Vous avez accepté l'entrevue"
-            } else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
+            else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
                 return " Vous avez refusé l'entrevue"
-            }
         }
         return ""
     }
 
     function getDateEntretien(i) {
         if (interviews[i]) {
-            if (hasEmployeurAcceptedStudentToInterview(i)) {
+            if (hasEmployeurAcceptedStudentToInterview(i))
                 return new Date(interviews[i].date).toLocaleString()
-            }
         }
         return ""
     }
 
     function generateMenuItems() {
         let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
-        if (filteredResumes.length === 1) {
+        if (filteredResumes.length === 1)
             return <MenuItem value={filteredResumes[0].id}>{filteredResumes[0].name}</MenuItem>
-        } else if (filteredResumes.length !== 0) {
+        else if (filteredResumes.length !== 0) {
             filteredResumes = filteredResumes.map((item, i) =>
                 <MenuItem key={i} value={item.id}>{item.name}</MenuItem>)
             filteredResumes.push(
