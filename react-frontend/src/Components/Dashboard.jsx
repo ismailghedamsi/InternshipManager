@@ -31,7 +31,7 @@ import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Footer";
 import Navbar from "./Utils/Navbar";
 import {RoleProtectedRoute} from "./Utils/Routes";
-import HiredStudentList from "./HiredStudentList";
+import HiredStudentList from "./Employer/HiredStudentList";
 
 const useStyles = makeStyles(() => ({
     root: {

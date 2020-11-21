@@ -126,6 +126,14 @@ export default function StudentStatus() {
         api.get("students").then(resp => setStudents(resp ? resp.data : []))
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    function isResumesNotUndefined(students, currentIndex) {
+        return students.length !== 0 && students[currentIndex].resumes.length > 0
+    }
+
+    function isOffersNotUndefined(students, currentIndex) {
+        return students[currentIndex].allowedOffers && students[currentIndex].allowedOffers.length > 0
+    }
+
     return <Grid
         container
         spacing={2}
@@ -145,62 +153,61 @@ export default function StudentStatus() {
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                             {students[i].firstName} {students[i].lastName}
                         </Typography>
+                    </button>
+                    {currentIndex === i &&
+                    <div>
+                        <button
+                            type={"button"}
+                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
+                            onClick={() => setCurrentSubtab(0)}>
+                            <Typography color={"textSecondary"} variant={"body2"}>
+                                CVs
+                            </Typography>
                         </button>
-                        {currentIndex === i &&
-                        <div>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
-                                onClick={() => setCurrentSubtab(0)}>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    CVs
-                                </Typography>
-                            </button>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
-                                onClick={() => setCurrentSubtab(1)}>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    Offres de stage
-                                </Typography>
-                            </button>
-                        </div>
-                        }
+                        <button
+                            type={"button"}
+                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
+                            onClick={() => setCurrentSubtab(1)}>
+                            <Typography color={"textSecondary"} variant={"body2"}>
+                                Offres de stage
+                            </Typography>
+                        </button>
+                    </div>
+                    }
                     <hr/>
                 </div>
             ) : "Aucun étudiants"}
-            </Grid>
-            <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                {currentSubtab === 0 && students.length !== 0 ? students[currentIndex].resumes.length > 0 ? students[currentIndex].resumes.map((resume, index) =>
-                        <ResumeStatus key={index}
-                                      classes={classes}
-                                      resume={resume}
-                                      onClick={() => {
-                                          setCurrentDoc(resume.file);
-                                          openPdf();
-                                      }}/>
-                    ) : "L'étudiant n'a téléversé aucun CV"
-                    : ""}
-                {currentSubtab === 1 && students[currentIndex].allowedOffers && (students[currentIndex].allowedOffers.length > 0 ? students[currentIndex].allowedOffers.map((offer, index) =>
-                    <OfferStatus key={index}
-                                 classes={classes}
-                                 offer={offer}
-                                 currentStudent={students[currentIndex]}
-                                 onClick={() => {
-                                     setCurrentDoc(offer.file);
-                                     openPdf();
-                                 }}/>
-                ) : "L'étudiant n'a accès à aucune offre de stage")}
-            </Grid>
-            <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-                <DialogContent className={classes.viewbox}>
-                    <PdfDocument document={currentDoc}/>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closePdf} color="primary">
-                        Fermer
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </Grid>
+        <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
+            {currentSubtab === 0 && isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
+                <ResumeStatus key={index}
+                              classes={classes}
+                              resume={resume}
+                              onClick={() => {
+                                  setCurrentDoc(resume.file);
+                                  openPdf();
+                              }}/>
+            ) : "L'étudiant n'a téléversé aucun CV"}
+            {currentSubtab === 1 && isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+                <OfferStatus key={index}
+                             classes={classes}
+                             offer={offer}
+                             currentStudent={students[currentIndex]}
+                             onClick={() => {
+                                 setCurrentDoc(offer.file);
+                                 openPdf();
+                             }}/>
+            ) : "L'étudiant n'a accès à aucune offre de stage"}
+        </Grid>
+        <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
+            <DialogContent className={classes.viewbox}>
+                <PdfDocument document={currentDoc}/>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={closePdf} color="primary">
+                    Fermer
+                </Button>
+            </DialogActions>
+        </Dialog>
+    </Grid>
 }
