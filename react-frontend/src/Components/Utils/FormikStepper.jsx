@@ -3,10 +3,10 @@ import LinearProgress from "@material-ui/core/LinearProgress"
 import {Form, Formik} from "formik"
 import React, {useState} from "react"
 import {useHistory} from "react-router-dom"
-import AuthenticationService from "../../../Services/AuthenticationService"
-import EvaluationModal from "../../Employer/Evaluations/EvaluationModal"
-import {useApi, useFileReader, useModal} from "../../Utils/Hooks"
-import BusinessEvaluationModal from "./BusinessEvaluationModal"
+import AuthenticationService from "../../Services/AuthenticationService"
+import EvaluationModal from "../Employer/Evaluations/EvaluationModal"
+import BusinessEvaluationModal from "../Manager/BusinessEvaluations/BusinessEvaluationModal"
+import {useApi, useFileReader, useModal} from "./Hooks"
 
 export function FormikStepper({contract, initialValues, children}) {
     const history = useHistory()

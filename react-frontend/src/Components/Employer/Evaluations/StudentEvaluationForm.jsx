@@ -4,7 +4,7 @@ import {SimpleFileUpload, TextField} from "formik-material-ui"
 import React from "react"
 import {useLocation} from "react-router-dom"
 import * as yup from "yup"
-import {FormikStepper} from "../../Manager/BusinessEvaluations/FormikStepper"
+import {FormikStepper} from "../../Utils/FormikStepper"
 import useStyles from "../../Utils/useStyles"
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
@@ -624,7 +624,7 @@ function DecisionStep(props) {
     </FormikStep>
 }
 
-export default function Evaluationform() {
+export default function StudentEvaluationForm() {
     const classes = useStyles()
     const location = useLocation()
     const evaluationAnswers = [
