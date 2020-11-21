@@ -116,7 +116,7 @@ OfferStatus.propTypes = {
 export default function StudentStatus() {
     const classes = useStyles();
     const api = useApi();
-    const [students, setStudents] = useState([{}]);
+    const [students, setStudents] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentSubtab, setCurrentSubtab] = useState(0);
     const [currentDoc, setCurrentDoc] = useState('');
@@ -134,17 +134,17 @@ export default function StudentStatus() {
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 État des étudiants
             </Typography>
-            {students.map((item, i) =>
-                    <div key={i}>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
-                            onClick={() => {
-                                setCurrentIndex(i);
-                            }}>
-                            <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                                {students[i].firstName} {students[i].lastName}
-                            </Typography>
+            {students.length !== 0 ? students.map((item, i) =>
+                <div key={i}>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        onClick={() => {
+                            setCurrentIndex(i);
+                        }}>
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                            {students[i].firstName} {students[i].lastName}
+                        </Typography>
                         </button>
                         {currentIndex === i &&
                         <div>
@@ -166,20 +166,21 @@ export default function StudentStatus() {
                             </button>
                         </div>
                         }
-                        <hr/>
-                    </div>
-                )}
+                    <hr/>
+                </div>
+            ) : "Aucun étudiants"}
             </Grid>
             <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                {currentSubtab === 0 && students[currentIndex].resumes && (students[currentIndex].resumes.length > 0 ? students[currentIndex].resumes.map((resume, index) =>
-                    <ResumeStatus key={index}
-                                  classes={classes}
-                                  resume={resume}
-                                  onClick={() => {
-                                      setCurrentDoc(resume.file);
-                                      openPdf();
-                                  }}/>
-                ) : "L'étudiant n'a téléversé aucun CV")}
+                {currentSubtab === 0 && students.length !== 0 ? students[currentIndex].resumes.length > 0 ? students[currentIndex].resumes.map((resume, index) =>
+                        <ResumeStatus key={index}
+                                      classes={classes}
+                                      resume={resume}
+                                      onClick={() => {
+                                          setCurrentDoc(resume.file);
+                                          openPdf();
+                                      }}/>
+                    ) : "L'étudiant n'a téléversé aucun CV"
+                    : ""}
                 {currentSubtab === 1 && students[currentIndex].allowedOffers && (students[currentIndex].allowedOffers.length > 0 ? students[currentIndex].allowedOffers.map((offer, index) =>
                     <OfferStatus key={index}
                                  classes={classes}
