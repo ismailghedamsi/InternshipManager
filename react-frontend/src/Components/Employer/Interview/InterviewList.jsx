@@ -14,7 +14,11 @@ export default function Interviewlist() {
 
     useEffect(() => {
         api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
-            .then(r => setInterviews(r.data))
+                .then(r => {
+                    setInterviews(r.data)
+                    console.log(r.data)
+                })
+
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function redirectEditFormInterview(interview) {
@@ -37,9 +41,9 @@ export default function Interviewlist() {
                 interviews.length > 0 ?
                     interviews.map((interview, key) => <div key={key}>
                         <Typography>Date de l'entrevue
-                            : {interview.date ? new Date(interview.date).toLocaleDateString() : ""}</Typography>
+                            : {interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</Typography>
                         <Typography>L'heure de l'entrevue
-                            : {interview.date ? parseTimeFromDate(interview.date) : ""}</Typography>
+                            : {interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</Typography>
                         <Typography>Titre de l'offre
                             : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
                         {<Typography> Étudiants à rencontrer
