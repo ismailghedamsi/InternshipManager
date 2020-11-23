@@ -1,9 +1,6 @@
 package com.power222.tuimspfcauppbj.service;
 
-import com.aspose.pdf.facades.IPdfFileEditor;
-import com.aspose.pdf.facades.PdfFileEditor;
 import com.itextpdf.io.font.constants.StandardFonts;
-import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.WebColors;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -17,24 +14,27 @@ import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.UnitValue;
 import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.util.ContractDTO;
 import com.power222.tuimspfcauppbj.util.ContractSignatureDTO;
-import com.power222.tuimspfcauppbj.util.ContractSignatureState;
-import com.power222.tuimspfcauppbj.util.UserType;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.util.filetypedetector.FileType;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -66,24 +66,13 @@ public class ContractGenerationService {
         this.authService = authService;
     }
 
-    private static UserType getSignerFromState(ContractSignatureState state) {
-        switch (state) {
-            case WAITING_FOR_EMPLOYER_SIGNATURE:
-                return UserType.EMPLOYER;
-            case WAITING_FOR_STUDENT_SIGNATURE:
-                return UserType.STUDENT;
-            default:
-                return UserType.ADMIN;
-        }
-    }
-
-    public boolean generateContract(ContractDTO contractDto) {
+    public boolean generateContract(ContractDTO contractDto) throws IOException {
         if (!(authService.getCurrentUser() instanceof Admin))
             return false;
         return generateContract(contractDto, (Admin) authService.getCurrentUser());
     }
 
-    public boolean generateContract(ContractDTO contractDto, Admin admin) {
+    public boolean generateContract(ContractDTO contractDto, Admin admin) throws IOException {
         Optional<StudentApplication> optionalApplication = getStudentApplication(contractDto);
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {
@@ -92,28 +81,49 @@ public class ContractGenerationService {
             PdfWriter writer = new PdfWriter(stream);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf, PageSize.A4);
-            document.add(new Paragraph("CONTRAT DE STAGE").setBold().setFontSize(20)
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginTop(document.getPageEffectiveArea(PageSize.A4).getHeight() / 2));
+
+            document.add(new Paragraph("CONTRAT DE STAGE").setBold().setFontSize(20).setTextAlignment(TextAlignment.CENTER).setMarginTop(document.getPageEffectiveArea(PageSize.A4).getHeight() / 2));
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-            Paragraph paragraph = new Paragraph(new Text("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES \n\n").setBold()
-            ).setPaddingTop(30f)
-                    .add(new Text("Dans le cadre de la formule ATE, les parties citées ci-dessous:\n\n"))
-                    .add("Le gestionnaire de stage, " + admin.getName() + "\n\n")
-                    .add(new Text("et\n\n\n").setBold())
-                    .add(new Text("L'employeur, " + studentApplication.getOffer().getEmployer().getCompanyName() + "\n\n"))
-                    .add(new Text("et\n\n\n").setBold())
-                    .add(new Text("L'étudiant(e), " + studentApplication.getStudent().getFirstName() + " " + studentApplication.getStudent().getLastName() + "\n\n"))
-                    .add(new Text("Conviennent des conditions de stage suivantes : "));
+            Paragraph paragraph = new Paragraph(new Text("ENTENTE DE STAGE INTERVENUE ENTRE LES PARTIES SUIVANTES \n\n").setBold()).setPaddingTop(30f).add(new Text("Dans le cadre de la formule ATE, les parties citées ci-dessous:\n\n")).add("Le gestionnaire de stage, " + admin.getName() + "\n\n").add(new Text("et\n\n\n").setBold()).add(new Text("L'employeur, " + studentApplication.getOffer().getEmployer().getCompanyName() + "\n\n")).add(new Text("et\n\n\n").setBold()).add(new Text("L'étudiant(e), " + studentApplication.getStudent().getFirstName() + " " + studentApplication.getStudent().getLastName() + "\n\n")).add(new Text("Conviennent des conditions de stage suivantes : "));
             document.add(paragraph.setTextAlignment(TextAlignment.CENTER));
             insertInternshipInfoTable(studentApplication, contractDto.getTotalHoursPerWeek(), document);
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-            document.add(new Paragraph(new Text("TACHES ET RESPONSABILITES DU STAGIAIRE\n").setBold()));
+            document.add(new Paragraph(new Text("TÂCHES ET RESPONSABILITÉS DU STAGIAIRE\n").setBold()));
             float documentWidth = document.getPageEffectiveArea(PageSize.A4).getWidth();
             final var table = new Table(1).setWidth(documentWidth);
             table.addCell(new Paragraph(studentApplication.getOffer().getDetails().getDescription()));
             document.add(table);
+
             internshipPartiesResponsabilities(contractDto, document);
+
+            document.add(new Div().setTextAlignment(TextAlignment.JUSTIFIED)
+                                  .add(new Paragraph("SIGNATURES - VOIR PAGE SUIVANTE\n").setBold())
+                                  .setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))
+                                  .setWidth(documentWidth).setHeight(40f)
+                                  .setFixedPosition(100, 100, UnitValue.createPercentValue(100)));
+
+            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+            document.add(new Div().setTextAlignment(TextAlignment.JUSTIFIED)
+                                  .add(new Paragraph("SIGNATURES\n").setBold())
+                                  .setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))
+                                  .setWidth(documentWidth)
+                                  .setHeight(40f))
+                    .add(new Paragraph().add(new Text("Les parties s’engagent à respecter cette entente de stage\nEn foi de quoi les parties ont signé,")
+                                                     .setBold()
+                                                     .setTextAlignment(TextAlignment.CENTER))
+                                        .setFirstLineIndent(15f));
+            document.add(new Paragraph().add(new Text("\n\nL'employeur :\n").setBold()).setMarginBottom(75f))
+                    .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
+                    .add(new Paragraph().add(new Paragraph("Date").setMarginLeft(290f)));
+            document.add(new Paragraph().add(new Text("\nL’étudiant(e) :\n").setBold()).setMarginBottom(75f)
+                                        .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)))
+                    .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
+                    .add(new Paragraph().add(new Paragraph("Date\n").setMarginLeft(290f)));
+            document.add(new Paragraph().add(new Text("Le gestionnaire de stage :\n").setBold()).setMarginBottom(75f))
+                    .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
+                    .add(new Paragraph().add(new Paragraph("Date").setMarginLeft(290f)));
+
             document.close();
             String fileBase64 = encodeBytes(stream.toByteArray());
             contractDto.setFile("data:application/pdf;base64," + fileBase64);
@@ -130,7 +140,7 @@ public class ContractGenerationService {
     private Optional<Contract> performSignature(Contract contract, ContractSignatureDTO signatureDto) {
         if (contract.getSignatureState() != PENDING_FOR_ADMIN_REVIEW) {
             if (signatureDto.isApproved()) {
-                final String signedFile = getContractFileWithSignature2(contract, signatureDto);
+                final String signedFile = getContractFileWithSignature(contract, signatureDto);
                 if (signedFile == null)
                     return Optional.empty();
                 contract.setFile(signedFile);
@@ -146,94 +156,38 @@ public class ContractGenerationService {
         return signedContract;
     }
 
-    private String getContractFileWithSignature2(Contract contract, ContractSignatureDTO signatureDto) {
-        PDDocument document = null;
+    private String getContractFileWithSignature(Contract contract, ContractSignatureDTO signatureDto) {
+        ByteArrayOutputStream out = null;
 
         try {
-            document = PDDocument.load(new ByteArrayInputStream(contract.getFile().getBytes()));
+            PDDocument document = PDDocument.load(new ByteArrayInputStream(Base64.getMimeDecoder().decode(contract.getFile().split(",")[1])));
             PDPage page = document.getPage(document.getNumberOfPages() - 1);
-            PDImageXObject image = PDImageXObject.createFromByteArray(document, signatureDto.getImageSignature().getBytes(), "signature");
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            PDImageXObject image = PDImageXObject.createFromByteArray(document, Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1]), FileType.PNG.name());
+            PDPageContentStream contentStream = new PDPageContentStream(document, page, AppendMode.APPEND, true);
+
+            var state = contract.getSignatureState().name().toLowerCase();
+            var initialYPosition = (state.contains("employer") ? 600f : (state.contains("student") ? 460f : 330f));
+
+            contentStream.drawImage(image, 75, initialYPosition, image.getWidth() / (image.getHeight() / 60f), 60f);
+
             contentStream.beginText();
-            contentStream.drawImage((PDImageXObject) null, 75, 250);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+            contentStream.newLineAtOffset(330, initialYPosition);
+            contentStream.showText(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME));
+            contentStream.newLineAtOffset(-270, -40);
+            contentStream.showText(signatureDto.getNomSignataire());
+            contentStream.endText();
+
             contentStream.close();
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            out = new ByteArrayOutputStream();
             document.save(out);
             document.close();
-
-            return "data:application/pdf;base64," + encodeBytes(out.toByteArray());
         } catch (Exception e) {
-
-        }
-        return null;
-    }
-
-    private String getContractFileWithSignature(Contract contract, ContractSignatureDTO signatureDto) {
-        ByteArrayOutputStream appendedOut = new ByteArrayOutputStream();
-        PdfDocument pdfAppendedOut = new PdfDocument(new PdfWriter(appendedOut));
-        Document documentAppendedOut = new Document(pdfAppendedOut, PageSize.A4);
-        float documentWidth = documentAppendedOut.getPageEffectiveArea(PageSize.A4).getWidth();
-
-        if (getSignerFromState(contract.getSignatureState()) == UserType.EMPLOYER) {
-            documentAppendedOut.add(new Div()
-                    .setTextAlignment(TextAlignment.JUSTIFIED)
-                    .add(new Paragraph("SIGNATURES\n").setBold())
-                    .setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))
-                    .setWidth(documentWidth)
-                    .setHeight(40f))
-                    .add(new Paragraph()
-                            .add(new Text("Les parties s’engagent à respecter cette entente de stage\nEn foi de quoi les parties ont signé,")
-                                    .setBold()
-                                    .setTextAlignment(TextAlignment.CENTER))
-                            .setFirstLineIndent(15f));
-
-            documentAppendedOut.add(
-                    new Paragraph()
-                            .add(new Text("\n\nL'employeur :\n").setBold())
-                            .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
-                                    .scale(0.1F, 0.1F))
-                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME)).setMarginLeft(105f)))
-                    .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
-                    .add(new Paragraph().add(new Text(signatureDto.getNomSignataire()))
-                            .add(new Paragraph("Date").setMarginLeft(145f)));
-        } else if (getSignerFromState(contract.getSignatureState()) == UserType.STUDENT) {
-            documentAppendedOut.add(
-                    new Paragraph()
-                            .add(new Text("\nL’étudiant(e) :\n").setBold())
-                            .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
-                                    .scale(0.1F, 0.1F))
-                            .add(new Text(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME)))
-                            .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)))
-                    .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
-                    .add(new Paragraph()
-                            .add(new Text(signatureDto.getNomSignataire()))
-                            .setMarginRight(120f)
-                            .setMarginBottom(0)
-                            .add(new Paragraph("Date\n").setMarginLeft(145f)));
-        } else {
-            documentAppendedOut.add(
-                    new Paragraph()
-                            .add(new Text("Le gestionnaire de stage :\n").setBold())
-                            .add(new Image(ImageDataFactory.create(Base64.getMimeDecoder().decode(signatureDto.getImageSignature().split(",")[1])))
-                                    .scale(0.1F, 0.1F))
-                            .add(new Paragraph(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME)).setMarginLeft(105f)))
-                    .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
-                    .add(new Paragraph(new Text(signatureDto.getNomSignataire()))
-                            .add(new Paragraph("Date").setMarginLeft(145f)));
+            log.error("Impossible d'apposer une signature: {}", e.getMessage());
         }
 
-        documentAppendedOut.close();
-
-        ByteArrayInputStream in = new ByteArrayInputStream(Base64.getMimeDecoder().decode(contract.getFile().split(",")[1]));
-        ByteArrayInputStream appendedIn = new ByteArrayInputStream(appendedOut.toByteArray());
-
-        IPdfFileEditor pdfEditor = new PdfFileEditor();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        pdfEditor.concatenate(in, appendedIn, out);
-
-        return "data:application/pdf;base64," + encodeBytes(out.toByteArray());
+        return (out == null) ? null : ("data:application/pdf;base64," + encodeBytes(out.toByteArray()));
     }
 
     public Optional<StudentApplication> getStudentApplication(ContractDTO contract) {
