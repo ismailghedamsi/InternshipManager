@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Typography} from "@material-ui/core";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import {useApi, useModal} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
-import TextboxModal from "../Utils/TextboxModal";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi, useModal} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
+import TextboxModal from "../Utils/Modal/TextboxModal";
 
 export default function ResumeApprobation() {
     const classes = useStyles();

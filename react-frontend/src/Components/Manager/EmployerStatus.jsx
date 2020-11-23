@@ -1,9 +1,9 @@
 import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Hooks";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PdfDocument";
-import useStyles from "../Utils/useStyles";
+import PdfDocument from "../Utils/PDF/PdfDocument";
+import useStyles from "../Utils/Style/useStyles";
 import DialogActions from "@material-ui/core/DialogActions";
 
 export default function StudentStatus() {
@@ -110,7 +110,7 @@ export default function StudentStatus() {
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 État des employeurs
             </Typography>
-            {employers.map((item, i) =>
+            {employers.length !== 0 ? employers.map((item, i) =>
                 <div key={i}>
                     <button type={"button"}
                             className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(' ')}
@@ -147,7 +147,7 @@ export default function StudentStatus() {
                     </div>
                     }
                 </div>
-            )}
+            ) : "Aucun employeurs"}
         </Grid>
         <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
             {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}

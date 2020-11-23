@@ -2,9 +2,9 @@ import {Typography} from "@material-ui/core"
 import React, {useEffect, useState} from "react"
 import {Link} from "react-router-dom"
 import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "../Utils/Hooks"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import useStyles from "../Utils/useStyles"
+import {useApi} from "../Utils/Services/Hooks"
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer"
+import useStyles from "../Utils/Style/useStyles"
 
 export default function ContractList() {
     const classes = useStyles()

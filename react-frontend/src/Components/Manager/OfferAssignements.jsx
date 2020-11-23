@@ -3,9 +3,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {Field, Form, Formik} from "formik";
 import {Checkbox} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
-import {useApi} from "../Utils/Hooks";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import useStyles from "../Utils/useStyles";
+import {useApi} from "../Utils/Services/Hooks";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function OfferAssignements() {
     const classes = useStyles();

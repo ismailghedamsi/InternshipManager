@@ -9,8 +9,8 @@ import MenuIcon from "@material-ui/icons/Menu"
 import axios from "axios"
 import React, {useContext, useEffect, useState} from "react"
 import {useHistory, useLocation} from "react-router-dom"
-import {SemesterContext} from "../../App"
-import AuthenticationService from "../../Services/AuthenticationService"
+import {SemesterContext} from "../../../App"
+import AuthenticationService from "../../../Services/AuthenticationService"
 
 const Links = {
     admin: [
@@ -112,6 +112,10 @@ const Links = {
         {
             title: "Évaluations des stagiaire",
             url: "/dashboard/evaluationList"
+        },
+        {
+            title: "Étudiants embauchés",
+            url: "/dashboard/hiredStudentList"
         }
     ]
 }

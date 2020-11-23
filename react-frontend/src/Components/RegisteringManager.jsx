@@ -10,7 +10,7 @@ import {Link as RouterLink, useHistory} from "react-router-dom";
 import RegisterEmployer from "./RegisterEmployer";
 import RegisterStudent from "./RegisterStudent";
 import TabPanel from "./Utils/TabPanel";
-import useStyles from "./Utils/useStyles";
+import useStyles from "./Utils/Style/useStyles";
 
 export default function RegisteringManager() {
     const classes = useStyles();

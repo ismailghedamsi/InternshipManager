@@ -4,8 +4,8 @@ import {SimpleFileUpload, TextField} from "formik-material-ui"
 import React from "react"
 import {useLocation} from "react-router-dom"
 import * as yup from "yup"
-import {FormikStepper} from "../../Manager/BusinessEvaluations/FormikStepper"
-import useStyles from "../../Utils/useStyles"
+import {FormikStepper} from "../../Utils/FormikStepper"
+import useStyles from "../../Utils/Style/useStyles"
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min

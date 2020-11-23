@@ -8,9 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import {Select} from "formik-material-ui";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
-import useStyles from "../Utils/useStyles";
+import useStyles from "../Utils/Style/useStyles";
 import MenuItem from "@material-ui/core/MenuItem";
-import {useApi} from "../Utils/Hooks";
+import {useApi} from "../Utils/Services/Hooks";
 import {useHistory} from "react-router-dom";
 
 

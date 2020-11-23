@@ -15,7 +15,7 @@ import * as yup from "yup";
 import {ModalContext} from "../App";
 import fl from '../img/fl.png'
 import AuthenticationService from '../Services/AuthenticationService';
-import useStyles from "./Utils/useStyles";
+import useStyles from "./Utils/Style/useStyles";
 
 const HTTP_UNAUTHORIZED = 401;
 const HTTP_TOKEN_EXPIRED = 498;
