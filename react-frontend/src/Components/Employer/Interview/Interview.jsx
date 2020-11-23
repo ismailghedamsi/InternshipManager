@@ -1,4 +1,4 @@
-import {Typography} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
 import React from 'react'
 import {useTimeParserFromDate} from "../../Utils/Services/Hooks";
 
@@ -25,5 +25,11 @@ export default function Interview(props) {
         {<Typography> Étudiants à rencontrer
             : {props.interview.studentApplication ? props.interview.studentApplication.student.firstName + " " + props.interview.studentApplication.student.lastName : ""}</Typography>}
         <Typography>{isInterviewAccepted(props.interview)}</Typography>
+        <Button onClick={() => {
+            props.onDelete(props.interview)
+        }}>Supprimer</Button>
+        <Button onClick={() => {
+            props.onReschedule(props.interview)
+        }}>Reprogrammer</Button>
     </>
 }

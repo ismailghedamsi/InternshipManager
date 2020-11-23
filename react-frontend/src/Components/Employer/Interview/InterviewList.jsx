@@ -1,4 +1,3 @@
-import {Button} from '@material-ui/core'
 import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
@@ -36,6 +35,20 @@ export default function Interviewlist() {
         return "En attente d'approbation"
     }
 
+    function handleDelete(interview) {
+        const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
+        const copyInterviews = [...interviews]
+        api.delete("/interviews/" + interview.id)
+                .then(() => {
+                    copyInterviews.splice(interviewToDeleteIndex, 1)
+                    setInterviews(copyInterviews)
+                })
+    }
+
+    function handleReschedule(interview) {
+        redirectEditFormInterview(interview);
+    }
+
     return <Grid
             container
             spacing={2}
@@ -44,19 +57,7 @@ export default function Interviewlist() {
             {
                 interviews.length > 0 ?
                         interviews.map((interview, key) => <div key={key}>
-                            <Interview interview={interview}/>
-                            <Button onClick={() => {
-                                const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
-                                const copyInterviews = [...interviews]
-                                api.delete("/interviews/" + interview.id)
-                                        .then(() => {
-                                            copyInterviews.splice(interviewToDeleteIndex, 1)
-                                            setInterviews(copyInterviews)
-                                        })
-                            }}>Supprimer</Button>
-                            <Button onClick={() => {
-                                redirectEditFormInterview(interview);
-                            }}>Reprogrammer</Button>
+                            <Interview interview={interview} onDelete={handleDelete} onReschedule={handleReschedule}/>
                             <hr/>
                         </div>)
                         : "Aucune entrevue n'a été créée"
