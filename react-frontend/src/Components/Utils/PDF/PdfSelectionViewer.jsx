@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import {Typography} from "@material-ui/core";
-import useStyles from "./useStyles";
+import useStyles from "../Style/useStyles";
 import PdfDocument from "./PdfDocument";
 
 export default function PdfSelectionViewer(props) {

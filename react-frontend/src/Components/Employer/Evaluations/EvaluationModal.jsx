@@ -5,8 +5,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import React, {useEffect, useState} from "react";
-import useStyles from "../../Utils/useStyles";
-import {useDateParser, useFileReader} from "../../Utils/Hooks";
+import useStyles from "../../Utils/Style/useStyles";
+import {useDateParser, useFileReader} from "../../Utils/Services/Hooks";
 
 export default function EvaluationModal({isOpen, data, hide}) {
     const [imageSrc, setImageSrc] = useState("")

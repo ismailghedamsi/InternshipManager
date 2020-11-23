@@ -4,12 +4,12 @@ import Login from './Components/Login';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import RegisteringManager from "./Components/RegisteringManager";
 import Dashboard from "./Components/Dashboard";
-import {BasicProtectedRoute} from "./Components/Utils/Routes";
+import {BasicProtectedRoute} from "./Components/Utils/Services/Routes";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {pdfjs} from "react-pdf";
 import PasswordChange from "./Components/PasswordChange";
-import ErrorModal from "./Components/Utils/ErrorModal";
-import {useModal} from "./Components/Utils/Hooks";
+import ErrorModal from "./Components/Utils/Modal/ErrorModal";
+import {useModal} from "./Components/Utils/Services/Hooks";
 import DateFnsUtils from "@date-io/date-fns";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 

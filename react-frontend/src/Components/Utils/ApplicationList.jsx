@@ -3,9 +3,9 @@ import Typography from "@material-ui/core/Typography"
 import React, {useEffect, useState} from "react"
 import {Link, useLocation} from "react-router-dom"
 import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "../Utils/Hooks"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import useStyles from "../Utils/useStyles"
+import {useApi} from "./Services/Hooks"
+import PdfSelectionViewer from "./PDF/PdfSelectionViewer"
+import useStyles from "./Style/useStyles"
 
 export default function ApplicationList() {
     const classes = useStyles()

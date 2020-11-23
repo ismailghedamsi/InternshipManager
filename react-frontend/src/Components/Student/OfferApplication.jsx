@@ -12,11 +12,11 @@ import {Select} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../Utils/Hooks";
+import {useApi, useModal} from "../Utils/Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import TextboxModal from "../Utils/TextboxModal";
-import useStyles from "../Utils/useStyles";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import TextboxModal from "../Utils/Modal/TextboxModal";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function OfferApplication() {
     const classes = useStyles();

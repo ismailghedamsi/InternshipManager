@@ -6,10 +6,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
 import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal} from "../Utils/Hooks";
+import {useApi, useDateParser, useModal} from "../Utils/Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PdfDocument";
-import useStyles from "../Utils/useStyles";
+import PdfDocument from "../Utils/PDF/PdfDocument";
+import useStyles from "../Utils/Style/useStyles";
 
 const applicationAcceptedStates = [
     "STUDENT_HIRED_BY_EMPLOYER",

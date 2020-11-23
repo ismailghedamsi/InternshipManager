@@ -1,9 +1,9 @@
 import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Hooks";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PdfDocument";
-import useStyles from "../Utils/useStyles";
+import PdfDocument from "../Utils/PDF/PdfDocument";
+import useStyles from "../Utils/Style/useStyles";
 import DialogActions from "@material-ui/core/DialogActions";
 
 export default function StudentStatus() {
