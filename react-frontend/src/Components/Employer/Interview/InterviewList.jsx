@@ -2,7 +2,7 @@ import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import AuthenticationService from '../../../Services/AuthenticationService'
-import {useApi, useTimeParserFromDate} from '../../Utils/Services/Hooks'
+import {useApi} from '../../Utils/Services/Hooks'
 import useStyles from "../../Utils/Style/useStyles";
 import Interview from "./Interview";
 
@@ -11,7 +11,6 @@ export default function Interviewlist() {
     const api = useApi()
     const history = useHistory();
     const classes = useStyles();
-    const parseTimeFromDate = useTimeParserFromDate();
 
     useEffect(() => {
         api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
@@ -23,16 +22,6 @@ export default function Interviewlist() {
 
     function redirectEditFormInterview(interview) {
         history.push("/dashboard/rescheduleInterview", {...interview})
-    }
-
-    function isInterviewAccepted(interview) {
-        if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT") {
-            return "L'étudiant a accepté l'entrevue"
-        } else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
-            return <span style={{color: "red"}}>Rejeté<span
-                    style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>;
-        }
-        return "En attente d'approbation"
     }
 
     function handleDelete(interview) {
