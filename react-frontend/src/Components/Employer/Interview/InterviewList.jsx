@@ -3,8 +3,8 @@ import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import AuthenticationService from '../../../Services/AuthenticationService'
-import {useApi, useTimeParserFromDate} from '../../Utils/Hooks'
-import useStyles from "../../Utils/useStyles";
+import {useApi, useTimeParserFromDate} from '../../Utils/Services/Hooks'
+import useStyles from "../../Utils/Style/useStyles";
 
 export default function Interviewlist() {
     const [interviews, setInterviews] = useState([{}])

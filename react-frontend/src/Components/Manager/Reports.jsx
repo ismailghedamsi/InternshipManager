@@ -13,8 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import PropTypes from 'prop-types';
 import React, {useEffect, useMemo, useState} from 'react';
-import {useApi, useDateParser} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import {useApi, useDateParser} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 const reports = [
     "Étudiants inscrits",

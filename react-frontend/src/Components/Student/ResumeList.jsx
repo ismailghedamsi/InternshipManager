@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import AuthenticationService from '../../Services/AuthenticationService';
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import {useApi} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function ResumeList() {
     const classes = useStyles();
