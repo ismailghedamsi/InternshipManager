@@ -1,10 +1,11 @@
-import {Button, Typography} from '@material-ui/core'
+import {Button} from '@material-ui/core'
 import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import AuthenticationService from '../../../Services/AuthenticationService'
 import {useApi, useTimeParserFromDate} from '../../Utils/Services/Hooks'
 import useStyles from "../../Utils/Style/useStyles";
+import Interview from "./Interview";
 
 export default function Interviewlist() {
     const [interviews, setInterviews] = useState([{}])
@@ -17,7 +18,6 @@ export default function Interviewlist() {
         api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
                 .then(r => {
                     setInterviews(r.data)
-                    console.log(r.data)
                 })
 
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -44,24 +44,16 @@ export default function Interviewlist() {
             {
                 interviews.length > 0 ?
                         interviews.map((interview, key) => <div key={key}>
-                            <Typography>Date de l'entrevue
-                                : {interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</Typography>
-                            <Typography>L'heure de l'entrevue
-                                : {interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</Typography>
-                            <Typography>Titre de l'offre
-                                : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
-                            {<Typography> Étudiants à rencontrer
-                            : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
-                        <Typography>{isInterviewAccepted(interview)}</Typography>
-                        <Button onClick={() => {
-                            const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
-                            const copyInterviews = [...interviews]
-                            api.delete("/interviews/" + interview.id)
-                                .then(() => {
-                                    copyInterviews.splice(interviewToDeleteIndex, 1)
-                                    setInterviews(copyInterviews)
-                                })
-                        }}>Supprimer</Button>
+                            <Interview interview={interview}/>
+                            <Button onClick={() => {
+                                const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
+                                const copyInterviews = [...interviews]
+                                api.delete("/interviews/" + interview.id)
+                                        .then(() => {
+                                            copyInterviews.splice(interviewToDeleteIndex, 1)
+                                            setInterviews(copyInterviews)
+                                        })
+                            }}>Supprimer</Button>
                             <Button onClick={() => {
                                 redirectEditFormInterview(interview);
                             }}>Reprogrammer</Button>
