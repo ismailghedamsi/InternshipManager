@@ -31,6 +31,7 @@ import ResumeUpload from "./Student/Upload/ResumeUpload";
 import Footer from "./Utils/Navb-Foot/Footer";
 import Navbar from "./Utils/Navb-Foot/Navbar";
 import {RoleProtectedRoute} from "./Utils/Services/Routes";
+import HiredStudentList from "./Employer/HiredStudentList";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -220,6 +221,12 @@ export default function Dashboard() {
                     exact={true}
                     path="/dashboard/evaluationList"
                     component={StudentEvaluationsList}
+                    role={"employer"}
+                />
+                <RoleProtectedRoute
+                    exact={true}
+                    path="/dashboard/hiredStudentList"
+                    component={HiredStudentList}
                     role={"employer"}
                 />
                 {/* Etudiant */}

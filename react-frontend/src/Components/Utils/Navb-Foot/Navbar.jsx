@@ -112,6 +112,10 @@ const Links = {
         {
             title: "Évaluations des stagiaire",
             url: "/dashboard/evaluationList"
+        },
+        {
+            title: "Étudiants embauchés",
+            url: "/dashboard/hiredStudentList"
         }
     ]
 }
