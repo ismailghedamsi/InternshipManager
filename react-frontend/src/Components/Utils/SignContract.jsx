@@ -2,10 +2,10 @@ import {Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../Utils/Hooks";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import TextboxModal from "../Utils/TextboxModal";
-import useStyles from "../Utils/useStyles";
+import {useApi, useModal} from "./Services/Hooks";
+import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
+import TextboxModal from "./Modal/TextboxModal";
+import useStyles from "./Style/useStyles";
 
 export default function SignContract() {
     const classes = useStyles();
@@ -83,10 +83,8 @@ export default function SignContract() {
     }
 
     function directionLink() {
-        if (AuthenticationService.getCurrentUserRole() === "employer")
-            return "/dashboard/signFormEmployer"
-        else
-            return "/dashboard/signFormStudent"
+        return (AuthenticationService.getCurrentUserRole() === "employer") ?
+            "/dashboard/signFormEmployer" : "/dashboard/signFormStudent"
     }
 
     return <div style={{height: "100%"}}>
@@ -138,7 +136,7 @@ export default function SignContract() {
                     {currentIndex === i &&
                     contractState(contracts[i])
                     }
-                    {contracts[i].signatureState === "SIGNED" &&
+                    {contracts[i].signatureState === "SIGNED" && AuthenticationService.getCurrentUserRole() === 'employer' &&
                     <Link
                         variant={"body1"}
                         to={{

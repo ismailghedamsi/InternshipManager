@@ -1,7 +1,7 @@
 import Typography from "@material-ui/core/Typography";
 import * as PropTypes from "prop-types";
 import React from "react";
-import {useDateParser} from "./Hooks";
+import {useDateParser} from "./Services/Hooks";
 
 export default function OfferDetails(props) {
     const parseDate = useDateParser();

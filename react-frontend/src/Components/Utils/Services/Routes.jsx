@@ -1,5 +1,5 @@
 import {Redirect} from "react-router-dom";
-import AuthenticationService from "../../Services/AuthenticationService";
+import AuthenticationService from "../../../Services/AuthenticationService";
 import React from "react";
 
 export function ConditionalRoute(props) {

@@ -8,8 +8,8 @@ import {TextField} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
-import {useApi} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
 const requiredFieldMsg = "Ce champs est requis";
