@@ -1,4 +1,5 @@
-import {Button, Container, Typography} from '@material-ui/core'
+import {Button, Typography} from '@material-ui/core'
+import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import AuthenticationService from '../../../Services/AuthenticationService'
@@ -30,23 +31,26 @@ export default function Interviewlist() {
             return "L'étudiant a accepté l'entrevue"
         } else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
             return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>;
+                    style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>;
         }
         return "En attente d'approbation"
     }
 
-    return <div className={classes.viewbox}>
-        <Container className={classes.container}>
+    return <Grid
+            container
+            spacing={2}
+            className={classes.main}>
+        <Grid item xs={5} className={classes.list}>
             {
                 interviews.length > 0 ?
-                    interviews.map((interview, key) => <div key={key}>
-                        <Typography>Date de l'entrevue
-                            : {interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</Typography>
-                        <Typography>L'heure de l'entrevue
-                            : {interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</Typography>
-                        <Typography>Titre de l'offre
-                            : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
-                        {<Typography> Étudiants à rencontrer
+                        interviews.map((interview, key) => <div key={key}>
+                            <Typography>Date de l'entrevue
+                                : {interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</Typography>
+                            <Typography>L'heure de l'entrevue
+                                : {interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</Typography>
+                            <Typography>Titre de l'offre
+                                : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
+                            {<Typography> Étudiants à rencontrer
                             : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
                         <Typography>{isInterviewAccepted(interview)}</Typography>
                         <Button onClick={() => {
@@ -58,13 +62,13 @@ export default function Interviewlist() {
                                     setInterviews(copyInterviews)
                                 })
                         }}>Supprimer</Button>
-                        <Button onClick={() => {
-                            redirectEditFormInterview(interview);
-                        }}>Reprogrammer</Button>
-                        <hr/>
-                    </div>)
-                    : "Aucune entrevue n'a été créée"
+                            <Button onClick={() => {
+                                redirectEditFormInterview(interview);
+                            }}>Reprogrammer</Button>
+                            <hr/>
+                        </div>)
+                        : "Aucune entrevue n'a été créée"
             }
-        </Container>
-    </div>
+        </Grid>
+    </Grid>
 }

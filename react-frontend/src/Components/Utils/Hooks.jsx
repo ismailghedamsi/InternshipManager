@@ -23,7 +23,7 @@ export function useApi() {
     const user = AuthenticationService.getCurrentUser();
     const api = axios.create({
         baseURL: "http://localhost:8080/api/",
-        timeout: 15000,
+        timeout: 40000,
         headers: {
             authorization: "Basic " + btoa(user.username + ":" + user.password)
         }
