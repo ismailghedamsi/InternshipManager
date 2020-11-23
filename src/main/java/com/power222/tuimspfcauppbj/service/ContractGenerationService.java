@@ -72,7 +72,7 @@ public class ContractGenerationService {
         return generateContract(contractDto, (Admin) authService.getCurrentUser());
     }
 
-    public boolean generateContract(ContractDTO contractDto, Admin admin) throws IOException {
+    public boolean generateContract(ContractDTO contractDto, Admin admin) {
         Optional<StudentApplication> optionalApplication = getStudentApplication(contractDto);
         ByteArrayOutputStream stream = null;
         if (optionalApplication.isPresent()) {

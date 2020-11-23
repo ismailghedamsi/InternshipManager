@@ -49,7 +49,7 @@ public class ContractGenerationServiceTest {
     private Admin contractAdmin;
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() {
         contractDto = ContractDTO.builder()
                 .engagementCollege("Engagement College")
                 .engagementCompany("Engagement company")

@@ -39,11 +39,6 @@
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>com.aspose</groupId>
-            <artifactId>aspose-pdf</artifactId>
-            <version>20.10</version>
-        </dependency>
-        <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>io</artifactId>
             <version>7.1.13</version>
