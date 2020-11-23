@@ -88,7 +88,7 @@ function OfferStatus(props) {
             {
                 application.interview ?
                     <span>
-                   Entrevue: {parseInterviewDate(application.interview.date)}, {parseInterviewState(application.interview)}
+                   Entrevue: {parseInterviewDate(application.interview.dateTime)}, {parseInterviewState(application.interview)}
                 </span>
                     :
                     <span>
