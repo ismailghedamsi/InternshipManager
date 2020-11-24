@@ -3,13 +3,12 @@ import React from "react";
 export default function Offerstatus(offer) {
     function printOfferStatus(offer) {
         if (offer.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
+            return <span style={{color: "blue"}}>En attente</span>
         else if (offer.reviewState === "DENIED")
-            return <span><span style={{color: "red"}}>Rejeté: </span>{offer.reasonForRejection}</span>;
+            return <span><span style={{color: "red"}}>Rejeté: </span>{offer.reasonForRejection}</span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return <span style={{color: "green"}}>Approuvé</span>
     }
 
-    return printOfferStatus(offer);
-
+    return printOfferStatus(offer)
 }
