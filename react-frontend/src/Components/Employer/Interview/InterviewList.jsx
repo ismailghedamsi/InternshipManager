@@ -18,7 +18,6 @@ export default function Interviewlist() {
                 .then(r => {
                     setInterviews(r ? r.data : [])
                 })
-
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function redirectEditFormInterview(interview) {
