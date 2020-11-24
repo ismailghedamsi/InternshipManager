@@ -12,15 +12,17 @@ import {Select} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../Utils/Services/Hooks";
+import TextboxModal from "../Utils/Modal/TextboxModal";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import TextboxModal from "../Utils/Modal/TextboxModal";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function OfferApplication() {
     const classes = useStyles()
     const api = useApi()
+    const dateParser = useDateParser()
+    const timeParser = useTimeParserFromDate()
     const [offers, setOffers] = useState([])
     const [resumes, setResumes] = useState([])
     const [interviews, setInterviews] = useState([])
@@ -103,10 +105,11 @@ export default function OfferApplication() {
         return ""
     }
 
-    function getDateEntretien(i) {
+    function getInterviewDate(i) {
         if (interviews[i]) {
             if (hasEmployeurAcceptedStudentToInterview(i))
-                return new Date(interviews[i].date).toLocaleString()
+                return dateParser(interviews[i].dateTime) + " à " + timeParser(interviews[i].dateTime)
+
         }
         return ""
     }
@@ -174,7 +177,7 @@ export default function OfferApplication() {
                     {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                     {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) &&
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                        Date de l'entrevue : {getDateEntretien(i)}
+                        Date de l'entrevue : {getInterviewDate(i)}
                     </Typography>
                     }
                     {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION" &&
