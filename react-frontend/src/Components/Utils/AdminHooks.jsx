@@ -15,32 +15,32 @@ export function useModal() {
         setOpen(false)
     }
 
-    return [isOpen, open, close];
+    return [isOpen, open, close]
 }
 
 export function useApi() {
-    const {open} = useContext(ModalContext);
-    const {semester} = useContext(SemesterContext);
-    const user = AuthenticationService.getCurrentUser();
+    const {open} = useContext(ModalContext)
+    const {semester} = useContext(SemesterContext)
+    const user = AuthenticationService.getCurrentUser()
     const api = axios.create({
         baseURL: "http://localhost:8080/api/",
         timeout: 15000,
         headers: {
             authorization: "Basic " + btoa(user.username + ":" + user.password)
         }
-    });
+    })
     api.interceptors.request.use(config => {
         if (semester)
-            config.headers = {"X-Semester": semester, ...config.headers};
+            config.headers = {"X-Semester": semester, ...config.headers}
 
-        return config;
-    });
+        return config
+    })
     api.interceptors.response.use(response => response, error => {
-        console.warn("Axios error: " + error);
-        open();
-    });
+        console.warn("Axios error: " + error)
+        open()
+    })
 
-    return api;
+    return api
 }
 
 export function useBusinessEnvironmentEvaluation() {
