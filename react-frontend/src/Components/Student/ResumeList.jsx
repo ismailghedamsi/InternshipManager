@@ -1,9 +1,9 @@
-import Typography from "@material-ui/core/Typography"
-import React, {useEffect, useState} from "react"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "../Utils/Hooks"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import useStyles from "../Utils/useStyles"
+import Typography from "@material-ui/core/Typography";
+import React, {useEffect, useState} from "react";
+import AuthenticationService from "../../Services/AuthenticationService";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function ResumeList({count, deniedCount}) {
     const classes = useStyles()
@@ -36,12 +36,12 @@ export default function ResumeList({count, deniedCount}) {
 
     function getResumeState(resume) {
         if (resume.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
+            return <span style={{color: "blue"}}>En attente</span>
         else if (resume.reviewState === "DENIED")
             return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>;
+                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return <span style={{color: "green"}}>Approuvé</span>
     }
 
     return <div style={{height: "100%"}}>
@@ -81,5 +81,5 @@ export default function ResumeList({count, deniedCount}) {
                 <hr/>
             </div>}
         </PdfSelectionViewer>
-    </div>;
+    </div>
 }

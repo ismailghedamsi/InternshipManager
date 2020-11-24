@@ -5,6 +5,7 @@ import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
+import com.power222.tuimspfcauppbj.model.InternshipOffer.InternshipOfferDetails;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.util.ReviewState;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -67,7 +68,7 @@ public class CliTestRunner implements CommandLineRunner {
         internshipRepo.save(InternshipOffer.builder()
                 .semester("a2020h2021")
                 .title("Offre de stage bootstrappée")
-                .details(InternshipOffer.InternshipOfferDetails.builder()
+                .details(InternshipOfferDetails.builder()
                         .description("Description bootstrappée - Développement d'applications Web trois tiers.")
                         .salary(15.98)
                         .creationDate(LocalDate.now())
@@ -85,7 +86,7 @@ public class CliTestRunner implements CommandLineRunner {
         internshipRepo.save(InternshipOffer.builder()
                 .semester("a2021h2022")
                 .title("Offre de stage bootstrappée 2022")
-                .details(InternshipOffer.InternshipOfferDetails.builder()
+                .details(InternshipOfferDetails.builder()
                         .description("Description bootstrappée - Développement d'applications Web trois tiers.")
                         .salary(15.98)
                         .creationDate(LocalDate.now())

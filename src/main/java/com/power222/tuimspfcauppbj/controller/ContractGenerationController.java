@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/contractGeneration")
 public class ContractGenerationController {
@@ -19,7 +21,7 @@ public class ContractGenerationController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> generateContract(@RequestBody ContractDTO contract) {
+    public ResponseEntity<Void> generateContract(@RequestBody ContractDTO contract) throws IOException {
         return service.generateContract(contract) ? ResponseEntity.status(HttpStatus.CREATED).build()
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }

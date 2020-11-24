@@ -1,14 +1,16 @@
-import {Typography} from "@material-ui/core"
-import React, {useEffect, useState} from "react"
-import {Link} from "react-router-dom"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "../Utils/Hooks"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import useStyles from "../Utils/useStyles"
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
+import ApprovalButtons from "../Utils/ApprovalButtons";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function ContractList({count}) {
     const classes = useStyles()
     const api = useApi()
+    const history = useHistory()
     const [contracts, setContracts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -72,13 +74,12 @@ export default function ContractList({count}) {
         }
     }
 
-    function evaluationDirection() {
-        return (AuthenticationService.getCurrentUserRole() === "admin") ? "/dashboard/businessEvaluation" : "/dashboard/evaluateStudent"
+    function showDeleteContractButtonCondition(i) {
+        return contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" || contracts[i].signatureState === "REJECTED_BY_EMPLOYER"
     }
 
-    function roleCondition(i) {
-        return (AuthenticationService.getCurrentUserRole() === "admin") ?
-            contracts[i].businessEvaluation === null : contracts[i].internEvaluation === null
+    function showEvaluationButtonCondition(i) {
+        return contracts[i].signatureState === "SIGNED" && contracts[i].businessEvaluation === null
     }
 
     return <div style={{height: "100%"}}>
@@ -88,7 +89,7 @@ export default function ContractList({count}) {
             {(i, setCurrent) =>
                 <div key={i}>
                     <div className={classes.buttonDiv}>
-                        {contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
+                        {showDeleteContractButtonCondition(i) &&
                         <button
                             type={"button"}
                             className={classes.linkButton}
@@ -115,52 +116,36 @@ export default function ContractList({count}) {
                     </button>
                     <div className={classes.buttonDiv} style={{display: "block"}}>
                         {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
-                        <>
-                            <button
-                                type={"button"}
-                                className={classes.linkButton}
-                                onClick={() => sendDecision(i, true)}
-                            >
-                                <i className="fa fa-check-square" style={{color: "green"}}/>
-                                <Typography display={"inline"}>
-                                    &ensp;Approuver le contrat
-                                </Typography>
-                            </button>
-                            <button
-                                type={"button"}
-                                className={classes.linkButton}
-                                onClick={() => deleteContract(i)}>
-                                <i className="fa fa-window-close" style={{color: "red"}}/>
-                                <Typography display={"inline"}>
-                                    &ensp;Refuser le contrat
-                                </Typography>
-                            </button>
-                        </>
+                        <ApprovalButtons
+                            onApprove={() => sendDecision(i, true)}
+                            onDeny={() => deleteContract(i)}
+                            approveLabel={"Approuver le contrat"}
+                            denyLabel={"Refuser le contrat"}
+                        />
                         }
                         {contracts[i].signatureState === "WAITING_FOR_ADMIN_SIGNATURE" &&
-                        <Link variant={"body1"}
-                              to={{
-                                  pathname: "/dashboard/signFormAdmin",
-                                  state: {...contracts[i]}
-                              }}
-                              style={{display: "block"}}
-                        >
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={() => {
+                                history.push("/dashboard/signFormAdmin", {...contracts[i]})
+                            }}>
                             Signer le contrat
-                        </Link>
+                        </Button>
                         }
                         {showContractState(i)}
                     </div>
-                    {contracts[i].signatureState === "SIGNED" && roleCondition(i) &&
-                    <Link
-                        variant={"body1"}
-                        to={{
-                            pathname: evaluationDirection(),
-                            state: {...contracts[i]}
+                    {showEvaluationButtonCondition(i) &&
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            history.push("/dashboard/businessEvaluation", {...contracts[i]})
                         }}
-                        style={{display: "block"}}
                     >
-                        {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
-                    </Link>}
+                        Évaluer l'entreprise
+                    </Button>
+                    }
                     <hr className={classes.hrStyle}/>
                 </div>}
         </PdfSelectionViewer>

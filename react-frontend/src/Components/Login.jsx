@@ -1,21 +1,21 @@
-import {Avatar} from "@material-ui/core"
-import Button from "@material-ui/core/Button"
-import Container from "@material-ui/core/Container"
-import CssBaseline from "@material-ui/core/CssBaseline"
-import Divider from "@material-ui/core/Divider"
-import Grid from "@material-ui/core/Grid"
-import LinearProgress from "@material-ui/core/LinearProgress"
-import Link from "@material-ui/core/Link"
-import Typography from "@material-ui/core/Typography"
-import {Field, Form, Formik} from "formik"
-import {TextField} from "formik-material-ui"
-import React, {useContext} from "react"
-import {Link as RouterLink, Redirect, useHistory} from "react-router-dom"
-import * as yup from "yup"
-import {ModalContext} from "../App"
-import fl from "../img/fl.png"
-import AuthenticationService from "../Services/AuthenticationService"
-import useStyles from "./Utils/useStyles"
+import {Avatar} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Link from "@material-ui/core/Link";
+import Typography from "@material-ui/core/Typography";
+import {Field, Form, Formik} from "formik";
+import {TextField} from "formik-material-ui";
+import React, {useContext} from "react";
+import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
+import * as yup from "yup";
+import {ModalContext} from "../App";
+import fl from "../img/fl.png";
+import AuthenticationService from "../Services/AuthenticationService";
+import useStyles from "./Utils/Style/useStyles";
 
 const HTTP_UNAUTHORIZED = 401
 const HTTP_TOKEN_EXPIRED = 498
@@ -43,7 +43,7 @@ export default function Login() {
             open()
             console.error("Axios error: " + error)
         }
-    };
+    }
 
     if (AuthenticationService.isUserLoggedIn())
         return <Redirect to="/dashboard/"/>

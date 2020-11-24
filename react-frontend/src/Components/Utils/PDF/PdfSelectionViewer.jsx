@@ -1,8 +1,8 @@
-import {Typography} from "@material-ui/core"
-import Grid from "@material-ui/core/Grid"
-import React, {useEffect, useRef, useState} from "react"
-import PdfDocument from "./PdfDocument"
-import useStyles from "./useStyles"
+import {Typography} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import React, {useEffect, useRef, useState} from "react";
+import useStyles from "../Style/useStyles";
+import PdfDocument from "./PdfDocument";
 
 export default function PdfSelectionViewer({documents, title, children}) {
     const classes = useStyles()

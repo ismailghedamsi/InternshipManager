@@ -1,8 +1,8 @@
-import Divider from "@material-ui/core/Divider"
-import Typography from "@material-ui/core/Typography"
-import * as PropTypes from "prop-types"
-import React from "react"
-import {useDateParser, useTimeFormatter} from "./Hooks"
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
+import * as PropTypes from "prop-types";
+import React from "react";
+import {useDateParser, useTimeFormatter} from "./Services/Hooks";
 
 export default function OfferDetails(props) {
     const parseDate = useDateParser()
@@ -45,4 +45,4 @@ export default function OfferDetails(props) {
 
 OfferDetails.propTypes = {
     offer: PropTypes.any.isRequired,
-};
+}

@@ -1,54 +1,53 @@
 import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Hooks";
-import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PdfDocument";
-import useStyles from "../Utils/useStyles";
 import DialogActions from "@material-ui/core/DialogActions";
+import React, {useEffect, useState} from "react";
+import OfferDetails from "../Utils/OfferDetails";
+import PdfDocument from "../Utils/PDF/PdfDocument";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function StudentStatus() {
-    const offersTabIndex = 0;
-    const interviewsTabIndex = 1;
-    const classes = useStyles();
-    const api = useApi();
-    const parseDate = useDateParser();
-    const parseTimeFromDate = useTimeParserFromDate();
-    const [employers, setEmployers] = useState([]);
-    const [currentEmployerOffers, setCurrentEmployerOffers] = useState([]);
-    const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([]);
-    const [currentEmployerIndex, setCurrentEmployerIndex] = useState(0);
-    const [isPdfOpen, openPdf, closePdf] = useModal();
-    const [currentDoc, setCurrentDoc] = useState('');
-    const [currentSubtab, setCurrentSubtab] = useState(0);
+    const offersTabIndex = 0
+    const interviewsTabIndex = 1
+    const classes = useStyles()
+    const api = useApi()
+    const parseDate = useDateParser()
+    const parseTimeFromDate = useTimeParserFromDate()
+    const [employers, setEmployers] = useState([])
+    const [currentEmployerOffers, setCurrentEmployerOffers] = useState([])
+    const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([])
+    const [currentEmployerIndex, setCurrentEmployerIndex] = useState(0)
+    const [isPdfOpen, openPdf, closePdf] = useModal()
+    const [currentDoc, setCurrentDoc] = useState("")
+    const [currentSubtab, setCurrentSubtab] = useState(0)
 
     useEffect(() => {
         api.get("employers").then(resp => {
             setEmployers(resp ? resp.data : [])
         })
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (employers[currentEmployerIndex])
             api.get("/offers/employer/" + employers[currentEmployerIndex].username)
                 .then(r => {
-                    setCurrentEmployerOffers(r.data);
+                    setCurrentEmployerOffers(r.data)
                 })
-    }, [currentEmployerIndex, employers]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [currentEmployerIndex, employers]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (employers[currentEmployerIndex]) {
             api.get("/interviews/employer/" + employers[currentEmployerIndex].id)
                 .then(r => {
-                    setCurrentEmployerInterviews(r ? r.data : []);
+                    setCurrentEmployerInterviews(r ? r.data : [])
                 })
         }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function getCurrentEmployerInterviews(index) {
         api.get("/interviews/employer/" + employers[index].id)
             .then(r => {
-                setCurrentEmployerInterviews(r ? r.data : []);
+                setCurrentEmployerInterviews(r ? r.data : [])
             })
     }
 
@@ -58,28 +57,28 @@ export default function StudentStatus() {
                 <Typography
                     style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
             )
-            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>;
+            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>
     }
 
     function printOfferStatus(offer) {
         if (offer.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
+            return <span style={{color: "blue"}}>En attente</span>
         else if (offer.reviewState === "DENIED")
             return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>;
+                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return <span style={{color: "green"}}>Approuvé</span>
     }
 
     function InterviewStatus(props) {
         function getInterviewState(interview) {
             if (interview.reviewState === "PENDING")
-                return <span style={{color: "blue"}}>En attente</span>;
+                return <span style={{color: "blue"}}>En attente</span>
             else if (interview.reviewState === "DENIED")
                 return <span style={{color: "red"}}>Rejeté<span
-                    style={{color: "black"}}> : {interview.reasonForRejection} </span></span>;
+                    style={{color: "black"}}> : {interview.reasonForRejection} </span></span>
             else
-                return <span style={{color: "green"}}>Approuvé</span>;
+                return <span style={{color: "green"}}>Approuvé</span>
         }
 
         return <div>
@@ -98,7 +97,7 @@ export default function StudentStatus() {
             <Typography>
                 État : {getInterviewState(props.interview)}
             </Typography>
-        </div>;
+        </div>
     }
 
     return <Grid
@@ -110,12 +109,12 @@ export default function StudentStatus() {
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 État des employeurs
             </Typography>
-            {employers.map((item, i) =>
+            {employers.length !== 0 ? employers.map((item, i) =>
                 <div key={i}>
                     <button type={"button"}
-                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(' ')}
+                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(" ")}
                             onClick={() => {
-                                setCurrentEmployerIndex(i);
+                                setCurrentEmployerIndex(i)
                             }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
@@ -147,7 +146,7 @@ export default function StudentStatus() {
                     </div>
                     }
                 </div>
-            )}
+            ) : "Aucun employeurs"}
         </Grid>
         <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
             {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
@@ -158,8 +157,8 @@ export default function StudentStatus() {
                                 <Typography>
                                     <button type={"button"} className={[classes.linkButton].join(" ")}
                                             onClick={() => {
-                                                setCurrentDoc(o.file);
-                                                openPdf();
+                                                setCurrentDoc(o.file)
+                                                openPdf()
                                             }}
                                     >
                                         {o.title}
@@ -199,5 +198,5 @@ export default function StudentStatus() {
                 </Button>
             </DialogActions>
         </Dialog>
-    </Grid>;
+    </Grid>
 }

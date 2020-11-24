@@ -1,5 +1,5 @@
-import * as PropTypes from "prop-types"
-import React from "react"
+import * as PropTypes from "prop-types";
+import React from "react";
 
 export default function TabPanel(props) {
     const {children, value, index, ...other} = props

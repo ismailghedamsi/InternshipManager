@@ -1,33 +1,32 @@
-import {Typography} from '@material-ui/core';
+import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import {DateTimePicker} from 'formik-material-ui-pickers';
+import {DateTimePicker} from "formik-material-ui-pickers";
 import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from "react-router-dom";
 import * as yup from "yup";
-import AuthenticationService from '../../../Services/AuthenticationService';
-import {useApi} from "../../Utils/Hooks";
-import useStyles from "../../Utils/useStyles";
+import AuthenticationService from "../../../Services/AuthenticationService";
+import {useApi} from "../../Utils/Services/Hooks";
+import useStyles from "../../Utils/Style/useStyles";
 
-const requiredFieldMsg = "Ce champs est requis";
-
+const requiredFieldMsg = "Ce champs est requis"
 export default function InterviewConvocation() {
-    const classes = useStyles();
-    const api = useApi();
-    const location = useLocation();
-    const history = useHistory();
-    const [applicationInterview, setApplicationInterview] = useState({});
+    const classes = useStyles()
+    const api = useApi()
+    const location = useLocation()
+    const history = useHistory()
+    const [applicationInterview, setApplicationInterview] = useState({})
 
     useEffect(() => {
         setApplicationInterview(location.state)
     }, [location.state])
 
     function createInterview(values) {
-        let dto = {...values};
-        dto.date = values.interviewDate
+        let dto = {...values}
+        dto.dateTime = values.dateTime
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = applicationInterview
@@ -50,10 +49,10 @@ export default function InterviewConvocation() {
                     validateOnChange={false}
                     enableReinitialize={true}
                     validationSchema={yup.object().shape({
-                        interviewDate: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
+                        dateTime: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
                     })}
                     initialValues={{
-                        interviewDate: new Date()
+                        dateTime: new Date()
                     }}>
                     {({isSubmitting}) =>
                         <Form className={classes.form}>
@@ -69,7 +68,7 @@ export default function InterviewConvocation() {
                                 <Grid item xs={12}>
                                     <Field
                                         component={DateTimePicker}
-                                        name="interviewDate"
+                                        name="dateTime"
                                         variant="outlined"
                                         label="Date et heure de l'entrevue"
                                         required

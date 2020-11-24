@@ -1,16 +1,16 @@
-import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core"
-import AppBar from "@material-ui/core/AppBar"
-import Divider from "@material-ui/core/Divider"
-import Drawer from "@material-ui/core/Drawer"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import {makeStyles} from "@material-ui/core/styles"
-import MenuIcon from "@material-ui/icons/Menu"
-import axios from "axios"
-import React, {useContext, useEffect, useState} from "react"
-import {useHistory, useLocation} from "react-router-dom"
-import {SemesterContext} from "../../App"
-import AuthenticationService from "../../Services/AuthenticationService"
+import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import {makeStyles} from "@material-ui/core/styles";
+import MenuIcon from "@material-ui/icons/Menu";
+import axios from "axios";
+import React, {useContext, useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+import {SemesterContext} from "../../../App";
+import AuthenticationService from "../../../Services/AuthenticationService";
 
 const Links = {
     admin: [
@@ -102,6 +102,10 @@ const Links = {
         {
             title: "Évaluations des stagiaire",
             url: "/dashboard/evaluationList"
+        },
+        {
+            title: "Étudiants embauchés",
+            url: "/dashboard/hiredStudentList"
         }
     ]
 }
@@ -115,17 +119,17 @@ const useStyles = makeStyles(theme => ({
         }
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        marginRight: theme.spacing(2)
     },
     spacer: {
         flexGrow: 1
     }
-}));
+}))
 
 export default function Navbar() {
     const classes = useStyles()
-    const history = useHistory();
-    const location = useLocation();
+    const history = useHistory()
+    const location = useLocation()
     const [menuOpen, setMenuOpen] = useState(false)
     const [current, setCurrent] = useState(0)
     const {semester, setSemester} = useContext(SemesterContext)

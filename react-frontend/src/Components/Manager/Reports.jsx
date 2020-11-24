@@ -1,17 +1,17 @@
-import {Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow} from "@material-ui/core"
-import Button from "@material-ui/core/Button"
-import Divider from "@material-ui/core/Divider"
-import Drawer from "@material-ui/core/Drawer"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import ListSubheader from "@material-ui/core/ListSubheader"
-import TableCell from "@material-ui/core/TableCell"
-import Typography from "@material-ui/core/Typography"
-import PropTypes from "prop-types"
-import React, {useEffect, useMemo, useState} from "react"
-import {useApi, useDateParser} from "../Utils/Hooks"
-import useStyles from "../Utils/useStyles"
+import {Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import TableCell from "@material-ui/core/TableCell";
+import Typography from "@material-ui/core/Typography";
+import PropTypes from "prop-types";
+import React, {useEffect, useMemo, useState} from "react";
+import {useApi, useDateParser} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 const reports = [
     "Étudiants inscrits",
@@ -181,7 +181,7 @@ DataTable.propTypes = {
 }
 
 export default function Reports() {
-    const classes = useStyles();
+    const classes = useStyles()
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [report, setReport] = useState(0)
 

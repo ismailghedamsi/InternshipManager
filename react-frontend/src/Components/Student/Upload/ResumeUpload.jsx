@@ -1,16 +1,16 @@
-import Button from "@material-ui/core/Button"
-import Container from "@material-ui/core/Container"
-import Grid from "@material-ui/core/Grid"
-import LinearProgress from "@material-ui/core/LinearProgress"
-import Typography from "@material-ui/core/Typography"
-import {ErrorMessage, Field, Form, Formik} from "formik"
-import {SimpleFileUpload, TextField} from "formik-material-ui"
-import React from "react"
-import {useHistory} from "react-router-dom"
-import * as yup from "yup"
-import {useApi} from "../../Utils/Hooks"
-import useStyles from "../../Utils/useStyles"
-import "./ResumeUpload.css"
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
+import React from "react";
+import {useHistory} from "react-router-dom";
+import * as yup from "yup";
+import {useApi} from "../../Utils/Services/Hooks";
+import useStyles from "../../Utils/Style/useStyles";
+import "./ResumeUpload.css";
 
 export default function ResumeUpload() {
     const classes = useStyles()

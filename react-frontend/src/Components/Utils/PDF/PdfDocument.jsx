@@ -1,7 +1,7 @@
-import * as PropTypes from "prop-types"
-import React, {useState} from "react"
-import {Document, Page} from "react-pdf"
-import useStyles from "./useStyles"
+import * as PropTypes from "prop-types";
+import React, {useState} from "react";
+import {Document, Page} from "react-pdf";
+import useStyles from "../Style/useStyles";
 
 export default function PdfDocument(props) {
     const classes = useStyles()
@@ -26,4 +26,4 @@ export default function PdfDocument(props) {
 
 PdfDocument.propTypes = {
     document: PropTypes.any.isRequired,
-};
+}

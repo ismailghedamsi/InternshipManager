@@ -1,17 +1,17 @@
-import {Typography} from "@material-ui/core"
-import Button from "@material-ui/core/Button"
-import Container from "@material-ui/core/Container"
-import Grid from "@material-ui/core/Grid"
-import LinearProgress from "@material-ui/core/LinearProgress"
-import {Field, Form, Formik} from "formik"
-import {SimpleFileUpload, TextField} from "formik-material-ui"
-import {DatePicker, TimePicker} from "formik-material-ui-pickers"
-import React from "react"
-import {useHistory} from "react-router-dom"
-import * as yup from "yup"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "../Utils/Hooks"
-import useStyles from "../Utils/useStyles"
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {Field, Form, Formik} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
+import {DatePicker, TimePicker} from "formik-material-ui-pickers";
+import React from "react";
+import {useHistory} from "react-router-dom";
+import * as yup from "yup";
+import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLittleError = valueNumber => "Doit être un nombre plus grand que ou égal à " + valueNumber.min
@@ -41,8 +41,8 @@ export default function OfferCreation() {
                 "internshipStartDate",
                 (internshipStartDate, schema) => internshipStartDate && schema.min(
                     internshipStartDate,
-                    "La date de début doit être avant la date de fin")),
-    });
+                    "La date de début doit être avant la date de fin"))
+    })
     const initialValues = {
         title: "",
         description: "",
@@ -71,20 +71,20 @@ export default function OfferCreation() {
 
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
-            let reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+            let reader = new FileReader()
+            reader.onload = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(file)
         })
     }
 
     function sendOfferToBackEnd(values) {
         return readFileAsync(values.file).then(base64file => {
-            let dto = {};
-            dto.details = {...values};
-            dto.title = dto.details.title;
-            dto.file = base64file;
-            dto.employer = AuthenticationService.getCurrentUser();
+            let dto = {}
+            dto.details = {...values}
+            dto.title = dto.details.title
+            dto.file = base64file
+            dto.employer = AuthenticationService.getCurrentUser()
 
             return api.post("/offers", dto)
         })
@@ -114,13 +114,11 @@ export default function OfferCreation() {
                     initialValues={initialValues}
                     validate={values => {
                         const errors = {}
-                        if (values.file.type !== "application/pdf") {
+                        if (values.file.type !== "application/pdf")
                             errors.file = "Le fichier doit être de type PDF"
-                        }
-                        if (values.file.length === 0) {
+                        if (values.file.length === 0)
                             errors.file = "Aucun fichier selectionné ou le fichier est vide"
-                        }
-                        return errors;
+                        return errors
                     }}
                 >
                     {({isSubmitting, setFieldValue}) =>

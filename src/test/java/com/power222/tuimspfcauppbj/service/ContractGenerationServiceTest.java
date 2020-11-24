@@ -12,9 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -269,7 +272,20 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
-    public void successfulPdfGenerationTestForActiveAdminAsEmployer() {
+    void updateContractSignatureStateWithInvalidSignatureImageTest() {
+        signatureDto.setImageSignature("data:image/png;base64," + Arrays.toString(Base64.getEncoder().encode("test12345".getBytes())));
+        contract.setSignatureState(ContractSignatureState.WAITING_FOR_STUDENT_SIGNATURE);
+
+        when(contractService.getContractById(contract.getId())).thenReturn(Optional.of(contract));
+
+        var actual = contractGenerationService.signContract(signatureDto);
+
+        assertThat(actual).isEmpty();
+        verify(contractService, times(0)).updateContract(contract.getId(), contract);
+    }
+
+    @Test
+    public void successfulPdfGenerationTestForActiveAdminAsEmployer() throws IOException {
         when(authService.getCurrentUser()).thenReturn(Employer.builder().id(1L).build());
 
         boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto);
@@ -278,7 +294,7 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
-    public void successfulPdfGenerationTestForActiveAdminAsAdmin() {
+    public void successfulPdfGenerationTestForActiveAdminAsAdmin() throws IOException {
         when(contractGenerationService.getStudentApplication(contractDto)).thenReturn(Optional.of(expectedStudentApplication));
         when(studentApplicationService.getApplicationById(contractDto.getStudentApplicationId())).thenReturn(Optional.ofNullable(expectedStudentApplication));
         when(authService.getCurrentUser()).thenReturn(contractAdmin);
@@ -289,7 +305,7 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
-    public void successfulPdfGenerationTestForGivenAdmin() {
+    public void successfulPdfGenerationTestForGivenAdmin() throws IOException {
         when(contractGenerationService.getStudentApplication(contractDto)).thenReturn(Optional.of(expectedStudentApplication));
         when(studentApplicationService.getApplicationById(contractDto.getStudentApplicationId())).thenReturn(Optional.ofNullable(expectedStudentApplication));
 
@@ -299,7 +315,7 @@ public class ContractGenerationServiceTest {
     }
 
     @Test
-    public void getStudentApplicationWithWrongDtoTest() {
+    public void getStudentApplicationWithWrongDtoTest() throws IOException {
         boolean generatePdfSuccess = contractGenerationService.generateContract(contractDto, contractAdmin);
 
         assertThat(generatePdfSuccess).isFalse();

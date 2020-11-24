@@ -6,10 +6,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
 import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal} from "../Utils/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PdfDocument";
-import useStyles from "../Utils/useStyles";
+import PdfDocument from "../Utils/PDF/PdfDocument";
+import {useApi, useDateParser, useModal} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 const applicationAcceptedStates = [
     "STUDENT_HIRED_BY_EMPLOYER",
@@ -48,11 +48,11 @@ ResumeStatus.propTypes = {
     classes: PropTypes.any,
     onClick: PropTypes.func,
     resume: PropTypes.any
-};
+}
 
 function OfferStatus(props) {
-    const parseInterviewDate = useDateParser();
-    const application = props.offer.applications.find(a => a.student.id === props.currentStudent.id);
+    const parseInterviewDate = useDateParser()
+    const application = props.offer.applications.find(a => a.student.id === props.currentStudent.id)
 
     function parseInterviewState(interview) {
         if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
@@ -88,7 +88,7 @@ function OfferStatus(props) {
             {
                 application.interview ?
                     <span>
-                   Entrevue: {parseInterviewDate(application.interview.date)}, {parseInterviewState(application.interview)}
+                   Entrevue: {parseInterviewDate(application.interview.dateTime)}, {parseInterviewState(application.interview)}
                 </span>
                     :
                     <span>
@@ -102,7 +102,7 @@ function OfferStatus(props) {
             }
         </Typography>
         <hr/>
-    </div>;
+    </div>
 }
 
 OfferStatus.propTypes = {
@@ -110,21 +110,29 @@ OfferStatus.propTypes = {
     onClick: PropTypes.func,
     offer: PropTypes.any,
     currentStudent: PropTypes.any,
-};
+}
 
 
 export default function StudentStatus() {
-    const classes = useStyles();
-    const api = useApi();
-    const [students, setStudents] = useState([{}]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentSubtab, setCurrentSubtab] = useState(0);
-    const [currentDoc, setCurrentDoc] = useState('');
-    const [isPdfOpen, openPdf, closePdf] = useModal();
+    const classes = useStyles()
+    const api = useApi()
+    const [students, setStudents] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [currentSubtab, setCurrentSubtab] = useState(0)
+    const [currentDoc, setCurrentDoc] = useState("")
+    const [isPdfOpen, openPdf, closePdf] = useModal()
 
     useEffect(() => {
         api.get("students").then(resp => setStudents(resp ? resp.data : []))
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    function isResumesNotUndefined(students, currentIndex) {
+        return students.length !== 0 && students[currentIndex].resumes.length > 0
+    }
+
+    function isOffersNotUndefined(students, currentIndex) {
+        return students[currentIndex].allowedOffers && students[currentIndex].allowedOffers.length > 0
+    }
 
     return <Grid
         container
@@ -134,72 +142,72 @@ export default function StudentStatus() {
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 État des étudiants
             </Typography>
-            {students.map((item, i) =>
-                    <div key={i}>
+            {students.length !== 0 ? students.map((item, i) =>
+                <div key={i}>
+                    <button
+                        type={"button"}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
+                        onClick={() => {
+                            setCurrentIndex(i)
+                        }}>
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                            {students[i].firstName} {students[i].lastName}
+                        </Typography>
+                    </button>
+                    {currentIndex === i &&
+                    <div>
                         <button
                             type={"button"}
-                            className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
-                            onClick={() => {
-                                setCurrentIndex(i);
-                            }}>
-                            <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                                {students[i].firstName} {students[i].lastName}
+                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(" ")}
+                            onClick={() => setCurrentSubtab(0)}>
+                            <Typography color={"textSecondary"} variant={"body2"}>
+                                CVs
                             </Typography>
                         </button>
-                        {currentIndex === i &&
-                        <div>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
-                                onClick={() => setCurrentSubtab(0)}>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    CVs
-                                </Typography>
-                            </button>
-                            <button
-                                type={"button"}
-                                className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
-                                onClick={() => setCurrentSubtab(1)}>
-                                <Typography color={"textSecondary"} variant={"body2"}>
-                                    Offres de stage
-                                </Typography>
-                            </button>
-                        </div>
-                        }
-                        <hr/>
+                        <button
+                            type={"button"}
+                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(" ")}
+                            onClick={() => setCurrentSubtab(1)}>
+                            <Typography color={"textSecondary"} variant={"body2"}>
+                                Offres de stage
+                            </Typography>
+                        </button>
                     </div>
-                )}
-            </Grid>
-            <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-                {currentSubtab === 0 && students[currentIndex].resumes && (students[currentIndex].resumes.length > 0 ? students[currentIndex].resumes.map((resume, index) =>
-                    <ResumeStatus key={index}
-                                  classes={classes}
-                                  resume={resume}
-                                  onClick={() => {
-                                      setCurrentDoc(resume.file);
-                                      openPdf();
-                                  }}/>
-                ) : "L'étudiant n'a téléversé aucun CV")}
-                {currentSubtab === 1 && students[currentIndex].allowedOffers && (students[currentIndex].allowedOffers.length > 0 ? students[currentIndex].allowedOffers.map((offer, index) =>
-                    <OfferStatus key={index}
-                                 classes={classes}
-                                 offer={offer}
-                                 currentStudent={students[currentIndex]}
-                                 onClick={() => {
-                                     setCurrentDoc(offer.file);
-                                     openPdf();
-                                 }}/>
-                ) : "L'étudiant n'a accès à aucune offre de stage")}
-            </Grid>
-            <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-                <DialogContent className={classes.viewbox}>
-                    <PdfDocument document={currentDoc}/>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closePdf} color="primary">
-                        Fermer
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                    }
+                    <hr/>
+                </div>
+            ) : "Aucun étudiants"}
         </Grid>
+        <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
+            {currentSubtab === 0 && isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
+                <ResumeStatus key={index}
+                              classes={classes}
+                              resume={resume}
+                              onClick={() => {
+                                  setCurrentDoc(resume.file)
+                                  openPdf()
+                              }}/>
+            ) : "L'étudiant n'a téléversé aucun CV"}
+            {currentSubtab === 1 && isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+                <OfferStatus key={index}
+                             classes={classes}
+                             offer={offer}
+                             currentStudent={students[currentIndex]}
+                             onClick={() => {
+                                 setCurrentDoc(offer.file)
+                                 openPdf()
+                             }}/>
+            ) : "L'étudiant n'a accès à aucune offre de stage"}
+        </Grid>
+        <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
+            <DialogContent className={classes.viewbox}>
+                <PdfDocument document={currentDoc}/>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={closePdf} color="primary">
+                    Fermer
+                </Button>
+            </DialogActions>
+        </Dialog>
+    </Grid>
 }

@@ -1,26 +1,29 @@
-import Button from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import DialogActions from "@material-ui/core/DialogActions"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogContentText from "@material-ui/core/DialogContentText"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import LinearProgress from "@material-ui/core/LinearProgress"
-import MenuItem from "@material-ui/core/MenuItem"
-import Typography from "@material-ui/core/Typography"
-import {ErrorMessage, Field, Form, Formik} from "formik"
-import {Select} from "formik-material-ui"
-import React, {useEffect, useState} from "react"
-import * as yup from "yup"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi, useModal} from "../Utils/Hooks"
-import OfferDetails from "../Utils/OfferDetails"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import TextboxModal from "../Utils/TextboxModal"
-import useStyles from "../Utils/useStyles"
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import MenuItem from "@material-ui/core/MenuItem";
+import Typography from "@material-ui/core/Typography";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {Select} from "formik-material-ui";
+import React, {useEffect, useState} from "react";
+import * as yup from "yup";
+import AuthenticationService from "../../Services/AuthenticationService";
+import ApprovalButtons from "../Utils/ApprovalButtons";
+import TextboxModal from "../Utils/Modal/TextboxModal";
+import OfferDetails from "../Utils/OfferDetails";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function OfferApplication({count, pendingCount}) {
     const classes = useStyles()
     const api = useApi()
+    const dateParser = useDateParser()
+    const timeParser = useTimeParserFromDate()
     const [offers, setOffers] = useState([])
     const [resumes, setResumes] = useState([])
     const [interviews, setInterviews] = useState([])
@@ -81,9 +84,8 @@ export default function OfferApplication({count, pendingCount}) {
     }
 
     function hasEmployeurAcceptedStudentToInterview(i) {
-        if (interviews[i]) {
+        if (interviews[i])
             return interviews[i].studentApplication.student.id === AuthenticationService.getCurrentUser().id
-        }
         return false
     }
 
@@ -92,37 +94,37 @@ export default function OfferApplication({count, pendingCount}) {
     }
 
     function getStudentDecision(offer, student) {
-        if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")) {
+        if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT"))
             return " Vous avez accepté cette offre"
-        } else if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_DENIED_BY_STUDENT")) {
+        else if (offer.applications.find(a => a.student.id === student.id && a.state === "JOB_OFFER_DENIED_BY_STUDENT"))
             return " Vous avez refusé cette offre"
-        }
         return ""
     }
 
     function getStudentDecisionForInterview(i) {
         if (interviews[i]) {
-            if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT") {
+            if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
                 return " Vous avez accepté l'entrevue"
-            } else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
+            else if (hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
                 return " Vous avez refusé l'entrevue"
-            }
         }
         return ""
     }
 
-    function getDateEntretien(i) {
+    function getInterviewDate(i) {
         if (interviews[i]) {
-            if (hasEmployeurAcceptedStudentToInterview(i)) {
-                return new Date(interviews[i].date).toLocaleString()
-            }
+            if (hasEmployeurAcceptedStudentToInterview(i))
+                return dateParser(interviews[i].dateTime) + " à " + timeParser(interviews[i].dateTime)
+
         }
         return ""
     }
 
     function generateMenuItems() {
         let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
-        if (filteredResumes.length !== 0) {
+        if (filteredResumes.length === 1)
+            return <MenuItem value={filteredResumes[0].id}>{filteredResumes[0].name}</MenuItem>
+        else if (filteredResumes.length !== 0) {
             filteredResumes = filteredResumes.map((item, i) =>
                 <MenuItem key={i} value={item.id}>{item.name}</MenuItem>)
             filteredResumes.push(
@@ -131,6 +133,22 @@ export default function OfferApplication({count, pendingCount}) {
             return filteredResumes
         } else
             return <MenuItem value={-1} disabled>Aucun CV n'a été approuvé</MenuItem>
+    }
+
+    function setFirstCV() {
+        let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
+        return filteredResumes.length === 1 ? filteredResumes[0].id : -1
+    }
+
+    function hasStudentDeniedOffer(offer, student) {
+        return offer.applications.find(a => a.student.id === student.id && a.state !== "JOB_OFFER_DENIED_BY_STUDENT")
+    }
+
+    function showInterviewButtonCondition(i) {
+        return hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser())
+            && hasEmployeurAcceptedStudentToInterview(i)
+            && interviews[i].studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
+            && hasStudentDeniedOffer(offers[i], AuthenticationService.getCurrentUser())
     }
 
     return <div style={{height: "100%"}}>
@@ -176,53 +194,34 @@ export default function OfferApplication({count, pendingCount}) {
                     {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                     {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) &&
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                        Date de l'entrevue : {getDateEntretien(i)}
+                        Date de l'entrevue : {getInterviewDate(i)}
                     </Typography>
                     }
-                    {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION" &&
-                    <div className={classes.buttonDiv} style={{display: "block"}}>
-                        Acceptez l'entrevue
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(" ")}
-                            onClick={() => sendInterviewDecision(i, "INTERVIEW_ACCEPTED_BY_STUDENT")}
-                            style={{marginRight: 5}}
-                        ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                        Refusez l'entrevue
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(" ")}
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                openReasonOfInterviewModal()
-                            }}
-                        ><i className="fa fa-ban" style={{color: "red"}}/></button>
-                    </div>
+                    {showInterviewButtonCondition(i) &&
+                    <ApprovalButtons
+                        onApprove={() => sendInterviewDecision(i, "INTERVIEW_ACCEPTED_BY_STUDENT")}
+                        onDeny={() => {
+                            setCurrentIndex(i)
+                            openReasonOfInterviewModal()
+                        }}
+                        approveLabel={"Acceptez l'entrevue"}
+                        denyLabel={"Refusez l'entrevue"}
+                    />
                     }
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {getStudentDecisionForInterview(i)}
                     </Typography>
                     {hasEmployeurAcceptedStudentOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
-                    <div className={classes.buttonDiv} style={{display: "block"}}>
-                        Acceptez l'offre
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(" ")}
-                            onClick={() => sendDecision(i, "JOB_OFFER_ACCEPTED_BY_STUDENT")}
-                            style={{marginRight: 5}}
-                        ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                        Refusez l'offre
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(" ")}
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                openReasonModal()
-                            }}
-                        ><i className="fa fa-ban" style={{color: "red"}}/></button>
-                    </div>
+                    <ApprovalButtons
+                        onApprove={() => sendDecision(i, "JOB_OFFER_ACCEPTED_BY_STUDENT")}
+                        onDeny={() => {
+                            setCurrentIndex(i)
+                            openReasonModal()
+                        }}
+                        approveLabel={"Acceptez l'offre"}
+                        denyLabel={"Refusez l'offre"}
+                    />
                     }
-
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {getStudentDecision(offers[i], AuthenticationService.getCurrentUser())}
                     </Typography>
@@ -252,7 +251,7 @@ export default function OfferApplication({count, pendingCount}) {
                                 resumeId: yup.number().notOneOf([-1], "Impossible d'appliquer sans un CV valide").required("Ce champ est requis")
                             })
                         }
-                        initialValues={{resumeId: -1}}>
+                        initialValues={{resumeId: setFirstCV()}}>
                         {({isSubmitting}) =>
                             <Form>
                                 <Field

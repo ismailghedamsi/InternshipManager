@@ -1,12 +1,12 @@
-import {Typography} from "@material-ui/core"
-import Button from "@material-ui/core/Button"
-import Divider from "@material-ui/core/Divider"
-import Grid from "@material-ui/core/Grid"
-import React, {useEffect, useState} from "react"
-import {useApi, useModal} from "../Utils/Hooks"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import TextboxModal from "../Utils/TextboxModal"
-import useStyles from "../Utils/useStyles"
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import React, {useEffect, useState} from "react";
+import TextboxModal from "../Utils/Modal/TextboxModal";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi, useModal} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function ResumeApprobation({count}) {
     const classes = useStyles()

@@ -16,23 +16,23 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import * as locales from '@material-ui/core/locale';
+import * as locales from "@material-ui/core/locale";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
-import PropTypes from 'prop-types';
-import {default as React, useEffect, useState} from 'react';
+import PropTypes from "prop-types";
+import {default as React, useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
-import {useHistory} from "react-router-dom";
+import {useApi, useModal} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
-const requiredFieldMsg = "Ce champs est requis";
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+const requiredFieldMsg = "Ce champs est requis"
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 
 function DataTableHeader() {
     return <TableRow>
@@ -240,7 +240,7 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
                 Annuler
             </Button>
         </DialogActions>
-    </Dialog>;
+    </Dialog>
 }
 
 function CreateManager({isOpen, hide, setRows, setItemCount}) {
@@ -365,7 +365,7 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                 Annuler
             </Button>
         </DialogActions>
-    </Dialog>;
+    </Dialog>
 }
 
 EditManager.propTypes = {
@@ -384,7 +384,7 @@ CreateManager.propTypes = {
 }
 
 export default function Managers() {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return <div className={classes.main} style={{overflowY: "auto"}}>
         <Typography variant={"h5"} display={"block"} style={{marginTop: 10}}>

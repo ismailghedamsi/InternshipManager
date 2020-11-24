@@ -1,27 +1,27 @@
 import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from "react-router-dom";
 import * as yup from "yup";
-import {useApi} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const requiredFieldMsg = "Ce champs est requis"
 export default function ContractForm() {
-    const classes = useStyles();
-    const api = useApi();
-    const location = useLocation();
-    const history = useHistory();
-    const [applicationContract, setapplicationContract] = useState({});
+    const classes = useStyles()
+    const api = useApi()
+    const location = useLocation()
+    const history = useHistory()
+    const [applicationContract, setapplicationContract] = useState({})
 
     useEffect(() => {
-        setapplicationContract(location.state);
+        setapplicationContract(location.state)
     }, [location.state])
 
     return <Grid
@@ -36,8 +36,8 @@ export default function ContractForm() {
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
                     onSubmit={async values => {
-                        let dto = {...values};
-                        dto.studentApplicationId = applicationContract.id;
+                        let dto = {...values}
+                        dto.studentApplicationId = applicationContract.id
                         return api.post("/contractGeneration", dto)
                             .then(() => history.push("/dashboard/contractList"))
                     }}

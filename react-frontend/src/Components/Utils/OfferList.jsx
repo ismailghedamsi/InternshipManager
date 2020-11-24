@@ -1,12 +1,12 @@
-import Link from "@material-ui/core/Link"
-import Typography from "@material-ui/core/Typography"
-import React, {useEffect, useState} from "react"
-import {useHistory} from "react-router-dom"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "../Utils/Hooks"
-import OfferDetails from "../Utils/OfferDetails"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import useStyles from "../Utils/useStyles"
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
+import AuthenticationService from "../../Services/AuthenticationService";
+import OfferDetails from "../Utils/OfferDetails";
+import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
+import {useApi} from "./Services/Hooks";
+import useStyles from "./Style/useStyles";
 
 export default function OfferList({count}) {
     const classes = useStyles()
@@ -92,18 +92,19 @@ export default function OfferList({count}) {
                     </button>
                     {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                     {offers[i].applications.length !== 0 &&
-                    <Link variant={"body1"}
-                          onClick={() => {
-                              if (AuthenticationService.getCurrentUserRole() === "employer") {
-                                  history.push("/dashboard/applications", {offerId: offers[i].id})
-                              } else if (AuthenticationService.getCurrentUserRole() === "admin") {
-                                  history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
-                              }
-                          }
-                          }
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            if (AuthenticationService.getCurrentUserRole() === "employer") {
+                                history.push("/dashboard/applications", {offerId: offers[i].id})
+                            } else if (AuthenticationService.getCurrentUserRole() === "admin") {
+                                history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
+                            }
+                        }}
                     >
                         Voir les applications
-                    </Link>
+                    </Button>
                     }
                     <hr/>
                 </div>

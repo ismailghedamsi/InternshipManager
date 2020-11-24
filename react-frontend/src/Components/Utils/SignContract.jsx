@@ -1,16 +1,17 @@
-import {Typography} from "@material-ui/core"
-import Button from "@material-ui/core/Button"
-import React, {useEffect, useState} from "react"
-import {Link} from "react-router-dom"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi, useModal} from "../Utils/Hooks"
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
-import TextboxModal from "../Utils/TextboxModal"
-import useStyles from "../Utils/useStyles"
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
+import AuthenticationService from "../../Services/AuthenticationService";
+import TextboxModal from "./Modal/TextboxModal";
+import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
+import {useApi, useModal} from "./Services/Hooks";
+import useStyles from "./Style/useStyles";
 
 export default function SignContract({count, waitingCount}) {
     const classes = useStyles()
     const api = useApi()
+    const history = useHistory()
     const [contracts, setContracts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
@@ -93,10 +94,14 @@ export default function SignContract({count, waitingCount}) {
     }
 
     function directionLink() {
-        if (AuthenticationService.getCurrentUserRole() === "employer")
-            return "/dashboard/signFormEmployer"
-        else
-            return "/dashboard/signFormStudent"
+        return AuthenticationService.getCurrentUserRole() === "employer" ?
+            "/dashboard/signFormEmployer" : "/dashboard/signFormStudent"
+    }
+
+    function showEvaluationButtonCondition(i) {
+        return contracts[i].signatureState === "SIGNED"
+            && AuthenticationService.getCurrentUserRole() === "employer"
+            && contracts[i].internEvaluation === null
     }
 
     return <div style={{height: "100%"}}>
@@ -120,43 +125,41 @@ export default function SignContract({count, waitingCount}) {
                     </button>
                     {currentIndex === i && ownerCondition(i) &&
                     <div className={classes.buttonDiv} style={{display: "block"}}>
-                        <Link variant={"body1"}
-                              to={{
-                                  pathname: directionLink(),
-                                  state: {...contracts[i]}
-                              }}
-                              style={{display: "block"}}
-                        >
-                            Signer le contrat
-                        </Link>
-                        {AuthenticationService.getCurrentUserRole() !== "student" &&
                         <Button
                             variant={"contained"}
                             color={"primary"}
-                            style={{backgroundColor: "red"}}
+                            onClick={() => {
+                                history.push(directionLink(), {...contracts[i]})
+                            }}>
+                            Signer le contrat
+                        </Button>
+                        &ensp;
+                        {AuthenticationService.getCurrentUserRole() !== "student" &&
+                        <Button
+                            variant={"contained"}
+                            style={{backgroundColor: "red", color: "white"}}
                             onClick={() => {
                                 setCurrentIndex(i)
                                 openReasonModal()
-                            }}
-                        >
-                            <i className="fa fa-ban" style={{color: "white"}}/>&ensp;Refuser le contrat
+                            }}>
+                            Refuser le contrat
                         </Button>
                         }
                     </div>}
                     {currentIndex === i &&
                     contractState(contracts[i])
                     }
-                    {contracts[i].signatureState === "SIGNED" &&
-                    <Link
-                        variant={"body1"}
-                        to={{
-                            pathname: "/dashboard/evaluateStudent",
-                            state: {...contracts[i]}
+                    {showEvaluationButtonCondition(i) &&
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            history.push("/dashboard/evaluateStudent", {...contracts[i]})
                         }}
-                        style={{display: "block"}}
                     >
                         Évaluer l'étudiant
-                    </Link>}
+                    </Button>
+                    }
                     <hr/>
                 </div>}
         </PdfSelectionViewer>
