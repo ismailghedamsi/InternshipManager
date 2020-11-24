@@ -13,9 +13,9 @@ import Login from "./Components/Login"
 import PasswordChange from "./Components/PasswordChange"
 import RegisteringManager from "./Components/RegisteringManager"
 import RouteSelector from "./Components/RouteSelector"
-import ErrorModal from "./Components/Utils/ErrorModal"
-import {useModal} from "./Components/Utils/Hooks"
-import {BasicProtectedRoute} from "./Components/Utils/Routes"
+import ErrorModal from "./Components/Utils/Modal/ErrorModal"
+import {useModal} from "./Components/Utils/Services/Hooks"
+import {BasicProtectedRoute} from "./Components/Utils/Services/Routes"
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 

@@ -3,15 +3,15 @@ import Badge from "@material-ui/core/Badge"
 import NotificationImportantOutlinedIcon from "@material-ui/icons/NotificationImportantOutlined"
 import React, {useState} from "react"
 import AuthenticationService from "../Services/AuthenticationService"
-import OfferList from "./Employer/OfferList"
-import SignContract from "./Employer/SignContract"
 import OfferApprobation from "./Manager/OfferApprobation"
 import PendingContracts from "./Manager/PendingContracts"
 import ResumeApprobation from "./Manager/ResumeApprobation"
 import OfferApplication from "./Student/OfferApplication"
 import ResumeList from "./Student/ResumeList"
+import OfferList from "./Utils/OfferList"
+import SignContract from "./Utils/SignContract"
+import useStyles from "./Utils/Style/useStyles"
 import TabPanel from "./Utils/TabPanel"
-import useStyles from "./Utils/useStyles"
 
 function TabButton({value, index, onClick, children}) {
     const classes = useStyles()
