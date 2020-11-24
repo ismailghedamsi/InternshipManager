@@ -24,11 +24,6 @@
             <name>jcenter</name>
             <url>https://jcenter.bintray.com/</url>
         </repository>
-        <repository>
-            <id>AsposeJavaAPI</id>
-            <name>Aspose Java API</name>
-            <url>https://repository.aspose.com/repo/</url>
-        </repository>
     </repositories>
 
     <dependencies>
