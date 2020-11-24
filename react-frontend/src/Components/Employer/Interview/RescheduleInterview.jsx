@@ -11,12 +11,11 @@ import {useHistory, useLocation} from 'react-router-dom'
 import * as yup from 'yup';
 import {useApi} from '../../Utils/Services/Hooks';
 
-
 export function Rescheduleinterview(props) {
     const location = useLocation()
     const history = useHistory()
     const api = useApi()
-    const [interview, setInterview] = useState({});
+    const [interview, setInterview] = useState({})
 
     const useStyles = makeStyles(() => ({
         root: {
@@ -34,7 +33,7 @@ export function Rescheduleinterview(props) {
             overflow: "auto",
             backgroundColor: "#fff",
         }
-    }));
+    }))
 
     const classes = useStyles()
 
@@ -50,16 +49,16 @@ export function Rescheduleinterview(props) {
     }
 
     function updateInterview(values) {
-        const nextState = {...interview};
-        nextState.dateTime = values.dateTime;
+        const nextState = {...interview}
+        nextState.dateTime = values.dateTime
         setInterview(nextState)
         api.put("/interviews/" + nextState.id, nextState)
-            .then(() => history.push("/dashboard/listInterview"))
+                .then(() => history.push("/dashboard/listInterview"))
     }
 
     const validationSchema = yup.object().shape({
         dateTime: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
-    });
+    })
 
     return <Grid
         className={classes.viewbox}
