@@ -1,11 +1,13 @@
-import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from "@material-ui/core";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import {Form, Formik} from "formik";
-import React, {useState} from "react";
-import {useHistory} from "react-router-dom";
-import AuthenticationService from "../../Services/AuthenticationService";
-import EvaluationModal from "../Employer/Evaluations/EvaluationModal";
-import BusinessEvaluationModal from "../Manager/BusinessEvaluations/BusinessEvaluationModal";
+import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from "@material-ui/core"
+import LinearProgress from "@material-ui/core/LinearProgress"
+import {Form, Formik} from "formik"
+import React, {useState} from "react"
+import {useHistory} from "react-router-dom"
+import AuthenticationService from "../../Services/AuthenticationService"
+import EvaluationModal from "../Employer/Evaluations/EvaluationModal"
+import BusinessEvaluationModal from "../Manager/BusinessEvaluations/BusinessEvaluationModal"
+import {useBusinessEnvironmentEvaluation} from "./AdminHooks";
+import {useStudentEvaluation} from "./EmployerHooks";
 import {useApi, useFileReader, useModal} from "./Services/Hooks";
 
 export function FormikStepper({contract, initialValues, children}) {
