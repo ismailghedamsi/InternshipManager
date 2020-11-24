@@ -1,9 +1,9 @@
 import {Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../Utils/Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function HiredStudentList() {

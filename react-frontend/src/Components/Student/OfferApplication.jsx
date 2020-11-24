@@ -12,15 +12,18 @@ import {Select} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../Utils/Services/Hooks";
+import ApprovalButtons from "../Utils/ApprovalButtons";
+import TextboxModal from "../Utils/Modal/TextboxModal";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import TextboxModal from "../Utils/Modal/TextboxModal";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function OfferApplication() {
     const classes = useStyles()
     const api = useApi()
+    const dateParser = useDateParser()
+    const timeParser = useTimeParserFromDate()
     const [offers, setOffers] = useState([])
     const [resumes, setResumes] = useState([])
     const [interviews, setInterviews] = useState([])
@@ -103,10 +106,11 @@ export default function OfferApplication() {
         return ""
     }
 
-    function getDateEntretien(i) {
+    function getInterviewDate(i) {
         if (interviews[i]) {
             if (hasEmployeurAcceptedStudentToInterview(i))
-                return new Date(interviews[i].date).toLocaleString()
+                return dateParser(interviews[i].dateTime) + " à " + timeParser(interviews[i].dateTime)
+
         }
         return ""
     }
@@ -129,6 +133,17 @@ export default function OfferApplication() {
     function setFirstCV() {
         let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
         return filteredResumes.length === 1 ? filteredResumes[0].id : -1
+    }
+
+    function hasStudentDeniedOffer(offer, student) {
+        return offer.applications.find(a => a.student.id === student.id && a.state !== "JOB_OFFER_DENIED_BY_STUDENT")
+    }
+
+    function showInterviewButtonCondition(i) {
+        return hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser())
+            && hasEmployeurAcceptedStudentToInterview(i)
+            && interviews[i].studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
+            && hasStudentDeniedOffer(offers[i], AuthenticationService.getCurrentUser())
     }
 
     return <div style={{height: "100%"}}>
@@ -174,53 +189,34 @@ export default function OfferApplication() {
                     {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                     {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) &&
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                        Date de l'entrevue : {getDateEntretien(i)}
+                        Date de l'entrevue : {getInterviewDate(i)}
                     </Typography>
                     }
-                    {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) && interviews[i].studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION" &&
-                    <div className={classes.buttonDiv} style={{display: "block"}}>
-                        Acceptez l'entrevue
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(' ')}
-                            onClick={() => sendInterviewDecision(i, "INTERVIEW_ACCEPTED_BY_STUDENT")}
-                            style={{marginRight: 5}}
-                        ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                        Refusez l'entrevue
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(' ')}
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                openReasonOfInterviewModal()
-                            }}
-                        ><i className="fa fa-ban" style={{color: "red"}}/></button>
-                    </div>
+                    {showInterviewButtonCondition(i) &&
+                    <ApprovalButtons
+                        onApprove={() => sendInterviewDecision(i, "INTERVIEW_ACCEPTED_BY_STUDENT")}
+                        onDeny={() => {
+                            setCurrentIndex(i)
+                            openReasonOfInterviewModal()
+                        }}
+                        approveLabel={"Acceptez l'entrevue"}
+                        denyLabel={"Refusez l'entrevue"}
+                    />
                     }
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {getStudentDecisionForInterview(i)}
                     </Typography>
                     {hasEmployeurAcceptedStudentOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
-                    <div className={classes.buttonDiv} style={{display: "block"}}>
-                        Acceptez l'offre
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(' ')}
-                            onClick={() => sendDecision(i, "JOB_OFFER_ACCEPTED_BY_STUDENT")}
-                            style={{marginRight: 5}}
-                        ><i className="fa fa-check-square" style={{color: "green"}}/></button>
-                        Refusez l'offre
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton].join(' ')}
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                openReasonModal()
-                            }}
-                        ><i className="fa fa-ban" style={{color: "red"}}/></button>
-                    </div>
+                    <ApprovalButtons
+                        onApprove={() => sendDecision(i, "JOB_OFFER_ACCEPTED_BY_STUDENT")}
+                        onDeny={() => {
+                            setCurrentIndex(i)
+                            openReasonModal()
+                        }}
+                        approveLabel={"Acceptez l'offre"}
+                        denyLabel={"Refusez l'offre"}
+                    />
                     }
-
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {getStudentDecision(offers[i], AuthenticationService.getCurrentUser())}
                     </Typography>

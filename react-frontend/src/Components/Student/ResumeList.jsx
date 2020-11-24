@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
+import React, {useEffect, useState} from "react";
 import AuthenticationService from '../../Services/AuthenticationService';
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function ResumeList() {
-    const classes = useStyles();
-    const api = useApi();
-    const [resumes, setResumes] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const classes = useStyles()
+    const api = useApi()
+    const [resumes, setResumes] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
@@ -17,7 +17,7 @@ export default function ResumeList() {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function deleteResume(index) {
-        const nextState = [...resumes];
+        const nextState = [...resumes]
         return api.delete("/resumes/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)
@@ -31,12 +31,12 @@ export default function ResumeList() {
 
     function getResumeState(resume) {
         if (resume.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
+            return <span style={{color: "blue"}}>En attente</span>
         else if (resume.reviewState === "DENIED")
             return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>;
+                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return <span style={{color: "green"}}>Approuvé</span>
     }
 
     return <div style={{height: "100%"}}>
@@ -76,5 +76,5 @@ export default function ResumeList() {
                 <hr/>
             </div>}
         </PdfSelectionViewer>
-    </div>;
+    </div>
 }
