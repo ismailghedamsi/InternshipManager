@@ -39,7 +39,6 @@ export default function Interviewlist() {
             spacing={2}
             className={classes.main}>
         <Grid item xs={12} className={classes.list}>
-
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
@@ -49,8 +48,8 @@ export default function Interviewlist() {
                             <TableCell align="right">Titre</TableCell>
                             <TableCell align="right">Etudiant</TableCell>
                             <TableCell align="right">Status</TableCell>
-                            <TableCell align="right">Supprimer</TableCell>
                             <TableCell align="right">Reprogrammer</TableCell>
+                            <TableCell align="right">Supprimer</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -65,6 +64,14 @@ export default function Interviewlist() {
                                     <TableCell
                                             align="right">{interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</TableCell>
                                     <TableCell align="right">{isInterviewAccepted(interview)}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                onClick={() => {
+                                                    redirectEditFormInterview(interview)
+                                                }}>Reprogrammer</Button>
+                                    </TableCell>
                                     <TableCell align="right">
                                         <Button
                                                 style={{backgroundColor: "red"}}
@@ -80,14 +87,6 @@ export default function Interviewlist() {
                                                             })
                                                 }}>Supprimer
                                         </Button>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                                variant={"contained"}
-                                                color={"primary"}
-                                                onClick={() => {
-                                                    redirectEditFormInterview(interview)
-                                                }}>Reprogrammer</Button>
                                     </TableCell>
                                 </TableRow>)
                         }
