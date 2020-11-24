@@ -1,11 +1,11 @@
-import {Card, CardContent, Grid, Typography} from "@material-ui/core"
-import {ErrorMessage, Field} from "formik"
-import {SimpleFileUpload, TextField} from "formik-material-ui"
-import React from "react"
-import {useLocation} from "react-router-dom"
-import * as yup from "yup"
-import {FormikStepper} from "../../Utils/FormikStepper"
-import useStyles from "../../Utils/useStyles"
+import {Card, CardContent, Grid, Typography} from "@material-ui/core";
+import {ErrorMessage, Field} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
+import React from "react";
+import {useLocation} from "react-router-dom";
+import * as yup from "yup";
+import {FormikStepper} from "../../Utils/FormikStepper";
+import useStyles from "../../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min
@@ -40,7 +40,7 @@ function GeneralInfoStep(props) {
                 />
             </Grid>
         </Grid>
-    </FormikStep>;
+    </FormikStep>
 }
 
 function ProductivityStep(props) {
@@ -138,7 +138,7 @@ function ProductivityStep(props) {
                 />
             </Grid>
         </Grid>
-    </FormikStep>;
+    </FormikStep>
 }
 
 function QualityStep(props) {
@@ -231,7 +231,7 @@ function QualityStep(props) {
                 />
             </Grid>
         </Grid>
-    </FormikStep>;
+    </FormikStep>
 }
 
 function RelationshipsStep(props) {
@@ -334,7 +334,7 @@ function RelationshipsStep(props) {
                 />
             </Grid>
         </Grid>
-    </FormikStep>;
+    </FormikStep>
 }
 
 function SkillsStep(props) {
@@ -435,7 +435,7 @@ function SkillsStep(props) {
                 />
             </Grid>
         </Grid>
-    </FormikStep>;
+    </FormikStep>
 }
 
 function AppreciationStep(props) {
@@ -525,7 +525,7 @@ function SupervisionStep(props) {
                 </ErrorMessage>
             </Grid>
         </Grid>
-    </FormikStep>;
+    </FormikStep>
 }
 
 function DecisionStep(props) {
