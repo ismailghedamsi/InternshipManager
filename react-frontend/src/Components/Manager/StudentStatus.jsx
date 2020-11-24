@@ -134,6 +134,33 @@ export default function StudentStatus() {
         return students[currentIndex].allowedOffers && students[currentIndex].allowedOffers.length > 0
     }
 
+
+    function etatEtudiant(student) {
+        var string = ""
+        if (student.resumes.length === 0) {
+            string = "Aucun CV"
+        } else if (student.resumes.length > 0 && student.offer === undefined) {
+            var cpt = 0;
+            for (var i = 0; i < student.resumes.length; i++) {
+                if (student.resumes[i].reviewState === "APPROVED") {
+                    cpt += 1;
+                }
+            }
+            string = "A " + student.resumes.length + " CV en total " + cpt + ":qui sont aprouvé"
+        } else {
+            string = ""
+        }
+        if (student.offer === undefined) {
+            string += " - Aucune offre"
+        } else if (student.offer.length > 0) {
+            string += "Droit a " + student.offer.length + " offres"
+        } else {
+            string += ""
+        }
+
+        return string
+    }
+
     return <Grid
         container
         spacing={2}
@@ -150,10 +177,15 @@ export default function StudentStatus() {
                         onClick={() => {
                             setCurrentIndex(i);
                         }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"} align={"left"}>
                             {students[i].firstName} {students[i].lastName}
                         </Typography>
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"} align={"left"}>
+                            {etatEtudiant(students[i])}
+                        </Typography>
+
                     </button>
+
                     {currentIndex === i &&
                     <div>
                         <button
@@ -188,7 +220,7 @@ export default function StudentStatus() {
                                   openPdf();
                               }}/>
             ) : "L'étudiant n'a téléversé aucun CV"}
-            {currentSubtab === 1 && isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+            {currentSubtab === 2 && isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
                 <OfferStatus key={index}
                              classes={classes}
                              offer={offer}
@@ -197,7 +229,7 @@ export default function StudentStatus() {
                                  setCurrentDoc(offer.file);
                                  openPdf();
                              }}/>
-            ) : "L'étudiant n'a accès à aucune offre de stage"}
+            ) : " L'étudiant n'a accès à aucune offre de stage"}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
             <DialogContent className={classes.viewbox}>
