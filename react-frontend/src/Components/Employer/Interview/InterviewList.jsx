@@ -44,26 +44,22 @@ export default function Interviewlist() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Date</TableCell>
-                            <TableCell align="right">Heure</TableCell>
-                            <TableCell align="right">Titre</TableCell>
-                            <TableCell align="right">Etudiant</TableCell>
-                            <TableCell align="right">Status</TableCell>
-                            <TableCell align="right">Reprogrammer</TableCell>
-                            <TableCell align="right">Supprimer</TableCell>
+                            <TableCell>Heure</TableCell>
+                            <TableCell>Titre</TableCell>
+                            <TableCell>Etudiant</TableCell>
+                            <TableCell>Status</TableCell>
+                            <TableCell>Reprogrammer</TableCell>
+                            <TableCell>Supprimer</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {interviews && interviews.map((interview, key) =>
                                 <TableRow key={key}>
-                                    <TableCell
-                                            align="right">{interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</TableCell>
-                                    <TableCell
-                                            align="right">{interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</TableCell>
-                                    <TableCell
-                                            align="right">{interview.studentApplication ? interview.studentApplication.offer.title : ""}</TableCell>
-                                    <TableCell
-                                            align="right">{interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</TableCell>
-                                    <TableCell align="right">{isInterviewAccepted(interview)}</TableCell>
+                                    <TableCell>{interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</TableCell>
+                                    <TableCell>{interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</TableCell>
+                                    <TableCell>{interview.studentApplication ? interview.studentApplication.offer.title : ""}</TableCell>
+                                    <TableCell>{interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</TableCell>
+                                    <TableCell>{isInterviewAccepted(interview)}</TableCell>
                                     <TableCell>
                                         <Button
                                                 variant={"contained"}
@@ -72,7 +68,7 @@ export default function Interviewlist() {
                                                     redirectEditFormInterview(interview)
                                                 }}>Reprogrammer</Button>
                                     </TableCell>
-                                    <TableCell align="right">
+                                    <TableCell>
                                         <Button
                                                 style={{backgroundColor: "red"}}
                                                 variant={"contained"}

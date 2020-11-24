@@ -51,6 +51,7 @@ export function Rescheduleinterview(props) {
     function updateInterview(values) {
         const nextState = {...interview}
         nextState.dateTime = values.dateTime
+        nextState.studentAcceptanceState = "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
         setInterview(nextState)
         api.put("/interviews/" + nextState.id, nextState)
                 .then(() => history.push("/dashboard/listInterview"))
@@ -74,8 +75,8 @@ export function Rescheduleinterview(props) {
                 <Formik
                     onSubmit={async values => {
                         updateInterview(values)
-                    }
-                    }
+
+                    }}
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
