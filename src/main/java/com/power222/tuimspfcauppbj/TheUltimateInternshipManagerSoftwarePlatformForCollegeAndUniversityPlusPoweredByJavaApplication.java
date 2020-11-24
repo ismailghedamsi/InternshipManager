@@ -33,11 +33,12 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         @Override
         @Transactional
         public void run(String... args) {
-            userRepo.saveAndFlush(Admin.builder()
-                    .email("projetemployeur@gmail.com")
-                    .password(passwordEncoder.encode("password"))
-                    .name("Default Admin")
-                    .build());
+            if (userRepo.count() == 0)
+                userRepo.saveAndFlush(Admin.builder()
+                        .email("projetemployeur@gmail.com")
+                        .password(passwordEncoder.encode("password"))
+                        .name("Default Admin")
+                        .build());
 
         }
     }

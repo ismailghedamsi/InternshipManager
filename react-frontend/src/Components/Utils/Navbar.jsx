@@ -22,17 +22,6 @@ const Links = {
             title: <Divider/>
         },
         {
-            title: "Approbation des CV",
-            url: "/dashboard/approbation/cv"
-        },
-        {
-            title: "Approbation des offres",
-            url: "/dashboard/approbation/offres"
-        },
-        {
-            title: <Divider/>
-        },
-        {
             title: 'Assignation des offres',
             url: '/dashboard/assignement/offer',
         },
@@ -83,38 +72,32 @@ const Links = {
     ],
     student: [
         {
-            title: 'Téléverser un CV',
-            url: '/dashboard/upload'
+            title: "Accueil",
+            url: "/dashboard"
         },
         {
-            title: 'Mes CV',
-            url: '/dashboard/listcv'
+            title: <Divider/>
         },
         {
-            title: "Offres de stage",
-            url: "/dashboard/stagelist"
-        },
-        {
-            title: "Contrats",
-            url: "/dashboard/signContractStudent"
+            title: "Téléverser un CV",
+            url: "/dashboard/upload"
         }
     ],
     employer: [
         {
-            title: 'Créer une offre',
-            url: '/dashboard/createstage'
+            title: "Accueil",
+            url: "/dashboard"
         },
         {
-            title: "Mes offres",
-            url: "/dashboard/listoffer"
+            title: <Divider/>
+        },
+        {
+            title: "Créer une offre",
+            url: "/dashboard/createstage"
         },
         {
             title: "Entrevues",
             url: "/dashboard/listInterview"
-        },
-        {
-            title: "Contrats",
-            url: "/dashboard/signContract"
         },
         {
             title: "Évaluations des stagiaire",

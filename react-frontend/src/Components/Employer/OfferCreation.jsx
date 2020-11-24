@@ -105,7 +105,7 @@ export default function OfferCreation() {
                         const dto = {...values}
                         dto.startTime = new Date(values.startTime).toTimeString().split(" ")[0]
                         dto.endTime = new Date(values.endTime).toTimeString().split(" ")[0]
-                        return sendOfferToBackEnd(dto).then(() => history.push("/dashboard/listoffer"))
+                        return sendOfferToBackEnd(dto).then(() => history.push("/dashboard"))
                     }}
                     validateOnBlur={false}
                     validateOnChange={false}

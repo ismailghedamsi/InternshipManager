@@ -21,9 +21,7 @@ export default function OfferApprobation({count}) {
             .then(r => setOffers(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        count(offers.length)
-    })
+    useEffect(() => count(offers.length))
 
     function sendDecision(index, reviewState, reason = "") {
         const nextState = [...offers]

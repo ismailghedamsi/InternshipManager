@@ -20,9 +20,7 @@ export default function ResumeApprobation({count}) {
             .then(r => setResumes(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        count(resumes.length)
-    })
+    useEffect(() => count(resumes.length))
 
     function sendDecision(index, reviewState, reason = "") {
         const nextState = [...resumes]

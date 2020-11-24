@@ -18,7 +18,8 @@ export default function ContractList({count}) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        count(contracts.length)
+        if (count)
+            count(contracts.length)
     })
 
     function sendDecision(index, isApproved) {
@@ -49,23 +50,23 @@ export default function ContractList({count}) {
 
         switch (contractState) {
             case "WAITING_FOR_EMPLOYER_SIGNATURE" :
-                return <Typography variant={"body1"} style={{color: "blue"}} >
+                return <Typography variant={"body1"} style={{color: "blue"}}>
                     En attente de la signature de l'employeur
-                </Typography >
+                </Typography>
             case "REJECTED_BY_EMPLOYER" :
-                return <Typography variant={"body1"} style={{color: "red"}} >
+                return <Typography variant={"body1"} style={{color: "red"}}>
                     L'employeur a rejeté le contrat :
                     {nextState[index].reasonForRejection}
-                </Typography >
+                </Typography>
             case "WAITING_FOR_STUDENT_SIGNATURE" :
-                return <Typography variant={"body1"} style={{color: "blue"}} >
+                return <Typography variant={"body1"} style={{color: "blue"}}>
                     En attente de la signature de l'étudiant
                     {nextState[index].reasonForRejection}
-                </Typography >
+                </Typography>
             case "SIGNED":
-                return <Typography variant={"body1"} style={{color: "green"}} >
+                return <Typography variant={"body1"} style={{color: "green"}}>
                     Contrat signé
-                </Typography >
+                </Typography>
             default:
                 return ""
         }
@@ -80,7 +81,7 @@ export default function ContractList({count}) {
             contracts[i].businessEvaluation === null : contracts[i].internEvaluation === null
     }
 
-    return <div style={{height: "100%"}} >
+    return <div style={{height: "100%"}}>
         <PdfSelectionViewer
             documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
             title={"Contrats en attente"}>
@@ -104,15 +105,15 @@ export default function ContractList({count}) {
                             setCurrentIndex(i)
                         }}
                     >
-                        <Typography color={"textPrimary"} variant={"body1"} >
+                        <Typography color={"textPrimary"} variant={"body1"}>
                             {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
                             &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
-                        </Typography >
-                        <Typography color={"textPrimary"} variant={"body2"} >
+                        </Typography>
+                        <Typography color={"textPrimary"} variant={"body2"}>
                             Nom du gestionnaire de stage : {contracts[i].admin.name}
-                        </Typography >
-                    </button >
-                    <div className={classes.buttonDiv} style={{display: "block"}} >
+                        </Typography>
+                    </button>
+                    <div className={classes.buttonDiv} style={{display: "block"}}>
                         {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
                         <>
                             <button
@@ -120,20 +121,20 @@ export default function ContractList({count}) {
                                 className={classes.linkButton}
                                 onClick={() => sendDecision(i, true)}
                             >
-                                <i className="fa fa-check-square" style={{color: "green"}} />
-                                <Typography display={"inline"} >
+                                <i className="fa fa-check-square" style={{color: "green"}}/>
+                                <Typography display={"inline"}>
                                     &ensp;Approuver le contrat
-                                </Typography >
-                            </button >
+                                </Typography>
+                            </button>
                             <button
                                 type={"button"}
                                 className={classes.linkButton}
-                                onClick={() => deleteContract(i)} >
-                                <i className="fa fa-window-close" style={{color: "red"}} />
-                                <Typography display={"inline"} >
+                                onClick={() => deleteContract(i)}>
+                                <i className="fa fa-window-close" style={{color: "red"}}/>
+                                <Typography display={"inline"}>
                                     &ensp;Refuser le contrat
-                                </Typography >
-                            </button >
+                                </Typography>
+                            </button>
                         </>
                         }
                         {contracts[i].signatureState === "WAITING_FOR_ADMIN_SIGNATURE" &&
@@ -145,10 +146,10 @@ export default function ContractList({count}) {
                               style={{display: "block"}}
                         >
                             Signer le contrat
-                        </Link >
+                        </Link>
                         }
                         {showContractState(i)}
-                    </div >
+                    </div>
                     {contracts[i].signatureState === "SIGNED" && roleCondition(i) &&
                     <Link
                         variant={"body1"}
@@ -159,9 +160,9 @@ export default function ContractList({count}) {
                         style={{display: "block"}}
                     >
                         {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
-                    </Link >}
-                    <hr className={classes.hrStyle} />
-                </div >}
-        </PdfSelectionViewer >
-    </div >
+                    </Link>}
+                    <hr className={classes.hrStyle}/>
+                </div>}
+        </PdfSelectionViewer>
+    </div>
 }

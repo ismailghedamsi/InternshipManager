@@ -1,23 +1,28 @@
-import React, {useEffect, useState} from "react";
-import Typography from "@material-ui/core/Typography";
-import AuthenticationService from '../../Services/AuthenticationService';
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import {useApi} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import Typography from "@material-ui/core/Typography"
+import React, {useEffect, useState} from "react"
+import AuthenticationService from "../../Services/AuthenticationService"
+import {useApi} from "../Utils/Hooks"
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
+import useStyles from "../Utils/useStyles"
 
-export default function ResumeList() {
-    const classes = useStyles();
-    const api = useApi();
-    const [resumes, setResumes] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
+export default function ResumeList({count, deniedCount}) {
+    const classes = useStyles()
+    const api = useApi()
+    const [resumes, setResumes] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
-            .then(r => setResumes(r.data))
+            .then(r => setResumes(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        count(resumes.length)
+        deniedCount(resumes.filter(r => r.reviewState === "DENIED").length)
+    })
+
     function deleteResume(index) {
-        const nextState = [...resumes];
+        const nextState = [...resumes]
         return api.delete("/resumes/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)

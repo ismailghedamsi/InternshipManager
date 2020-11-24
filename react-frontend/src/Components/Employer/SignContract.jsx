@@ -1,18 +1,19 @@
-import {Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../Utils/Hooks";
-import PdfSelectionViewer from "../Utils/PdfSelectionViewer";
-import TextboxModal from "../Utils/TextboxModal";
-import useStyles from "../Utils/useStyles";
+import {Typography} from "@material-ui/core"
+import Button from "@material-ui/core/Button"
+import React, {useEffect, useState} from "react"
+import {Link} from "react-router-dom"
+import AuthenticationService from "../../Services/AuthenticationService"
+import {useApi, useModal} from "../Utils/Hooks"
+import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
+import TextboxModal from "../Utils/TextboxModal"
+import useStyles from "../Utils/useStyles"
 
-export default function SignContract() {
-    const classes = useStyles();
-    const api = useApi();
-    const [contracts, setContracts] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
+export default function SignContract({count, waitingCount}) {
+    const classes = useStyles()
+    const api = useApi()
+    const [contracts, setContracts] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
 
     useEffect(() => {
         if (AuthenticationService.getCurrentUserRole() === "employer") {
@@ -24,16 +25,25 @@ export default function SignContract() {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        count(contracts.length)
+
+        if (AuthenticationService.getCurrentUserRole() === "student")
+            waitingCount(contracts.filter(c => c.signatureState === "WAITING_FOR_STUDENT_SIGNATURE").length)
+        else if (AuthenticationService.getCurrentUserRole() === "employer")
+            waitingCount(contracts.filter(c => c.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE").length)
+    })
+
     function sendDecision(index, isApprouved, values) {
-        const nextState = [...contracts];
-        let dto = {};
-        dto.contractId = nextState[index].id;
-        dto.isApproved = isApprouved;
-        dto.reasonForRejection = values.message;
+        const nextState = [...contracts]
+        let dto = {}
+        dto.contractId = nextState[index].id
+        dto.isApproved = isApprouved
+        dto.reasonForRejection = values.message
         return api.put("/contractGeneration/sign", dto)
             .then(result => {
-                nextState.splice(index, 1, result.data);
-                setContracts(nextState);
+                nextState.splice(index, 1, result.data)
+                setContracts(nextState)
                 closeReasonModal()
             })
     }
@@ -51,35 +61,35 @@ export default function SignContract() {
                         En attente de la signature de l'employeur
                     </Typography>
                 }
-                break;
+                break
             case "WAITING_FOR_STUDENT_SIGNATURE":
                 if (AuthenticationService.getCurrentUserRole() !== "student") {
                     return <Typography variant={"body1"} style={{color: "blue"}}>
                         En attente de la signature de l'étudiant
                     </Typography>
                 }
-                break;
+                break
             case "WAITING_FOR_ADMIN_SIGNATURE":
                 if (AuthenticationService.getCurrentUserRole() !== "admin") {
                     return <Typography variant={"body1"} style={{color: "blue"}}>
                         En attente de la signature du gestionnaire de stage
                     </Typography>
                 }
-                break;
+                break
             case "SIGNED":
                 return <Typography variant={"body1"} style={{color: "green"}}>
                     Contrat signée
                 </Typography>
             default:
-                return '';
+                return ""
         }
     }
 
     function ownerCondition(i) {
         if ((contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" && AuthenticationService.getCurrentUserRole() === "employer")
             || (contracts[i].signatureState === "WAITING_FOR_STUDENT_SIGNATURE" && AuthenticationService.getCurrentUserRole() === "student"))
-            return true;
-        else return false;
+            return true
+        else return false
     }
 
     function directionLink() {
@@ -97,10 +107,10 @@ export default function SignContract() {
                 <div key={i}>
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
                         onClick={() => {
-                            setCurrent(i);
-                            setCurrentIndex(i);
+                            setCurrent(i)
+                            setCurrentIndex(i)
                         }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"}>
@@ -120,19 +130,17 @@ export default function SignContract() {
                             Signer le contrat
                         </Link>
                         {AuthenticationService.getCurrentUserRole() !== "student" &&
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            style={{backgroundColor: "red"}}
                             onClick={() => {
-                                setCurrentIndex(i);
+                                setCurrentIndex(i)
                                 openReasonModal()
                             }}
                         >
-                            <i className="fa fa-ban" style={{color: "red"}}/>
-                            <Typography display={"inline"}>
-                                &ensp;Refuser le contrat
-                            </Typography>
-                        </button>
+                            <i className="fa fa-ban" style={{color: "white"}}/>&ensp;Refuser le contrat
+                        </Button>
                         }
                     </div>}
                     {currentIndex === i &&

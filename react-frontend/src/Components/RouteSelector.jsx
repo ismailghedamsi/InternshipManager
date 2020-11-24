@@ -11,7 +11,6 @@ import Interviewlist from "./Employer/Interview/InterviewList"
 import {Rescheduleinterview} from "./Employer/Interview/RescheduleInterview"
 import OfferCreation from "./Employer/OfferCreation"
 import OfferList from "./Employer/OfferList"
-import SignContract from "./Employer/SignContract"
 import SignForm from "./Employer/SignForm"
 import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm"
 import BusinessEvaluationList from "./Manager/BusinessEvaluations/BusinessEvaluationList"
@@ -19,14 +18,10 @@ import ContractForm from "./Manager/ContractForm"
 import ContractList from "./Manager/ContractList"
 import Employerstatus from "./Manager/EmployerStatus"
 import Managers from "./Manager/Managers"
-import OfferApprobation from "./Manager/OfferApprobation"
 import OfferAssignements from "./Manager/OfferAssignements"
 import Reports from "./Manager/Reports"
-import ResumeApprobation from "./Manager/ResumeApprobation"
 import SemesterSelector from "./Manager/SemesterSelector"
 import StudentStatus from "./Manager/StudentStatus"
-import OfferApplication from "./Student/OfferApplication"
-import ResumeList from "./Student/ResumeList"
 import ResumeUpload from "./Student/Upload/ResumeUpload"
 import Footer from "./Utils/Footer"
 import Navbar from "./Utils/Navbar"
@@ -61,18 +56,6 @@ export default function RouteSelector() {
                 {/* Admin */}
                 <RoleProtectedRoute
                     exact={true}
-                    path="/dashboard/approbation/cv"
-                    component={ResumeApprobation}
-                    role={"admin"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/approbation/offres"
-                    component={OfferApprobation}
-                    role={"admin"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
                     path="/dashboard/assignement/offer"
                     component={OfferAssignements}
                     role={"admin"}
@@ -105,12 +88,6 @@ export default function RouteSelector() {
                     exact={true}
                     path={"/dashboard/setSemester"}
                     component={SemesterSelector}
-                    role={"admin"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/contractList"
-                    component={ContractList}
                     role={"admin"}
                 />
                 <RoleProtectedRoute
@@ -155,17 +132,17 @@ export default function RouteSelector() {
                     component={Managers}
                     role={"admin"}
                 />
+                <RoleProtectedRoute
+                    exact={true}
+                    path="/dashboard/contractList"
+                    component={ContractList}
+                    role={"admin"}
+                />
                 {/* Employeur */}
                 <RoleProtectedRoute
                     exact={true}
                     path="/dashboard/createstage"
                     component={OfferCreation}
-                    role={"employer"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/listoffer"
-                    component={OfferList}
                     role={"employer"}
                 />
                 <RoleProtectedRoute
@@ -194,12 +171,6 @@ export default function RouteSelector() {
                 />
                 <RoleProtectedRoute
                     exact={true}
-                    path="/dashboard/signContract"
-                    component={SignContract}
-                    role={"employer"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
                     path="/dashboard/evaluateStudent"
                     component={Evaluationform}
                     role={"employer"}
@@ -221,24 +192,6 @@ export default function RouteSelector() {
                     exact={true}
                     path="/dashboard/upload"
                     component={ResumeUpload}
-                    role={"student"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/listcv"
-                    component={ResumeList}
-                    role={"student"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/stagelist"
-                    component={OfferApplication}
-                    role={"student"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signContractStudent"
-                    component={SignContract}
                     role={"student"}
                 />
                 <RoleProtectedRoute

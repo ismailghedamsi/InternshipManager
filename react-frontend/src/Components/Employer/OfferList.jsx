@@ -8,7 +8,7 @@ import OfferDetails from "../Utils/OfferDetails"
 import PdfSelectionViewer from "../Utils/PdfSelectionViewer"
 import useStyles from "../Utils/useStyles"
 
-export default function OfferList() {
+export default function OfferList({count}) {
     const classes = useStyles()
     const api = useApi()
     const history = useHistory()
@@ -27,8 +27,13 @@ export default function OfferList() {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        if (count)
+            count(offers.length)
+    })
+
     function deleteOffer(index) {
-        const nextState = [...offers];
+        const nextState = [...offers]
         return api.delete("/offers/" + nextState[index].id)
             .then(() => {
                 nextState.splice(index, 1)
@@ -42,15 +47,15 @@ export default function OfferList() {
 
     function getOfferState(offer) {
         if (offer.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>;
+            return <span style={{color: "blue"}}>En attente</span>
         else if (offer.reviewState === "REJECTED")
             return <span style={{color: "red"}}>Rejeté
                 <span style={{color: "black"}}>
                     : {offer.reasonForRejection}
                 </span>
-        </span>;
+        </span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>;
+            return <span style={{color: "green"}}>Approuvé</span>
     }
 
     return <div style={{height: "100%"}}>
@@ -67,7 +72,7 @@ export default function OfferList() {
                     </div>
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
                         autoFocus={i === 0}
                         onClick={() => {
                             setCurrentIndex(i)

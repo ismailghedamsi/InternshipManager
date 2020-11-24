@@ -44,7 +44,7 @@ export default function ResumeUpload() {
                             let dto = {...values}
                             dto.file = file
                             return api.post("/resumes", dto)
-                                .then(() => history.push("/dashboard/listcv"))
+                                .then(() => history.push("/dashboard"))
                         })}
                     validateOnBlur={false}
                     validateOnChange={false}

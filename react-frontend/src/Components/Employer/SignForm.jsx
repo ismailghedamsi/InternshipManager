@@ -1,25 +1,24 @@
-import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
-import {Field, Form, Formik} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from 'react-router-dom';
-import * as yup from "yup";
-import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import Button from "@material-ui/core/Button"
+import Container from "@material-ui/core/Container"
+import Grid from "@material-ui/core/Grid"
+import LinearProgress from "@material-ui/core/LinearProgress"
+import Typography from "@material-ui/core/Typography"
+import {Field, Form, Formik} from "formik"
+import {SimpleFileUpload, TextField} from "formik-material-ui"
+import React, {useEffect, useState} from "react"
+import {useHistory, useLocation} from "react-router-dom"
+import * as yup from "yup"
+import {useApi} from "../Utils/Hooks"
+import useStyles from "../Utils/useStyles"
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = value => "Doit avoir moins que " + value.max + " caractères";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const tooLongError = value => "Doit avoir moins que " + value.max + " caractères"
 export default function SignForm() {
-    const classes = useStyles();
-    const api = useApi();
-    const location = useLocation();
-    const history = useHistory();
-    const [contract, setContract] = useState({});
+    const classes = useStyles()
+    const api = useApi()
+    const location = useLocation()
+    const history = useHistory()
+    const [contract, setContract] = useState({})
 
     useEffect(() => {
         setContract(location.state);
@@ -36,24 +35,15 @@ export default function SignForm() {
                 dto.nomSignataire = values.nomSignataire;
                 dto.signatureTimestamp = new Date();
                 return api.put("/contractGeneration/sign", dto)
-                    .then(() => redirection())
+                    .then(() => history.push("/dashboard"))
             })
         } else {
             dto.contractId = contract.id;
             dto.isApproved = isApprouved;
             dto.reasonForRejection = values.message;
             return api.put("/contractGeneration/sign", dto)
-                .then(() => redirection())
+                .then(() => history.push("/dashboard"))
         }
-    }
-
-    function redirection() {
-        if (AuthenticationService.getCurrentUserRole() === "admin")
-            return history.push("/dashboard/contractList")
-        else if (AuthenticationService.getCurrentUserRole() === "employer")
-            return history.push("/dashboard/signContract")
-        else
-            return history.push("/dashboard/signContractStudent")
     }
 
     function readFileAsync(file) {
