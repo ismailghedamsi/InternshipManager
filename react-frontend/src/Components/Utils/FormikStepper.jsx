@@ -3,7 +3,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import {Form, Formik} from "formik";
 import React, {useState} from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
-import EvaluationModal from "../Employer/Evaluations/EvaluationModal";
+import StudentEvaluationModal from "../Employer/Evaluations/StudentEvaluationModal";
 import BusinessEvaluationModal from "../Manager/BusinessEvaluations/BusinessEvaluationModal";
 import {useBusinessEnvironmentEvaluation} from "./AdminHooks";
 import {useStudentEvaluation} from "./EmployerHooks";
@@ -30,7 +30,7 @@ export function FormikStepper({contract, initialValues, children}) {
         return AuthenticationService.getCurrentUserRole() === "admin" ?
                 <BusinessEvaluationModal isOpen={isBusinessEvaluationModalOpen} data={data}
                                          hide={closeBusinessEvaluationModal}/> :
-                <EvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>
+                <StudentEvaluationModal isOpen={isEvaluationModalOpen} data={data} hide={closeEvaluationModal}/>
     }
 
     async function evaluate(userType, dto) {
