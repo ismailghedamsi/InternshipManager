@@ -6,9 +6,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
 import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal} from "../Utils/Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PDF/PdfDocument";
+import {useApi, useDateParser, useModal} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const applicationAcceptedStates = [
@@ -48,11 +48,11 @@ ResumeStatus.propTypes = {
     classes: PropTypes.any,
     onClick: PropTypes.func,
     resume: PropTypes.any
-};
+}
 
 function OfferStatus(props) {
-    const parseInterviewDate = useDateParser();
-    const application = props.offer.applications.find(a => a.student.id === props.currentStudent.id);
+    const parseInterviewDate = useDateParser()
+    const application = props.offer.applications.find(a => a.student.id === props.currentStudent.id)
 
     function parseInterviewState(interview) {
         if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
@@ -88,7 +88,7 @@ function OfferStatus(props) {
             {
                 application.interview ?
                     <span>
-                   Entrevue: {parseInterviewDate(application.interview.date)}, {parseInterviewState(application.interview)}
+                   Entrevue: {parseInterviewDate(application.interview.dateTime)}, {parseInterviewState(application.interview)}
                 </span>
                     :
                     <span>
@@ -102,7 +102,7 @@ function OfferStatus(props) {
             }
         </Typography>
         <hr/>
-    </div>;
+    </div>
 }
 
 OfferStatus.propTypes = {
@@ -110,21 +110,21 @@ OfferStatus.propTypes = {
     onClick: PropTypes.func,
     offer: PropTypes.any,
     currentStudent: PropTypes.any,
-};
+}
 
 
 export default function StudentStatus() {
-    const classes = useStyles();
-    const api = useApi();
-    const [students, setStudents] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentSubtab, setCurrentSubtab] = useState(0);
-    const [currentDoc, setCurrentDoc] = useState('');
-    const [isPdfOpen, openPdf, closePdf] = useModal();
+    const classes = useStyles()
+    const api = useApi()
+    const [students, setStudents] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [currentSubtab, setCurrentSubtab] = useState(0)
+    const [currentDoc, setCurrentDoc] = useState('')
+    const [isPdfOpen, openPdf, closePdf] = useModal()
 
     useEffect(() => {
         api.get("students").then(resp => setStudents(resp ? resp.data : []))
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function isResumesNotUndefined(students, currentIndex) {
         return students.length !== 0 && students[currentIndex].resumes.length > 0
@@ -148,7 +148,7 @@ export default function StudentStatus() {
                         type={"button"}
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                         onClick={() => {
-                            setCurrentIndex(i);
+                            setCurrentIndex(i)
                         }}>
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                             {students[i].firstName} {students[i].lastName}
@@ -184,8 +184,8 @@ export default function StudentStatus() {
                               classes={classes}
                               resume={resume}
                               onClick={() => {
-                                  setCurrentDoc(resume.file);
-                                  openPdf();
+                                  setCurrentDoc(resume.file)
+                                  openPdf()
                               }}/>
             ) : "L'étudiant n'a téléversé aucun CV"}
             {currentSubtab === 1 && isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
@@ -194,8 +194,8 @@ export default function StudentStatus() {
                              offer={offer}
                              currentStudent={students[currentIndex]}
                              onClick={() => {
-                                 setCurrentDoc(offer.file);
-                                 openPdf();
+                                 setCurrentDoc(offer.file)
+                                 openPdf()
                              }}/>
             ) : "L'étudiant n'a accès à aucune offre de stage"}
         </Grid>

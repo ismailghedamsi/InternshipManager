@@ -3,16 +3,13 @@ import {makeStyles} from "@material-ui/core/styles";
 import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import AuthenticationService from "../Services/AuthenticationService";
-import ApplicationList from "./Utils/ApplicationList";
 import Evaluationform from "./Employer/Evaluations/Evaluationform";
 import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList";
+import HiredStudentList from "./Employer/HiredStudentList";
 import InterviewConvocation from "./Employer/Interview/InterviewConvocation";
 import Interviewlist from "./Employer/Interview/InterviewList";
 import {Rescheduleinterview} from "./Employer/Interview/RescheduleInterview";
 import OfferCreation from "./Employer/OfferCreation";
-import OfferList from "./Utils/OfferList";
-import SignContract from "./Utils/SignContract";
-import SignForm from "./Utils/SignForm";
 import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm";
 import BusinessEvaluationList from "./Manager/BusinessEvaluations/BusinessEvaluationList";
 import ContractForm from "./Manager/ContractForm";
@@ -28,10 +25,13 @@ import StudentStatus from "./Manager/StudentStatus";
 import OfferApplication from "./Student/OfferApplication";
 import ResumeList from "./Student/ResumeList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
+import ApplicationList from "./Utils/ApplicationList";
 import Footer from "./Utils/Navb-Foot/Footer";
 import Navbar from "./Utils/Navb-Foot/Navbar";
+import OfferList from "./Utils/OfferList";
 import {RoleProtectedRoute} from "./Utils/Services/Routes";
-import HiredStudentList from "./Employer/HiredStudentList";
+import SignContract from "./Utils/SignContract";
+import SignForm from "./Utils/SignForm";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -44,10 +44,10 @@ const useStyles = makeStyles(() => ({
         height: "90vh",
         overflow: "hidden"
     }
-}));
+}))
 
 export default function Dashboard() {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return <div className={classes.root}>
         <Navbar/>

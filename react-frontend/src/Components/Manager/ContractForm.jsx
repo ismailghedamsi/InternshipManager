@@ -11,17 +11,17 @@ import * as yup from "yup";
 import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const requiredFieldMsg = "Ce champs est requis"
 export default function ContractForm() {
-    const classes = useStyles();
-    const api = useApi();
-    const location = useLocation();
-    const history = useHistory();
-    const [applicationContract, setapplicationContract] = useState({});
+    const classes = useStyles()
+    const api = useApi()
+    const location = useLocation()
+    const history = useHistory()
+    const [applicationContract, setapplicationContract] = useState({})
 
     useEffect(() => {
-        setapplicationContract(location.state);
+        setapplicationContract(location.state)
     }, [location.state])
 
     return <Grid
@@ -36,8 +36,8 @@ export default function ContractForm() {
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
                     onSubmit={async values => {
-                        let dto = {...values};
-                        dto.studentApplicationId = applicationContract.id;
+                        let dto = {...values}
+                        dto.studentApplicationId = applicationContract.id
                         return api.post("/contractGeneration", dto)
                             .then(() => history.push("/dashboard/contractList"))
                     }}

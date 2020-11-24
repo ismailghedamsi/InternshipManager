@@ -3,16 +3,16 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {Field, Form, Formik} from "formik";
 import {Checkbox} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
-import {useApi} from "../Utils/Services/Hooks";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function OfferAssignements() {
-    const classes = useStyles();
-    const api = useApi();
+    const classes = useStyles()
+    const api = useApi()
     const [students, setStudents] = useState([])
-    const [offers, setOffers] = useState([]);
-    const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
+    const [offers, setOffers] = useState([])
+    const [currentOfferIndex, setCurrentOfferIndex] = useState(0)
 
     useEffect(() => {
         api.get("/offers/approved")
@@ -24,8 +24,8 @@ export default function OfferAssignements() {
             .then(r => {
                 if (r) {
                     r.data.forEach(s => {
-                        delete s.resumes;
-                        delete s.appliedOffers;
+                        delete s.resumes
+                        delete s.appliedOffers
                     })
                     setStudents(r.data)
                 } else
@@ -34,7 +34,7 @@ export default function OfferAssignements() {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function isStudentAllowedInOffer(offer, student) {
-        return offer.allowedStudents.find(s => s.id === student.id) !== undefined && offer.allowedStudents.length !== 0;
+        return offer.allowedStudents.find(s => s.id === student.id) !== undefined && offer.allowedStudents.length !== 0
     }
 
     return <div style={{height: "100%"}}>
@@ -45,8 +45,8 @@ export default function OfferAssignements() {
                         type={"button"}
                         className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(' ')}
                         onClick={() => {
-                            setCurrent(i);
-                            setCurrentOfferIndex(i);
+                            setCurrent(i)
+                            setCurrentOfferIndex(i)
                         }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"}>
@@ -68,9 +68,9 @@ export default function OfferAssignements() {
                                     onSubmit={values => {
                                         return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
                                             .then(r => {
-                                                const nextState = [...offers];
-                                                nextState.splice(i, 1, r.data);
-                                                setOffers(nextState);
+                                                const nextState = [...offers]
+                                                nextState.splice(i, 1, r.data)
+                                                setOffers(nextState)
                                             })
                                     }}>
                                     {({submitForm, isSubmitting}) =>

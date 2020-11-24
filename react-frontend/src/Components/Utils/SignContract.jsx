@@ -1,18 +1,20 @@
 import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "./Services/Hooks";
-import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import TextboxModal from "./Modal/TextboxModal";
+import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
+import {useApi, useModal} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function SignContract() {
-    const classes = useStyles();
-    const api = useApi();
-    const [contracts, setContracts] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal();
+    const classes = useStyles()
+    const api = useApi()
+    const history = useHistory()
+    const [contracts, setContracts] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
 
     useEffect(() => {
         if (AuthenticationService.getCurrentUserRole() === "employer") {
@@ -25,15 +27,15 @@ export default function SignContract() {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function sendDecision(index, isApprouved, values) {
-        const nextState = [...contracts];
-        let dto = {};
-        dto.contractId = nextState[index].id;
-        dto.isApproved = isApprouved;
-        dto.reasonForRejection = values.message;
+        const nextState = [...contracts]
+        let dto = {}
+        dto.contractId = nextState[index].id
+        dto.isApproved = isApprouved
+        dto.reasonForRejection = values.message
         return api.put("/contractGeneration/sign", dto)
             .then(result => {
-                nextState.splice(index, 1, result.data);
-                setContracts(nextState);
+                nextState.splice(index, 1, result.data)
+                setContracts(nextState)
                 closeReasonModal()
             })
     }
@@ -51,40 +53,46 @@ export default function SignContract() {
                         En attente de la signature de l'employeur
                     </Typography>
                 }
-                break;
+                break
             case "WAITING_FOR_STUDENT_SIGNATURE":
                 if (AuthenticationService.getCurrentUserRole() !== "student") {
                     return <Typography variant={"body1"} style={{color: "blue"}}>
                         En attente de la signature de l'étudiant
                     </Typography>
                 }
-                break;
+                break
             case "WAITING_FOR_ADMIN_SIGNATURE":
                 if (AuthenticationService.getCurrentUserRole() !== "admin") {
                     return <Typography variant={"body1"} style={{color: "blue"}}>
                         En attente de la signature du gestionnaire de stage
                     </Typography>
                 }
-                break;
+                break
             case "SIGNED":
                 return <Typography variant={"body1"} style={{color: "green"}}>
                     Contrat signée
                 </Typography>
             default:
-                return '';
+                return ''
         }
     }
 
     function ownerCondition(i) {
         if ((contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" && AuthenticationService.getCurrentUserRole() === "employer")
             || (contracts[i].signatureState === "WAITING_FOR_STUDENT_SIGNATURE" && AuthenticationService.getCurrentUserRole() === "student"))
-            return true;
-        else return false;
+            return true
+        else return false
     }
 
     function directionLink() {
-        return (AuthenticationService.getCurrentUserRole() === "employer") ?
+        return AuthenticationService.getCurrentUserRole() === "employer" ?
             "/dashboard/signFormEmployer" : "/dashboard/signFormStudent"
+    }
+
+    function showEvaluationButtonCondition(i) {
+        return contracts[i].signatureState === "SIGNED"
+            && AuthenticationService.getCurrentUserRole() === 'employer'
+            && contracts[i].internEvaluation === null
     }
 
     return <div style={{height: "100%"}}>
@@ -97,8 +105,8 @@ export default function SignContract() {
                         type={"button"}
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
                         onClick={() => {
-                            setCurrent(i);
-                            setCurrentIndex(i);
+                            setCurrent(i)
+                            setCurrentIndex(i)
                         }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"}>
@@ -108,45 +116,41 @@ export default function SignContract() {
                     </button>
                     {currentIndex === i && ownerCondition(i) &&
                     <div className={classes.buttonDiv} style={{display: "block"}}>
-                        <Link variant={"body1"}
-                              to={{
-                                  pathname: directionLink(),
-                                  state: {...contracts[i]}
-                              }}
-                              style={{display: "block"}}
-                        >
-                            Signer le contrat
-                        </Link>
-                        {AuthenticationService.getCurrentUserRole() !== "student" &&
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
                             onClick={() => {
-                                setCurrentIndex(i);
+                                history.push(directionLink(), {...contracts[i]})
+                            }}>
+                            Signer le contrat
+                        </Button>
+                        &ensp;
+                        {AuthenticationService.getCurrentUserRole() !== "student" &&
+                        <Button
+                            variant={"contained"}
+                            style={{backgroundColor: "red", color: "white"}}
+                            onClick={() => {
+                                setCurrentIndex(i)
                                 openReasonModal()
-                            }}
-                        >
-                            <i className="fa fa-ban" style={{color: "red"}}/>
-                            <Typography display={"inline"}>
-                                &ensp;Refuser le contrat
-                            </Typography>
-                        </button>
+                            }}>
+                            Refuser le contrat
+                        </Button>
                         }
                     </div>}
                     {currentIndex === i &&
                     contractState(contracts[i])
                     }
-                    {contracts[i].signatureState === "SIGNED" && AuthenticationService.getCurrentUserRole() === 'employer' &&
-                    <Link
-                        variant={"body1"}
-                        to={{
-                            pathname: "/dashboard/evaluateStudent",
-                            state: {...contracts[i]}
+                    {showEvaluationButtonCondition(i) &&
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            history.push("/dashboard/evaluateStudent", {...contracts[i]})
                         }}
-                        style={{display: "block"}}
                     >
                         Évaluer l'étudiant
-                    </Link>}
+                    </Button>
+                    }
                     <hr/>
                 </div>}
         </PdfSelectionViewer>

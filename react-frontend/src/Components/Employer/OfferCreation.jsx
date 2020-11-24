@@ -13,15 +13,15 @@ import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLittleError = valueNumber => "Doit être un nombre plus grand que ou égal à " + valueNumber.min;
-const tooBigError = valueNumber => "Doit être un nombre plus petit que ou égal à " + valueNumber.max;
-const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const tooLittleError = valueNumber => "Doit être un nombre plus grand que ou égal à " + valueNumber.min
+const tooBigError = valueNumber => "Doit être un nombre plus petit que ou égal à " + valueNumber.max
+const requiredFieldMsg = "Ce champs est requis"
 
 export default function OfferCreation() {
-    const classes = useStyles();
-    const api = useApi();
-    const history = useHistory();
+    const classes = useStyles()
+    const api = useApi()
+    const history = useHistory()
     const validationSchema = yup.object().shape({
         title: yup.string().trim().min(2, tooShortError).required(requiredFieldMsg),
         description: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
@@ -45,7 +45,7 @@ export default function OfferCreation() {
                     "La date de début doit être avant la date de fin")),
         startTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg),
         endTime: yup.number().min(0, tooLittleError).max(23, tooBigError).required(requiredFieldMsg)
-    });
+    })
     const initialValues = {
         title: '',
         description: '',
@@ -62,20 +62,20 @@ export default function OfferCreation() {
 
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
-            let reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+            let reader = new FileReader()
+            reader.onload = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(file)
         })
     }
 
     function sendOfferToBackEnd(values) {
         return readFileAsync(values.file).then(base64file => {
-            let dto = {};
-            dto.details = {...values};
-            dto.title = dto.details.title;
-            dto.file = base64file;
-            dto.employer = AuthenticationService.getCurrentUser();
+            let dto = {}
+            dto.details = {...values}
+            dto.title = dto.details.title
+            dto.file = base64file
+            dto.employer = AuthenticationService.getCurrentUser()
 
             return api.post("/offers", dto)
         })
@@ -102,20 +102,17 @@ export default function OfferCreation() {
                     validationSchema={validationSchema}
                     initialValues={initialValues}
                     validate={values => {
-                        const errors = {};
-                        if (values.file.type !== "application/pdf") {
+                        const errors = {}
+                        if (values.file.type !== "application/pdf")
                             errors.file = "Le fichier doit être de type PDF"
-                        }
-                        if (values.file.length === 0) {
+                        if (values.file.length === 0)
                             errors.file = "Aucun fichier selectionné ou le fichier est vide"
-                        }
-                        return errors;
+                        return errors
                     }}
                 >
                     {({isSubmitting}) =>
                         <Form className={classes.form}>
                             <Grid container
-                                  alignItems="start"
                                   justify="center"
                                   spacing={2}>
                                 <Typography variant={"h1"} className={classes.formTitle}>

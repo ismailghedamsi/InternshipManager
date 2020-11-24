@@ -1,14 +1,16 @@
-import {Typography} from "@material-ui/core"
-import React, {useEffect, useState} from "react"
-import {Link} from "react-router-dom"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "../Utils/Services/Hooks"
-import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer"
-import useStyles from "../Utils/Style/useStyles"
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
+import ApprovalButtons from "../Utils/ApprovalButtons";
+import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 export default function ContractList() {
     const classes = useStyles()
     const api = useApi()
+    const history = useHistory()
     const [contracts, setContracts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -22,7 +24,7 @@ export default function ContractList() {
         const signDto = {}
         signDto.contractId = nextState[index].id
         signDto.isApproved = isApproved
-        
+
         return api.put("/contractGeneration/sign", signDto)
             .then(r => {
                 nextState.splice(index, 1, r.data)
@@ -45,53 +47,53 @@ export default function ContractList() {
 
         switch (contractState) {
             case "WAITING_FOR_EMPLOYER_SIGNATURE" :
-                return <Typography variant={"body1"} style={{color: "blue"}} >
+                return <Typography variant={"body1"} style={{color: "blue"}}>
                     En attente de la signature de l'employeur
-                </Typography >
+                </Typography>
             case "REJECTED_BY_EMPLOYER" :
-                return <Typography variant={"body1"} style={{color: "red"}} >
+                return <Typography variant={"body1"} style={{color: "red"}}>
                     L'employeur a rejeté le contrat :
                     {nextState[index].reasonForRejection}
-                </Typography >
+                </Typography>
             case "WAITING_FOR_STUDENT_SIGNATURE" :
-                return <Typography variant={"body1"} style={{color: "blue"}} >
+                return <Typography variant={"body1"} style={{color: "blue"}}>
                     En attente de la signature de l'étudiant
                     {nextState[index].reasonForRejection}
-                </Typography >
+                </Typography>
             case "SIGNED":
-                return <Typography variant={"body1"} style={{color: "green"}} >
+                return <Typography variant={"body1"} style={{color: "green"}}>
                     Contrat signé
-                </Typography >
+                </Typography>
             default:
                 return ""
         }
     }
 
-    function evaluationDirection() {
-        return (AuthenticationService.getCurrentUserRole() === "admin") ? "/dashboard/businessEvaluation" : "/dashboard/evaluateStudent"
+
+    function showDeleteContractButtonCondition(i) {
+        return contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" || contracts[i].signatureState === "REJECTED_BY_EMPLOYER"
     }
 
-    function roleCondition(i) {
-        return (AuthenticationService.getCurrentUserRole() === "admin") ?
-            contracts[i].businessEvaluation === null : contracts[i].internEvaluation === null
+    function showEvaluationButtonCondition(i) {
+        return contracts[i].signatureState === "SIGNED" && contracts[i].businessEvaluation === null
     }
 
-    return <div style={{height: "100%"}} >
+    return <div style={{height: "100%"}}>
         <PdfSelectionViewer
             documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
-            title={"Contrats"} >
+            title={"Contrats"}>
             {(i, setCurrent) =>
-                <div key={i} >
-                    <div className={classes.buttonDiv} >
-                        {contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" &&
+                <div key={i}>
+                    <div className={classes.buttonDiv}>
+                        {showDeleteContractButtonCondition(i) &&
                         <button
                             type={"button"}
                             className={classes.linkButton}
-                            onClick={() => deleteContract(i)} >
-                            <i className="fa fa-trash" style={{color: "red"}} />
-                        </button >
+                            onClick={() => deleteContract(i)}>
+                            <i className="fa fa-trash" style={{color: "red"}}/>
+                        </button>
                         }
-                    </div >
+                    </div>
                     <button
                         type={"button"}
                         className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
@@ -100,64 +102,48 @@ export default function ContractList() {
                             setCurrentIndex(i)
                         }}
                     >
-                        <Typography color={"textPrimary"} variant={"body1"} >
+                        <Typography color={"textPrimary"} variant={"body1"}>
                             {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
                             &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
-                        </Typography >
-                        <Typography color={"textPrimary"} variant={"body2"} >
+                        </Typography>
+                        <Typography color={"textPrimary"} variant={"body2"}>
                             Nom du gestionnaire de stage : {contracts[i].admin.name}
-                        </Typography >
-                    </button >
-                    <div className={classes.buttonDiv} style={{display: "block"}} >
+                        </Typography>
+                    </button>
+                    <div className={classes.buttonDiv} style={{display: "block"}}>
                         {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
-                        <>
-                            <button
-                                type={"button"}
-                                className={classes.linkButton}
-                                onClick={() => sendDecision(i, true)}
-                            >
-                                <i className="fa fa-check-square" style={{color: "green"}} />
-                                <Typography display={"inline"} >
-                                    &ensp;Approuver le contrat
-                                </Typography >
-                            </button >
-                            <button
-                                type={"button"}
-                                className={classes.linkButton}
-                                onClick={() => deleteContract(i)} >
-                                <i className="fa fa-window-close" style={{color: "red"}} />
-                                <Typography display={"inline"} >
-                                    &ensp;Refuser le contrat
-                                </Typography >
-                            </button >
-                        </>
+                        <ApprovalButtons
+                            onApprove={() => sendDecision(i, true)}
+                            onDeny={() => deleteContract(i)}
+                            approveLabel={"Approuver le contrat"}
+                            denyLabel={"Refuser le contrat"}
+                        />
                         }
                         {contracts[i].signatureState === "WAITING_FOR_ADMIN_SIGNATURE" &&
-                        <Link variant={"body1"}
-                              to={{
-                                  pathname: "/dashboard/signFormAdmin",
-                                  state: {...contracts[i]}
-                              }}
-                              style={{display: "block"}}
-                        >
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={() => {
+                                history.push("/dashboard/signFormAdmin", {...contracts[i]})
+                            }}>
                             Signer le contrat
-                        </Link >
+                        </Button>
                         }
                         {showContractState(i)}
-                    </div >
-                    {contracts[i].signatureState === "SIGNED" && roleCondition(i) &&
-                    <Link
-                        variant={"body1"}
-                        to={{
-                            pathname: evaluationDirection(),
-                            state: {...contracts[i]}
+                    </div>
+                    {showEvaluationButtonCondition(i) &&
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            history.push("/dashboard/businessEvaluation", {...contracts[i]})
                         }}
-                        style={{display: "block"}}
                     >
-                        {AuthenticationService.getCurrentUserRole() === "admin" ? "Évaluer l'entreprise" : "Évaluer l'étudiant"}
-                    </Link >}
-                    <hr className={classes.hrStyle} />
-                </div >}
-        </PdfSelectionViewer >
-    </div >
+                        Évaluer l'entreprise
+                    </Button>
+                    }
+                    <hr className={classes.hrStyle}/>
+                </div>}
+        </PdfSelectionViewer>
+    </div>
 }

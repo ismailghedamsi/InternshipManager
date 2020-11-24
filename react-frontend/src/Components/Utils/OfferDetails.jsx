@@ -4,7 +4,7 @@ import React from "react";
 import {useDateParser} from "./Services/Hooks";
 
 export default function OfferDetails(props) {
-    const parseDate = useDateParser();
+    const parseDate = useDateParser()
 
     return <div>
         <Typography color={"textSecondary"}
@@ -52,9 +52,9 @@ export default function OfferDetails(props) {
                     display={"block"}>
             {"Heure de fin : " + props.offer.details.endTime + ":00"}
         </Typography>
-    </div>;
+    </div>
 }
 
 OfferDetails.propTypes = {
     offer: PropTypes.any.isRequired,
-};
+}
