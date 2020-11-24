@@ -3,9 +3,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import AuthenticationService from "../Services/AuthenticationService";
-import ApplicationList from "./Employer/ApplicationList";
 import StudentEvaluationForm from "./Employer/Evaluations/StudentEvaluationForm";
 import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList";
+import HiredStudentList from "./Employer/HiredStudentList";
 import InterviewConvocation from "./Employer/Interview/InterviewConvocation";
 import Interviewlist from "./Employer/Interview/InterviewList";
 import {Rescheduleinterview} from "./Employer/Interview/RescheduleInterview";
@@ -151,10 +151,10 @@ export default function Dashboard() {
                     role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/evaluationListAdmin"
-                    component={StudentEvaluationsList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/studentEvaluationListAdmin"
+                        component={StudentEvaluationsList}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
                     exact={true}
@@ -218,10 +218,10 @@ export default function Dashboard() {
                     role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/evaluationList"
-                    component={StudentEvaluationsList}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/studentEvaluationList"
+                        component={StudentEvaluationsList}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
                     exact={true}

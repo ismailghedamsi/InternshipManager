@@ -71,7 +71,7 @@ const Links = {
         },
         {
             title: "Évaluations des stagiaires",
-            url: "/dashboard/evaluationListAdmin"
+            url: "/dashboard/studentEvaluationListAdmin"
         }
     ],
     student: [
@@ -111,7 +111,7 @@ const Links = {
         },
         {
             title: "Évaluations des stagiaire",
-            url: "/dashboard/evaluationList"
+            url: "/dashboard/studentEvaluationList"
         },
         {
             title: "Étudiants embauchés",
