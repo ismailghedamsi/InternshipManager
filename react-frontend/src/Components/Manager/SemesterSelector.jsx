@@ -1,38 +1,38 @@
-import React, {useContext, useEffect, useState} from "react"
-import {SemesterContext} from "../../App";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import {Field, Form, Formik} from "formik";
-import * as yup from "yup";
-import Typography from "@material-ui/core/Typography";
-import {Select} from "formik-material-ui";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
-import useStyles from "../Utils/useStyles";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@material-ui/core/MenuItem";
-import {useApi} from "../Utils/Hooks";
+import Typography from "@material-ui/core/Typography";
+import {Field, Form, Formik} from "formik";
+import {Select} from "formik-material-ui";
+import React, {useContext, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
+import * as yup from "yup";
+import {SemesterContext} from "../../App";
+import {useApi} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 
 export default function SemesterSelector() {
-    const classes = useStyles();
-    const history = useHistory();
-    const {setSemester} = useContext(SemesterContext);
-    const api = useApi();
-    const [semesters, setSemesters] = useState([]);
+    const classes = useStyles()
+    const history = useHistory()
+    const {setSemester} = useContext(SemesterContext)
+    const api = useApi()
+    const [semesters, setSemesters] = useState([])
 
     useEffect(() => {
         api.get("/semesters")
             .then(r => setSemesters(r ? r.data : []))
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function generateMenuItems() {
         if (semesters.length !== 0) {
-            const options = semesters.map((item, i) => <MenuItem key={i} value={i}>{item}</MenuItem>);
-            options.push(<MenuItem key={semesters.length} value={-1} disabled>Veuillez choisir une année</MenuItem>);
-            return options;
+            const options = semesters.map((item, i) => <MenuItem key={i} value={i}>{item}</MenuItem>)
+            options.push(<MenuItem key={semesters.length} value={-1} disabled>Veuillez choisir une année</MenuItem>)
+            return options
         } else
-            return <MenuItem value={-1} disabled>Aucune année</MenuItem>;
+            return <MenuItem value={-1} disabled>Aucune année</MenuItem>
     }
 
     return <Grid
@@ -47,8 +47,8 @@ export default function SemesterSelector() {
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
                     onSubmit={async values => {
-                        setSemester(semesters[values.semester]);
-                        history.push("/dashboard");
+                        setSemester(semesters[values.semester])
+                        history.push("/dashboard")
                     }}
 
                     validateOnBlur={false}

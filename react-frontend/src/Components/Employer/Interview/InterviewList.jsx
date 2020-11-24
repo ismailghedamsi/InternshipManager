@@ -1,20 +1,23 @@
-import {Button, Container, Typography} from '@material-ui/core'
-import React, {useEffect, useState} from 'react'
-import {useHistory} from 'react-router-dom'
-import AuthenticationService from '../../../Services/AuthenticationService'
-import {useApi, useTimeParserFromDate} from '../../Utils/Hooks'
-import useStyles from "../../Utils/useStyles";
+import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import React, {useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
+import AuthenticationService from '../../../Services/AuthenticationService';
+import {useApi, useTimeParserFromDate} from '../../Utils/Services/Hooks';
+import useStyles from "../../Utils/Style/useStyles";
 
 export default function Interviewlist() {
     const [interviews, setInterviews] = useState([{}])
     const api = useApi()
-    const history = useHistory();
-    const classes = useStyles();
-    const parseTimeFromDate = useTimeParserFromDate();
+    const history = useHistory()
+    const classes = useStyles()
+    const parseTimeFromDate = useTimeParserFromDate()
 
     useEffect(() => {
         api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
-            .then(r => setInterviews(r.data))
+                .then(r => {
+                    setInterviews(r ? r.data : [])
+                })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function redirectEditFormInterview(interview) {
@@ -26,41 +29,66 @@ export default function Interviewlist() {
             return "L'étudiant a accepté l'entrevue"
         } else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
             return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>;
+                    style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>
         }
         return "En attente d'approbation"
     }
 
-    return <div className={classes.viewbox}>
-        <Container className={classes.container}>
-            {
-                interviews.length > 0 ?
-                    interviews.map((interview, key) => <div key={key}>
-                        <Typography>Date de l'entrevue
-                            : {interview.date ? new Date(interview.date).toLocaleDateString() : ""}</Typography>
-                        <Typography>L'heure de l'entrevue
-                            : {interview.date ? parseTimeFromDate(interview.date) : ""}</Typography>
-                        <Typography>Titre de l'offre
-                            : {interview.studentApplication ? interview.studentApplication.offer.title : ""}</Typography>
-                        {<Typography> Étudiants à rencontrer
-                            : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
-                        <Typography>{isInterviewAccepted(interview)}</Typography>
-                        <Button onClick={() => {
-                            const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
-                            const copyInterviews = [...interviews]
-                            api.delete("/interviews/" + interview.id)
-                                .then(() => {
-                                    copyInterviews.splice(interviewToDeleteIndex, 1)
-                                    setInterviews(copyInterviews)
-                                })
-                        }}>Supprimer</Button>
-                        <Button onClick={() => {
-                            redirectEditFormInterview(interview);
-                        }}>Reprogrammer</Button>
-                        <hr/>
-                    </div>)
-                    : "Aucune entrevue n'a été créée"
-            }
-        </Container>
-    </div>
+    return <Grid
+            container
+            spacing={2}
+            className={classes.main}>
+        <Grid item xs={12} className={classes.list}>
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Date</TableCell>
+                            <TableCell>Heure</TableCell>
+                            <TableCell>Titre</TableCell>
+                            <TableCell>Etudiant</TableCell>
+                            <TableCell>Status</TableCell>
+                            <TableCell>Reprogrammer</TableCell>
+                            <TableCell>Supprimer</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {interviews && interviews.map((interview, key) =>
+                                <TableRow key={key}>
+                                    <TableCell>{interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</TableCell>
+                                    <TableCell>{interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</TableCell>
+                                    <TableCell>{interview.studentApplication ? interview.studentApplication.offer.title : ""}</TableCell>
+                                    <TableCell>{interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</TableCell>
+                                    <TableCell>{isInterviewAccepted(interview)}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                onClick={() => {
+                                                    redirectEditFormInterview(interview)
+                                                }}>Reprogrammer</Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                                style={{backgroundColor: "red"}}
+                                                variant={"contained"}
+                                                color={"primary"}
+                                                onClick={() => {
+                                                    const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id)
+                                                    const copyInterviews = [...interviews]
+                                                    api.delete("/interviews/" + interview.id)
+                                                            .then(() => {
+                                                                copyInterviews.splice(interviewToDeleteIndex, 1)
+                                                                setInterviews(copyInterviews)
+                                                            })
+                                                }}>Supprimer
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>)
+                        }
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Grid>
+    </Grid>
 }

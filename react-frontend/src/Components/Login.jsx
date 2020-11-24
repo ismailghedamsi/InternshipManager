@@ -13,18 +13,18 @@ import React, {useContext} from 'react';
 import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
 import * as yup from "yup";
 import {ModalContext} from "../App";
-import fl from '../img/fl.png'
+import fl from '../img/fl.png';
 import AuthenticationService from '../Services/AuthenticationService';
-import useStyles from "./Utils/useStyles";
+import useStyles from "./Utils/Style/useStyles";
 
-const HTTP_UNAUTHORIZED = 401;
-const HTTP_TOKEN_EXPIRED = 498;
-const requiredFieldMsg = "Ce champs est requis";
+const HTTP_UNAUTHORIZED = 401
+const HTTP_TOKEN_EXPIRED = 498
+const requiredFieldMsg = "Ce champs est requis"
 
 export default function Login() {
-    const {open} = useContext(ModalContext);
-    const history = useHistory();
-    const classes = useStyles();
+    const {open} = useContext(ModalContext)
+    const history = useHistory()
+    const classes = useStyles()
     const initialValues = {
         username: "",
         password: ""
@@ -38,12 +38,12 @@ export default function Login() {
             } else if (error.response.status === HTTP_TOKEN_EXPIRED) {
                 history.push("/passwordChange", {username: username})
             } else
-                open();
+                open()
         } else {
-            open();
+            open()
             console.error("Axios error: " + error)
         }
-    };
+    }
 
     if (AuthenticationService.isUserLoggedIn())
         return <Redirect to="/dashboard/"/>

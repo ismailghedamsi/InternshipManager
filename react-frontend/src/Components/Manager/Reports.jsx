@@ -13,8 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import PropTypes from 'prop-types';
 import React, {useEffect, useMemo, useState} from 'react';
-import {useApi, useDateParser} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import {useApi, useDateParser} from "../Utils/Services/Hooks";
+import useStyles from "../Utils/Style/useStyles";
 
 const reports = [
     "Étudiants inscrits",
@@ -145,7 +145,7 @@ function DataTable({report}) {
     const [rows, setRows] = useState([])
     //To prevent undefineds caused by rerender on report, before rows are updated
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const bodyMemo = useMemo(() => <DataTableBody rows={rows} report={report}/>, [rows]);
+    const bodyMemo = useMemo(() => <DataTableBody rows={rows} report={report}/>, [rows])
 
     useEffect(() => {
         api.get("/reports/" + reportEndpoints[report] + "?page=" + currentPage + "&itemsPerPage=" + rowsPerPage)
@@ -186,7 +186,7 @@ DataTable.propTypes = {
 }
 
 export default function Reports() {
-    const classes = useStyles();
+    const classes = useStyles()
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [report, setReport] = useState(0)
 

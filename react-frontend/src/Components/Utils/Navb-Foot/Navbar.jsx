@@ -1,16 +1,16 @@
-import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core"
-import AppBar from "@material-ui/core/AppBar"
-import Divider from "@material-ui/core/Divider"
-import Drawer from "@material-ui/core/Drawer"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import {makeStyles} from "@material-ui/core/styles"
-import MenuIcon from "@material-ui/icons/Menu"
-import axios from "axios"
-import React, {useContext, useEffect, useState} from "react"
-import {useHistory, useLocation} from "react-router-dom"
-import {SemesterContext} from "../../App"
-import AuthenticationService from "../../Services/AuthenticationService"
+import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import {makeStyles} from "@material-ui/core/styles";
+import MenuIcon from "@material-ui/icons/Menu";
+import axios from "axios";
+import React, {useContext, useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+import {SemesterContext} from "../../../App";
+import AuthenticationService from "../../../Services/AuthenticationService";
 
 const Links = {
     admin: [
@@ -112,6 +112,10 @@ const Links = {
         {
             title: "Évaluations des stagiaire",
             url: "/dashboard/evaluationList"
+        },
+        {
+            title: "Étudiants embauchés",
+            url: "/dashboard/hiredStudentList"
         }
     ]
 }
@@ -130,12 +134,12 @@ const useStyles = makeStyles(theme => ({
     spacer: {
         flexGrow: 1
     }
-}));
+}))
 
 export default function Navbar() {
     const classes = useStyles()
-    const history = useHistory();
-    const location = useLocation();
+    const history = useHistory()
+    const location = useLocation()
     const [menuOpen, setMenuOpen] = useState(false)
     const [current, setCurrent] = useState(0)
     const {semester, setSemester} = useContext(SemesterContext)
@@ -178,7 +182,7 @@ export default function Navbar() {
                     onClick={() => {
                         AuthenticationService.logout()
                         axios.get("http://localhost:8080/api/semesters/present")
-                            .then(r => setSemester(r ? r.data : ''));
+                            .then(r => setSemester(r ? r.data : ''))
                         history.push("/")
                     }}
             >

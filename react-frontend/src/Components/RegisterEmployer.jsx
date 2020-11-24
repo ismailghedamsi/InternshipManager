@@ -1,19 +1,19 @@
-import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import React, {useContext} from "react";
-import {Field, Form, Formik} from "formik";
+import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import * as yup from "yup";
+import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
-import AuthenticationService from "../Services/AuthenticationService";
+import React, {useContext} from "react";
+import * as yup from "yup";
 import {ModalContext} from "../App";
+import AuthenticationService from "../Services/AuthenticationService";
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = value => "Doit avoir au plus " + value.max + " caractères";
-const requiredFieldMsg = "Ce champs est requis";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const tooLongError = value => "Doit avoir au plus " + value.max + " caractères"
+const requiredFieldMsg = "Ce champs est requis"
 
 export default function RegisterEmployer(props) {
-    const {open} = useContext(ModalContext);
+    const {open} = useContext(ModalContext)
     const validationSchema = yup.object()
         .shape({
             companyName: yup.string().trim().min(5, tooShortError).required(requiredFieldMsg),
@@ -25,7 +25,7 @@ export default function RegisterEmployer(props) {
             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
             passwordConfirm: yup.string()
                 .oneOf([yup.ref('password'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg),
-        });
+        })
     const initialValues = {
         companyName: '',
         contactName: '',
@@ -157,5 +157,5 @@ export default function RegisterEmployer(props) {
                 S'enregistrer
             </Button>
         </Form>}
-    </Formik>;
+    </Formik>
 }

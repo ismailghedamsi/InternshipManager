@@ -1,11 +1,11 @@
+import * as PropTypes from "prop-types";
 import React, {useState} from "react";
 import {Document, Page} from "react-pdf";
-import * as PropTypes from "prop-types";
-import useStyles from "./useStyles";
+import useStyles from "../Style/useStyles";
 
 export default function PdfDocument(props) {
-    const classes = useStyles();
-    const [numPages, setNumPages] = useState(0);
+    const classes = useStyles()
+    const [numPages, setNumPages] = useState(0)
 
     return <Document
         onLoadSuccess={async ({numPages}) => await setNumPages(numPages)}
@@ -25,4 +25,4 @@ export default function PdfDocument(props) {
 
 PdfDocument.propTypes = {
     document: PropTypes.any.isRequired,
-};
+}

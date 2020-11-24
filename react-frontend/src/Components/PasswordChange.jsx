@@ -1,32 +1,32 @@
-import React, {useContext} from "react";
-import AuthenticationService from "../Services/AuthenticationService";
-import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
-import {Field, Form, Formik} from "formik";
-import * as yup from "yup";
-import {TextField} from "formik-material-ui";
+import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Link from "@material-ui/core/Link";
+import Typography from "@material-ui/core/Typography";
 import axios from 'axios';
-import useStyles from "./Utils/useStyles";
+import {Field, Form, Formik} from "formik";
+import {TextField} from "formik-material-ui";
+import React, {useContext} from "react";
+import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
+import * as yup from "yup";
 import {ModalContext} from "../App";
+import AuthenticationService from "../Services/AuthenticationService";
+import useStyles from "./Utils/Style/useStyles";
 
-const HTTP_UNAUTHORIZED = 401;
-const HTTP_NOT_FOUND = 404;
-const HTTP_CONFLICT = 409;
-const requiredFieldMsg = "Ce champs est requis";
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
+const HTTP_UNAUTHORIZED = 401
+const HTTP_NOT_FOUND = 404
+const HTTP_CONFLICT = 409
+const requiredFieldMsg = "Ce champs est requis"
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 
 export default function PasswordChange() {
-    const {open} = useContext(ModalContext);
-    const history = useHistory();
-    const location = useLocation();
-    const classes = useStyles();
+    const {open} = useContext(ModalContext)
+    const history = useHistory()
+    const location = useLocation()
+    const classes = useStyles()
     const initialValues = {
         username: location.state ? location.state.username : "",
         oldPassword: "",
@@ -43,10 +43,10 @@ export default function PasswordChange() {
             else if (error.response.status === HTTP_NOT_FOUND)
                 setFieldError("username", "Le nom d'utilisateur n'est pas valide")
             else
-                open();
+                open()
         } else
-            open();
-    };
+            open()
+    }
 
     if (AuthenticationService.isUserLoggedIn())
         return <Redirect to="/dashboard/"/>

@@ -9,25 +9,24 @@ import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import AuthenticationService from '../../../Services/AuthenticationService';
-import {useApi} from "../../Utils/Hooks";
-import useStyles from "../../Utils/useStyles";
+import {useApi} from "../../Utils/Services/Hooks";
+import useStyles from "../../Utils/Style/useStyles";
 
-const requiredFieldMsg = "Ce champs est requis";
-
+const requiredFieldMsg = "Ce champs est requis"
 export default function InterviewConvocation() {
-    const classes = useStyles();
-    const api = useApi();
-    const location = useLocation();
-    const history = useHistory();
-    const [applicationInterview, setApplicationInterview] = useState({});
+    const classes = useStyles()
+    const api = useApi()
+    const location = useLocation()
+    const history = useHistory()
+    const [applicationInterview, setApplicationInterview] = useState({})
 
     useEffect(() => {
         setApplicationInterview(location.state)
     }, [location.state])
 
     function createInterview(values) {
-        let dto = {...values};
-        dto.date = values.interviewDate
+        let dto = {...values}
+        dto.dateTime = values.dateTime
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = applicationInterview
@@ -50,10 +49,10 @@ export default function InterviewConvocation() {
                     validateOnChange={false}
                     enableReinitialize={true}
                     validationSchema={yup.object().shape({
-                        interviewDate: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
+                        dateTime: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
                     })}
                     initialValues={{
-                        interviewDate: new Date()
+                        dateTime: new Date()
                     }}>
                     {({isSubmitting}) =>
                         <Form className={classes.form}>
@@ -68,13 +67,13 @@ export default function InterviewConvocation() {
                                   spacing={2}>
                                 <Grid item xs={12}>
                                     <Field
-                                        component={DateTimePicker}
-                                        name="interviewDate"
-                                        variant="outlined"
-                                        label="Date et heure de l'entrevue"
-                                        required
-                                        fullWidth
-                                        format="MM/dd/yyyy hh:mm"
+                                            component={DateTimePicker}
+                                            name="dateTime"
+                                            variant="outlined"
+                                            label="Date et heure de l'entrevue"
+                                            required
+                                            fullWidth
+                                            format="MM/dd/yyyy hh:mm"
                                     />
                                 </Grid>
                                 <ErrorMessage name={"file"}>

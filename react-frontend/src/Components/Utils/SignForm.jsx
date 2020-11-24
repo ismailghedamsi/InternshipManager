@@ -9,39 +9,39 @@ import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from 'react-router-dom';
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../Utils/Hooks";
-import useStyles from "../Utils/useStyles";
+import {useApi} from "./Services/Hooks";
+import useStyles from "./Style/useStyles";
 
-const tooShortError = value => "Doit avoir au moins " + value.min + " caractères";
-const tooLongError = value => "Doit avoir moins que " + value.max + " caractères";
+const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const tooLongError = value => "Doit avoir moins que " + value.max + " caractères"
 export default function SignForm() {
-    const classes = useStyles();
-    const api = useApi();
-    const location = useLocation();
-    const history = useHistory();
-    const [contract, setContract] = useState({});
+    const classes = useStyles()
+    const api = useApi()
+    const location = useLocation()
+    const history = useHistory()
+    const [contract, setContract] = useState({})
 
     useEffect(() => {
-        setContract(location.state);
+        setContract(location.state)
     }, [location.state])
 
     function sendDecision(isApprouved, values) {
-        let dto = {};
+        let dto = {}
         if (isApprouved) {
             return readFileAsync(values.file).then(file => {
-                dto.contractId = contract.id;
-                dto.isApproved = isApprouved;
-                dto.imageSignature = file;
-                dto.reasonForRejection = "";
-                dto.nomSignataire = values.nomSignataire;
-                dto.signatureTimestamp = new Date();
+                dto.contractId = contract.id
+                dto.isApproved = isApprouved
+                dto.imageSignature = file
+                dto.reasonForRejection = ""
+                dto.nomSignataire = values.nomSignataire
+                dto.signatureTimestamp = new Date()
                 return api.put("/contractGeneration/sign", dto)
                     .then(() => redirection())
             })
         } else {
-            dto.contractId = contract.id;
-            dto.isApproved = isApprouved;
-            dto.reasonForRejection = values.message;
+            dto.contractId = contract.id
+            dto.isApproved = isApprouved
+            dto.reasonForRejection = values.message
             return api.put("/contractGeneration/sign", dto)
                 .then(() => redirection())
         }
@@ -58,12 +58,12 @@ export default function SignForm() {
 
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
-            let reader = new FileReader();
+            let reader = new FileReader()
             reader.onload = () => {
                 resolve(reader.result)
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(file)
         })
     }
 
@@ -83,11 +83,11 @@ export default function SignForm() {
                     validateOnChange={false}
                     enableReinitialize={true}
                     validate={values => {
-                        const errors = {};
+                        const errors = {}
                         if (values.file.type !== "image/png" && values.file.type !== "image/jpeg") {
                             errors.file = "L'image doit être de type PNG ou JPG"
                         }
-                        return errors;
+                        return errors
                     }}
                     validationSchema={yup.object()
                         .shape({

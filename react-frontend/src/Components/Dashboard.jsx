@@ -10,9 +10,6 @@ import InterviewConvocation from "./Employer/Interview/InterviewConvocation";
 import Interviewlist from "./Employer/Interview/InterviewList";
 import {Rescheduleinterview} from "./Employer/Interview/RescheduleInterview";
 import OfferCreation from "./Employer/OfferCreation";
-import OfferList from "./Employer/OfferList";
-import SignContract from "./Employer/SignContract";
-import SignForm from "./Employer/SignForm";
 import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm";
 import BusinessEvaluationList from "./Manager/BusinessEvaluations/BusinessEvaluationList";
 import ContractForm from "./Manager/ContractForm";
@@ -28,9 +25,13 @@ import StudentStatus from "./Manager/StudentStatus";
 import OfferApplication from "./Student/OfferApplication";
 import ResumeList from "./Student/ResumeList";
 import ResumeUpload from "./Student/Upload/ResumeUpload";
-import Footer from "./Utils/Footer";
-import Navbar from "./Utils/Navbar";
-import {RoleProtectedRoute} from "./Utils/Routes";
+import ApplicationList from "./Utils/ApplicationList";
+import Footer from "./Utils/Navb-Foot/Footer";
+import Navbar from "./Utils/Navb-Foot/Navbar";
+import OfferList from "./Utils/OfferList";
+import {RoleProtectedRoute} from "./Utils/Services/Routes";
+import SignContract from "./Utils/SignContract";
+import SignForm from "./Utils/SignForm";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -43,10 +44,10 @@ const useStyles = makeStyles(() => ({
         height: "90vh",
         overflow: "hidden"
     }
-}));
+}))
 
 export default function Dashboard() {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return <div className={classes.root}>
         <Navbar/>
@@ -220,6 +221,12 @@ export default function Dashboard() {
                     exact={true}
                     path="/dashboard/evaluationList"
                     component={StudentEvaluationsList}
+                    role={"employer"}
+                />
+                <RoleProtectedRoute
+                    exact={true}
+                    path="/dashboard/hiredStudentList"
+                    component={HiredStudentList}
                     role={"employer"}
                 />
                 {/* Etudiant */}

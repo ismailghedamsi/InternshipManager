@@ -1,22 +1,21 @@
-import React, {useEffect, useState} from 'react'
-import {useHistory, useLocation} from 'react-router-dom'
+import {makeStyles} from '@material-ui/core';
+import Button from "@material-ui/core/Button";
 import Container from '@material-ui/core/Container';
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
 import {DateTimePicker} from 'formik-material-ui-pickers';
-import Button from "@material-ui/core/Button";
-import {makeStyles} from '@material-ui/core';
-import {useApi} from '../../Utils/Hooks';
+import React, {useEffect, useState} from 'react'
+import {useHistory, useLocation} from 'react-router-dom'
 import * as yup from 'yup';
-
+import {useApi} from '../../Utils/Services/Hooks';
 
 export function Rescheduleinterview(props) {
     const location = useLocation()
     const history = useHistory()
     const api = useApi()
-    const [interview, setInterview] = useState({});
+    const [interview, setInterview] = useState({})
 
     const useStyles = makeStyles(() => ({
         root: {
@@ -34,7 +33,7 @@ export function Rescheduleinterview(props) {
             overflow: "auto",
             backgroundColor: "#fff",
         }
-    }));
+    }))
 
     const classes = useStyles()
 
@@ -45,21 +44,22 @@ export function Rescheduleinterview(props) {
     const initialValues = {
         studentFirstName: location.state.studentApplication.student.firstName,
         studentLastName: location.state.studentApplication.student.lastName,
-        interviewDate: location.state.date,
+        dateTime: location.state.dateTime,
         email: location.state.studentApplication.student.email
     }
 
     function updateInterview(values) {
-        const nextState = {...interview};
-        nextState.date = values.interviewDate;
+        const nextState = {...interview}
+        nextState.dateTime = values.dateTime
+        nextState.studentAcceptanceState = "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
         setInterview(nextState)
         api.put("/interviews/" + nextState.id, nextState)
-            .then(() => history.push("/dashboard/listInterview"))
+                .then(() => history.push("/dashboard/listInterview"))
     }
 
     const validationSchema = yup.object().shape({
-        interviewDate: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
-    });
+        dateTime: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
+    })
 
     return <Grid
         className={classes.viewbox}
@@ -75,8 +75,8 @@ export function Rescheduleinterview(props) {
                 <Formik
                     onSubmit={async values => {
                         updateInterview(values)
-                    }
-                    }
+
+                    }}
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
@@ -113,13 +113,13 @@ export function Rescheduleinterview(props) {
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Field
-                                    component={DateTimePicker}
-                                    name="interviewDate"
-                                    variant="outlined"
-                                    label="Date et heure de l'entrevue "
-                                    required
-                                    fullWidth
-                                    format="MM/dd/yyyy"
+                                        component={DateTimePicker}
+                                        name="dateTime"
+                                        variant="outlined"
+                                        label="Date et heure de l'entrevue "
+                                        required
+                                        fullWidth
+                                        format="MM/dd/yyyy"
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>

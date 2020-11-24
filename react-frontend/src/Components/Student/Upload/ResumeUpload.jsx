@@ -1,31 +1,30 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import {ErrorMessage, Field, Form, Formik} from "formik";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import './ResumeUpload.css'
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import * as yup from "yup";
-import useStyles from "../../Utils/useStyles";
-import {useApi} from "../../Utils/Hooks";
+import Typography from "@material-ui/core/Typography";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
+import React from "react";
 import {useHistory} from "react-router-dom";
-
+import * as yup from "yup";
+import {useApi} from "../../Utils/Services/Hooks";
+import useStyles from "../../Utils/Style/useStyles";
+import './ResumeUpload.css';
 
 export default function ResumeUpload() {
-    const classes = useStyles();
-    const api = useApi();
-    const history = useHistory();
+    const classes = useStyles()
+    const api = useApi()
+    const history = useHistory()
 
     function readFileAsync(file) {
         return new Promise((resolve, reject) => {
-            let reader = new FileReader();
+            let reader = new FileReader()
             reader.onload = () => {
                 resolve(reader.result)
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(file)
         })
     }
 
@@ -41,8 +40,8 @@ export default function ResumeUpload() {
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
                     onSubmit={async values => readFileAsync(values.file).then(file => {
-                        let dto = {...values};
-                        dto.file = file;
+                        let dto = {...values}
+                        dto.file = file
                         return api.post("/resumes", dto)
                             .then(() => history.push("/dashboard/listcv"))
                     })
@@ -52,11 +51,11 @@ export default function ResumeUpload() {
                     validateOnChange={false}
                     enableReinitialize={true}
                     validate={values => {
-                        const errors = {};
+                        const errors = {}
                         if (values.file.type !== "application/pdf") {
                             errors.file = "Le fichier doit être de type PDF"
                         }
-                        return errors;
+                        return errors
                     }}
                     validationSchema={yup.object()
                         .shape({
