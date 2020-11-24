@@ -1,16 +1,16 @@
-import {Button, Container, Typography} from '@material-ui/core'
-import React, {useEffect, useState} from 'react'
-import {useHistory} from 'react-router-dom'
-import AuthenticationService from '../../../Services/AuthenticationService'
-import {useApi, useTimeParserFromDate} from '../../Utils/Services/Hooks'
+import {Button, Container, Typography} from '@material-ui/core';
+import React, {useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
+import AuthenticationService from '../../../Services/AuthenticationService';
+import {useApi, useTimeParserFromDate} from '../../Utils/Services/Hooks';
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function Interviewlist() {
     const [interviews, setInterviews] = useState([{}])
     const api = useApi()
-    const history = useHistory();
-    const classes = useStyles();
-    const parseTimeFromDate = useTimeParserFromDate();
+    const history = useHistory()
+    const classes = useStyles()
+    const parseTimeFromDate = useTimeParserFromDate()
 
     useEffect(() => {
         api.get("/interviews/employer/" + AuthenticationService.getCurrentUser().id)
@@ -26,7 +26,7 @@ export default function Interviewlist() {
             return "L'étudiant a accepté l'entrevue"
         } else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
             return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>;
+                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>
         }
         return "En attente d'approbation"
     }
@@ -45,18 +45,25 @@ export default function Interviewlist() {
                         {<Typography> Étudiants à rencontrer
                             : {interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</Typography>}
                         <Typography>{isInterviewAccepted(interview)}</Typography>
-                        <Button onClick={() => {
-                            const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id);
-                            const copyInterviews = [...interviews]
-                            api.delete("/interviews/" + interview.id)
-                                .then(() => {
-                                    copyInterviews.splice(interviewToDeleteIndex, 1)
-                                    setInterviews(copyInterviews)
-                                })
-                        }}>Supprimer</Button>
-                        <Button onClick={() => {
-                            redirectEditFormInterview(interview);
-                        }}>Reprogrammer</Button>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={() => {
+                                redirectEditFormInterview(interview)
+                            }}>Reprogrammer</Button>
+                        &ensp;
+                        <Button
+                            variant={"contained"}
+                            style={{backgroundColor: "red", color: "white"}}
+                            onClick={() => {
+                                const interviewToDeleteIndex = interviews.findIndex(interv => interv.id === interview.id)
+                                const copyInterviews = [...interviews]
+                                api.delete("/interviews/" + interview.id)
+                                    .then(() => {
+                                        copyInterviews.splice(interviewToDeleteIndex, 1)
+                                        setInterviews(copyInterviews)
+                                    })
+                            }}>Supprimer</Button>
                         <hr/>
                     </div>)
                     : "Aucune entrevue n'a été créée"

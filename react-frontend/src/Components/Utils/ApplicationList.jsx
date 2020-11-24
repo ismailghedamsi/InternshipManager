@@ -1,15 +1,17 @@
-import {Checkbox} from "@material-ui/core"
-import Typography from "@material-ui/core/Typography"
-import React, {useEffect, useState} from "react"
-import {Link, useLocation} from "react-router-dom"
-import AuthenticationService from "../../Services/AuthenticationService"
-import {useApi} from "./Services/Hooks"
-import PdfSelectionViewer from "./PDF/PdfSelectionViewer"
-import useStyles from "./Style/useStyles"
+import {Checkbox} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import React, {useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+import AuthenticationService from "../../Services/AuthenticationService";
+import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
+import {useApi} from "./Services/Hooks";
+import useStyles from "./Style/useStyles";
 
 export default function ApplicationList() {
     const classes = useStyles()
     const location = useLocation()
+    const history = useHistory()
     const api = useApi()
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -21,13 +23,12 @@ export default function ApplicationList() {
 
     function studentApplicationState(i) {
         switch (offer.applications[i].state) {
-            case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
-            case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
-            case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
             case "STUDENT_HIRED_BY_EMPLOYER":
                 if (AuthenticationService.getCurrentUserRole() === "admin")
                     return <Typography variant={"body1"} style={{color: "green"}}>Application acceptée</Typography>
-
+            case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
+            case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
+            case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
                 return <Typography>
                     Application acceptée:
                     <Checkbox
@@ -58,17 +59,17 @@ export default function ApplicationList() {
             case "JOB_OFFER_ACCEPTED_BY_STUDENT":
                 return <Typography variant={"body1"} style={{color: "green"}}>
                     L'étudiant a été embauché
+                    <br/>
                     {offer.applications[i].contract === null && AuthenticationService.getCurrentUserRole() === "admin" &&
-                    <Link
-                        variant={"body1"}
-                        to={{
-                            pathname: "/dashboard/contractForm",
-                            state: {...offer.applications[i]},
-                        }}
-                        style={{display: "block"}}
-                    >
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            history.push("/dashboard/contractForm", {...offer.applications[i]})
+                        }}>
                         Genérer le contrat
-                    </Link>}
+                    </Button>
+                    }
                 </Typography>
             case "JOB_OFFER_DENIED_BY_STUDENT":
                 return <Typography variant={"body1"} style={{color: "red"}}>
@@ -77,6 +78,13 @@ export default function ApplicationList() {
             default:
                 return ""
         }
+    }
+
+    function showButtonCondition(i) {
+        return AuthenticationService.getCurrentUserRole() === "employer"
+            && offer.applications[i].state !== "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER"
+            && offer.applications[i].state !== "JOB_OFFER_DENIED_BY_STUDENT"
+            && offer.applications[i].interview === null
     }
 
     return <div style={{height: "100%"}}>
@@ -105,17 +113,17 @@ export default function ApplicationList() {
                         {offer.applications[i].student.address}
                     </Typography>
                     {studentApplicationState(i)}
-                    {AuthenticationService.getCurrentUserRole() === "employer" && offer.applications[i].state !== "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER" &&
-                    <Link
-                        variant={"body1"}
-                        to={{
-                            pathname: "/dashboard/interviewConvocation",
-                            state: {...offer.applications[i]},
+                    {showButtonCondition(i) &&
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
                         }}
-                        style={{display: "block"}}
                     >
                         Convoquer l'étudiant pour un entrevue
-                    </Link>}
+                    </Button>
+                    }
                 </div>}
                 <hr/>
             </div>}

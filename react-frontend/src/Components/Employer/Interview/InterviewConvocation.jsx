@@ -12,21 +12,20 @@ import AuthenticationService from '../../../Services/AuthenticationService';
 import {useApi} from "../../Utils/Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
-const requiredFieldMsg = "Ce champs est requis";
-
+const requiredFieldMsg = "Ce champs est requis"
 export default function InterviewConvocation() {
-    const classes = useStyles();
-    const api = useApi();
-    const location = useLocation();
-    const history = useHistory();
-    const [applicationInterview, setApplicationInterview] = useState({});
+    const classes = useStyles()
+    const api = useApi()
+    const location = useLocation()
+    const history = useHistory()
+    const [applicationInterview, setApplicationInterview] = useState({})
 
     useEffect(() => {
         setApplicationInterview(location.state)
     }, [location.state])
 
     function createInterview(values) {
-        let dto = {...values};
+        let dto = {...values}
         dto.date = values.interviewDate
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
