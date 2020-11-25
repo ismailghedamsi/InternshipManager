@@ -17,7 +17,7 @@ function ContextButton({application}) {
             style={{marginTop: 15}}
             fullWidth
         >
-            <i className="fa fa-pencil-square-o"/>&ensp;Genérer le contrat
+            <i className="fa fa-pencil-square-o"/>&ensp;Générer le contrat
         </Button>
     else
         return <Button

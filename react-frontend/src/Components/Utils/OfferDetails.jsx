@@ -38,7 +38,7 @@ export default function OfferDetails(props) {
         <Typography variant={"body2"}
                     color={"textSecondary"}
                     display={"block"}>
-            {`Crée le ${parseDate(props.offer.details.creationDate)}`}
+            {`Créée le ${parseDate(props.offer.details.creationDate)}`}
         </Typography>
     </div>
 }

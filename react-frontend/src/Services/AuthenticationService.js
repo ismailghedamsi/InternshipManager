@@ -41,7 +41,7 @@ class AuthenticationService {
             .catch(error => {
                 if (error.response) {
                     if (error.response.status === HTTP_CONFLICT)
-                        setFieldError("email", "L'addresse courriel est déja utilisée")
+                        setFieldError("email", "Cette addresse courriel est déja utilisée")
                     else
                         setModalOpen()
                 } else {

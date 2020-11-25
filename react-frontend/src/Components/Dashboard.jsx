@@ -106,7 +106,7 @@ function StudentDashboard() {
                     {cvCount} documents
                 </Typography>
                 <Typography variant={"body2"}>
-                    {deniedCvCount} documents nécéssitant votre attention
+                    {deniedCvCount} documents nécessitant votre attention
                 </Typography>
             </TabButton>
             <Divider/>
@@ -136,7 +136,7 @@ function StudentDashboard() {
                     {contractCount} documents
                 </Typography>
                 <Typography variant={"body2"}>
-                    {contractWaitingCount} documents nécéssitant votre attention
+                    {contractWaitingCount} documents nécessitant votre attention
                 </Typography>
             </TabButton>
             <Divider/>
@@ -183,7 +183,7 @@ function EmployerDashboard() {
                     {contractCount} documents
                 </Typography>
                 <Typography variant={"body2"}>
-                    {contractWaitingCount} documents nécéssitant votre attention
+                    {contractWaitingCount} documents nécessitant votre attention
                 </Typography>
             </TabButton>
             <Divider/>

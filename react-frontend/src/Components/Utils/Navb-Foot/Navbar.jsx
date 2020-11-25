@@ -100,7 +100,7 @@ const Links = {
             url: "/dashboard/listInterview"
         },
         {
-            title: "Évaluations des stagiaire",
+            title: "Évaluations des stagiaires",
             url: "/dashboard/evaluationList"
         },
         {

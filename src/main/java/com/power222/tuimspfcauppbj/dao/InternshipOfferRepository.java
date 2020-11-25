@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface InternshipOfferRepository extends JpaRepository<InternshipOffer, Long> {
 
-    List<InternshipOffer> findByEmployerEmail(String uemail);
+    List<InternshipOffer> findByEmployerEmail(String email);
 
     List<InternshipOffer> findAllByAllowedStudentsId(long id);
 

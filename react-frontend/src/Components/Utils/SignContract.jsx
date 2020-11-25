@@ -35,11 +35,11 @@ export default function SignContract({count, waitingCount}) {
             waitingCount(contracts.filter(c => c.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE").length)
     })
 
-    function sendDecision(index, isApprouved, values) {
+    function sendDecision(index, isApproved, values) {
         const nextState = [...contracts]
         let dto = {}
         dto.contractId = nextState[index].id
-        dto.isApproved = isApprouved
+        dto.isApproved = isApproved
         dto.reasonForRejection = values.message
         return api.put("/contractGeneration/sign", dto)
             .then(result => {
@@ -79,7 +79,7 @@ export default function SignContract({count, waitingCount}) {
                 break
             case "SIGNED":
                 return <Typography variant={"body1"} style={{color: "green"}}>
-                    Contrat signée
+                    Contrat signé
                 </Typography>
             default:
                 return ""

@@ -81,7 +81,7 @@ export default function Interviewlist() {
                                                     copyInterviews.splice(interviewToDeleteIndex, 1)
                                                     setInterviews(copyInterviews)
                                                 })
-                                        }}>Supprimer
+                                        }}>Annuler
                                     </Button>
                                 </TableCell>
                             </TableRow>)
