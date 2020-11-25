@@ -17,9 +17,9 @@ function TabButton({value, index, onClick, children}) {
     const classes = useStyles()
     const activeClasses = [classes.dashboardTab, index === value && classes.selectedDashboardTab].join(" ")
     return <Typography
-        variant={"h6"}
-        onClick={() => onClick(index)}
-        className={activeClasses}
+            variant={"h6"}
+            onClick={() => onClick(index)}
+            className={activeClasses}
     >
         {children}
     </Typography>
@@ -82,7 +82,6 @@ function AdminDashboard() {
         </Grid>
     </>
 }
-
 function StudentDashboard() {
     const classes = useStyles()
     const [currentTab, setCurrentTab] = useState(0)
@@ -92,7 +91,6 @@ function StudentDashboard() {
     const [offerPendingCount, setOfferPendingCount] = useState(0)
     const [contractCount, setContractCount] = useState(0)
     const [contractWaitingCount, setContractWaitingCount] = useState(0)
-
     return <>
         <Grid item xs={2} className={classes.list} style={{padding: 0, backgroundColor: "#DDD"}}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
@@ -155,14 +153,12 @@ function StudentDashboard() {
         </Grid>
     </>
 }
-
 function EmployerDashboard() {
     const classes = useStyles()
     const [currentTab, setCurrentTab] = useState(0)
     const [offerCount, setOfferCount] = useState(0)
     const [contractCount, setContractCount] = useState(0)
     const [contractWaitingCount, setContractWaitingCount] = useState(0)
-
     return <>
         <Grid item xs={2} className={classes.list} style={{padding: 0, backgroundColor: "#DDD"}}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
@@ -199,10 +195,8 @@ function EmployerDashboard() {
         </Grid>
     </>
 }
-
 export default function Dashboard() {
     const classes = useStyles()
-
     return <Grid container wrap={"nowrap"} spacing={0} className={classes.main}>
         {function () {
             switch (AuthenticationService.getCurrentUserRole()) {

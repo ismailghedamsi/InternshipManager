@@ -26,7 +26,7 @@ export function useApi() {
         baseURL: "http://localhost:8080/api/",
         timeout: 15000,
         headers: {
-            authorization: "Basic " + btoa(user.username + ":" + user.password)
+            authorization: "Basic " + btoa(user.email + ":" + user.password)
         }
     })
     api.interceptors.request.use(config => {

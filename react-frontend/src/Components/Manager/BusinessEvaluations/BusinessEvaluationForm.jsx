@@ -532,7 +532,7 @@ export default function BusinessEvalution() {
                 />
                 <GeneralObservationsStep label="Observations générales"
                                          validationSchema={ObservationsValidation}
-                                         mapEvaluationAnswers={() => mapAnswers(evaluationAnswers)}
+                                         mapEvaluationAnswers={() => mapAnswers(traineesNumber)}
                                          errorMessage={showErrorMessage}
                 />
                 <SignatureStep label="Signature"

@@ -100,10 +100,6 @@ const Links = {
             url: "/dashboard/listInterview"
         },
         {
-            title: "Contrats",
-            url: "/dashboard/signContract"
-        },
-        {
             title: "Évaluations des stagiaires",
             url: "/dashboard/studentEvaluationList"
         },
@@ -176,7 +172,7 @@ export default function Navbar() {
                     onClick={() => {
                         AuthenticationService.logout()
                         axios.get("http://localhost:8080/api/semesters/present")
-                            .then(r => setSemester(r ? r.data : ""))
+                                .then(r => setSemester(r ? r.data : ""))
                         history.push("/")
                     }}
             >
