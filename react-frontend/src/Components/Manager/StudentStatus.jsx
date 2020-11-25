@@ -117,33 +117,36 @@ function EtatEtudiant(props) {
     var string = ""
     var ctp = 0;
     var ctp2 = 0;
+    var ctp3 = 0;
 
     if (student.resumes.length === 0) {
         string = "Aucun CV"
     } else if (student.resumes.length > 0 && student.offer === undefined) {
         ctp = 0;
         ctp2 = 0;
+        ctp3 = 0;
         for (var i = 0; i < student.resumes.length; i++) {
             if (student.resumes[i].reviewState === "APPROVED") {
                 ctp += 1;
             } else if (student.resumes[i].reviewState === "PENDING") {
                 ctp2 += 1;
+            } else if (student.resumes[i].reviewState === "DENIED") {
+                ctp3 += 1;
             }
         }
-        string = "A " + student.resumes.length + " CV en total: " + ctp + " aprouvé et " + ctp2 + " en attente"
+        string = student.resumes.length + " CV en total: " + ctp + " aprouvé " + ctp2 + " en attente " + ctp3 + " rejeté "
     } else {
         string = ""
     }
 
-    if (student.allowedOffers === undefined) {
-        string += " - Aucune offre"
-    } else if (student.allowedOffers.length > 0) {
+    if (student.allowedOffers.length > 0) {
         string += " - Droit a " + student.allowedOffers.length + " offres"
     } else {
-        string += ""
+        string += " - Aucun offre "
     }
-    if (student.applications !== undefined) {
 
+    if (student.applications.length > 0) {
+        string += " - " + student.applications.length + " CVs envoyer au offres"
         ctp = 0;
         for (var i = 0; i < student.applications.length; i++) {
             if (student.applications[i].interview !== null) {
@@ -151,33 +154,36 @@ function EtatEtudiant(props) {
             }
 
         }
-        string += " - " + student.applications.length + " offre accepter par l'étudiant - "
-            + ctp + " demande d'entrevue"
-        ctp = 0;
-        for(var i = 0; i < student.applications.length;i++){
-            if(student.applications[i].contract !== undefined){
-                ctp = i;
+        if (ctp > 0) {
+            string += " - " + student.applications.length +
+                +ctp + " demande d'entrevues"
+        } else {
+            string += ""
+        }
+
+        for (var i = 0; i < student.applications.length; i++) {
+            if (student.applications[i].contract !== null) {
+                switch (student.applications[i].contract.signatureState) {
+                    case "WAITING_FOR_EMPLOYER_SIGNATURE" :
+                        string += " - Contrat: En attente de la signature de l'employeur"
+                        break
+                    case "REJECTED_BY_EMPLOYER" :
+                        string += " - Contrat: L'employeur a rejeté le contrat"
+                        break
+                    case "WAITING_FOR_STUDENT_SIGNATURE" :
+                        string += " - Contrat: En attente de la signature de l'étudiant"
+                        break
+                    case "SIGNED":
+                        string += " - Contrat signé est finalisé"
+                        break
+                    default:
+                        string += " - Embaucher"
+                        break
+                }
             }
         }
-        /*
-        if(student.applications[ctp].contract !== undefined){
-            switch (student.applications.contract.signatureState) {
-                case "WAITING_FOR_EMPLOYER_SIGNATURE" :
-                    string += "En attente de la signature de l'employeur"
-                    break
-                case "REJECTED_BY_EMPLOYER" :
-                    string+="L'employeur a rejeté le contrat"
-                    break
-                case "WAITING_FOR_STUDENT_SIGNATURE" :
-                    string += "En attente de la signature de l'étudiant"
-                    break
-                case "SIGNED":
-                    string +="Contrat signé"
-                    break
-            }
-        }*/
-    } else {
-        string += " - Aucune offre acepter par l'étudiant"
+    } else if (student.allowedOffers.length > 0) {
+        string += " - Aucune offre accepter par l'étudiant"
     }
 
     return <div><Typography>{string}</Typography></div>
@@ -209,8 +215,6 @@ export default function StudentStatus() {
     function isOffersNotUndefined(students, currentIndex) {
         return students[currentIndex].allowedOffers && students[currentIndex].allowedOffers.length > 0
     }
-
-
 
 
     return <Grid
