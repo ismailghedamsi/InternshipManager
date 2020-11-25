@@ -112,120 +112,122 @@ OfferStatus.propTypes = {
     currentStudent: PropTypes.any,
 }
 
-function EtatEtudiant(props) {
-    var student = props.currentStudent;
-    var string = ""
-    var ctp = 0;
-    var ctp2 = 0;
-    var ctp3 = 0;
+function StudentApplicationDetails({student}) {
 
-    if (student.resumes.length === 0) {
-        string = "Aucun CV"
-    } else if (student.resumes.length > 0 && student.offer === undefined) {
-        ctp = 0;
-        ctp2 = 0;
-        ctp3 = 0;
-        for (var i = 0; i < student.resumes.length; i++) {
-            if (student.resumes[i].reviewState === "APPROVED") {
-                ctp += 1;
-            } else if (student.resumes[i].reviewState === "PENDING") {
-                ctp2 += 1;
-            } else if (student.resumes[i].reviewState === "DENIED") {
-                ctp3 += 1;
-            }
-        }
-        string = student.resumes.length + " CV en total: " + ctp + " aprouvé " + ctp2 + " en attente " + ctp3 + " rejeté "
-    } else {
-        string = ""
+    function interviewStatus() {
+        const interviewCount = student.applications.filter(appli => appli.interview).length
+
+        if (interviewCount > 0)
+            return interviewCount + " demandes d'entrevue"
+        else
+            return "Aucune demande d'entrevue"
     }
 
-    if (student.allowedOffers.length > 0) {
-        string += " - Droit a " + student.allowedOffers.length + " offres"
-    } else {
-        string += " - Aucun offre "
+    function isApplicationPending(appli) {
+        return appli.state === "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW" ||
+            appli.state === "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" ||
+            appli.state === "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION"
     }
 
-    if (student.applications.length > 0) {
-        string += " - Nombre d'applications " + student.applications.length + ""
-        ctp = 0;
-        for (var i = 0; i < student.applications.length; i++) {
-            if (student.applications[i].interview !== null) {
-                ctp += 1;
-            }
+    function applicationStatus() {
+        const acceptedApplication = student.applications.find(appli => appli.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")
+        if (acceptedApplication)
+            return "A accepté l'offre " + acceptedApplication.offer.title + " de "
+                + acceptedApplication.offer.employer.companyName
 
-        }
-        if (ctp > 0) {
-            string += " - " + student.applications.length +
-                +ctp + " demande d'entrevues"
-        } else {
-            string += ""
-        }
-        ctp = 0
-        ctp2 = 0
-        ctp3 = 0
-        for (var i = 0; i < student.applications.length; i++) {
-            switch (student.applications[i].state) {
-                case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
-                    ctp++
-                    break;
-                case "APPLICATION_REJECTED_BY_EMPLOYER":
-                    break;
-                case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
-                    break;
-                case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
-                    ctp++
-                    break;
-                case "STUDENT_HIRED_BY_EMPLOYER":
-                    break;
-                case "STUDENT_REJECTED_BY_EMPLOYER":
-                    break;
-                case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
-                    ctp++
-                    break;
-                case "JOB_OFFER_ACCEPTED_BY_STUDENT":
-                    ctp2 = 1;
-                    break;
-                case "JOB_OFFER_DENIED_BY_STUDENT":
-                    break;
-            }
-        }
-        string += ctp2 === 1 ? "Etudiant embaucher" : ""
-        string += ctp1 + " - attente de l'application"
+        let pendingApplications = student.applications.filter(isApplicationPending).length
+        return pendingApplications + " en attente de décision"
+    }
 
-        for (var i = 0; i < student.applications.length; i++) {
-            if (student.applications[i].contract !== null) {
-                switch (student.applications[i].contract.signatureState) {
+    function contractStatus() {
+        for (const appli of student.applications)
+            if (appli.contract)
+                switch (appli.contract.signatureState) {
+                    case "PENDING_FOR_ADMIN_REVIEW":
+                        return "Contrat en attente de l'approbation du gestionnaire de stage"
                     case "WAITING_FOR_EMPLOYER_SIGNATURE" :
-                        string += " - Contrat: En attente de la signature de l'employeur"
-                        break
+                        return "Contrat en attente de la signature de l'employeur"
                     case "REJECTED_BY_EMPLOYER" :
-                        string += " - Contrat: L'employeur a rejeté le contrat"
-                        break
+                        return "L'employeur a rejeté le contrat"
                     case "WAITING_FOR_STUDENT_SIGNATURE" :
-                        string += " - Contrat: En attente de la signature de l'étudiant"
-                        break
+                        return "Contrat en attente de la signature de l'étudiant"
+                    case "WAITING_FOR_ADMIN_SIGNATURE":
+                        return "Contrat en attente de la signature du gestionnaire de stage"
                     case "SIGNED":
-                        string += " - Contrat signé est finalisé"
-                        break
+                    default:
+                        return "Contrat signé par tous les parties"
                 }
-            }
-        }
-
-    } else if (student.allowedOffers.length > 0) {
-        string += " - Aucune offre accepter par l'étudiant"
+        return null
     }
 
-    return <div><Typography>{string}</Typography></div>
+    return student.applications.length > 0 ? <>
+            <Typography>
+                {interviewStatus()}
+            </Typography>
+            <Typography>
+                {applicationStatus()}
+            </Typography>
+            <Typography>
+                {contractStatus()}
+            </Typography>
+        </>
+        : <Typography>
+            N'a appliqué sur aucune offre
+        </Typography>
 }
 
-
-
-
-
-EtatEtudiant.propTypes = {
-    currentStudent: PropTypes.any,
+StudentApplicationDetails.propTypes = {
+    student: PropTypes.object.isRequired
 }
 
+function StudentStatusDetails({student}) {
+
+    function resumeStatus() {
+        if (student.resumes.length === 0)
+            return "Aucun CV"
+        else {
+            let approvedResumes = 0
+            let pendingResumes = 0
+            let rejectedResumes = 0
+
+            for (const resume of student.resumes) {
+                if (resume.reviewState === "APPROVED")
+                    approvedResumes++
+                else if (resume.reviewState === "PENDING")
+                    pendingResumes++
+                else if (resume.reviewState === "DENIED")
+                    rejectedResumes++
+            }
+
+            return student.resumes.length + " CVs: " + approvedResumes + " approuvés, "
+                + pendingResumes + " en attente, " + rejectedResumes + " rejetés "
+        }
+    }
+
+    function offerStatus() {
+        if (student.allowedOffers.length === 0)
+            return "N'a accès à aucune offre"
+        else
+            return "A accès à " + student.allowedOffers.length + " offres, a deposé "
+                + student.applications.length + " applications"
+    }
+
+    return <>
+        <Typography>
+            {resumeStatus()}
+        </Typography>
+        <Typography>
+            {offerStatus()}
+        </Typography>
+        {student.allowedOffers && student.allowedOffers.length > 0 &&
+        <StudentApplicationDetails student={student}/>
+        }
+    </>
+}
+
+StudentStatusDetails.propTypes = {
+    student: PropTypes.object.isRequired
+}
 
 export default function StudentStatus() {
     const classes = useStyles()
@@ -252,7 +254,9 @@ export default function StudentStatus() {
     return <Grid
         container
         spacing={2}
-        className={classes.main}>
+        className={classes.main}
+        style={{padding: "15px 0 0 15px"}}
+    >
         <Grid item xs={5} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 État des étudiants
@@ -270,10 +274,9 @@ export default function StudentStatus() {
                         </Typography>
                     </button>
 
-                    <EtatEtudiant currentStudent={students[i]}/>
-
                     {currentIndex === i &&
                     <div>
+                        <StudentStatusDetails student={students[i]}/>
                         <button
                             type={"button"}
                             className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(" ")}
@@ -296,8 +299,8 @@ export default function StudentStatus() {
                 </div>
             ) : "Aucun étudiants"}
         </Grid>
-        <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === 0 ? isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
+        <Grid item xs={7} align={"center"} style={{overflow: "auto", height: "100%"}}>
+            {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
                 <ResumeStatus key={index}
                               classes={classes}
                               resume={resume}
@@ -305,8 +308,8 @@ export default function StudentStatus() {
                                   setCurrentDoc(resume.file)
                                   openPdf()
                               }}/>
-            ) : "L'étudiant n'a téléversé aucun CV" : ""}
-            {currentSubtab === 1 ? isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+            ) : "L'étudiant n'a téléversé aucun CV")}
+            {currentSubtab === 1 && (isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
                 <OfferStatus key={index}
                              classes={classes}
                              offer={offer}
@@ -315,7 +318,7 @@ export default function StudentStatus() {
                                  setCurrentDoc(offer.file)
                                  openPdf()
                              }}/>
-            ) : " L'étudiant n'a accès à aucune offre de stage" : ""}
+            ) : " L'étudiant n'a accès à aucune offre de stage")}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
             <DialogContent className={classes.viewbox}>
