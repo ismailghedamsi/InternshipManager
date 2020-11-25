@@ -467,7 +467,7 @@ function AppreciationStep(props) {
                         rows={4}
                         fullWidth
                         multiline
-                        label="Précisez votre appréciation:"
+                        label="Précisez votre appréciation"
                         name="appreciation.comment"
                 />
             </Grid>
