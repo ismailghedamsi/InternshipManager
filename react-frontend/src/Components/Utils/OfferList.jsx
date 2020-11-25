@@ -3,12 +3,12 @@ import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../../Services/Hooks";
-import OfferDetails from "./OfferDetails";
+import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
+import {useApi} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
 
-export default function OfferList() {
+export default function OfferList({count}) {
     const classes = useStyles()
     const api = useApi()
     const history = useHistory()
@@ -17,7 +17,7 @@ export default function OfferList() {
 
     useEffect(() => {
         if (AuthenticationService.getCurrentUserRole() === "employer") {
-            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().username)
+            api.get("/offers/employer/" + AuthenticationService.getCurrentUser().email)
                 .then(r => setOffers(r ? r.data : []))
         } else if (AuthenticationService.getCurrentUserRole() === "admin") {
             api.get("/offers/approved")
@@ -26,6 +26,11 @@ export default function OfferList() {
                 })
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (count)
+            count(offers.length)
+    })
 
     function deleteOffer(index) {
         const nextState = [...offers]
@@ -67,7 +72,7 @@ export default function OfferList() {
                     </div>
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
                         autoFocus={i === 0}
                         onClick={() => {
                             setCurrentIndex(i)

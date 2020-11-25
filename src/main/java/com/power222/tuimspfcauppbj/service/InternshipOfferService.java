@@ -65,8 +65,8 @@ public class InternshipOfferService {
         return offerRepo.findById(id);
     }
 
-    public List<InternshipOffer> getInternshipOffersOfEmployer(String username) {
-        return offerRepo.findByEmployerUsername(username);
+    public List<InternshipOffer> getInternshipOffersOfEmployer(String email) {
+        return offerRepo.findByEmployerEmail(email);
     }
 
     public Optional<InternshipOffer> updateInternshipOffer(long id, InternshipOffer offer) {

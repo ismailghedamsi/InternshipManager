@@ -5,7 +5,7 @@ import {useApi} from "../../Services/Hooks";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
 
-export default function ResumeList() {
+export default function ResumeList({count, deniedCount}) {
     const classes = useStyles()
     const api = useApi()
     const [resumes, setResumes] = useState([])
@@ -13,8 +13,13 @@ export default function ResumeList() {
 
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
-            .then(r => setResumes(r.data))
+            .then(r => setResumes(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        count(resumes.length)
+        deniedCount(resumes.filter(r => r.reviewState === "DENIED").length)
+    })
 
     function deleteResume(index) {
         const nextState = [...resumes]

@@ -26,6 +26,7 @@ export default function ApplicationList() {
             case "STUDENT_HIRED_BY_EMPLOYER":
                 if (AuthenticationService.getCurrentUserRole() === "admin")
                     return <Typography variant={"body1"} style={{color: "green"}}>Application acceptée</Typography>
+                break;
             case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
             case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
             case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":

@@ -67,13 +67,13 @@ export default function InterviewConvocation() {
                                   spacing={2}>
                                 <Grid item xs={12}>
                                     <Field
-                                            component={DateTimePicker}
-                                            name="dateTime"
-                                            variant="outlined"
-                                            label="Date et heure de l'entrevue"
-                                            required
-                                            fullWidth
-                                            format="MM/dd/yyyy hh:mm"
+                                        component={DateTimePicker}
+                                        name="dateTime"
+                                        variant="outlined"
+                                        label="Date et heure de l'entrevue"
+                                        required
+                                        fullWidth
+                                        format="MM/dd/yyyy hh:mm"
                                     />
                                 </Grid>
                                 <ErrorMessage name={"file"}>

@@ -1,11 +1,11 @@
 import AppBar from "@material-ui/core/AppBar";
-import Container from '@material-ui/core/Container';
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import Typography from '@material-ui/core/Typography';
-import React from 'react';
+import Typography from "@material-ui/core/Typography";
+import React from "react";
 import {Link as RouterLink, useHistory} from "react-router-dom";
 import RegisterEmployer from "./RegisterEmployer";
 import RegisterStudent from "./RegisterStudent";
@@ -23,7 +23,7 @@ export default function RegisteringManager() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{minHeight: '100vh'}}
+        style={{minHeight: "100vh"}}
     >
         <Grid item xs={12} md={6} xl={3}>
             <Container component="main" maxWidth="sm" className={classes.container}>

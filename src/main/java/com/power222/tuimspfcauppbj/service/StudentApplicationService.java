@@ -5,9 +5,12 @@ import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.dao.StudentApplicationRepository;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
+import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import com.power222.tuimspfcauppbj.util.StudentApplicationState;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +31,13 @@ public class StudentApplicationService {
 
     public List<StudentApplication> getAllApplication() {
         return appliRepo.findAll();
+    }
+
+    public List<StudentApplication> getAllContractsWaitingForAdmin() {
+        var set = new HashSet<StudentApplication>();
+        set.addAll(appliRepo.findAllByStateAndContractIsNull(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT));
+        set.addAll(appliRepo.findAllByContractSignatureState(ContractSignatureState.WAITING_FOR_ADMIN_SIGNATURE));
+        return new ArrayList<>(set);
     }
 
     public Optional<StudentApplication> getApplicationById(long id) {

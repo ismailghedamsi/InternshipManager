@@ -8,7 +8,6 @@ import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import * as yup from "yup";
-import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi} from "../../Services/Hooks";
 import useStyles from "./Style/useStyles";
 
@@ -36,24 +35,15 @@ export default function SignForm() {
                 dto.nomSignataire = values.nomSignataire
                 dto.signatureTimestamp = new Date()
                 return api.put("/contractGeneration/sign", dto)
-                    .then(() => redirection())
+                    .then(() => history.push("/dashboard"))
             })
         } else {
             dto.contractId = contract.id
             dto.isApproved = isApprouved
             dto.reasonForRejection = values.message
             return api.put("/contractGeneration/sign", dto)
-                .then(() => redirection())
+                .then(() => history.push("/dashboard"))
         }
-    }
-
-    function redirection() {
-        if (AuthenticationService.getCurrentUserRole() === "admin")
-            return history.push("/dashboard/contractList")
-        else if (AuthenticationService.getCurrentUserRole() === "employer")
-            return history.push("/dashboard/signContract")
-        else
-            return history.push("/dashboard/signContractStudent")
     }
 
     function readFileAsync(file) {

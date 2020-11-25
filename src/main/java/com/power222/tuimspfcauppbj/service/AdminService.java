@@ -27,7 +27,7 @@ public class AdminService {
 
     public Optional<Admin> createAdmin(Admin admin) {
         return Optional.of(admin)
-                .filter(a -> !repo.existsByUsername(a.getUsername()))
+                .filter(a -> !repo.existsByEmail(a.getEmail()))
                 .map(a -> {
                     a.setPassword(encoder.encode(a.getPassword()));
                     a.setPasswordExpired(true);
@@ -46,7 +46,7 @@ public class AdminService {
     }
 
     public Optional<Admin> updateUserPassword(PasswordDTO dto) {
-        return repo.findByUsername(dto.getUsername())
+        return repo.findByEmail(dto.getUsername())
                 .map(a -> {
                     a.setPassword(encoder.encode(dto.getNewPassword()));
                     return a;

@@ -2,11 +2,8 @@ package com.power222.tuimspfcauppbj.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.power222.tuimspfcauppbj.config.TestsWithoutSecurityConfig;
-import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Contract;
-import com.power222.tuimspfcauppbj.model.StudentApplication;
 import com.power222.tuimspfcauppbj.service.ContractService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -41,26 +38,6 @@ public class ContractControllerTests {
 
     @MockBean
     private ContractService svc;
-
-    private Contract expectedContract;
-
-    @BeforeEach
-    void beforeEach() {
-        Admin admin = Admin.builder()
-                .name("Reda")
-                .build();
-
-        expectedContract = Contract.builder()
-                .id(1L)
-                .admin(admin)
-                .engagementCollege("College")
-                .engagementCompany("Company")
-                .engagementStudent("Student")
-                .file("file")
-                .totalHoursPerWeek(32)
-                .studentApplication(new StudentApplication())
-                .build();
-    }
 
     @Test
     void getAllContractsTest() throws Exception {

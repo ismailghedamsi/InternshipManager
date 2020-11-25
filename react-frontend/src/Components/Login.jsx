@@ -7,14 +7,14 @@ import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
-import {Field, Form, Formik} from 'formik';
+import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
-import React, {useContext} from 'react';
+import React, {useContext} from "react";
 import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
 import * as yup from "yup";
 import {ModalContext} from "../App";
-import fl from '../img/fl.png';
-import AuthenticationService from '../Services/AuthenticationService';
+import fl from "../img/fl.png";
+import AuthenticationService from "../Services/AuthenticationService";
 import useStyles from "./Utils/Style/useStyles";
 
 const HTTP_UNAUTHORIZED = 401
@@ -26,17 +26,17 @@ export default function Login() {
     const history = useHistory()
     const classes = useStyles()
     const initialValues = {
-        username: "",
+        email: "",
         password: ""
     }
 
-    const handleHttpError = (error, setFieldError, username) => {
+    const handleHttpError = (error, setFieldError, email) => {
         if (error.response) {
             if (error.response.status === HTTP_UNAUTHORIZED) {
                 setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
                 setFieldError("password", "   ")
             } else if (error.response.status === HTTP_TOKEN_EXPIRED) {
-                history.push("/passwordChange", {username: username})
+                history.push("/passwordChange", {email: email})
             } else
                 open()
         } else {
@@ -77,14 +77,14 @@ export default function Login() {
                         onSubmit={async (values, {setFieldError}) =>
                             AuthenticationService.authenticate(values)
                                 .then(() => history.push("/dashboard"))
-                                .catch((error) => handleHttpError(error, setFieldError, values.username))
+                                .catch(error => handleHttpError(error, setFieldError, values.email))
                         }
 
                         validationSchema={yup.object()
                             .shape({
-                                    username: yup.string().trim().required(requiredFieldMsg),
-                                    password: yup.string().trim().required(requiredFieldMsg)
-                                })}
+                                email: yup.string().trim().required(requiredFieldMsg),
+                                password: yup.string().trim().required(requiredFieldMsg)
+                            })}
                             validateOnBlur={false}
                             validateOnChange={false}
                             enableReinitialize={true}
@@ -96,13 +96,13 @@ export default function Login() {
                                     <Grid item xs={12}>
                                         <Field
                                             component={TextField}
-                                            name="username"
-                                            id="username"
+                                            name="email"
+                                            id="email"
                                             variant="outlined"
-                                            label="Nom d'utilisateur"
+                                            label="Addresse courriel"
                                             required
-                                                fullWidth
-                                            />
+                                            fullWidth
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Field

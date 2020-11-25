@@ -51,16 +51,15 @@ public class InternshipOfferControllerTests {
     void beforeEach() {
 
         expectedEmployer = Employer.builder()
-                .username("employeur")
+                .email("employeur@gmail.com")
                 .build();
 
         expectedStudent = Student.builder()
                 .id(1L)
-                .username("student")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
-                .email("simon@cal.qc.ca")
+                .email("student@cal.qc.ca")
                 .phoneNumber("5144816959")
                 .address("6600 St-Jacques Ouest")
                 .build();
@@ -148,9 +147,9 @@ public class InternshipOfferControllerTests {
 
     @Test
     void getOfferByEmployerId() throws Exception {
-        when(svc.getInternshipOffersOfEmployer(expectedEmployer.getUsername())).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
+        when(svc.getInternshipOffersOfEmployer(expectedEmployer.getEmail())).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
-        mvc.perform(get("/api/offers/employer/" + expectedEmployer.getUsername()))
+        mvc.perform(get("/api/offers/employer/" + expectedEmployer.getEmail()))
                 .andExpect(status().isOk());
     }
 

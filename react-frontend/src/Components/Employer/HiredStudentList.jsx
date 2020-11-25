@@ -24,7 +24,7 @@ export default function HiredStudentList() {
                 <div key={i}>
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
                         autoFocus={i === 0}
                         onClick={() => {
                             setCurrentIndex(i)

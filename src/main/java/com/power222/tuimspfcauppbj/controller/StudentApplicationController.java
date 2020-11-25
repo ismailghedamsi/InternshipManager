@@ -30,6 +30,11 @@ public class StudentApplicationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/pending")
+    public List<StudentApplication> getAllContractsWaitingForAdmin() {
+        return svc.getAllContractsWaitingForAdmin();
+    }
+
     @PostMapping("/{offerId}/{resumeId}")
     public ResponseEntity<StudentApplication> createStudentApplication(
             @PathVariable long offerId, @PathVariable long resumeId) {

@@ -8,7 +8,7 @@ import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
 
-export default function SignContract() {
+export default function SignContract({count, waitingCount}) {
     const classes = useStyles()
     const api = useApi()
     const history = useHistory()
@@ -26,11 +26,20 @@ export default function SignContract() {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    function sendDecision(index, isApprouved, values) {
+    useEffect(() => {
+        count(contracts.length)
+
+        if (AuthenticationService.getCurrentUserRole() === "student")
+            waitingCount(contracts.filter(c => c.signatureState === "WAITING_FOR_STUDENT_SIGNATURE").length)
+        else if (AuthenticationService.getCurrentUserRole() === "employer")
+            waitingCount(contracts.filter(c => c.signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE").length)
+    })
+
+    function sendDecision(index, isApproved, values) {
         const nextState = [...contracts]
         let dto = {}
         dto.contractId = nextState[index].id
-        dto.isApproved = isApprouved
+        dto.isApproved = isApproved
         dto.reasonForRejection = values.message
         return api.put("/contractGeneration/sign", dto)
             .then(result => {
@@ -70,10 +79,10 @@ export default function SignContract() {
                 break
             case "SIGNED":
                 return <Typography variant={"body1"} style={{color: "green"}}>
-                    Contrat signée
+                    Contrat signé
                 </Typography>
             default:
-                return ''
+                return ""
         }
     }
 
@@ -91,7 +100,7 @@ export default function SignContract() {
 
     function showEvaluationButtonCondition(i) {
         return contracts[i].signatureState === "SIGNED"
-            && AuthenticationService.getCurrentUserRole() === 'employer'
+            && AuthenticationService.getCurrentUserRole() === "employer"
             && contracts[i].internEvaluation === null
     }
 
@@ -103,7 +112,7 @@ export default function SignContract() {
                 <div key={i}>
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
                         onClick={() => {
                             setCurrent(i)
                             setCurrentIndex(i)
