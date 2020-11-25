@@ -41,13 +41,12 @@ public class MailSendingServiceTests {
     @BeforeEach
     public void setUp() {
         employer = Employer.builder()
-                .username("employeur")
                 .password("Projet_employeur1")
                 .companyName("Dacima")
                 .contactName("Zack")
                 .phoneNumber("5144317713")
                 .address("1300 rue ducas")
-                .email("projetemployeur@gmail.com")
+                .email("employeur@gmail.com")
                 .build();
 
         offer = InternshipOffer.builder()

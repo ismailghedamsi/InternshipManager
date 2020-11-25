@@ -18,6 +18,7 @@ export default function PdfDocument(props) {
                 pageNumber={index + 1}
                 renderTextLayer={false}
                 className={classes.page}
+                width={props.container.current.offsetWidth * .95}
             />,
         )}
     </Document>

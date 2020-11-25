@@ -33,7 +33,7 @@ public class EmployerService {
     }
 
     public Optional<Employer> persistNewEmployer(Employer employer) {
-        if (userRepo.existsByUsername(employer.getUsername()))
+        if (userRepo.existsByEmail(employer.getEmail()))
             return Optional.empty();
 
         employer.setPassword(passwordEncoder.encode(employer.getPassword()));
