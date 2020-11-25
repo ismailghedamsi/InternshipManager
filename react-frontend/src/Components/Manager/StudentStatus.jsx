@@ -143,7 +143,7 @@ function EtatEtudiant(props) {
         string += ""
     }
     if (student.applications !== undefined) {
-        /*
+
         ctp = 0;
         for (var i = 0; i < student.applications.length; i++) {
             if (student.applications[i].interview !== null) {
@@ -159,6 +159,7 @@ function EtatEtudiant(props) {
                 ctp = i;
             }
         }
+        /*
         if(student.applications[ctp].contract !== undefined){
             switch (student.applications.contract.signatureState) {
                 case "WAITING_FOR_EMPLOYER_SIGNATURE" :
