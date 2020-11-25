@@ -1,14 +1,14 @@
-import {Typography} from '@material-ui/core';
+import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import {DateTimePicker} from 'formik-material-ui-pickers';
+import {DateTimePicker} from "formik-material-ui-pickers";
 import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from "react-router-dom";
 import * as yup from "yup";
-import AuthenticationService from '../../../Services/AuthenticationService';
+import AuthenticationService from "../../../Services/AuthenticationService";
 import {useApi} from "../../Utils/Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
@@ -67,13 +67,13 @@ export default function InterviewConvocation() {
                                   spacing={2}>
                                 <Grid item xs={12}>
                                     <Field
-                                            component={DateTimePicker}
-                                            name="dateTime"
-                                            variant="outlined"
-                                            label="Date et heure de l'entrevue"
-                                            required
-                                            fullWidth
-                                            format="MM/dd/yyyy hh:mm"
+                                        component={DateTimePicker}
+                                        name="dateTime"
+                                        variant="outlined"
+                                        label="Date et heure de l'entrevue"
+                                        required
+                                        fullWidth
+                                        format="MM/dd/yyyy hh:mm"
                                     />
                                 </Grid>
                                 <ErrorMessage name={"file"}>

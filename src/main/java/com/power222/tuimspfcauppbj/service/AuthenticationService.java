@@ -32,13 +32,13 @@ public class AuthenticationService {
     }
 
     public User getCurrentUser() {
-        final var user = userRepo.findByUsername(getPrincipal().getUsername()).orElse(null);
+        final var user = userRepo.findByEmail(getPrincipal().getUsername()).orElse(null);
         eventListeners.forEach(userConsumer -> userConsumer.accept(user));
         return user;
     }
 
     public PasswordUpdateStatus updateUserPassword(PasswordDTO dto) {
-        return userRepo.findByUsername(dto.getUsername())
+        return userRepo.findByEmail(dto.getUsername())
                 .map(u -> doPasswordUpdate(u, dto))
                 .orElse(PasswordUpdateStatus.USER_NOT_FOUND);
     }

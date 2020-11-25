@@ -39,13 +39,12 @@ public class EmployerServiceTests {
     void beforeEach() {
         expectedEmployer = Employer.builder()
                 .id(1L)
-                .username("employer")
                 .password("password")
                 .companyName("Cal Inc.")
                 .contactName("Simon Longpré")
                 .phoneNumber("5144816959")
                 .address("6600 St-Jacques Ouest")
-                .email("simon@cal.qc.ca")
+                .email("employer@cal.qc.ca")
                 .offers(Collections.emptyList())
                 .build();
     }
@@ -104,7 +103,7 @@ public class EmployerServiceTests {
 
     @Test
     void createEmployerWithExistingUsername() {
-        when(userRepo.existsByUsername(expectedEmployer.getUsername())).thenReturn(true);
+        when(userRepo.existsByEmail(expectedEmployer.getEmail())).thenReturn(true);
 
         var actual = svc.persistNewEmployer(expectedEmployer);
 

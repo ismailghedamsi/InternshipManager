@@ -33,7 +33,7 @@ public class StudentService {
     }
 
     public Optional<Student> persistNewStudent(Student student) {
-        if (userRepo.existsByUsername(student.getUsername()))
+        if (userRepo.existsByEmail(student.getEmail()))
             return Optional.empty();
 
         student.setPassword(passwordEncoder.encode(student.getPassword()));

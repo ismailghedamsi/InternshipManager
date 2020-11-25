@@ -15,12 +15,8 @@ import AuthenticationService from "../../../Services/AuthenticationService";
 const Links = {
     admin: [
         {
-            title: "Approbation des CV",
-            url: "/dashboard/approbation/cv"
-        },
-        {
-            title: "Approbation des offres",
-            url: "/dashboard/approbation/offres"
+            title: "Accueil",
+            url: "/dashboard"
         },
         {
             title: <Divider/>
@@ -76,30 +72,28 @@ const Links = {
     ],
     student: [
         {
-            title: 'Téléverser un CV',
-            url: '/dashboard/upload'
+            title: "Accueil",
+            url: "/dashboard"
         },
         {
-            title: 'Mes CV',
-            url: '/dashboard/listcv'
+            title: <Divider/>
         },
         {
-            title: "Offres de stage",
-            url: "/dashboard/stagelist"
-        },
-        {
-            title: "Contrats",
-            url: "/dashboard/signContractStudent"
+            title: "Téléverser un CV",
+            url: "/dashboard/upload"
         }
     ],
     employer: [
         {
-            title: 'Créer une offre',
-            url: '/dashboard/createstage'
+            title: "Accueil",
+            url: "/dashboard"
         },
         {
-            title: "Mes offres",
-            url: "/dashboard/listoffer"
+            title: <Divider/>
+        },
+        {
+            title: "Créer une offre",
+            url: "/dashboard/createstage"
         },
         {
             title: "Entrevues",
@@ -110,7 +104,7 @@ const Links = {
             url: "/dashboard/signContract"
         },
         {
-            title: "Évaluations des stagiaire",
+            title: "Évaluations des stagiaires",
             url: "/dashboard/studentEvaluationList"
         },
         {
@@ -129,7 +123,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        marginRight: theme.spacing(2)
     },
     spacer: {
         flexGrow: 1
@@ -182,11 +176,11 @@ export default function Navbar() {
                     onClick={() => {
                         AuthenticationService.logout()
                         axios.get("http://localhost:8080/api/semesters/present")
-                                .then(r => setSemester(r ? r.data : ''))
+                            .then(r => setSemester(r ? r.data : ""))
                         history.push("/")
                     }}
             >
-                <i className="fa fa-sign-out"/>&ensp;Déconnexion
+                <i className="fa fa-sign-out"/>&ensp;Déconnexion - {AuthenticationService.getCurrentUser().email}
             </Button>
         </Toolbar>
         <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)} style={{width: 250}}>

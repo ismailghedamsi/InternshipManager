@@ -36,12 +36,11 @@ class ResumeServiceTests {
     void setUp() {
         expectedStudent = Student.builder()
                 .id(1L)
-                .username("student")
                 .password("password")
                 .firstName("Simon")
                 .lastName("Longpré")
                 .studentId("1386195")
-                .email("simon@cal.qc.ca")
+                .email("student@cal.qc.ca")
                 .phoneNumber("5144816959")
                 .address("6600 St-Jacques Ouest")
                 .build();

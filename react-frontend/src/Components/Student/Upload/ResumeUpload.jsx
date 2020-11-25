@@ -10,7 +10,7 @@ import {useHistory} from "react-router-dom";
 import * as yup from "yup";
 import {useApi} from "../../Utils/Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
-import './ResumeUpload.css';
+import "./ResumeUpload.css";
 
 export default function ResumeUpload() {
     const classes = useStyles()
@@ -34,19 +34,18 @@ export default function ResumeUpload() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{minHeight: '100%'}}
+        style={{minHeight: "100%"}}
     >
         <Grid item xs={12} sm={7} lg={5}>
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <Formik
-                    onSubmit={async values => readFileAsync(values.file).then(file => {
-                        let dto = {...values}
-                        dto.file = file
-                        return api.post("/resumes", dto)
-                            .then(() => history.push("/dashboard/listcv"))
-                    })
-                    }
-
+                    onSubmit={async values => readFileAsync(values.file)
+                        .then(file => {
+                            let dto = {...values}
+                            dto.file = file
+                            return api.post("/resumes", dto)
+                                .then(() => history.push("/dashboard"))
+                        })}
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
@@ -68,7 +67,6 @@ export default function ResumeUpload() {
                 >
                     {({submitForm, isSubmitting}) => <Form>
                         <Grid container
-                              alignItems="start"
                               justify="center"
                               spacing={2}>
                             <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
