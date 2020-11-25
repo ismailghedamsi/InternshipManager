@@ -203,9 +203,9 @@ export default function RouteSelector() {
                 />
                 <RoleProtectedRoute
                         exact={true}
-                    path="/dashboard/signFormStudent"
-                    component={SignForm}
-                    role={"student"}
+                        path="/dashboard/signFormStudent"
+                        component={SignForm}
+                        role={"student"}
                 />
             </Switch>
         </Container>

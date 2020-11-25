@@ -201,7 +201,7 @@ export default function BusinessEvalution() {
                             name="evaluationCriterias.salary"
                             id="salary"
                             variant="outlined"
-                            label="Préciser le taux horaire."
+                            label="Préciser le taux horaire"
                             required
                             type={"number"}
                             style={{marginRight: "2em"}}
@@ -461,7 +461,7 @@ export default function BusinessEvalution() {
                     <Field component={TextField}
                            name="signature.name"
                            variant="outlined"
-                           label="Nom :"
+                           label="Nom "
                            required
                            disabled
                            fullWidth
