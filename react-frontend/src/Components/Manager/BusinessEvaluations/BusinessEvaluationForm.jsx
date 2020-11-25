@@ -98,7 +98,7 @@ export default function BusinessEvalution() {
                             type="radio"
                             name="evaluationCriterias.internshipCount"
                             id="internship"
-                            value="Deuxieme stage"
+                            value="Deuxième stage"
                     />
                     <label>Deuxième stage</label>
                     <ErrorMessage name={"evaluationCriterias.internshipCount"}>
@@ -107,8 +107,7 @@ export default function BusinessEvalution() {
                 </Grid>
                 <Grid item xs={8}>
                     <label style={{marginRight: "2em"}}>
-                        Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de
-                        stage
+                        Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage
                     </label>
                 </Grid>
                 <Grid item xs={4}>
@@ -124,8 +123,8 @@ export default function BusinessEvalution() {
                     </ErrorMessage>
                 </Grid>
                 <Grid item xs={8}>
-                    <label style={{marginRight: "2em"}}>Des mesures d’accueil facilitent l’intégration du
-                        nouveau stagiaire</label>
+                    <label style={{marginRight: "2em"}}>Des mesures d’accueil facilitent l’intégration du nouveau
+                        stagiaire</label>
                 </Grid>
                 <Grid item xs={4}>
                     <Field as="select" name="evaluationCriterias.easyIntigration">
@@ -148,9 +147,8 @@ export default function BusinessEvalution() {
                     </ErrorMessage>
                 </Grid>
                 <Grid item xs={8}>
-                    <label style={{marginRight: "2em"}}>L’environnement de travail respecte les normes
-                        d’hygiène
-                        et de sécurité au travail</label>
+                    <label style={{marginRight: "2em"}}>L’environnement de travail respecte les normes d’hygiène et de
+                        sécurité au travail</label>
                 </Grid>
                 <Grid item xs={4}>
                     <Field as="select" name="evaluationCriterias.securityWorkPlace">
@@ -184,8 +182,7 @@ export default function BusinessEvalution() {
                     </ErrorMessage>
                 </Grid>
                 <Grid item xs={8}>
-                    <label style={{marginRight: "2em"}}>Le salaire offert est intéressant pour le
-                        stagiaire</label>
+                    <label style={{marginRight: "2em"}}>Le salaire offert est intéressant pour le stagiaire</label>
                 </Grid>
                 <Grid item xs={4}>
                     <Field as="select" name="evaluationCriterias.goodSalary">
@@ -214,8 +211,8 @@ export default function BusinessEvalution() {
                     />
                 </Grid>
                 <Grid item xs={8}>
-                    <label style={{marginRight: "2em"}}>La communication avec le superviseur de stage facilite
-                        le déroulement du stage</label>
+                    <label style={{marginRight: "2em"}}>La communication avec le superviseur de stage facilite le
+                        déroulement du stage</label>
                 </Grid>
                 <Grid item xs={4}>
                     <Field as="select" name="evaluationCriterias.supervisorFacilitatesIntern">
@@ -226,8 +223,7 @@ export default function BusinessEvalution() {
                     </ErrorMessage>
                 </Grid>
                 <Grid item xs={8}>
-                    <label style={{marginRight: "2em"}}>L’équipement fourni est adéquat pour réaliser les
-                        tâches
+                    <label style={{marginRight: "2em"}}>L’équipement fourni est adéquat pour réaliser les tâches
                         confiées</label>
                 </Grid>
                 <Grid item xs={4}>
@@ -250,7 +246,7 @@ export default function BusinessEvalution() {
                     </ErrorMessage>
                 </Grid>
                 <Grid item xs={12}>
-                    <label style={{marginRight: "2em"}}>Préciser le nom d'heure par semaine :</label>
+                    <label style={{marginRight: "2em"}}>Préciser le nombre d'heures par semaine :</label>
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Field
@@ -328,7 +324,7 @@ export default function BusinessEvalution() {
                 <Grid item xs={4}>
                     <Field type="radio" name="observations.preferedInternship" value="Premier stage"/>
                     <label style={{marginRight: "1em"}}>Premier stage</label>
-                    <Field type="radio" name="observations.preferedInternship" value="Deuxieme stage"/>
+                    <Field type="radio" name="observations.preferedInternship" value="Deuxième stage"/>
                     <label>Deuxième stage</label>
                     <ErrorMessage name={"observations.preferedInternship"}>
                         {props.errorMessage()}
@@ -346,8 +342,8 @@ export default function BusinessEvalution() {
                     </ErrorMessage>
                 </Grid>
                 <Grid item xs={8}>
-                    <label style={{marginRight: "2em"}}>Ce milieu désire accueillir le même stagiaire pour un
-                        prochain stage</label>
+                    <label style={{marginRight: "2em"}}>Ce milieu désire accueillir le même stagiaire pour un prochain
+                        stage</label>
                 </Grid>
                 <Grid item xs={4}>
                     <Field type="radio" name="observations.welcomeSameIntern" value="Oui"/>
@@ -359,8 +355,7 @@ export default function BusinessEvalution() {
                     </ErrorMessage>
                 </Grid>
                 <Grid item xs={8}>
-                    <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail
-                        variables</label>
+                    <label style={{marginRight: "2em"}}>Ce milieu offre des quarts de travail variables</label>
                 </Grid>
                 <Grid item xs={4}>
                     <Field type="radio"

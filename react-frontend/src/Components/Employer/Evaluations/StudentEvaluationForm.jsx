@@ -54,7 +54,7 @@ function ProductivityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label>
-                    a - planifier et organiser son travail de façon efficace
+                    a - Planifier et organiser son travail de façon efficace
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -71,7 +71,7 @@ function ProductivityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label style={{marginRight: "2em"}}>
-                    b - comprendre rapidement les directives relatives à son
+                    b - Comprendre rapidement les directives relatives à son
                     travail
                 </label>
             </Grid>
@@ -89,7 +89,7 @@ function ProductivityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label style={{marginRight: "2em"}}>
-                    c - maintenir un rythme de travail soutenu
+                    c - Maintenir un rythme de travail soutenu
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -102,7 +102,7 @@ function ProductivityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label style={{marginRight: "2em"}}>
-                    d - établir ses priorités
+                    d - Établir ses priorités
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -115,7 +115,7 @@ function ProductivityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label style={{marginRight: "2em"}}>
-                    e - respecter ses échéanciers
+                    e - Respecter ses échéanciers
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -158,7 +158,7 @@ function QualityStep(props) {
                 </h3>
             </Grid>
             <Grid item xs={8}>
-                <label>a - respecter les mandats qui lui ont été confiés</label>
+                <label>a - Respecter les mandats qui lui ont été confiés</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="quality.followsInstruction">
@@ -170,7 +170,7 @@ function QualityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label>
-                    b - porter attention aux détails dans la réalisation de ses
+                    b - Porter attention aux détails dans la réalisation de ses
                     tâches
                 </label>
             </Grid>
@@ -184,7 +184,7 @@ function QualityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label>
-                    c - vérifier son travail, s’assurer que rien n’a été oublié
+                    c - Vérifier son travail, s’assurer que rien n’a été oublié
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -196,7 +196,7 @@ function QualityStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>d - rechercher des occasions de se perfectionner</label>
+                <label>d - Rechercher des occasions de se perfectionner</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="quality.strivesForPerfection">
@@ -208,7 +208,7 @@ function QualityStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label>
-                    e - faire une bonne analyse des problèmes rencontrés
+                    e - Faire une bonne analyse des problèmes rencontrés
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -251,7 +251,7 @@ function RelationshipsStep(props) {
                 </h3>
             </Grid>
             <Grid item xs={8}>
-                <label>a - établir facilement des contacts avec les gens</label>
+                <label>a - Établir facilement des contacts avec les gens</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="relationships.connectsEasily">
@@ -262,7 +262,7 @@ function RelationshipsStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>b - contribuer activement au travail d’équipe</label>
+                <label>b - Contribuer activement au travail d’équipe</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="relationships.teamworkContribution">
@@ -274,7 +274,7 @@ function RelationshipsStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label>
-                    c - s’adapter facilement à la culture de l’entreprise
+                    c - S’adapter facilement à la culture de l’entreprise
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -286,7 +286,7 @@ function RelationshipsStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>d - accepter les critiques constructives</label>
+                <label>d - Accepter les critiques constructives</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="relationships.acceptsCriticism">
@@ -297,7 +297,7 @@ function RelationshipsStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>e - être respectueux envers les gens</label>
+                <label>e - Être respectueux envers les gens</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="relationships.respectsOthers">
@@ -355,7 +355,7 @@ function SkillsStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label>
-                    a - démontrer de l’intérêt et de la motivation au travail
+                    a - Démontrer de l’intérêt et de la motivation au travail
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -367,7 +367,7 @@ function SkillsStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>b - exprimer clairement ses idées</label>
+                <label>b - Exprimer clairement ses idées</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="skills.expressesOwnIdeas">
@@ -378,7 +378,7 @@ function SkillsStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>c - faire preuve d’initiative</label>
+                <label>c - Faire preuve d’initiative</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="skills.showsInitiative">
@@ -389,7 +389,7 @@ function SkillsStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>d - travailler de façon sécuritaire</label>
+                <label>d - Travailler de façon sécuritaire</label>
             </Grid>
             <Grid item xs={4}>
                 <Field as="select" name="skills.worksSafely">
@@ -401,7 +401,7 @@ function SkillsStep(props) {
             </Grid>
             <Grid item xs={8}>
                 <label>
-                    e - démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision
+                    e - Démontrer un bon sens des responsabilités ne requérant qu’un minimum de supervision
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -413,13 +413,13 @@ function SkillsStep(props) {
                 </ErrorMessage>
             </Grid>
             <Grid item xs={8}>
-                <label>f - être ponctuel et assidu à son travail</label>
+                <label>f - Être ponctuel et assidu à son travail</label>
             </Grid>
             <Grid item xs={4}>
-                <Field as="select" name="skills.puntual">
+                <Field as="select" name="skills.punctual">
                     {props.mapEvaluationAnswers()}
                 </Field>
-                <ErrorMessage name="skills.puntual">
+                <ErrorMessage name="skills.punctual">
                     {props.errorMessage()}
                 </ErrorMessage>
             </Grid>
@@ -449,7 +449,7 @@ function AppreciationStep(props) {
                 spacing={2}
         >
             <Grid item xs={6}>
-                <label>Appréciation gloabale du stagiaire</label>
+                <label>Appréciation globale du stagiaire</label>
             </Grid>
             <Grid item xs={6}>
                 <Field as="select" name="appreciation.expectations">
