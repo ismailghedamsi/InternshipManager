@@ -112,6 +112,81 @@ OfferStatus.propTypes = {
     currentStudent: PropTypes.any,
 }
 
+function EtatEtudiant(props) {
+    var student = props.currentStudent;
+    var string = ""
+    var ctp = 0;
+    var ctp2 = 0;
+
+    if (student.resumes.length === 0) {
+        string = "Aucun CV"
+    } else if (student.resumes.length > 0 && student.offer === undefined) {
+        ctp = 0;
+        ctp2 = 0;
+        for (var i = 0; i < student.resumes.length; i++) {
+            if (student.resumes[i].reviewState === "APPROVED") {
+                ctp += 1;
+            } else if (student.resumes[i].reviewState === "PENDING") {
+                ctp2 += 1;
+            }
+        }
+        string = "A " + student.resumes.length + " CV en total: " + ctp + " aprouvé et " + ctp2 + " en attente"
+    } else {
+        string = ""
+    }
+
+    if (student.allowedOffers === undefined) {
+        string += " - Aucune offre"
+    } else if (student.allowedOffers.length > 0) {
+        string += " - Droit a " + student.allowedOffers.length + " offres"
+    } else {
+        string += ""
+    }
+    if (student.applications !== undefined) {
+        /*
+        ctp = 0;
+        for (var i = 0; i < student.applications.length; i++) {
+            if (student.applications[i].interview !== null) {
+                ctp += 1;
+            }
+
+        }
+        string += " - " + student.applications.length + " offre accepter par l'étudiant - "
+            + ctp + " demande d'entrevue"
+        ctp = 0;
+        for(var i = 0; i < student.applications.length;i++){
+            if(student.applications[i].contract !== undefined){
+                ctp = i;
+            }
+        }
+        if(student.applications[ctp].contract !== undefined){
+            switch (student.applications.contract.signatureState) {
+                case "WAITING_FOR_EMPLOYER_SIGNATURE" :
+                    string += "En attente de la signature de l'employeur"
+                    break
+                case "REJECTED_BY_EMPLOYER" :
+                    string+="L'employeur a rejeté le contrat"
+                    break
+                case "WAITING_FOR_STUDENT_SIGNATURE" :
+                    string += "En attente de la signature de l'étudiant"
+                    break
+                case "SIGNED":
+                    string +="Contrat signé"
+                    break
+            }
+        }*/
+    } else {
+        string += " - Aucune offre acepter par l'étudiant"
+    }
+
+    return <div><Typography>{string}</Typography></div>
+
+}
+
+EtatEtudiant.propTypes = {
+    currentStudent: PropTypes.any,
+}
+
 
 export default function StudentStatus() {
     const classes = useStyles()
@@ -135,31 +210,7 @@ export default function StudentStatus() {
     }
 
 
-    function etatEtudiant(student) {
-        var string = ""
-        if (student.resumes.length === 0) {
-            string = "Aucun CV"
-        } else if (student.resumes.length > 0 && student.offer === undefined) {
-            var cpt = 0;
-            for (var i = 0; i < student.resumes.length; i++) {
-                if (student.resumes[i].reviewState === "APPROVED") {
-                    cpt += 1;
-                }
-            }
-            string = "A " + student.resumes.length + " CV en total " + cpt + ":qui sont aprouvé"
-        } else {
-            string = ""
-        }
-        if (student.offer === undefined) {
-            string += " - Aucune offre"
-        } else if (student.offer.length > 0) {
-            string += "Droit a " + student.offer.length + " offres"
-        } else {
-            string += ""
-        }
 
-        return string
-    }
 
     return <Grid
         container
@@ -180,11 +231,9 @@ export default function StudentStatus() {
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"} align={"left"}>
                             {students[i].firstName} {students[i].lastName}
                         </Typography>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"} align={"left"}>
-                            {etatEtudiant(students[i])}
-                        </Typography>
-
                     </button>
+
+                    <EtatEtudiant currentStudent={students[i]}/>
 
                     {currentIndex === i &&
                     <div>
@@ -211,7 +260,7 @@ export default function StudentStatus() {
             ) : "Aucun étudiants"}
         </Grid>
         <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === 0 && isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
+            {currentSubtab === 0 ? isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
                 <ResumeStatus key={index}
                               classes={classes}
                               resume={resume}
@@ -219,8 +268,8 @@ export default function StudentStatus() {
                                   setCurrentDoc(resume.file)
                                   openPdf()
                               }}/>
-            ) : "L'étudiant n'a téléversé aucun CV"}
-            {currentSubtab === 2 && isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+            ) : "L'étudiant n'a téléversé aucun CV" : ""}
+            {currentSubtab === 1 ? isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
                 <OfferStatus key={index}
                              classes={classes}
                              offer={offer}
@@ -229,7 +278,7 @@ export default function StudentStatus() {
                                  setCurrentDoc(offer.file)
                                  openPdf()
                              }}/>
-            ) : " L'étudiant n'a accès à aucune offre de stage"}
+            ) : " L'étudiant n'a accès à aucune offre de stage" : ""}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
             <DialogContent className={classes.viewbox}>
