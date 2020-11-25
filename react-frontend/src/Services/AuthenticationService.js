@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 
 const HTTP_CONFLICT = 409;
 
@@ -8,9 +8,9 @@ class AuthenticationService {
 
     constructor() {
         if (this.isUserLoggedIn()) {
-            const user = this.getCurrentUser().username;
-            const pass = this.getCurrentUser().password;
-            this.setupAxiosInterceptors(user, pass);
+            const user = this.getCurrentUser().email
+            const pass = this.getCurrentUser().password
+            this.setupAxiosInterceptors(user, pass)
         }
     }
 
@@ -21,12 +21,12 @@ class AuthenticationService {
             method: "GET",
             url: this.baseUrl + "/auth/user",
             headers: {
-                authorization: "Basic " + btoa(values.username + ":" + values.password)
+                authorization: "Basic " + btoa(values.email + ":" + values.password)
             }
         }).then(response => {
             let user = response.data
             user.password = values.password
-            this.setupAxiosInterceptors(values.username, values.password)
+            this.setupAxiosInterceptors(values.email, values.password)
             this.saveValueToSession("authenticatedUser", JSON.stringify(user))
         })
     }
@@ -41,7 +41,7 @@ class AuthenticationService {
             .catch(error => {
                 if (error.response) {
                     if (error.response.status === HTTP_CONFLICT)
-                        setFieldError("username", "Le nom d'utilisateur n'est pas disponible")
+                        setFieldError("email", "Cette addresse courriel est déja utilisée")
                     else
                         setModalOpen()
                 } else {
@@ -51,9 +51,9 @@ class AuthenticationService {
             })
     }
 
-    setupAxiosInterceptors(username, password) {
+    setupAxiosInterceptors(email, password) {
 
-        let basicAuthHeader = 'Basic ' + btoa(username + ":" + password)
+        let basicAuthHeader = "Basic " + btoa(email + ":" + password)
         this.interceptorId = axios.interceptors.request.use(
             config => {
                 config.headers.authorization = basicAuthHeader

@@ -1,15 +1,15 @@
-import {makeStyles} from '@material-ui/core';
+import {makeStyles} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
-import {DateTimePicker} from 'formik-material-ui-pickers';
-import React, {useEffect, useState} from 'react'
-import {useHistory, useLocation} from 'react-router-dom'
-import * as yup from 'yup';
-import {useApi} from '../../Utils/Services/Hooks';
+import {DateTimePicker} from "formik-material-ui-pickers";
+import React, {useEffect, useState} from "react"
+import {useHistory, useLocation} from "react-router-dom"
+import * as yup from "yup";
+import {useApi} from "../../Utils/Services/Hooks";
 
 export function Rescheduleinterview(props) {
     const location = useLocation()
@@ -31,7 +31,7 @@ export function Rescheduleinterview(props) {
         viewbox: {
             height: "90vh",
             overflow: "auto",
-            backgroundColor: "#fff",
+            backgroundColor: "#fff"
         }
     }))
 
@@ -54,7 +54,7 @@ export function Rescheduleinterview(props) {
         nextState.studentAcceptanceState = "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
         setInterview(nextState)
         api.put("/interviews/" + nextState.id, nextState)
-                .then(() => history.push("/dashboard/listInterview"))
+            .then(() => history.push("/dashboard/listInterview"))
     }
 
     const validationSchema = yup.object().shape({
@@ -113,13 +113,13 @@ export function Rescheduleinterview(props) {
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Field
-                                        component={DateTimePicker}
-                                        name="dateTime"
-                                        variant="outlined"
-                                        label="Date et heure de l'entrevue "
-                                        required
-                                        fullWidth
-                                        format="MM/dd/yyyy"
+                                    component={DateTimePicker}
+                                    name="dateTime"
+                                    variant="outlined"
+                                    label="Date et heure de l'entrevue "
+                                    required
+                                    fullWidth
+                                    format="MM/dd/yyyy"
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>

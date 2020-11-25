@@ -13,7 +13,6 @@ import {SemesterContext} from "../../App";
 import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
-
 export default function SemesterSelector() {
     const classes = useStyles()
     const history = useHistory()

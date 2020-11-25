@@ -45,7 +45,6 @@ public class EmployerControllerTests {
     void beforeEach() {
         expected = Employer.builder()
                 .id(1L)
-                .username("employer")
                 .companyName("AL")
                 .contactName("emp1")
                 .phoneNumber("0123456789")

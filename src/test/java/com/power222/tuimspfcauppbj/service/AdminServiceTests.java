@@ -62,7 +62,7 @@ class AdminServiceTests {
 
     @Test
     void createAdmin() {
-        when(repo.existsByUsername(expected.getUsername())).thenReturn(false);
+        when(repo.existsByEmail(expected.getEmail())).thenReturn(false);
         when(repo.saveAndFlush(expected)).thenReturn(expected);
 
         var actual = svc.createAdmin(expected);
@@ -72,7 +72,7 @@ class AdminServiceTests {
 
     @Test
     void createAdminDuplicateUsername() {
-        when(repo.existsByUsername(expected.getUsername())).thenReturn(true);
+        when(repo.existsByEmail(expected.getEmail())).thenReturn(true);
 
         var actual = svc.createAdmin(expected);
 
@@ -114,12 +114,12 @@ class AdminServiceTests {
     @Test
     void updateUserPassword() {
         final var newPassword = "fuckyes";
-        when(repo.findByUsername(expected.getUsername())).thenReturn(Optional.of(expected));
+        when(repo.findByEmail(expected.getEmail())).thenReturn(Optional.of(expected));
         when(repo.saveAndFlush(expected)).thenReturn(expected);
         when(encoder.encode(newPassword)).thenReturn(newPassword);
         PasswordDTO dto = PasswordDTO.builder()
                 .newPassword(newPassword)
-                .username(expected.getUsername())
+                .username(expected.getEmail())
                 .build();
 
         var actual = svc.updateUserPassword(dto);
@@ -131,10 +131,10 @@ class AdminServiceTests {
     @Test
     void updateInvalidUserPassword() {
         final var newPassword = "fuckyes";
-        when(repo.findByUsername(expected.getUsername())).thenReturn(Optional.empty());
+        when(repo.findByEmail(expected.getEmail())).thenReturn(Optional.empty());
         PasswordDTO dto = PasswordDTO.builder()
                 .newPassword(newPassword)
-                .username(expected.getUsername())
+                .username(expected.getEmail())
                 .build();
 
         var actual = svc.updateUserPassword(dto);

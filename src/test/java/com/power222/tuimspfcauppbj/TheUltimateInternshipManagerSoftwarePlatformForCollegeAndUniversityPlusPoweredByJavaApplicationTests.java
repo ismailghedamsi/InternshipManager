@@ -57,7 +57,7 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
 
     @Test
     void authenticatedPrivateHelloWorldTest() {
-        ResponseEntity<String> response = restTemplate.withBasicAuth("employeur", "password")
+        ResponseEntity<String> response = restTemplate.withBasicAuth("employeur@gmail.com", "password")
                 .exchange("/api/hello/private", HttpMethod.GET, new HttpEntity<Void>(headers), String.class);
 
         assertThat(response, is(notNullValue()));
@@ -80,7 +80,7 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
         headers.add("X-Semester", "a2020d2021");
 
         ResponseEntity<String> response = restTemplate
-                .withBasicAuth("admin", "password")
+                .withBasicAuth("admin@cal.qc.ca", "password")
                 .exchange("/api/students", HttpMethod.GET, new HttpEntity<Void>(headers), String.class);
 
         assertThat(response, is(notNullValue()));
@@ -94,7 +94,7 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
         headers.add("X-Semester", "a2020h2021");
 
         ResponseEntity<List> response = restTemplate
-                .withBasicAuth("admin", "password")
+                .withBasicAuth("admin@cal.qc.ca", "password")
                 .exchange("/api/offers", HttpMethod.GET, new HttpEntity<Void>(headers), List.class);
 
         List<LinkedHashMap> offers = response.getBody();
@@ -111,7 +111,7 @@ class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPow
         headers.add("X-Semester", "a2021h2022");
 
         ResponseEntity<List> response = restTemplate
-                .withBasicAuth("admin", "password")
+                .withBasicAuth("admin@cal.qc.ca", "password")
                 .exchange("/api/offers", HttpMethod.GET, new HttpEntity<Void>(headers), List.class);
 
         List<LinkedHashMap> offers = response.getBody();

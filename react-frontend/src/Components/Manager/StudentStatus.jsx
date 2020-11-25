@@ -119,7 +119,7 @@ export default function StudentStatus() {
     const [students, setStudents] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [currentSubtab, setCurrentSubtab] = useState(0)
-    const [currentDoc, setCurrentDoc] = useState('')
+    const [currentDoc, setCurrentDoc] = useState("")
     const [isPdfOpen, openPdf, closePdf] = useModal()
 
     useEffect(() => {
@@ -146,7 +146,7 @@ export default function StudentStatus() {
                 <div key={i}>
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
                         onClick={() => {
                             setCurrentIndex(i)
                         }}>
@@ -158,7 +158,7 @@ export default function StudentStatus() {
                     <div>
                         <button
                             type={"button"}
-                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
+                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(" ")}
                             onClick={() => setCurrentSubtab(0)}>
                             <Typography color={"textSecondary"} variant={"body2"}>
                                 CVs
@@ -166,7 +166,7 @@ export default function StudentStatus() {
                         </button>
                         <button
                             type={"button"}
-                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
+                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(" ")}
                             onClick={() => setCurrentSubtab(1)}>
                             <Typography color={"textSecondary"} variant={"body2"}>
                                 Offres de stage

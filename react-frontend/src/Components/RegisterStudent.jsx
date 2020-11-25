@@ -21,7 +21,6 @@ export default function RegisterStudent(props) {
             lastName: yup.string().trim().min(2, tooShortError).max(30, tooLongError).required(requiredFieldMsg),
             studentId: yup.string().trim().min(7, tooShortError).max(7, tooLongError).required(requiredFieldMsg),
             phoneNumber: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            username: yup.string().trim().min(5, tooShortError).max(30, tooLongError).required(requiredFieldMsg),
             email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
             passwordConfirm: yup.string()
@@ -31,7 +30,6 @@ export default function RegisterStudent(props) {
         firstName: "",
         lastName: "",
         email: "",
-        username: "",
         password: "",
         passwordConfirm: "",
         studentId: "",
@@ -108,22 +106,11 @@ export default function RegisterStudent(props) {
                         fullWidth
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Field
-                        component={TextField}
-                        name="username"
-                        id="username"
-                        variant="outlined"
-                        label="Nom d'utilisateur"
-                        required
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                     <Field
                         component={TextField}
                         name="email"
-                        id="email"
+                        id="emailStudent"
                         variant="outlined"
                         label="Addresse courriel"
                         type={"email"}
