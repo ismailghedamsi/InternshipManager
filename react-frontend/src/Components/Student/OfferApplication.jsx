@@ -19,7 +19,7 @@ import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
-export default function OfferApplication() {
+export default function OfferApplication({count, pendingCount}) {
     const classes = useStyles()
     const api = useApi()
     const dateParser = useDateParser()
@@ -31,6 +31,26 @@ export default function OfferApplication() {
     const [isResumeModalOpen, openResumeModal, closeResumeModal] = useModal()
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
     const [isReasonOfInterviewModalOpen, openReasonOfInterviewModal, closeReasonOfInterviewModal] = useModal()
+
+    useEffect(() => {
+        api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
+            .then(result => setResumes(result ? result.data : []))
+
+        api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
+            .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.details.limitDateToApply) >= new Date()) : []))
+
+        api.get("/interviews/student/" + AuthenticationService.getCurrentUser().id)
+            .then(result => setInterviews(result ? result.data : []))
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        count(offers.filter(item => !hasStudentAppliedOnOffer(item, AuthenticationService.getCurrentUser())).length)
+
+        pendingCount(
+            offers.filter(item => hasEmployeurAcceptedStudentOnOffer(item, AuthenticationService.getCurrentUser()))
+                .length
+        )
+    })
 
     function sendInterviewDecision(index, studentDecision, reason = "") {
         const nextState = [...interviews]
@@ -58,21 +78,6 @@ export default function OfferApplication() {
                 closeReasonModal()
             })
     }
-
-    useEffect(() => {
-        api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setResumes(result ? result.data : []))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.details.limitDateToApply) >= new Date()) : []))
-    }, [])// eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        api.get("/interviews/student/" + AuthenticationService.getCurrentUser().id)
-            .then(result => setInterviews(result ? result.data : []))
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function hasStudentAppliedOnOffer(offer, student) {
         return offer.applications.find(a => a.student.id === student.id) !== undefined && offer.applications.length !== 0
@@ -167,13 +172,13 @@ export default function OfferApplication() {
                     }
                     {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
                     <div className={classes.buttonDiv}>
-                        <i className={["fa fa-check-square", classes.appliedMark].join(' ')}
+                        <i className={["fa fa-check-square", classes.appliedMark].join(" ")}
                            style={{color: "green", marginRight: 5}}/>
                     </div>
                     }
                     <button
                         type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
                         onClick={() => {
                             setCurrentIndex(i)
                             setCurrent(i)

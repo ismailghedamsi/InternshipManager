@@ -43,12 +43,11 @@ public class StudentControllerTests {
     @BeforeEach
     void beforeEach() {
         expected = Student.builder()
-                .username("etudiant")
                 .firstName("Bob")
                 .lastName("Brutus")
                 .id(4L)
                 .studentId("1234")
-                .email("power@gmail.ca")
+                .email("etudiant@gmail.ca")
                 .phoneNumber("911")
                 .address("9310 Lasalle")
                 .build();

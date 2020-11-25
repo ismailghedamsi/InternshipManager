@@ -23,9 +23,9 @@ export function useApi() {
     const user = AuthenticationService.getCurrentUser()
     const api = axios.create({
         baseURL: "http://localhost:8080/api/",
-        timeout: 40000,
+        timeout: 15000,
         headers: {
-            authorization: "Basic " + btoa(user.username + ":" + user.password)
+            authorization: "Basic " + btoa(user.email + ":" + user.password)
         }
     })
     api.interceptors.request.use(config => {
@@ -52,8 +52,12 @@ export function useDateParser() {
 
 export function useTimeParserFromDate() {
     return date => {
-        return new Date(date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+        return new Date(date).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})
     }
+}
+
+export function useTimeFormatter() {
+    return time => time.split(":")[0] + ":" + time.split(":")[1]
 }
 
 export function useFileReader() {

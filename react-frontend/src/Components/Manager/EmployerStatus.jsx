@@ -18,7 +18,7 @@ export default function StudentStatus() {
     const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([])
     const [currentEmployerIndex, setCurrentEmployerIndex] = useState(0)
     const [isPdfOpen, openPdf, closePdf] = useModal()
-    const [currentDoc, setCurrentDoc] = useState('')
+    const [currentDoc, setCurrentDoc] = useState("")
     const [currentSubtab, setCurrentSubtab] = useState(0)
 
     useEffect(() => {
@@ -43,7 +43,6 @@ export default function StudentStatus() {
                 })
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
 
     function getCurrentEmployerInterviews(index) {
         api.get("/interviews/employer/" + employers[index].id)
@@ -113,7 +112,7 @@ export default function StudentStatus() {
             {employers.length !== 0 ? employers.map((item, i) =>
                 <div key={i}>
                     <button type={"button"}
-                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(' ')}
+                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(" ")}
                             onClick={() => {
                                 setCurrentEmployerIndex(i)
                             }}

@@ -6,13 +6,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import * as locales from '@material-ui/core/locale';
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
-import ThemeProvider from "@material-ui/styles/ThemeProvider";
-import PropTypes from 'prop-types';
-import React, {useEffect, useMemo, useState} from 'react';
+import PropTypes from "prop-types";
+import React, {useEffect, useMemo, useState} from "react";
 import {useApi, useDateParser} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
@@ -155,30 +152,28 @@ function DataTable({report}) {
             })
     }, [currentPage, rowsPerPage, report]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    return <ThemeProvider theme={createMuiTheme(locales['frFR'])}>
-        <TableContainer>
-            <Table>
-                <TableHead>
-                    <DataTableHeader report={report}/>
-                </TableHead>
-                <TableBody>
-                    {bodyMemo}
-                </TableBody>
-                <TableFooter>
-                    <tr>
-                        <TablePagination
-                            component="td"
-                            count={itemCount}
-                            page={currentPage}
-                            onChangePage={(e, page) => setCurrentPage(page)}
-                            rowsPerPage={rowsPerPage}
-                            onChangeRowsPerPage={({target: {value}}) => setRowsPerPage(parseInt(value))}
-                        />
-                    </tr>
-                </TableFooter>
-            </Table>
+    return <TableContainer>
+        <Table>
+            <TableHead>
+                <DataTableHeader report={report}/>
+            </TableHead>
+            <TableBody>
+                {bodyMemo}
+            </TableBody>
+            <TableFooter>
+                <tr>
+                    <TablePagination
+                        component="td"
+                        count={itemCount}
+                        page={currentPage}
+                        onChangePage={(e, page) => setCurrentPage(page)}
+                        rowsPerPage={rowsPerPage}
+                        onChangeRowsPerPage={({target: {value}}) => setRowsPerPage(parseInt(value))}
+                    />
+                </tr>
+            </TableFooter>
+        </Table>
         </TableContainer>
-    </ThemeProvider>
 }
 
 DataTable.propTypes = {
