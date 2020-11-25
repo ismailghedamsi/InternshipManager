@@ -11,6 +11,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import {SemesterContext} from "../../../App";
 import AuthenticationService from "../../../Services/AuthenticationService";
+import NotificationButton from "./NotificationButton"
 
 const Links = {
     admin: [
@@ -168,6 +169,7 @@ export default function Navbar() {
                 <Typography>{getLinks()[current].title}</Typography>
             </Button>
             <div className={classes.spacer}/>
+            <NotificationButton/>
             {AuthenticationService.getCurrentUserRole() === "admin" &&
             <>
                 <Button className={classes.linkButton}

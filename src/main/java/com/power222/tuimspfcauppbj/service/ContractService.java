@@ -11,16 +11,16 @@ import java.util.Optional;
 @Service
 public class ContractService {
     private final ContractRepository contractRepo;
-    private final MailSendingService mailSvc;
+    private final NotificationService notifSvc;
 
-    public ContractService(ContractRepository contractRepo, final MailSendingService mailSvc) {
+    public ContractService(ContractRepository contractRepo, final NotificationService mailSvc) {
         this.contractRepo = contractRepo;
-        this.mailSvc = mailSvc;
+        this.notifSvc = mailSvc;
     }
 
     public Contract createAndSaveNewContract(Contract contract) {
         var newContract = contractRepo.saveAndFlush(contract);
-        mailSvc.notifyAboutCreation(newContract);
+        notifSvc.notifyContractCreation(newContract);
         return newContract;
     }
 
@@ -55,7 +55,7 @@ public class ContractService {
         var contractOp = getContractById(id);
         if (contractOp.isEmpty())
             return;
-        mailSvc.notifyAboutDeletion(contractOp.get());
+        notifSvc.notifyContractDeletion(contractOp.get());
         contractRepo.deleteById(id);
     }
 }
