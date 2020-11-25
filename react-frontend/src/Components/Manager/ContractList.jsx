@@ -115,8 +115,8 @@ export default function ContractList() {
                         <ApprovalButtons
                             onApprove={() => sendDecision(i, true)}
                             onDeny={() => deleteContract(i)}
-                            approveLabel={"Approuver le contrat"}
-                            denyLabel={"Refuser le contrat"}
+                            approveLabel={"Approuvez le contrat"}
+                            denyLabel={"Supprimez le contrat"}
                         />
                         }
                         {contracts[i].signatureState === "WAITING_FOR_ADMIN_SIGNATURE" &&
