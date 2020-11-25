@@ -1,16 +1,16 @@
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {SimpleFileUpload, TextField} from "formik-material-ui";
-import {DatePicker} from 'formik-material-ui-pickers';
+import {DatePicker} from "formik-material-ui-pickers";
 import React from "react";
-import {useHistory} from 'react-router-dom';
+import {useHistory} from "react-router-dom";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../Utils/Services/Hooks";
+import {useApi} from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"

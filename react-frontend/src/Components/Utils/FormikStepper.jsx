@@ -4,9 +4,9 @@ import {Form, Formik} from "formik";
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi, useFileReader, useModal} from "../../Services/Hooks";
 import EvaluationModal from "../Employer/Evaluations/EvaluationModal";
 import BusinessEvaluationModal from "../Manager/BusinessEvaluations/BusinessEvaluationModal";
-import {useApi, useFileReader, useModal} from "./Services/Hooks";
 
 export function FormikStepper({contract, initialValues, children}) {
     const history = useHistory()

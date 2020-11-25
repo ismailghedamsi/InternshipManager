@@ -1,14 +1,14 @@
 import {Typography} from "@material-ui/core";
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from "react";
+import {useApi, useModal} from "../../Services/Hooks";
 import TextboxModal from "../Utils/Modal/TextboxModal";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import {useApi, useModal} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function ResumeApprobation() {
     const classes = useStyles()
     const api = useApi()
-    const [resumes, setResumes] = useState([{name: '', file: '', owner: {}}])
+    const [resumes, setResumes] = useState([{name: "", file: "", owner: {}}])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
 

@@ -1,9 +1,9 @@
 import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import AuthenticationService from '../../../Services/AuthenticationService';
-import {useApi, useTimeParserFromDate} from '../../Utils/Services/Hooks';
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
+import AuthenticationService from "../../../Services/AuthenticationService";
+import {useApi, useTimeParserFromDate} from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function Interviewlist() {

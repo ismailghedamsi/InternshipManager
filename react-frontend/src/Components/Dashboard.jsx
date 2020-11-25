@@ -3,6 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import AuthenticationService from "../Services/AuthenticationService";
+import {RoleProtectedRoute} from "../Services/Routes";
 import Evaluationform from "./Employer/Evaluations/Evaluationform";
 import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList";
 import HiredStudentList from "./Employer/HiredStudentList";
@@ -29,7 +30,6 @@ import ApplicationList from "./Utils/ApplicationList";
 import Footer from "./Utils/Navb-Foot/Footer";
 import Navbar from "./Utils/Navb-Foot/Navbar";
 import OfferList from "./Utils/OfferList";
-import {RoleProtectedRoute} from "./Utils/Services/Routes";
 import SignContract from "./Utils/SignContract";
 import SignForm from "./Utils/SignForm";
 

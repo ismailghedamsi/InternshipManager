@@ -3,9 +3,9 @@ import Button from "@material-ui/core/Button";
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi, useModal} from "../../Services/Hooks";
 import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
-import {useApi, useModal} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function SignContract() {

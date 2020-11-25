@@ -2,10 +2,10 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
-import AuthenticationService from '../../Services/AuthenticationService';
+import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi} from "../../Services/Hooks";
 import OfferDetails from "./OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
-import {useApi} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function OfferList() {

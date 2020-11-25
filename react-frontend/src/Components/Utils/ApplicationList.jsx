@@ -4,8 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi} from "../../Services/Hooks";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
-import {useApi} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function ApplicationList() {

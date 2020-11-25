@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import React, {useEffect, useState} from "react";
-import {useDateParser, useFileReader} from "../../Utils/Services/Hooks";
+import {useDateParser, useFileReader} from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function EvaluationModal({isOpen, data, hide}) {
