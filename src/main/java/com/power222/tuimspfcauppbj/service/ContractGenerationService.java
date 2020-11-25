@@ -97,27 +97,27 @@ public class ContractGenerationService {
             internshipPartiesResponsabilities(contractDto, document);
 
             document.add(new Div().setTextAlignment(TextAlignment.JUSTIFIED)
-                                  .add(new Paragraph("SIGNATURES - VOIR PAGE SUIVANTE\n").setBold())
-                                  .setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))
-                                  .setWidth(documentWidth).setHeight(40f)
-                                  .setFixedPosition(100, 100, UnitValue.createPercentValue(100)));
+                    .add(new Paragraph("SIGNATURES - VOIR PAGE SUIVANTE\n").setBold())
+                    .setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))
+                    .setWidth(documentWidth).setHeight(40f)
+                    .setFixedPosition(100, 100, UnitValue.createPercentValue(100)));
 
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
             document.add(new Div().setTextAlignment(TextAlignment.JUSTIFIED)
-                                  .add(new Paragraph("SIGNATURES\n").setBold())
-                                  .setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))
-                                  .setWidth(documentWidth)
-                                  .setHeight(40f))
+                    .add(new Paragraph("SIGNATURES\n").setBold())
+                    .setBackgroundColor(WebColors.getRGBColor("#DCDCDC"))
+                    .setWidth(documentWidth)
+                    .setHeight(40f))
                     .add(new Paragraph().add(new Text("Les parties s’engagent à respecter cette entente de stage\nEn foi de quoi les parties ont signé,")
-                                                     .setBold()
-                                                     .setTextAlignment(TextAlignment.CENTER))
-                                        .setFirstLineIndent(15f));
+                            .setBold()
+                            .setTextAlignment(TextAlignment.CENTER))
+                            .setFirstLineIndent(15f));
             document.add(new Paragraph().add(new Text("\n\nL'employeur :\n").setBold()).setMarginBottom(75f))
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph().add(new Paragraph("Date").setMarginLeft(290f)));
             document.add(new Paragraph().add(new Text("\nL’étudiant(e) :\n").setBold()).setMarginBottom(75f)
-                                        .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)))
+                    .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4)))
                     .add(new LineSeparator(new SolidLine(1)).setMarginTop(-4))
                     .add(new Paragraph().add(new Paragraph("Date\n").setMarginLeft(290f)));
             document.add(new Paragraph().add(new Text("Le gestionnaire de stage :\n").setBold()).setMarginBottom(75f))
@@ -183,7 +183,8 @@ public class ContractGenerationService {
             out = new ByteArrayOutputStream();
             document.save(out);
             document.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.error("Impossible d'apposer une signature: {}", e.getMessage());
         }
 

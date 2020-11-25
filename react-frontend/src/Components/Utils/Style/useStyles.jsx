@@ -10,7 +10,7 @@ export default function useStyles() {
         list: {
             height: "inherit",
             overflow: "auto",
-            padding: theme.spacing(0, 0, 0, 5)
+            padding: theme.spacing(0, 2)
         },
         viewbox: {
             height: "inherit",
@@ -42,7 +42,7 @@ export default function useStyles() {
 
         },
         buttonDiv: {
-            display: "inline"
+            margin: theme.spacing(1, 0, 0, 0)
         },
         offerState: {
             color: "black",
@@ -128,6 +128,19 @@ export default function useStyles() {
         },
         dividers: {
             margin: theme.spacing(1, 0)
+        },
+        dashboardTab: {
+            padding: theme.spacing(5, 0, 5, 3),
+            backgroundColor: "#FFF",
+            "&:hover": {
+                backgroundColor: "#EEF"
+            }
+        },
+        selectedDashboardTab: {
+            backgroundColor: "#DDF",
+            "&:hover": {
+                backgroundColor: "#EEF"
+            }
         }
 
     }))()

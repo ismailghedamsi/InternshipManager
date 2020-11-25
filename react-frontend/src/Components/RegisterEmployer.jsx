@@ -20,11 +20,10 @@ export default function RegisterEmployer(props) {
             address: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
             contactName: yup.string().trim().min(5, tooShortError).max(50, tooLongError).required(requiredFieldMsg),
             phoneNumber: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            username: yup.string().trim().min(5, tooShortError).max(30, tooLongError).required(requiredFieldMsg),
-            email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
+            email: yup.string().trim().email("L'adresse courriel n'est pas formatée correctement").required(requiredFieldMsg),
             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
             passwordConfirm: yup.string()
-                .oneOf([yup.ref('password'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg),
+                .oneOf([yup.ref("password"), null], "Les mots de passe doivent être identiques").required(requiredFieldMsg)
         })
     const initialValues = {
         companyName: '',
@@ -32,7 +31,6 @@ export default function RegisterEmployer(props) {
         phoneNumber: '',
         address: '',
         email: '',
-        username: '',
         password: '',
         passwordConfirm: '',
     }
@@ -95,22 +93,11 @@ export default function RegisterEmployer(props) {
                         fullWidth
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Field
-                        component={TextField}
-                        name="username"
-                        id="username"
-                        variant="outlined"
-                        label="Nom d'utilisateur"
-                        required
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                     <Field
                         component={TextField}
                         name="email"
-                        id="email"
+                        id="emailEmployer"
                         variant="outlined"
                         label="Addresse courriel"
                         type={"email"}

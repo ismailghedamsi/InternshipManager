@@ -37,7 +37,7 @@ public class SecurityDemoControllerTests {
 
     @Test
     void unauthenticatedPrivateHelloWorldTest() throws Exception {
-        when(userRepo.findByUsername(any())).thenReturn(Optional.empty());
+        when(userRepo.findByEmail(any())).thenReturn(Optional.empty());
 
         mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isUnauthorized());
     }
@@ -45,7 +45,7 @@ public class SecurityDemoControllerTests {
     @Test
     @WithMockUser("test")
     void authenticatedPrivateHelloWorldTest() throws Exception {
-        when(userRepo.findByUsername(any())).thenReturn(Optional.of(Admin.builder().username("admin").password("password").build()));
+        when(userRepo.findByEmail(any())).thenReturn(Optional.of(Admin.builder().email("admin@cal.qc.ca").password("password").build()));
 
         mvc.perform(get("/api/hello/private").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk()).andExpect(content().string(containsString("Hello, private world!")));
     }

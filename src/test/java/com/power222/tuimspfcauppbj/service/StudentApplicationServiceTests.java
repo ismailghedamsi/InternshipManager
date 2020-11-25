@@ -160,6 +160,19 @@ class StudentApplicationServiceTests {
     }
 
     @Test
+    void getAllPendingStudentsApplicationTest() {
+        var s1 = StudentApplication.builder().id(1L).build();
+        var s2 = StudentApplication.builder().id(2L).build();
+        var s3 = StudentApplication.builder().id(3L).build();
+        when(appliRepo.findAllByStateAndContractIsNull(StudentApplicationState.JOB_OFFER_ACCEPTED_BY_STUDENT))
+                .thenReturn(Arrays.asList(s1, s2, s3));
+
+        var actual = appliSvc.getAllContractsWaitingForAdmin();
+
+        assertThat(actual).hasSize(3);
+    }
+
+    @Test
     void getNoStudentsApplicationTest() {
         when(appliRepo.findAll()).thenReturn(Collections.emptyList());
 

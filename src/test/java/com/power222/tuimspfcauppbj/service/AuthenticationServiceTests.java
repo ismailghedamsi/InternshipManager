@@ -38,7 +38,7 @@ public class AuthenticationServiceTests {
         userRepo.deleteAll();
         expectedUser = userRepo.saveAndFlush(
                 Admin.builder()
-                        .username("admin")
+                        .email("admin@cal.qc.ca")
                         .password(encoder.encode("password"))
                         .passwordExpired(true)
                         .build());
@@ -51,7 +51,7 @@ public class AuthenticationServiceTests {
     }
 
     @Test
-    @WithMockUser("admin")
+    @WithMockUser("admin@cal.qc.ca")
     void validUser() {
         User actual = authSvc.getCurrentUser();
 
@@ -63,7 +63,7 @@ public class AuthenticationServiceTests {
         var dto = PasswordDTO.builder()
                 .oldPassword("password")
                 .newPassword("motdepasse")
-                .username(expectedUser.getUsername())
+                .username(expectedUser.getEmail())
                 .build();
 
         var actual = authSvc.updateUserPassword(dto);
@@ -89,7 +89,7 @@ public class AuthenticationServiceTests {
         var dto = PasswordDTO.builder()
                 .oldPassword("password")
                 .newPassword("password")
-                .username(expectedUser.getUsername())
+                .username(expectedUser.getEmail())
                 .build();
 
         var actual = authSvc.updateUserPassword(dto);
@@ -102,7 +102,7 @@ public class AuthenticationServiceTests {
         var dto = PasswordDTO.builder()
                 .oldPassword("bad_pass")
                 .newPassword("motdepasse")
-                .username(expectedUser.getUsername())
+                .username(expectedUser.getEmail())
                 .build();
 
         var actual = authSvc.updateUserPassword(dto);

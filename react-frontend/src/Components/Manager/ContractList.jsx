@@ -7,7 +7,7 @@ import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
-export default function ContractList() {
+export default function ContractList({count}) {
     const classes = useStyles()
     const api = useApi()
     const history = useHistory()
@@ -18,6 +18,11 @@ export default function ContractList() {
         api.get("/contract")
             .then(r => setContracts(r ? r.data : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (count)
+            count(contracts.length)
+    })
 
     function sendDecision(index, isApproved) {
         const nextState = [...contracts]
@@ -69,7 +74,6 @@ export default function ContractList() {
         }
     }
 
-
     function showDeleteContractButtonCondition(i) {
         return contracts[i].signatureState === "WAITING_FOR_EMPLOYER_SIGNATURE" || contracts[i].signatureState === "REJECTED_BY_EMPLOYER"
     }
@@ -81,7 +85,7 @@ export default function ContractList() {
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer
             documents={contracts ? contracts.map(c => c.file ? c.file : "") : []}
-            title={"Contrats"}>
+            title={"Contrats en attente"}>
             {(i, setCurrent) =>
                 <div key={i}>
                     <div className={classes.buttonDiv}>
