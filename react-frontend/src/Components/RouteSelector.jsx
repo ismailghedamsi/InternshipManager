@@ -24,7 +24,7 @@ import ApplicationList from "./Utils/ApplicationList"
 import Footer from "./Utils/Navb-Foot/Footer"
 import Navbar from "./Utils/Navb-Foot/Navbar"
 import OfferList from "./Utils/OfferList"
-import {RoleProtectedRoute} from "./Utils/Services/Routes"
+import {RoleProtectedRoute} from "./Utils/Routes"
 import SignForm from "./Utils/SignForm"
 
 const useStyles = makeStyles(() => ({

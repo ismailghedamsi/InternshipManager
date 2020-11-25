@@ -123,8 +123,12 @@ export function useDateParser() {
 
 export function useTimeParserFromDate() {
     return date => {
-        return new Date(date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+        return new Date(date).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})
     }
+}
+
+export function useTimeFormatter() {
+    return time => time.split(":")[0] + ":" + time.split(":")[1]
 }
 
 export function useFileReader() {
