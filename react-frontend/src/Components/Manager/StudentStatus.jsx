@@ -146,7 +146,7 @@ function EtatEtudiant(props) {
     }
 
     if (student.applications.length > 0) {
-        string += " - " + student.applications.length + " CVs envoyer au offres"
+        string += " - Nombre d'applications " + student.applications.length + ""
         ctp = 0;
         for (var i = 0; i < student.applications.length; i++) {
             if (student.applications[i].interview !== null) {
@@ -160,6 +160,37 @@ function EtatEtudiant(props) {
         } else {
             string += ""
         }
+        ctp = 0
+        ctp2 = 0
+        ctp3 = 0
+        for (var i = 0; i < student.applications.length; i++) {
+            switch (student.applications[i].state) {
+                case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
+                    ctp++
+                    break;
+                case "APPLICATION_REJECTED_BY_EMPLOYER":
+                    break;
+                case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
+                    break;
+                case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
+                    ctp++
+                    break;
+                case "STUDENT_HIRED_BY_EMPLOYER":
+                    break;
+                case "STUDENT_REJECTED_BY_EMPLOYER":
+                    break;
+                case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
+                    ctp++
+                    break;
+                case "JOB_OFFER_ACCEPTED_BY_STUDENT":
+                    ctp2 = 1;
+                    break;
+                case "JOB_OFFER_DENIED_BY_STUDENT":
+                    break;
+            }
+        }
+        string += ctp2 === 1 ? "Etudiant embaucher" : ""
+        string += ctp1 + " - attente de l'application"
 
         for (var i = 0; i < student.applications.length; i++) {
             if (student.applications[i].contract !== null) {
@@ -176,19 +207,20 @@ function EtatEtudiant(props) {
                     case "SIGNED":
                         string += " - Contrat signé est finalisé"
                         break
-                    default:
-                        string += " - Embaucher"
-                        break
                 }
             }
         }
+
     } else if (student.allowedOffers.length > 0) {
         string += " - Aucune offre accepter par l'étudiant"
     }
 
     return <div><Typography>{string}</Typography></div>
-
 }
+
+
+
+
 
 EtatEtudiant.propTypes = {
     currentStudent: PropTypes.any,
