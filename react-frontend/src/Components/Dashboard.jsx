@@ -17,9 +17,9 @@ function TabButton({value, index, onClick, children}) {
     const classes = useStyles()
     const activeClasses = [classes.dashboardTab, index === value && classes.selectedDashboardTab].join(" ")
     return <Typography
-        variant={"h6"}
-        onClick={() => onClick(index)}
-        className={activeClasses}
+            variant={"h6"}
+            onClick={() => onClick(index)}
+            className={activeClasses}
     >
         {children}
     </Typography>

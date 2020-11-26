@@ -118,6 +118,123 @@ OfferStatus.propTypes = {
     currentStudent: PropTypes.any,
 }
 
+function StudentApplicationDetails({student}) {
+
+    function interviewStatus() {
+        const interviewCount = student.applications.filter(appli => appli.interview).length
+
+        if (interviewCount > 0)
+            return interviewCount + " demandes d'entrevue"
+        else
+            return "Aucune demande d'entrevue"
+    }
+
+    function isApplicationPending(appli) {
+        return appli.state === "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW" ||
+            appli.state === "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" ||
+            appli.state === "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION"
+    }
+
+    function applicationStatus() {
+        const acceptedApplication = student.applications.find(appli => appli.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")
+        if (acceptedApplication)
+            return "A accepté l'offre " + acceptedApplication.offer.title + " de "
+                + acceptedApplication.offer.employer.companyName
+
+        let pendingApplications = student.applications.filter(isApplicationPending).length
+        return pendingApplications + " en attente de décision"
+    }
+
+    function contractStatus() {
+        for (const appli of student.applications)
+            if (appli.contract)
+                switch (appli.contract.signatureState) {
+                    case "PENDING_FOR_ADMIN_REVIEW":
+                        return "Contrat en attente de l'approbation du gestionnaire de stage"
+                    case "WAITING_FOR_EMPLOYER_SIGNATURE" :
+                        return "Contrat en attente de la signature de l'employeur"
+                    case "REJECTED_BY_EMPLOYER" :
+                        return "L'employeur a rejeté le contrat"
+                    case "WAITING_FOR_STUDENT_SIGNATURE" :
+                        return "Contrat en attente de la signature de l'étudiant"
+                    case "WAITING_FOR_ADMIN_SIGNATURE":
+                        return "Contrat en attente de la signature du gestionnaire de stage"
+                    case "SIGNED":
+                    default:
+                        return "Contrat signé par tous les parties"
+                }
+        return null
+    }
+
+    return student.applications.length > 0 ? <>
+            <Typography>
+                {interviewStatus()}
+            </Typography>
+            <Typography>
+                {applicationStatus()}
+            </Typography>
+            <Typography>
+                {contractStatus()}
+            </Typography>
+        </>
+        : <Typography>
+            N'a appliqué sur aucune offre
+        </Typography>
+}
+
+StudentApplicationDetails.propTypes = {
+    student: PropTypes.object.isRequired
+}
+
+function StudentStatusDetails({student}) {
+
+    function resumeStatus() {
+        if (student.resumes.length === 0)
+            return "Aucun CV"
+        else {
+            let approvedResumes = 0
+            let pendingResumes = 0
+            let rejectedResumes = 0
+
+            for (const resume of student.resumes) {
+                if (resume.reviewState === "APPROVED")
+                    approvedResumes++
+                else if (resume.reviewState === "PENDING")
+                    pendingResumes++
+                else if (resume.reviewState === "DENIED")
+                    rejectedResumes++
+            }
+
+            return student.resumes.length + " CVs: " + approvedResumes + " approuvés, "
+                + pendingResumes + " en attente, " + rejectedResumes + " rejetés "
+        }
+    }
+
+    function offerStatus() {
+        if (student.allowedOffers.length === 0)
+            return "N'a accès à aucune offre"
+        else
+            return "A accès à " + student.allowedOffers.length + " offres, a déposé "
+                + student.applications.length + " applications"
+    }
+
+    return <>
+        <Typography>
+            {resumeStatus()}
+        </Typography>
+        <Typography>
+            {offerStatus()}
+        </Typography>
+        {student.allowedOffers && student.allowedOffers.length > 0 &&
+        <StudentApplicationDetails student={student}/>
+        }
+    </>
+}
+
+StudentStatusDetails.propTypes = {
+    student: PropTypes.object.isRequired
+}
+
 export default function StudentStatus() {
     const classes = useStyles()
     const api = useApi()
@@ -143,7 +260,9 @@ export default function StudentStatus() {
     return <Grid
         container
         spacing={2}
-        className={classes.main}>
+        className={classes.main}
+        style={{padding: "15px 0 0 15px"}}
+    >
         <Grid item xs={5} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 État des étudiants
@@ -157,11 +276,12 @@ export default function StudentStatus() {
                         onClick={() => {
                             setCurrentIndex(i)
                         }}>
-                        <Typography variant={"body1"} display={"block"}>
+                        <Typography variant={"body1"} display={"block"} align={"left"}>
                             {students[i].firstName} {students[i].lastName}
                         </Typography>
                     </Button>
                     {currentIndex === i && <div>
+                        <StudentStatusDetails student={students[i]}/>
                         <Button
                             variant={currentSubtab === 0 ? "contained" : "outlined"}
                             color={"primary"}
@@ -186,8 +306,8 @@ export default function StudentStatus() {
                 </div>
             ) : "Aucun étudiants"}
         </Grid>
-        <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === 0 && isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
+        <Grid item xs={7} align={"center"} style={{overflow: "auto", height: "100%"}}>
+            {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
                 <ResumeStatus key={index}
                               classes={classes}
                               resume={resume}
@@ -195,8 +315,8 @@ export default function StudentStatus() {
                                   setCurrentDoc(resume.file)
                                   openPdf()
                               }}/>
-            ) : "L'étudiant n'a téléversé aucun CV"}
-            {currentSubtab === 1 && isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+            ) : "L'étudiant n'a téléversé aucun CV")}
+            {currentSubtab === 1 && (isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
                 <OfferStatus key={index}
                              classes={classes}
                              offer={offer}
@@ -205,7 +325,7 @@ export default function StudentStatus() {
                                  setCurrentDoc(offer.file)
                                  openPdf()
                              }}/>
-            ) : "L'étudiant n'a accès à aucune offre de stage"}
+            ) : " L'étudiant n'a accès à aucune offre de stage")}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
             <DialogContent className={classes.viewbox} ref={pdfContainer}>
