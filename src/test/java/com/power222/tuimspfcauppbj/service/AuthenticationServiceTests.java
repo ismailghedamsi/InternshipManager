@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("noBootstrappingTests")
-@SpringBootTest
+@SpringBootTest(properties = {"spring.rsocket.server.port=0"})
 @Transactional
 public class AuthenticationServiceTests {
 
