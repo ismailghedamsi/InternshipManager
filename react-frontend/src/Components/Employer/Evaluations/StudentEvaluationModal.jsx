@@ -8,7 +8,7 @@ import React, {useEffect, useState} from "react";
 import {useDateParser, useFileReader} from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
-export default function EvaluationModal({isOpen, data, hide}) {
+export default function StudentEvaluationModal({isOpen, data, hide}) {
     const [imageSrc, setImageSrc] = useState("")
     const classes = useStyles()
     const parseDate = useDateParser()

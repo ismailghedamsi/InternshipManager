@@ -68,7 +68,7 @@ const Links = {
         },
         {
             title: "Évaluations des stagiaires",
-            url: "/dashboard/evaluationListAdmin"
+            url: "/dashboard/studentEvaluationListAdmin"
         }
     ],
     student: [
@@ -102,7 +102,7 @@ const Links = {
         },
         {
             title: "Évaluations des stagiaires",
-            url: "/dashboard/evaluationList"
+            url: "/dashboard/studentEvaluationList"
         },
         {
             title: "Étudiants embauchés",
@@ -174,7 +174,7 @@ export default function Navbar() {
                     onClick={() => {
                         AuthenticationService.logout()
                         axios.get("http://localhost:8080/api/semesters/present")
-                            .then(r => setSemester(r ? r.data : ""))
+                                .then(r => setSemester(r ? r.data : ""))
                         history.push("/")
                     }}
             >
@@ -185,15 +185,15 @@ export default function Navbar() {
             <List style={{width: 250}} onClick={() => setMenuOpen(false)}>
                 <ListSubheader>Menu</ListSubheader>
                 {getLinks().map((item, index) =>
-                    <ListItem button
-                              key={index}
-                              onClick={() => {
-                                  setCurrent(index)
-                                  history.push(item.url)
-                              }}
-                    >
-                        <ListItemText primary={item.title}/>
-                    </ListItem>
+                        <ListItem button
+                                  key={index}
+                                  onClick={() => {
+                                      setCurrent(index)
+                                      history.push(item.url)
+                                  }}
+                        >
+                            <ListItemText primary={item.title}/>
+                        </ListItem>
                 )}
             </List>
         </Drawer>
