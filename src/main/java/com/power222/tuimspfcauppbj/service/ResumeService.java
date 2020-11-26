@@ -3,7 +3,6 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.ResumeRepository;
 import com.power222.tuimspfcauppbj.model.Resume;
 import com.power222.tuimspfcauppbj.model.Student;
-import com.power222.tuimspfcauppbj.model.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,10 +13,12 @@ import java.util.Optional;
 public class ResumeService {
     private final ResumeRepository resumeRepo;
     private final AuthenticationService authSvc;
+    private final NotificationService notifSvc;
 
-    public ResumeService(ResumeRepository resumeRepo, AuthenticationService authSvc) {
+    public ResumeService(ResumeRepository resumeRepo, AuthenticationService authSvc, NotificationService notifSvc) {
         this.resumeRepo = resumeRepo;
         this.authSvc = authSvc;
+        this.notifSvc = notifSvc;
     }
 
     public List<Resume> getAllResumes() {
@@ -37,18 +38,31 @@ public class ResumeService {
     }
 
     public Optional<Resume> persistNewResume(Resume resume) {
-        User currentUser = authSvc.getCurrentUser();
-        if (currentUser instanceof Student) {
-            resume.setOwner((Student) currentUser);
-            return Optional.of(resumeRepo.saveAndFlush(resume));
-        } else
-            return Optional.empty();
+        return Optional.of(authSvc.getCurrentUser())
+                .filter(u -> u instanceof Student)
+                .map(student -> {
+                    resume.setOwner((Student) student);
+                    return resume;
+                })
+                .map(resumeRepo::saveAndFlush)
+                .map(savedResume -> {
+                    notifSvc.notifyResumeCreation(savedResume);
+                    return savedResume;
+                });
     }
 
     public Optional<Resume> updateResume(long id, Resume resume) {
         return resumeRepo.findById(id)
-                .map(oldResume -> resume.toBuilder().id(oldResume.getId()).build())
-                .map(newResume -> resumeRepo.saveAndFlush(resume));
+                .map(Resume::getId)
+                .map(oldId -> {
+                    resume.setId(oldId);
+                    return resume;
+                })
+                .map(resumeRepo::saveAndFlush)
+                .map(updatedResume -> {
+                    notifSvc.notifyResumeUpdate(updatedResume);
+                    return updatedResume;
+                });
     }
 
     @Transactional

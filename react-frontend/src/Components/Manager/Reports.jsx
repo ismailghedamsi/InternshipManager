@@ -6,8 +6,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import * as locales from "@material-ui/core/locale";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";

@@ -1,9 +1,11 @@
 import {Button} from "@material-ui/core";
+import Badge from "@material-ui/core/Badge"
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {makeStyles} from "@material-ui/core/styles";
 import {Delete} from "@material-ui/icons";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 import React, {useRef, useState} from "react";
 import AuthenticationService from "../../../Services/AuthenticationService"
 import {useNotificationChannel} from "../../../Services/Hooks";
@@ -47,7 +49,14 @@ export default function NotificationButton() {
 
     return <>
         <Button ref={notifAnchor} onClick={() => setNotifOpen(true)} className={classes.linkButton}>
-            <i className="fa fa-bell"/>&ensp;Notifications
+
+            <Badge badgeContent={notifications.length}
+                   color={"secondary"}
+                   anchorOrigin={{vertical: "top", horizontal: "left"}}
+            >
+                <NotificationsIcon fontSize={"small"}/>
+                &ensp;Notifications
+            </Badge>
         </Button>
         <Menu
             anchorEl={notifAnchor.current}

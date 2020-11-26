@@ -26,6 +26,10 @@ class ResumeServiceTests {
     @Mock
     private AuthenticationService authSvc;
 
+    @Mock
+    @SuppressWarnings("unused") //Required dependency of ResumeService
+    private NotificationService notificationService;
+
     @InjectMocks
     private ResumeService resumeSvc;
 
@@ -55,9 +59,9 @@ class ResumeServiceTests {
 
     @Test
     void getAllResumes() {
-        var r1 = Resume.builder().id(1L).build();
-        var r2 = Resume.builder().id(2L).build();
-        var r3 = Resume.builder().id(3L).build();
+        var r1 = Resume.builder().id(1).build();
+        var r2 = Resume.builder().id(2).build();
+        var r3 = Resume.builder().id(3).build();
 
         when(resumeRepo.findAll()).thenReturn(Arrays.asList(r1, r2, r3));
 
@@ -68,9 +72,9 @@ class ResumeServiceTests {
 
     @Test
     void getAllResumesByOwnerId() {
-        var r1 = Resume.builder().id(1L).build();
-        var r2 = Resume.builder().id(2L).build();
-        var r3 = Resume.builder().id(3L).build();
+        var r1 = Resume.builder().id(1).build();
+        var r2 = Resume.builder().id(2).build();
+        var r3 = Resume.builder().id(3).build();
 
         when(resumeRepo.findAllByOwner_Id(expectedStudent.getId())).thenReturn(Arrays.asList(r1, r2, r3));
 

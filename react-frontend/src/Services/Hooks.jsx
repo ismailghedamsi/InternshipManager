@@ -29,7 +29,7 @@ export function useApi() {
         baseURL: "http://localhost:8080/api/",
         timeout: 40000,
         headers: {
-            authorization: "Basic " + btoa(user.username + ":" + user.password)
+            authorization: "Basic " + btoa(user.email + ":" + user.password)
         }
     })
     api.interceptors.request.use(config => {
@@ -96,9 +96,10 @@ export function useNotificationChannel(userId) {
                     socket.requestChannel(flow)
                         .subscribe({
                             onNext: ({data}) => {
-                                setNotifications(prev => {
-                                    return [...prev, data]
-                                })
+                                if (!notifications.find(data))
+                                    setNotifications(prev => {
+                                        return [...prev, data]
+                                    })
                             },
                             onSubscribe: sub => {
                                 sub.request(0x7fffffff)

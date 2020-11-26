@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class RsocketNotificationService {
 
-    private final Map<Long, List<FluxSink<Notification>>> sinks = new ConcurrentHashMap<>();
+    public final Map<Long, List<FluxSink<Notification>>> sinks = new ConcurrentHashMap<>();
     private final NotificationRepository notifRepo;
 
     public RsocketNotificationService(NotificationRepository notifRepo) {
@@ -27,11 +27,29 @@ public class RsocketNotificationService {
 
     public Flux<Notification> subscribeForUser(long userId) {
         AtomicReference<FluxSink<Notification>> fluxSink = new AtomicReference<>();
+        final Runnable cleanup = () -> sinks.get(userId).remove(fluxSink.get());
+
         return Flux.<Notification>create(sink -> {
             fluxSink.set(sink);
             initNotifQueue(userId, sink);
         })
-                .doOnComplete(() -> sinks.get(userId).remove(fluxSink.get()));
+                .doOnError(e -> cleanup.run())
+                .doOnComplete(cleanup)
+                .doOnTerminate(cleanup)
+                .doOnCancel(cleanup);
+    }
+
+    public void subscribeToAcks(Flux<UUID> acks) {
+        acks.filter(uuid -> !uuid.equals(UUID.fromString("00000000-0000-0000-0000-000000000000")))
+                .subscribe(notifRepo::deleteById);
+    }
+
+    public void notify(long userId, String message) {
+        var notif = new Notification(UUID.randomUUID(), userId, message);
+
+        notifRepo.save(notif);
+        if (sinks.containsKey(userId))
+            sinks.get(userId).forEach(sink -> sink.next(notif));
     }
 
     private void initNotifQueue(long userId, FluxSink<Notification> sink) {
@@ -41,18 +59,4 @@ public class RsocketNotificationService {
         sinks.get(userId).add(sink);
         notifRepo.findAllByUserId(userId).forEach(sink::next);
     }
-
-    public void notify(long userId, String message) {
-        var notif = new Notification(UUID.randomUUID(), userId, message);
-
-        notifRepo.save(notif);
-        if (sinks.containsKey(notif.getUserId()))
-            sinks.get(notif.getUserId()).forEach(sink -> sink.next(notif));
-    }
-
-    public void subscribeToAcks(Flux<UUID> acks) {
-        acks.filter(uuid -> !uuid.equals(UUID.fromString("00000000-0000-0000-0000-000000000000")))
-                .subscribe(notifRepo::deleteById);
-    }
-
 }

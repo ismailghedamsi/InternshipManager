@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -66,7 +65,7 @@ public class ContractGenerationService {
         this.authService = authService;
     }
 
-    public boolean generateContract(ContractDTO contractDto) throws IOException {
+    public boolean generateContract(ContractDTO contractDto) {
         if (!(authService.getCurrentUser() instanceof Admin))
             return false;
         return generateContract(contractDto, (Admin) authService.getCurrentUser());
@@ -152,7 +151,6 @@ public class ContractGenerationService {
 
         final var signedContract = contractService.updateContract(contract.getId(), contract);
         signedContract.ifPresent(notifService::notifyContractUpdate);
-
         return signedContract;
     }
 
