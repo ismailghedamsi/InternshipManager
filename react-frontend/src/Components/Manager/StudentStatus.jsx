@@ -208,7 +208,7 @@ function StudentStatusDetails({student}) {
         if (student.allowedOffers.length === 0)
             return "N'a accès à aucune offre"
         else
-            return "A accès à " + student.allowedOffers.length + " offres, a deposé "
+            return "A accès à " + student.allowedOffers.length + " offres, a déposé "
                 + student.applications.length + " applications"
     }
 
