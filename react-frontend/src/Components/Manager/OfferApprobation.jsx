@@ -1,6 +1,5 @@
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from "react";
 import TextboxModal from "../Utils/Modal/TextboxModal";
 import OfferDetails from "../Utils/OfferDetails";
@@ -60,33 +59,6 @@ export default function OfferApprobation({count}) {
                     </Button>
                     {currentOfferIndex === i && <>
                         <OfferDetails offer={offers[i]}/>
-                        <Grid container spacing={1} className={classes.buttonDiv}>
-                            <Grid item xs={6}>
-                                <Button
-                                    onClick={() => sendDecision(i, "APPROVED")}
-                                    variant={"contained"}
-                                    color={"primary"}
-                                    fullWidth
-                                    style={{backgroundColor: "green"}}
-                                >
-                                    <i className="fa fa-check-square" style={{color: "white"}}/>&ensp;Approuver
-                                </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button
-                                    onClick={() => {
-                                        setCurrentOfferIndex(i)
-                                        openReasonModal()
-                                    }}
-                                    variant={"contained"}
-                                    color={"primary"}
-                                    fullWidth
-                                    style={{backgroundColor: "red"}}
-                                >
-                                    <i className="fa fa-ban" style={{color: "white"}}/>&ensp;Refuser
-                                </Button>
-                            </Grid>
-                        </Grid>
                         <ApprovalButtons
                             onApprove={() => sendDecision(i, "APPROVED")}
                             onDeny={() => {

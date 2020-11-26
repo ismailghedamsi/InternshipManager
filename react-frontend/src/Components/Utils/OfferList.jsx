@@ -20,7 +20,7 @@ export default function OfferList({count}) {
             api.get("/offers/employer/" + AuthenticationService.getCurrentUser().email)
                 .then(r => setOffers(r ? r.data : []))
         } else if (AuthenticationService.getCurrentUserRole() === "admin") {
-            api.get("/offers/approved")
+            api.get("/offers")
                 .then(r => {
                     setOffers(r ? r.data : [])
                 })
@@ -48,7 +48,7 @@ export default function OfferList({count}) {
     function getOfferState(offer) {
         if (offer.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>
-        else if (offer.reviewState === "REJECTED")
+        else if (offer.reviewState === "DENIED")
             return <span style={{color: "red"}}>Rejeté
                 <span style={{color: "black"}}>
                     : {offer.reasonForRejection}
