@@ -1,6 +1,5 @@
 import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from "react";
 import TextboxModal from "../Utils/Modal/TextboxModal";
@@ -8,6 +7,7 @@ import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import {useApi, useModal} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
+import ApprovalButtons from "../Utils/ApprovalButtons";
 
 export default function OfferApprobation({count}) {
     const classes = useStyles()
@@ -44,21 +44,20 @@ export default function OfferApprobation({count}) {
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage en attente"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(" ")}
-                        autoFocus={i === 0}
+                    <Button
                         onClick={() => {
                             setCurrent(i)
                             setCurrentOfferIndex(i)
-                        }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                            {" " + offers[i].title + " "}
+                        }}
+                        variant={i === currentOfferIndex ? "contained" : "outlined"}
+                        color={"primary"}>
+                        <Typography variant={"body1"} display={"inline"}>
+                            {offers[i].title}&ensp;
                         </Typography>
-                        <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                        <Typography variant={"body2"} display={"inline"}>
                             {offers[i].employer.companyName} {offers[i].employer.contactName}
                         </Typography>
-                    </button>
+                    </Button>
                     {currentOfferIndex === i && <>
                         <OfferDetails offer={offers[i]}/>
                         <Grid container spacing={1} className={classes.buttonDiv}>
@@ -88,8 +87,17 @@ export default function OfferApprobation({count}) {
                                 </Button>
                             </Grid>
                         </Grid>
+                        <ApprovalButtons
+                            onApprove={() => sendDecision(i, "APPROVED")}
+                            onDeny={() => {
+                                setCurrentOfferIndex(i)
+                                openReasonModal()
+                            }}
+                            approveLabel={"Approuver"}
+                            denyLabel={"Refuser"}
+                        />
                     </>}
-                    <Divider/>
+                    <hr className={classes.hrStyle}/>
                 </div>
             }
         </PdfSelectionViewer>

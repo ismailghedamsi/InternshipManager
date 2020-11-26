@@ -155,42 +155,20 @@ export default function OfferApplication({count, pendingCount}) {
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage disponibles"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    {!hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
-                    <div className={classes.buttonDiv}>
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
-                            style={{marginRight: 5}}
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                openResumeModal()
-                            }}
-                        >
-                            <i className="fa fa-share-square-o"/>
-                        </button>
-                    </div>
-                    }
-                    {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) &&
-                    <div className={classes.buttonDiv}>
-                        <i className={["fa fa-check-square", classes.appliedMark].join(" ")}
-                           style={{color: "green", marginRight: 5}}/>
-                    </div>
-                    }
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
+                    <Button
+                        className={[i === currentIndex ? classes.fileButton : null].join(" ")}
                         onClick={() => {
                             setCurrentIndex(i)
                             setCurrent(i)
                         }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                            {offers[i].title + " "}
+                            {offers[i].title}&ensp;
                         </Typography>
                         <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
                             {offers[i].employer.companyName}
                         </Typography>
-                    </button>
+                    </Button>
                     {currentIndex === i && <OfferDetails offer={offers[i]}/>}
                     {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) && hasEmployeurAcceptedStudentToInterview(i) &&
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
@@ -225,6 +203,18 @@ export default function OfferApplication({count, pendingCount}) {
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {getStudentDecision(offers[i], AuthenticationService.getCurrentUser())}
                     </Typography>
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        disabled={hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser())}
+                        onClick={() => {
+                            setCurrentIndex(i)
+                            openResumeModal()
+                        }}
+                    >
+                        <i className="fa fa-share-square-o"/>&ensp;
+                        {hasStudentAppliedOnOffer(offers[i], AuthenticationService.getCurrentUser()) ? "Application envoyée" : "Appliquer"}
+                    </Button>
                     <hr/>
                 </div>
             }

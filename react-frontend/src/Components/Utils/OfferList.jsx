@@ -58,57 +58,58 @@ export default function OfferList({count}) {
             return <span style={{color: "green"}}>Approuvé</span>
     }
 
+    function showDeleteButtonCondition(i) {
+        return AuthenticationService.getCurrentUserRole() === "employer" && i === currentIndex
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <div className={classes.buttonDiv}>
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
-                            onClick={() => deleteOffer(i)}>
-                            <i className="fa fa-trash" style={{color: "red"}}/>
-                        </button>
-                    </div>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
-                        autoFocus={i === 0}
+                    <Button
+                        className={[i === currentIndex ? classes.fileButton : null].join(" ")}
                         onClick={() => {
                             setCurrentIndex(i)
                             setCurrent(i)
                         }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                            {" " + offers[i].title + " "}
+                            &ensp;{offers[i].title}&ensp;
                         </Typography>
                         <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                            {offers[i].employer.companyName} {offers[i].employer.contactName}
+                            {offers[i].employer.companyName}-{offers[i].employer.contactName}&ensp;
                         </Typography>
-                        <Typography
-                            variant={"body2"}>
-                            État : {getOfferState(offers[i])}
-                        </Typography>
-                    </button>
+                    </Button>
+                    <Typography
+                        variant={"body2"}>
+                        État : {getOfferState(offers[i])}
+                    </Typography>
                     {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                    {offers[i].applications.length !== 0 &&
+                    {offers[i].applications.length !== 0 && <>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={() => {
+                                if (AuthenticationService.getCurrentUserRole() === "employer") {
+                                    history.push("/dashboard/applications", {offerId: offers[i].id})
+                                } else if (AuthenticationService.getCurrentUserRole() === "admin") {
+                                    history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
+                                }
+                            }}
+                        >
+                            Voir les applications
+                        </Button>
+                        &ensp;
+                    </>}
+                    {showDeleteButtonCondition(i) &&
                     <Button
                         variant={"contained"}
-                        color={"primary"}
-                        onClick={() => {
-                            if (AuthenticationService.getCurrentUserRole() === "employer") {
-                                history.push("/dashboard/applications", {offerId: offers[i].id})
-                            } else if (AuthenticationService.getCurrentUserRole() === "admin") {
-                                history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
-                            }
-                        }}
-                    >
-                        Voir les applications
-                    </Button>
-                    }
+                        color={"secondary"}
+                        onClick={() => deleteOffer(i)}>
+                        <i className="fa fa-trash"/>&ensp;Supprimer
+                    </Button>}
                     <hr/>
-                </div>
-            }
+                </div>}
         </PdfSelectionViewer>
     </div>
 }

@@ -6,6 +6,7 @@ import React, {useEffect, useState} from "react";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
+import Button from "@material-ui/core/Button";
 
 export default function OfferAssignements() {
     const classes = useStyles()
@@ -41,54 +42,55 @@ export default function OfferAssignements() {
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Assignation des offres aux étudiants"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentOfferIndex ? classes.fileButton : null].join(' ')}
+                    <Button
+                        variant={i === currentOfferIndex ? "contained" : "outlined"}
+                        color={"primary"}
                         onClick={() => {
                             setCurrent(i)
                             setCurrentOfferIndex(i)
                         }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"}>
-                                {offers[i].title}
-                            </Typography>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                {offers[i].employer.companyName}
-                            </Typography>
-                        </button>
-                        {currentOfferIndex === i &&
-                        students.map((student, j) =>
-                            <div key={j}>
-                                <Formik
-                                    initialValues={{
-                                        offerId: offers[i].id,
-                                        studentId: student.id,
-                                        allowed: false
-                                    }}
-                                    onSubmit={values => {
-                                        return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
-                                            .then(r => {
-                                                const nextState = [...offers]
-                                                nextState.splice(i, 1, r.data)
-                                                setOffers(nextState)
-                                            })
-                                    }}>
-                                    {({submitForm, isSubmitting}) =>
-                                        <Form style={{display: "inline", marginLeft: 16}}>
-                                            <Field name={"offerId"} type={"hidden"}/>
-                                            <Field name={"studentId"} type={"hidden"}/>
-                                            <Field id={"allowed"} name={"allowed"} component={Checkbox}
-                                                   type="checkbox" onChange={submitForm} disabled={isSubmitting}
-                                                   checked={isStudentAllowedInOffer(offers[i], student)}/>
-                                            <label
-                                                htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
-                                            {isSubmitting && <CircularProgress size={18}/>}
-                                        </Form>}
-                                </Formik>
-                            </div>
-                        )}
-                    </div>
+                            {offers[i].title}
+                        </Typography>
+                        <Typography color={"textSecondary"} variant={"body2"}>
+                            {offers[i].employer.companyName}
+                        </Typography>
+                    </Button>
+                    {currentOfferIndex === i &&
+                    students.map((student, j) =>
+                        <div key={j}>
+                            <Formik
+                                initialValues={{
+                                    offerId: offers[i].id,
+                                    studentId: student.id,
+                                    allowed: false
+                                }}
+                                onSubmit={values => {
+                                    return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
+                                        .then(r => {
+                                            const nextState = [...offers]
+                                            nextState.splice(i, 1, r.data)
+                                            setOffers(nextState)
+                                        })
+                                }}>
+                                {({submitForm, isSubmitting}) =>
+                                    <Form style={{display: "inline", marginLeft: 16}}>
+                                        <Field name={"offerId"} type={"hidden"}/>
+                                        <Field name={"studentId"} type={"hidden"}/>
+                                        <Field id={"allowed"} name={"allowed"} component={Checkbox}
+                                               type="checkbox" onChange={submitForm} disabled={isSubmitting}
+                                               checked={isStudentAllowedInOffer(offers[i], student)}/>
+                                        <label
+                                            htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
+                                        {isSubmitting && <CircularProgress size={18}/>}
+                                    </Form>}
+                            </Formik>
+                        </div>
+                    )}
+                    <hr className={classes.hrStyle}/>
+                </div>
             }
-            </PdfSelectionViewer>
-        </div>
+        </PdfSelectionViewer>
+    </div>
 }

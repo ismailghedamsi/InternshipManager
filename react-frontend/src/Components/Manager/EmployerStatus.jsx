@@ -111,40 +111,45 @@ export default function StudentStatus() {
             </Typography>
             {employers.length !== 0 ? employers.map((item, i) =>
                 <div key={i}>
-                    <button type={"button"}
-                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(" ")}
-                            onClick={() => {
-                                setCurrentEmployerIndex(i)
-                            }}
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        style={{textTransform: "none", marginBottom: 10}}
+                        onClick={() => {
+                            setCurrentEmployerIndex(i)
+                        }}
                     >
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        <Typography variant={"body1"} display={"block"}>
                             {employers[i].companyName}
                         </Typography>
-                    </button>
+                    </Button>
                     {currentEmployerIndex === i &&
                     <div>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
+                        <Button
+                            variant={currentSubtab === 0 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => setCurrentSubtab(0)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                Offers
+                            <Typography variant={"body2"}>
+                                Offres
                             </Typography>
-                        </button>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
+                        </Button>
+                        &ensp;
+                        <Button
+                            variant={currentSubtab === 1 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => {
                                 setCurrentSubtab(1)
                                 getCurrentEmployerInterviews(currentEmployerIndex)
                             }
                             }>
                             <Typography color={"textSecondary"} variant={"body2"}>
-                                Inteviews
+                                Entrevues
                             </Typography>
-                        </button>
-                    </div>
-                    }
+                        </Button>
+                    </div>}
+                    <hr/>
                 </div>
             ) : "Aucun employeurs"}
         </Grid>
@@ -153,28 +158,31 @@ export default function StudentStatus() {
             {
                 currentSubtab === offersTabIndex ?
                     currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                            return <div key={k}>
-                                <Typography>
-                                    <button type={"button"} className={[classes.linkButton].join(" ")}
-                                            onClick={() => {
-                                                setCurrentDoc(o.file)
-                                                openPdf()
-                                            }}
-                                    >
-                                        {o.title}
-                                    </button>
-                                </Typography>
-                                <OfferDetails offer={o}/>
-                                <Typography>
-                                    <span>Liste des étudiants selectionnés</span>
-                                </Typography>
-                                {hiredStudentsNames(o)}
-                                {printOfferStatus(o)}
-                                <hr/>
-                            </div>
-                        })
-                        : "L'employeur n'a aucune offre"
-                    : ""
+                        return <div key={k}>
+                            <Typography variant={"h5"}>
+                                {o.title}
+                            </Typography>
+                            <OfferDetails offer={o}/>
+                            <Typography>
+                                <span>Liste des étudiants selectionnés</span>
+                            </Typography>
+                            {hiredStudentsNames(o)}
+                            {printOfferStatus(o)}
+                            <Button
+                                variant={"contained"}
+                                color={"primary"}
+                                size={"small"}
+                                onClick={() => {
+                                    setCurrentDoc(o.file)
+                                    openPdf()
+                                }}>
+                                <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
+                            </Button>
+                            <hr/>
+                        </div>
+                    })
+            : "L'employeur n'a aucune offre"
+            : ""
             }
             {
                 currentSubtab === interviewsTabIndex ?

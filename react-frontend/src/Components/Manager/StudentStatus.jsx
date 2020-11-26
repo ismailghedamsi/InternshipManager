@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PDF/PdfDocument";
 import {useApi, useDateParser, useModal} from "../Utils/Services/Hooks";
@@ -30,15 +30,19 @@ function ResumeStatus(props) {
     }
 
     return <div>
-        <Typography>
-            <button type={"button"}
-                    className={[props.classes.linkButton].join(" ")}
-                    onClick={props.onClick}>
-                {props.resume.name}
-            </button>
+        <Typography variant={"h5"}>
+            {props.resume.name}
         </Typography>
         <Typography>
             État: {getResumeState(props.resume)}
+            &emsp;
+            <Button
+                variant={"contained"}
+                color={"primary"}
+                size={"small"}
+                onClick={props.onClick}>
+                <i className="fa fa-file-text-o"/>&ensp;Afficher le CV
+            </Button>
         </Typography>
         <hr/>
     </div>
@@ -73,12 +77,8 @@ function OfferStatus(props) {
     }
 
     return <div>
-        <Typography>
-            <button type={"button"}
-                    className={[props.classes.linkButton].join(" ")}
-                    onClick={props.onClick}>
-                {props.offer.title}
-            </button>
+        <Typography variant={"h5"}>
+            {props.offer.title}
         </Typography>
         <OfferDetails offer={props.offer}/>
         <Typography
@@ -99,7 +99,13 @@ function OfferStatus(props) {
                 &emsp;A été sélectionné: {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
                 &emsp;Offre: {parseApplicationState(application)}
                 </span>
-            }
+            }&emsp;
+            <Button variant={"contained"}
+                    color={"primary"}
+                    size={"small"}
+                    onClick={props.onClick}>
+                <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
+            </Button>
         </Typography>
         <hr/>
     </div>
@@ -112,7 +118,6 @@ OfferStatus.propTypes = {
     currentStudent: PropTypes.any,
 }
 
-
 export default function StudentStatus() {
     const classes = useStyles()
     const api = useApi()
@@ -121,6 +126,7 @@ export default function StudentStatus() {
     const [currentSubtab, setCurrentSubtab] = useState(0)
     const [currentDoc, setCurrentDoc] = useState("")
     const [isPdfOpen, openPdf, closePdf] = useModal()
+    const pdfContainer = useRef()
 
     useEffect(() => {
         api.get("students").then(resp => setStudents(resp ? resp.data : []))
@@ -144,36 +150,38 @@ export default function StudentStatus() {
             </Typography>
             {students.length !== 0 ? students.map((item, i) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        style={{textTransform: "none", marginBottom: 10}}
                         onClick={() => {
                             setCurrentIndex(i)
                         }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        <Typography variant={"body1"} display={"block"}>
                             {students[i].firstName} {students[i].lastName}
                         </Typography>
-                    </button>
-                    {currentIndex === i &&
-                    <div>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(" ")}
+                    </Button>
+                    {currentIndex === i && <div>
+                        <Button
+                            variant={currentSubtab === 0 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => setCurrentSubtab(0)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
+                            <Typography variant={"body2"}>
                                 CVs
                             </Typography>
-                        </button>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(" ")}
+                        </Button>
+                        &ensp;
+                        <Button
+                            variant={currentSubtab === 1 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => setCurrentSubtab(1)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
+                            <Typography variant={"body2"}>
                                 Offres de stage
                             </Typography>
-                        </button>
-                    </div>
-                    }
+                        </Button>
+                    </div>}
                     <hr/>
                 </div>
             ) : "Aucun étudiants"}
@@ -200,8 +208,8 @@ export default function StudentStatus() {
             ) : "L'étudiant n'a accès à aucune offre de stage"}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-            <DialogContent className={classes.viewbox}>
-                <PdfDocument document={currentDoc}/>
+            <DialogContent className={classes.viewbox} ref={pdfContainer}>
+                <PdfDocument document={currentDoc} container={pdfContainer}/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={closePdf} color="primary">
