@@ -1,12 +1,11 @@
-import {Typography} from "@material-ui/core";
+import {Divider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from "react";
 import {useApi, useModal} from "../../Services/Hooks";
 import TextboxModal from "../Utils/Modal/TextboxModal";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
+import ApprovalButtons from "../Utils/ApprovalButtons";
 
 export default function ResumeApprobation({count}) {
     const classes = useStyles()
@@ -41,50 +40,31 @@ export default function ResumeApprobation({count}) {
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"CVs en attente"}>
             {(i, setCurrent) => <div key={i}>
-                <button
-                    type={"button"}
-                    className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
-                    autoFocus={i === 0}
+                <Button
                     onClick={() => {
                         setCurrentIndex(i)
                         setCurrent(i)
                     }}
+                    variant={i === currentIndex ? "contained" : "outlined"}
+                    color={"primary"}
                 >
-                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                        {" " + resumes[i].name + " "}
+                    <Typography variant={"body1"} display={"inline"}>
+                        {resumes[i].name}&ensp;
                     </Typography>
-                    <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                    <Typography variant={"body2"} display={"inline"}>
                         {resumes[i].owner.firstName} {resumes[i].owner.lastName}
                     </Typography>
-                </button>
-                <Grid container spacing={1} className={classes.buttonDiv}>
-                    <Grid item xs={6}>
-                        <Button
-                            onClick={() => sendDecision(i, "APPROVED")}
-                            variant={"contained"}
-                            color={"primary"}
-                            fullWidth
-                            style={{backgroundColor: "green"}}
-                        >
-                            <i className="fa fa-check-square" style={{color: "white"}}/>&ensp;Approuver
-                        </Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Button
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                openReasonModal()
-                            }}
-                            variant={"contained"}
-                            color={"primary"}
-                            fullWidth
-                            style={{backgroundColor: "red"}}
-                        >
-                            <i className="fa fa-ban" style={{color: "white"}}/>&ensp;Refuser
-                        </Button>
-                    </Grid>
-                </Grid>
-                <Divider/>
+                </Button>
+                <ApprovalButtons
+                    onApprove={() => sendDecision(i, "APPROVED")}
+                    onDeny={() => {
+                        setCurrentIndex(i)
+                        openReasonModal()
+                    }}
+                    approveLabel={"Approuver"}
+                    denyLabel={"Refuser"}
+                />
+                <Divider className={classes.dividers}/>
             </div>}
         </PdfSelectionViewer>
         <TextboxModal

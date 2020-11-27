@@ -1,11 +1,11 @@
-import {Typography} from "@material-ui/core";
+import {Divider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useApi, useDateParser, useModal} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PDF/PdfDocument";
@@ -30,17 +30,21 @@ function ResumeStatus(props) {
     }
 
     return <div>
-        <Typography>
-            <button type={"button"}
-                    className={[props.classes.linkButton].join(" ")}
-                    onClick={props.onClick}>
-                {props.resume.name}
-            </button>
+        <Typography variant={"h5"}>
+            {props.resume.name}
         </Typography>
         <Typography>
-            État: {getResumeState(props.resume)}
+            État : {getResumeState(props.resume)}
+            &emsp;
+            <Button
+                variant={"contained"}
+                color={"primary"}
+                size={"small"}
+                onClick={props.onClick}>
+                <i className="fa fa-file-text-o"/>&ensp;Afficher le CV
+            </Button>
         </Typography>
-        <hr/>
+        <Divider/>
     </div>
 }
 
@@ -58,7 +62,7 @@ function OfferStatus(props) {
         if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
             return "acceptée par l'étudiant"
         else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
-            return "refusée par l'étudiant. Raison: " + interview.reasonForRejectionByStudent
+            return "refusée par l'étudiant. Raison : " + interview.reasonForRejectionByStudent
         else
             return "en attente de réponse de l'étudiant"
     }
@@ -67,41 +71,43 @@ function OfferStatus(props) {
         if (application.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")
             return "Acceptée par l'étudiant"
         else if (application.state === "JOB_OFFER_DENIED_BY_STUDENT")
-            return "Refusée par l'étudiant. Raison: " + application.reasonForRejection
+            return "Refusée par l'étudiant. Raison : " + application.reasonForRejection
         else
             return "En attente de réponse de l'étudiant"
     }
 
     return <div>
-        <Typography>
-            <button type={"button"}
-                    className={[props.classes.linkButton].join(" ")}
-                    onClick={props.onClick}>
-                {props.offer.title}
-            </button>
+        <Typography variant={"h5"}>
+            {props.offer.title}
         </Typography>
         <OfferDetails offer={props.offer}/>
         <Typography
             variant={"body2"}>
-            A appliqué: {application ? "Oui" : "Non"} &emsp;
+            A appliqué : {application ? "Oui" : "Non"} &emsp;
             {application && <span>
             {
                 application.interview ?
                     <span>
-                   Entrevue: {parseInterviewDate(application.interview.dateTime)}, {parseInterviewState(application.interview)}
+                   Entrevue : {parseInterviewDate(application.interview.dateTime)}, {parseInterviewState(application.interview)}
                 </span>
                     :
                     <span>
-                   Entrevue: Pas planifiée
+                   Entrevue  Pas planifiée
                 </span>
             }
                 <br/>
-                &emsp;A été sélectionné: {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
-                &emsp;Offre: {parseApplicationState(application)}
+                &emsp;A été sélectionné : {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
+                &emsp;Offre : {parseApplicationState(application)}
                 </span>
-            }
+            }&emsp;
+            <Button variant={"contained"}
+                    color={"primary"}
+                    size={"small"}
+                    onClick={props.onClick}>
+                <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
+            </Button>
         </Typography>
-        <hr/>
+        <Divider/>
     </div>
 }
 
@@ -199,7 +205,7 @@ function StudentStatusDetails({student}) {
                     rejectedResumes++
             }
 
-            return student.resumes.length + " CVs: " + approvedResumes + " approuvés, "
+            return student.resumes.length + " CVs : " + approvedResumes + " approuvés, "
                 + pendingResumes + " en attente, " + rejectedResumes + " rejetés "
         }
     }
@@ -237,6 +243,7 @@ export default function StudentStatus() {
     const [currentSubtab, setCurrentSubtab] = useState(0)
     const [currentDoc, setCurrentDoc] = useState("")
     const [isPdfOpen, openPdf, closePdf] = useModal()
+    const pdfContainer = useRef()
 
     useEffect(() => {
         api.get("students").then(resp => setStudents(resp ? resp.data : []))
@@ -250,7 +257,6 @@ export default function StudentStatus() {
         return students[currentIndex].allowedOffers && students[currentIndex].allowedOffers.length > 0
     }
 
-
     return <Grid
         container
         spacing={2}
@@ -263,41 +269,42 @@ export default function StudentStatus() {
             </Typography>
             {students.length !== 0 ? students.map((item, i) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        style={{textTransform: "none", marginBottom: 10}}
                         onClick={() => {
                             setCurrentIndex(i)
                         }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"} align={"left"}>
+                        <Typography variant={"body1"} display={"block"} align={"left"}>
                             {students[i].firstName} {students[i].lastName}
                         </Typography>
-                    </button>
-
-                    {currentIndex === i &&
-                    <div>
+                    </Button>
+                    {currentIndex === i && <div>
                         <StudentStatusDetails student={students[i]}/>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(" ")}
+                        <Button
+                            variant={currentSubtab === 0 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => setCurrentSubtab(0)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
+                            <Typography variant={"body2"}>
                                 CVs
                             </Typography>
-                        </button>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(" ")}
+                        </Button>
+                        &ensp;
+                        <Button
+                            variant={currentSubtab === 1 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => setCurrentSubtab(1)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
+                            <Typography variant={"body2"}>
                                 Offres de stage
                             </Typography>
-                        </button>
-                    </div>
-                    }
-                    <hr/>
+                        </Button>
+                    </div>}
+                    <Divider className={classes.dividers}/>
                 </div>
-            ) : "Aucun étudiants"}
+            ) : "Aucun étudiant"}
         </Grid>
         <Grid item xs={7} align={"center"} style={{overflow: "auto", height: "100%"}}>
             {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
@@ -321,8 +328,8 @@ export default function StudentStatus() {
             ) : " L'étudiant n'a accès à aucune offre de stage")}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-            <DialogContent className={classes.viewbox}>
-                <PdfDocument document={currentDoc}/>
+            <DialogContent className={classes.viewbox} ref={pdfContainer}>
+                <PdfDocument document={currentDoc} container={pdfContainer}/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={closePdf} color="primary">

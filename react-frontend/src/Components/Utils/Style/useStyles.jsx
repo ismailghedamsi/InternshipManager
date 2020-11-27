@@ -38,7 +38,10 @@ export default function useStyles() {
         fileButton: {
             outline: "none",
             backgroundColor: theme.palette.primary.light,
-            display: "inline"
+            display: "inline",
+            '&:hover': {
+                backgroundColor: "#00000055",
+            }
 
         },
         buttonDiv: {
