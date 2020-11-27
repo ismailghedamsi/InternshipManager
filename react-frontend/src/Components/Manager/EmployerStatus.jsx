@@ -1,9 +1,9 @@
 import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import React, {useEffect, useState} from "react";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PDF/PdfDocument";
-import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 import * as PropTypes from "prop-types";
 

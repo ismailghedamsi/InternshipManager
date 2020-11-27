@@ -9,7 +9,7 @@ import {DateTimePicker} from "formik-material-ui-pickers";
 import React, {useEffect, useState} from "react"
 import {useHistory, useLocation} from "react-router-dom"
 import * as yup from "yup";
-import {useApi} from "../../Utils/Services/Hooks";
+import {useApi} from "../../../Services/Hooks";
 
 export function Rescheduleinterview(props) {
     const location = useLocation()

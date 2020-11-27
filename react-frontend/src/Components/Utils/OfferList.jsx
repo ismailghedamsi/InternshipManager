@@ -3,9 +3,9 @@ import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
-import {useApi} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function OfferList({count}) {
