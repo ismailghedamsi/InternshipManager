@@ -10,7 +10,7 @@ import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import React, {useEffect, useMemo, useState} from "react";
-import {useApi, useDateParser} from "../Utils/Services/Hooks";
+import {useApi, useDateParser} from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const reports = [

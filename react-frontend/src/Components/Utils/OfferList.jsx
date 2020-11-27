@@ -3,10 +3,11 @@ import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
-import {useApi} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
+import {Divider} from "@material-ui/core";
 
 export default function OfferList({count}) {
     const classes = useStyles()
@@ -20,7 +21,7 @@ export default function OfferList({count}) {
             api.get("/offers/employer/" + AuthenticationService.getCurrentUser().email)
                 .then(r => setOffers(r ? r.data : []))
         } else if (AuthenticationService.getCurrentUserRole() === "admin") {
-            api.get("/offers/approved")
+            api.get("/offers")
                 .then(r => {
                     setOffers(r ? r.data : [])
                 })
@@ -48,7 +49,7 @@ export default function OfferList({count}) {
     function getOfferState(offer) {
         if (offer.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>
-        else if (offer.reviewState === "REJECTED")
+        else if (offer.reviewState === "DENIED")
             return <span style={{color: "red"}}>Rejeté
                 <span style={{color: "black"}}>
                     : {offer.reasonForRejection}
@@ -58,57 +59,61 @@ export default function OfferList({count}) {
             return <span style={{color: "green"}}>Approuvé</span>
     }
 
+    function showDeleteButtonCondition(i) {
+        return AuthenticationService.getCurrentUserRole() === "employer" && i === currentIndex
+    }
+
+    function redirection(i) {
+        if (AuthenticationService.getCurrentUserRole() === "employer") {
+            return history.push("/dashboard/applications", {offerId: offers[i].id})
+        } else if (AuthenticationService.getCurrentUserRole() === "admin") {
+            return history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
+        }
+        return "";
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <div className={classes.buttonDiv}>
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
-                            onClick={() => deleteOffer(i)}>
-                            <i className="fa fa-trash" style={{color: "red"}}/>
-                        </button>
-                    </div>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
-                        autoFocus={i === 0}
+                    <Button
+                        className={[i === currentIndex ? classes.fileButton : null].join(" ")}
                         onClick={() => {
                             setCurrentIndex(i)
                             setCurrent(i)
                         }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                            {" " + offers[i].title + " "}
+                            &ensp;{offers[i].title}&ensp;
                         </Typography>
                         <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                            {offers[i].employer.companyName} {offers[i].employer.contactName}
+                            {offers[i].employer.companyName}-{offers[i].employer.contactName}&ensp;
                         </Typography>
-                        <Typography
-                            variant={"body2"}>
-                            État : {getOfferState(offers[i])}
-                        </Typography>
-                    </button>
+                    </Button>
+                    <Typography
+                        variant={"body2"}>
+                        État : {getOfferState(offers[i])}
+                    </Typography>
                     {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                    {offers[i].applications.length !== 0 &&
+                    {offers[i].applications.length !== 0 && <>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={redirection(i)}
+                        >
+                            Voir les applications
+                        </Button>
+                        &ensp;
+                    </>}
+                    {showDeleteButtonCondition(i) &&
                     <Button
                         variant={"contained"}
-                        color={"primary"}
-                        onClick={() => {
-                            if (AuthenticationService.getCurrentUserRole() === "employer") {
-                                history.push("/dashboard/applications", {offerId: offers[i].id})
-                            } else if (AuthenticationService.getCurrentUserRole() === "admin") {
-                                history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
-                            }
-                        }}
-                    >
-                        Voir les applications
-                    </Button>
-                    }
-                    <hr/>
-                </div>
-            }
+                        color={"secondary"}
+                        onClick={() => deleteOffer(i)}>
+                        <i className="fa fa-trash"/>&ensp;Supprimer
+                    </Button>}
+                    <Divider className={classes.dividers}/>
+                </div>}
         </PdfSelectionViewer>
     </div>
 }

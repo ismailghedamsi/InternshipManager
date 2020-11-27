@@ -1,9 +1,9 @@
-import {Button, Dialog, DialogContent, Grid, Typography} from "@material-ui/core";
+import {Button, Dialog, DialogContent, Divider, Grid, Typography} from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import React, {useEffect, useState} from "react";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PDF/PdfDocument";
-import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function StudentStatus() {
@@ -111,40 +111,45 @@ export default function StudentStatus() {
             </Typography>
             {employers.length !== 0 ? employers.map((item, i) =>
                 <div key={i}>
-                    <button type={"button"}
-                            className={[classes.linkButton, i === currentEmployerIndex ? classes.fileButton : null].join(" ")}
-                            onClick={() => {
-                                setCurrentEmployerIndex(i)
-                            }}
+                    <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        style={{textTransform: "none", marginBottom: 10}}
+                        onClick={() => {
+                            setCurrentEmployerIndex(i)
+                        }}
                     >
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        <Typography variant={"body1"} display={"block"}>
                             {employers[i].companyName}
                         </Typography>
-                    </button>
+                    </Button>
                     {currentEmployerIndex === i &&
                     <div>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
+                        <Button
+                            variant={currentSubtab === 0 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => setCurrentSubtab(0)}>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                Offers
+                            <Typography variant={"body2"}>
+                                Offres
                             </Typography>
-                        </button>
-                        <button
-                            type={"button"}
-                            className={[classes.linkButton, currentSubtab === 1 ? classes.fileButton : null].join(' ')}
+                        </Button>
+                        &ensp;
+                        <Button
+                            variant={currentSubtab === 1 ? "contained" : "outlined"}
+                            color={"primary"}
+                            style={{textTransform: "none"}}
                             onClick={() => {
                                 setCurrentSubtab(1)
                                 getCurrentEmployerInterviews(currentEmployerIndex)
                             }
                             }>
                             <Typography color={"textSecondary"} variant={"body2"}>
-                                Inteviews
+                                Entrevues
                             </Typography>
-                        </button>
-                    </div>
-                    }
+                        </Button>
+                    </div>}
+                    <Divider className={classes.dividers}/>
                 </div>
             ) : "Aucun employeurs"}
         </Grid>
@@ -152,40 +157,41 @@ export default function StudentStatus() {
             {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
             {
                 currentSubtab === offersTabIndex ?
-                    currentEmployerOffers ? currentEmployerOffers.map((o, k) => {
-                            return <div key={k}>
-                                <Typography>
-                                    <button type={"button"} className={[classes.linkButton].join(" ")}
-                                            onClick={() => {
-                                                setCurrentDoc(o.file)
-                                                openPdf()
-                                            }}
-                                    >
-                                        {o.title}
-                                    </button>
-                                </Typography>
-                                <OfferDetails offer={o}/>
-                                <Typography>
-                                    <span>Liste des étudiants selectionnés</span>
-                                </Typography>
-                                {hiredStudentsNames(o)}
-                                {printOfferStatus(o)}
-                                <hr/>
-                            </div>
-                        })
-                        : "L'employeur n'a aucune offre"
-                    : ""
+                    currentEmployerOffers && currentEmployerOffers.map((o, k) => {
+                        return <div key={k}>
+                            <Typography variant={"h5"}>
+                                {o.title}
+                            </Typography>
+                            <OfferDetails offer={o}/>
+                            <Typography>
+                                <span>Liste des étudiants sélectionnés</span>
+                            </Typography>
+                            {hiredStudentsNames(o)}
+                            {printOfferStatus(o)}
+                            <Button
+                                variant={"contained"}
+                                color={"primary"}
+                                size={"small"}
+                                onClick={() => {
+                                    setCurrentDoc(o.file)
+                                    openPdf()
+                                }}>
+                                <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
+                            </Button>
+                            <Divider className={classes.dividers}/>
+                        </div>
+                    })
+                    : "L'employeur n'a aucune offre"
             }
             {
                 currentSubtab === interviewsTabIndex ?
-                    currentSubtab === interviewsTabIndex && currentEmployerInterviews ? currentEmployerInterviews.map((interview, index) => {
-                            return <div key={index}>
-                                <InterviewStatus classes={classes} interview={interview}/>
-                                <hr/>
-                            </div>
-                        })
-                        : "L'employeur n'a programmé aucune entrevue"
-                    : ""
+                    currentSubtab === interviewsTabIndex && currentEmployerInterviews && currentEmployerInterviews.map((interview, index) => {
+                        return <div key={index}>
+                            <InterviewStatus classes={classes} interview={interview}/>
+                            <hr/>
+                        </div>
+                    })
+                    : "L'employeur n'a programmé aucune entrevue"
             }
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
