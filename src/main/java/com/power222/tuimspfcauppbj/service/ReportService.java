@@ -30,11 +30,11 @@ public class ReportService {
     }
 
     public Page<Student> studentsWithoutResume(int page, int itemPerPage) {
-        return studentRepo.findAllByResumesIsEmpty(PageRequest.of(page, itemPerPage));
+        return studentRepo.findAllBySemestersAndResumesIsEmpty(SemesterContext.getCurrent(), PageRequest.of(page, itemPerPage));
     }
 
     public Page<Student> studentsPendingResumes(int page, int itemPerPage) {
-        return studentRepo.findAllByResumesReviewStatePending(PageRequest.of(page, itemPerPage));
+        return studentRepo.findAllBySemestersAndResumesReviewStatePending(SemesterContext.getCurrent(), PageRequest.of(page, itemPerPage));
     }
 
     public Page<Student> studentsNotHired(int page, int itemPerPage) {
