@@ -51,6 +51,7 @@ function EmployerApplicationDetails({offers}) {
                             break;
                         case "SIGNED":
                             contractFinalizedCount++
+                            break;
                         default:
                             break;
                     }
@@ -58,7 +59,7 @@ function EmployerApplicationDetails({offers}) {
         return contractsWaitingCount + " contrats en attente, " + contractFinalizedCount + " contrats finalisés"
     }
 
-    return <>
+    return offers.find(offer => offer.applications).length > 0 ? <>
         <Typography>
             {interviewStatus()}
         </Typography>
@@ -68,7 +69,9 @@ function EmployerApplicationDetails({offers}) {
         <Typography>
             {contractsStatus()}
         </Typography>
-    </>
+    </> : <Typography>
+        N'a reçu aucune application d'étudiant
+    </Typography>
 }
 
 EmployerApplicationDetails.propTypes = {
@@ -102,9 +105,9 @@ function EmployerStatusDetails({offers}) {
         <Typography>
             {offerStatus()}
         </Typography>
-        <Typography>
-            <EmployerApplicationDetails offers={offers}/>
-        </Typography>
+        {offers.find(offer => offer.applications) &&
+        <EmployerApplicationDetails offers={offers}/>
+        }
     </>
 }
 
