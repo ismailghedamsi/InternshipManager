@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
 import React, {useContext} from "react";
-import {Link as RouterLink, Redirect, useHistory} from "react-router-dom";
+import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
 import * as yup from "yup";
 import {ModalContext} from "../App";
 import fl from "../img/fl.png";
@@ -25,8 +25,10 @@ export default function Login() {
     const {open} = useContext(ModalContext)
     const history = useHistory()
     const classes = useStyles()
+    const location = useLocation()
+    console.log(location.state)
     const initialValues = {
-        email: "",
+        email: location.state ? location.state.email : "",
         password: ""
     }
 
