@@ -16,9 +16,9 @@ function EmployerApplicationDetails({offers}) {
             interviewCount += offer.applications.filter(appli => appli.interview).length
 
         if (interviewCount > 0)
-                return interviewCount + " demandes d'entrevue"
-            else
-                return "Aucune demande d'entrevue"
+            return interviewCount + " demandes d'entrevue"
+        else
+            return "Aucune demande d'entrevue"
     }
 
     function isApplicationWaitingForEmployer(appli) {

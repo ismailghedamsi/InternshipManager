@@ -49,11 +49,11 @@ class RsocketNotificationServiceTests {
 
         StepVerifier.create(actual)
                 .expectNextMatches(notif::equals)
-                .verifyTimeout(Duration.of(10, ChronoUnit.MILLIS));
+                .verifyTimeout(Duration.of(1, ChronoUnit.SECONDS));
 
         StepVerifier.create(actual2)
                 .expectNextMatches(notif::equals)
-                .verifyTimeout(Duration.of(10, ChronoUnit.MILLIS));
+                .verifyTimeout(Duration.of(1, ChronoUnit.SECONDS));
     }
 
     @Test
