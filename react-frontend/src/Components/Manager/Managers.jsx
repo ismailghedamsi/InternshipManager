@@ -28,7 +28,7 @@ import {default as React, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../Utils/Services/Hooks";
+import {useApi, useModal} from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const requiredFieldMsg = "Ce champs est requis"

@@ -6,9 +6,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
 import React, {useEffect, useRef, useState} from "react";
+import {useApi, useDateParser, useModal} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PDF/PdfDocument";
-import {useApi, useDateParser, useModal} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const applicationAcceptedStates = [

@@ -10,7 +10,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import * as yup from "yup";
 import {SemesterContext} from "../../App";
-import {useApi} from "../Utils/Services/Hooks";
+import {useApi} from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function SemesterSelector() {

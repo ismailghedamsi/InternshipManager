@@ -2,12 +2,12 @@ import {Button, CircularProgress, Grid, Step, StepLabel, Stepper} from "@materia
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {Form, Formik} from "formik";
 import React, {useState} from "react";
+import {useBusinessEnvironmentEvaluation} from "../../Services/AdminHooks";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useStudentEvaluation} from "../../Services/EmployerHooks";
+import {useFileReader, useModal} from "../../Services/Hooks";
 import StudentEvaluationModal from "../Employer/Evaluations/StudentEvaluationModal";
 import BusinessEvaluationModal from "../Manager/BusinessEvaluations/BusinessEvaluationModal";
-import {useBusinessEnvironmentEvaluation} from "./AdminHooks";
-import {useStudentEvaluation} from "./EmployerHooks";
-import {useFileReader, useModal} from "./Services/Hooks";
 
 export function FormikStepper({contract, initialValues, children}) {
     const childrenArray = React.Children.toArray(children)

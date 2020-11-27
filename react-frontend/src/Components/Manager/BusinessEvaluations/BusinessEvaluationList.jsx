@@ -2,7 +2,7 @@ import {Divider} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
-import {useApi} from "../../Utils/Services/Hooks";
+import {useApi} from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function BusinessEvaluationList() {

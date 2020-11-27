@@ -1,10 +1,10 @@
 import {Divider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import React, {useEffect, useState} from "react";
+import {useApi, useModal} from "../../Services/Hooks";
 import TextboxModal from "../Utils/Modal/TextboxModal";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import {useApi, useModal} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 import ApprovalButtons from "../Utils/ApprovalButtons";
 

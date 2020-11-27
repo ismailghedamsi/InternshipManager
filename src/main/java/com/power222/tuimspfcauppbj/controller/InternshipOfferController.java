@@ -51,7 +51,7 @@ public class InternshipOfferController {
 
     @PostMapping
     public ResponseEntity<InternshipOffer> createOffer(@RequestBody InternshipOffer newOffer) {
-        return offerService.uploadInternshipOffer(newOffer)
+        return offerService.createInternshipOffer(newOffer)
                 .map(offer -> ResponseEntity.status(HttpStatus.CREATED).body(offer))
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
