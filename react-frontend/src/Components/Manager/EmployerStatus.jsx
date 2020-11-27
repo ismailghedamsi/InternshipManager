@@ -5,8 +5,114 @@ import OfferDetails from "../Utils/OfferDetails";
 import PdfDocument from "../Utils/PDF/PdfDocument";
 import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
+import * as PropTypes from "prop-types";
 
-export default function StudentStatus() {
+function EmployerApplicationDetails({offers}) {
+
+    function interviewStatus() {
+        let interviewCount = 0
+
+        for (const offer of offers)
+            interviewCount += offer.applications.filter(appli => appli.interview).length
+
+        if (interviewCount > 0)
+                return interviewCount + " demandes d'entrevue"
+            else
+                return "Aucune demande d'entrevue"
+    }
+
+    function isApplicationWaitingForEmployer(appli) {
+        return appli.state === "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW" ||
+            appli.state === "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION"
+    }
+
+    function applicationsStatus() {
+        let applisWaitingForEmployerCount = 0
+
+        for (const offer of offers)
+            applisWaitingForEmployerCount += offer.applications.filter(appli => isApplicationWaitingForEmployer(appli)).length
+
+        return applisWaitingForEmployerCount + " applications en attente de l'employeur"
+    }
+
+    function contractsStatus() {
+        let contractsWaitingCount = 0
+        let contractFinalizedCount = 0
+
+        for (const offer of offers)
+            for (const appli of offer.applications)
+                if (appli.contract)
+                    switch (appli.contract.signatureState) {
+                        case "PENDING_FOR_ADMIN_REVIEW":
+                        case "WAITING_FOR_EMPLOYER_SIGNATURE" :
+                        case "WAITING_FOR_STUDENT_SIGNATURE" :
+                        case "WAITING_FOR_ADMIN_SIGNATURE":
+                            contractsWaitingCount++
+                            break;
+                        case "SIGNED":
+                            contractFinalizedCount++
+                        default:
+                            break;
+                    }
+
+        return contractsWaitingCount + " contrats en attente, " + contractFinalizedCount + " contrats finalisés"
+    }
+
+    return <>
+        <Typography>
+            {interviewStatus()}
+        </Typography>
+        <Typography>
+            {applicationsStatus()}
+        </Typography>
+        <Typography>
+            {contractsStatus()}
+        </Typography>
+    </>
+}
+
+EmployerApplicationDetails.propTypes = {
+    offers: PropTypes.array.isRequired
+}
+
+function EmployerStatusDetails({offers}) {
+    function offerStatus() {
+        if (offers.length === 0)
+            return "Aucune offre"
+        else {
+            let approvedOffers = 0
+            let pendingOffers = 0
+            let rejectedOffers = 0
+
+            for (const offer of offers) {
+                if (offer.reviewState === "APPROVED")
+                    approvedOffers++
+                else if (offer.reviewState === "PENDING")
+                    pendingOffers++
+                else if (offer.reviewState === "DENIED")
+                    rejectedOffers++
+            }
+
+            return offers.length + " offres: " + approvedOffers + " approuvées, "
+                + pendingOffers + " en attente, " + rejectedOffers + " rejetées"
+        }
+    }
+
+    return <>
+        <Typography>
+            {offerStatus()}
+        </Typography>
+        <Typography>
+            <EmployerApplicationDetails offers={offers}/>
+        </Typography>
+    </>
+}
+
+EmployerStatusDetails.propTypes = {
+    offers: PropTypes.array.isRequired
+}
+
+export default function EmployerStatus() {
     const offersTabIndex = 0
     const interviewsTabIndex = 1
     const classes = useStyles()
@@ -22,14 +128,14 @@ export default function StudentStatus() {
     const [currentSubtab, setCurrentSubtab] = useState(0)
 
     useEffect(() => {
-        api.get("employers").then(resp => {
+        api.get("/employers").then(resp => {
             setEmployers(resp ? resp.data : [])
         })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (employers[currentEmployerIndex])
-            api.get("/offers/employer/" + employers[currentEmployerIndex].username)
+            api.get("/offers/employer/" + employers[currentEmployerIndex].email)
                 .then(r => {
                     setCurrentEmployerOffers(r.data)
                 })
@@ -104,6 +210,7 @@ export default function StudentStatus() {
         container
         spacing={2}
         className={classes.main}
+        style={{padding: "15px 0 0 15px"}}
     >
         <Grid item xs={5} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
@@ -118,11 +225,12 @@ export default function StudentStatus() {
                             }}
                     >
                         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                            {employers[i].companyName}
+                            {employers[i].companyName + " - " + employers[i].contactName}
                         </Typography>
                     </button>
                     {currentEmployerIndex === i &&
                     <div>
+                        <EmployerStatusDetails offers={currentEmployerOffers}/>
                         <button
                             type={"button"}
                             className={[classes.linkButton, currentSubtab === 0 ? classes.fileButton : null].join(' ')}
