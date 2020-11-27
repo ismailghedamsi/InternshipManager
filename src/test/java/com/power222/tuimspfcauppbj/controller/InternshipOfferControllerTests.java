@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@SuppressWarnings("MagicNumber")
 @ActiveProfiles({"noSecurityTests", "noBootstrappingTests"})
 @Import(TestsWithoutSecurityConfig.class)
 @WebMvcTest(InternshipOfferController.class)
@@ -155,7 +156,7 @@ public class InternshipOfferControllerTests {
 
     @Test
     void createOffer() throws Exception {
-        when(svc.uploadInternshipOffer(expectedOffer)).thenReturn(Optional.of(expectedOffer));
+        when(svc.createInternshipOffer(expectedOffer)).thenReturn(Optional.of(expectedOffer));
 
         mvc.perform(post("/api/offers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
                 .andExpect(status().isCreated());
@@ -163,7 +164,7 @@ public class InternshipOfferControllerTests {
 
     @Test
     void createInvalidOffer() throws Exception {
-        when(svc.uploadInternshipOffer(expectedOffer)).thenReturn(Optional.empty());
+        when(svc.createInternshipOffer(expectedOffer)).thenReturn(Optional.empty());
 
         mvc.perform(post("/api/offers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))
                 .andExpect(status().isBadRequest());
@@ -172,8 +173,6 @@ public class InternshipOfferControllerTests {
     @Test
     void updateOffer() throws Exception {
         when(svc.updateInternshipOffer(expectedOffer.getId(), expectedOffer)).thenReturn(Optional.of(expectedOffer));
-        System.err.println(expectedOffer);
-        System.err.println(mapper.readValue(mapper.writeValueAsString(expectedOffer), InternshipOffer.class));
 
         mvc.perform(put("/api/offers/" + expectedOffer.getId())
                 .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(expectedOffer)))

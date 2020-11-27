@@ -19,7 +19,8 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SuppressWarnings({"rawtypes", "unchecked"})
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"spring.rsocket.server.port=0"})
 class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversityPlusPoweredByJavaApplicationTests {
 
     @Autowired

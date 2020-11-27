@@ -4,7 +4,7 @@ import TableCell from "@material-ui/core/TableCell"
 import PropTypes from "prop-types"
 import React, {useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
-import {useApi} from "../Utils/Services/Hooks"
+import {useApi} from "../../Services/Hooks"
 
 function ContextButton({application}) {
     const history = useHistory()

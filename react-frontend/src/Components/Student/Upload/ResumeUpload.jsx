@@ -8,7 +8,7 @@ import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React from "react";
 import {useHistory} from "react-router-dom";
 import * as yup from "yup";
-import {useApi} from "../../Utils/Services/Hooks";
+import {useApi} from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 import "./ResumeUpload.css";
 

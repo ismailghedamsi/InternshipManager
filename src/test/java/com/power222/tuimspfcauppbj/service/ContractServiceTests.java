@@ -1,10 +1,8 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.ContractRepository;
-import com.power222.tuimspfcauppbj.model.Admin;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.StudentApplication;
-import com.power222.tuimspfcauppbj.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,10 +23,16 @@ public class ContractServiceTests {
     private ContractRepository contractRepo;
 
     @Mock
+    @SuppressWarnings("unused") //Required dependency of MailSendingService
     private ContractGenerationService contractGenSvc;
 
     @Mock
+    @SuppressWarnings("unused") //Required dependency of MailSendingService
     private AuthenticationService authSvc;
+
+    @Mock
+    @SuppressWarnings("unused") //Required dependency of MailSendingService
+    private NotificationService notificationService;
 
     @Mock
     private MailSendingService mailSvc;
@@ -38,17 +42,19 @@ public class ContractServiceTests {
 
     private Contract expectedContract;
 
+    public ContractServiceTests() {
+    }
+
     @BeforeEach
     void setUp() {
-        final User expectedAdmin = Admin.builder().id(1L).build();
 
-        StudentApplication expectedStudentApplication = StudentApplication.builder()
+        StudentApplication expectedApplication = StudentApplication.builder()
                 .id(1L)
                 .build();
 
         expectedContract = Contract.builder()
                 .id(1L)
-                .studentApplication(expectedStudentApplication)
+                .studentApplication(expectedApplication)
                 .build();
     }
 
@@ -61,14 +67,14 @@ public class ContractServiceTests {
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expectedContract);
 
-        verify(mailSvc, times(1)).notifyAboutCreation(expectedContract);
+        verify(notificationService, times(1)).notifyContractCreation(expectedContract);
     }
 
     @Test
     void getAllContractTest() {
-        var c1 = Contract.builder().id(1L).build();
-        var c2 = Contract.builder().id(2L).build();
-        var c3 = Contract.builder().id(3L).build();
+        var c1 = Contract.builder().id(1).build();
+        var c2 = Contract.builder().id(2).build();
+        var c3 = Contract.builder().id(3).build();
 
         when(contractRepo.findAll()).thenReturn(Arrays.asList(c1, c2, c3));
 
@@ -79,9 +85,9 @@ public class ContractServiceTests {
 
     @Test
     void getAllContractsByEmployerId() {
-        var c1 = Contract.builder().id(1L).build();
-        var c2 = Contract.builder().id(1L).build();
-        var c3 = Contract.builder().id(1L).build();
+        var c1 = Contract.builder().id(1).build();
+        var c2 = Contract.builder().id(1).build();
+        var c3 = Contract.builder().id(1).build();
         var employerId = 1;
 
         when(contractRepo.findAllByStudentApplication_Offer_Employer_Id(employerId)).thenReturn(Arrays.asList(c1, c2, c3));
@@ -179,7 +185,7 @@ public class ContractServiceTests {
 
         contractSvc.deleteContractById(idToDelete);
 
-        verify(mailSvc, times(1)).notifyAboutDeletion(expectedContract);
+        verify(notificationService, times(1)).notifyContractDeletion(expectedContract);
         verify(contractRepo, times(1)).deleteById(idToDelete);
     }
 }

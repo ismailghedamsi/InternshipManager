@@ -22,7 +22,8 @@ public class InternEvaluationServiceTests {
     private InternEvaluationRepository internRepo;
 
     @Mock
-    private MailSendingService mailSvc;
+    @SuppressWarnings("unused") //Required dependency of InternEvaluationService
+    private NotificationService notificationService;
 
     @InjectMocks
     private InternEvaluationService internSvc;

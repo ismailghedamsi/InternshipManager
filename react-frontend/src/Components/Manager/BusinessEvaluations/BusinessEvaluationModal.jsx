@@ -5,7 +5,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
-import {useDateParser, useFileReader} from "../../Utils/Services/Hooks";
+import {useDateParser, useFileReader} from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function BusinessEvaluationModal({isOpen, data, hide}) {
