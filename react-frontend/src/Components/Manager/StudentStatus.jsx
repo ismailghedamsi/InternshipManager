@@ -1,4 +1,4 @@
-import {Typography} from "@material-ui/core";
+import {Divider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -34,7 +34,7 @@ function ResumeStatus(props) {
             {props.resume.name}
         </Typography>
         <Typography>
-            État: {getResumeState(props.resume)}
+            État : {getResumeState(props.resume)}
             &emsp;
             <Button
                 variant={"contained"}
@@ -44,7 +44,7 @@ function ResumeStatus(props) {
                 <i className="fa fa-file-text-o"/>&ensp;Afficher le CV
             </Button>
         </Typography>
-        <hr/>
+        <Divider/>
     </div>
 }
 
@@ -62,7 +62,7 @@ function OfferStatus(props) {
         if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
             return "acceptée par l'étudiant"
         else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
-            return "refusée par l'étudiant. Raison: " + interview.reasonForRejectionByStudent
+            return "refusée par l'étudiant. Raison : " + interview.reasonForRejectionByStudent
         else
             return "en attente de réponse de l'étudiant"
     }
@@ -71,7 +71,7 @@ function OfferStatus(props) {
         if (application.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")
             return "Acceptée par l'étudiant"
         else if (application.state === "JOB_OFFER_DENIED_BY_STUDENT")
-            return "Refusée par l'étudiant. Raison: " + application.reasonForRejection
+            return "Refusée par l'étudiant. Raison : " + application.reasonForRejection
         else
             return "En attente de réponse de l'étudiant"
     }
@@ -83,21 +83,21 @@ function OfferStatus(props) {
         <OfferDetails offer={props.offer}/>
         <Typography
             variant={"body2"}>
-            A appliqué: {application ? "Oui" : "Non"} &emsp;
+            A appliqué : {application ? "Oui" : "Non"} &emsp;
             {application && <span>
             {
                 application.interview ?
                     <span>
-                   Entrevue: {parseInterviewDate(application.interview.dateTime)}, {parseInterviewState(application.interview)}
+                   Entrevue : {parseInterviewDate(application.interview.dateTime)}, {parseInterviewState(application.interview)}
                 </span>
                     :
                     <span>
-                   Entrevue: Pas planifiée
+                   Entrevue  Pas planifiée
                 </span>
             }
                 <br/>
-                &emsp;A été sélectionné: {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
-                &emsp;Offre: {parseApplicationState(application)}
+                &emsp;A été sélectionné : {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
+                &emsp;Offre : {parseApplicationState(application)}
                 </span>
             }&emsp;
             <Button variant={"contained"}
@@ -107,7 +107,7 @@ function OfferStatus(props) {
                 <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
             </Button>
         </Typography>
-        <hr/>
+        <Divider/>
     </div>
 }
 
@@ -205,7 +205,7 @@ function StudentStatusDetails({student}) {
                     rejectedResumes++
             }
 
-            return student.resumes.length + " CVs: " + approvedResumes + " approuvés, "
+            return student.resumes.length + " CVs : " + approvedResumes + " approuvés, "
                 + pendingResumes + " en attente, " + rejectedResumes + " rejetés "
         }
     }
@@ -302,9 +302,9 @@ export default function StudentStatus() {
                             </Typography>
                         </Button>
                     </div>}
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                 </div>
-            ) : "Aucun étudiants"}
+            ) : "Aucun étudiant"}
         </Grid>
         <Grid item xs={7} align={"center"} style={{overflow: "auto", height: "100%"}}>
             {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>

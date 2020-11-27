@@ -1,4 +1,4 @@
-import {Typography} from "@material-ui/core";
+import {Divider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import React, {useEffect, useState} from "react";
 import TextboxModal from "../Utils/Modal/TextboxModal";
@@ -64,7 +64,7 @@ export default function ResumeApprobation({count}) {
                     approveLabel={"Approuver"}
                     denyLabel={"Refuser"}
                 />
-                <hr className={classes.hrStyle}/>
+                <Divider className={classes.dividers}/>
             </div>}
         </PdfSelectionViewer>
         <TextboxModal

@@ -7,6 +7,7 @@ import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import {useApi} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
+import {Divider} from "@material-ui/core";
 
 export default function OfferList({count}) {
     const classes = useStyles()
@@ -62,6 +63,15 @@ export default function OfferList({count}) {
         return AuthenticationService.getCurrentUserRole() === "employer" && i === currentIndex
     }
 
+    function redirection(i) {
+        if (AuthenticationService.getCurrentUserRole() === "employer") {
+            return history.push("/dashboard/applications", {offerId: offers[i].id})
+        } else if (AuthenticationService.getCurrentUserRole() === "admin") {
+            return history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
+        }
+        return "";
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage"}>
             {(i, setCurrent) =>
@@ -89,13 +99,7 @@ export default function OfferList({count}) {
                         <Button
                             variant={"contained"}
                             color={"primary"}
-                            onClick={() => {
-                                if (AuthenticationService.getCurrentUserRole() === "employer") {
-                                    history.push("/dashboard/applications", {offerId: offers[i].id})
-                                } else if (AuthenticationService.getCurrentUserRole() === "admin") {
-                                    history.push("/dashboard/applicationsAdmin", {offerId: offers[i].id})
-                                }
-                            }}
+                            onClick={redirection(i)}
                         >
                             Voir les applications
                         </Button>
@@ -108,7 +112,7 @@ export default function OfferList({count}) {
                         onClick={() => deleteOffer(i)}>
                         <i className="fa fa-trash"/>&ensp;Supprimer
                     </Button>}
-                    <hr/>
+                    <Divider className={classes.dividers}/>
                 </div>}
         </PdfSelectionViewer>
     </div>

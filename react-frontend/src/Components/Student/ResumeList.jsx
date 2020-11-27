@@ -3,11 +3,9 @@ import React, {useEffect, useState} from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import {useApi} from "../Utils/Services/Hooks";
-import useStyles from "../Utils/Style/useStyles";
 import {Button} from "@material-ui/core";
 
 export default function ResumeList({count, deniedCount}) {
-    const classes = useStyles()
     const api = useApi()
     const [resumes, setResumes] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -73,7 +71,7 @@ export default function ResumeList({count, deniedCount}) {
                         size={"small"}
                         onClick={() => deleteResume(i)}
                         disabled={resumes[i].applications.length !== 0}
-                        title={resumes[i].applications.length === 0 ? '' : 'Impossible de supprimer un CV déja soumis dans une offre'}>
+                        title={resumes[i].applications.length === 0 ? '' : 'Impossible de supprimer un CV déja utilisé pour appliquer sur une offre'}>
                         <i className="fa fa-trash"/>&ensp;Supprimer
                     </Button>}
                 </Typography>

@@ -1,4 +1,4 @@
-import {Typography} from "@material-ui/core";
+import {Divider, Typography} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {Field, Form, Formik} from "formik";
 import {Checkbox} from "formik-material-ui";
@@ -38,6 +38,15 @@ export default function OfferAssignements() {
         return offer.allowedStudents.find(s => s.id === student.id) !== undefined && offer.allowedStudents.length !== 0
     }
 
+    function sendDicision(values, i) {
+        return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
+            .then(r => {
+                const nextState = [...offers]
+                nextState.splice(i, 1, r.data)
+                setOffers(nextState)
+            })
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Assignation des offres aux étudiants"}>
             {(i, setCurrent) =>
@@ -50,10 +59,10 @@ export default function OfferAssignements() {
                             setCurrentOfferIndex(i)
                         }}
                     >
-                        <Typography color={"textPrimary"} variant={"body1"}>
-                            {offers[i].title}
+                        <Typography variant={"body1"}>
+                            {offers[i].title}&ensp;
                         </Typography>
-                        <Typography color={"textSecondary"} variant={"body2"}>
+                        <Typography variant={"body2"}>
                             {offers[i].employer.companyName}
                         </Typography>
                     </Button>
@@ -67,12 +76,7 @@ export default function OfferAssignements() {
                                     allowed: false
                                 }}
                                 onSubmit={values => {
-                                    return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
-                                        .then(r => {
-                                            const nextState = [...offers]
-                                            nextState.splice(i, 1, r.data)
-                                            setOffers(nextState)
-                                        })
+                                    sendDicision(values, i)
                                 }}>
                                 {({submitForm, isSubmitting}) =>
                                     <Form style={{display: "inline", marginLeft: 16}}>
@@ -88,7 +92,7 @@ export default function OfferAssignements() {
                             </Formik>
                         </div>
                     )}
-                    <hr className={classes.hrStyle}/>
+                    <Divider className={classes.dividers}/>
                 </div>
             }
         </PdfSelectionViewer>
