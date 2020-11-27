@@ -3,10 +3,9 @@ import React, {useEffect, useState} from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi} from "../../Services/Hooks";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import useStyles from "../Utils/Style/useStyles";
+import {Button} from "@material-ui/core";
 
 export default function ResumeList({count, deniedCount}) {
-    const classes = useStyles()
     const api = useApi()
     const [resumes, setResumes] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -47,36 +46,34 @@ export default function ResumeList({count, deniedCount}) {
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={resumes.map(o => o.file)} title={"Liste des CVs"}>
             {(i, setCurrent) => <div key={i}>
-                <div className={classes.buttonDiv}>
-                    <button
-                        type={"button"}
-                        className={classes.linkButton}
-                        onClick={() => deleteResume(i)}
-                        style={{width: "auto"}}
-                        disabled={resumes[i].applications.length !== 0}
-                        title={resumes[i].applications.length === 0 ? '' : 'Impossible de supprimer un CV déja soumis dans une offre'}>
-                        <i className="fa fa-trash"
-                           style={resumes[i].applications.length === 0 ? {color: "red"} : {
-                               color: "grey",
-                               cursor: "not-allowed"
-                           }}/>
-                    </button>
-                </div>
-                <button
-                    type={"button"}
-                    className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
-                    autoFocus={i === 0}
+                <Button
+                    variant={i === currentIndex ? "contained" : "outlined"}
+                    color={"primary"}
+                    style={{marginBottom: 10}}
                     onClick={() => {
                         setCurrentIndex(i)
                         setCurrent(i)
                     }}>
-                    <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                    <Typography variant={"body1"}
+                                style={{padding: "0 2em 0 2em"}}
+                                display={"block"}>
                         {resumes[i].name + " "}
                     </Typography>
-                </button>
+                </Button>
                 <Typography
                     variant={"body2"}>
                     État : {getResumeState(resumes[i])}
+                    &emsp;
+                    {i === currentIndex &&
+                    <Button
+                        variant={"contained"}
+                        color={"secondary"}
+                        size={"small"}
+                        onClick={() => deleteResume(i)}
+                        disabled={resumes[i].applications.length !== 0}
+                        title={resumes[i].applications.length === 0 ? '' : 'Impossible de supprimer un CV déja utilisé pour appliquer sur une offre'}>
+                        <i className="fa fa-trash"/>&ensp;Supprimer
+                    </Button>}
                 </Typography>
                 <hr/>
             </div>}
