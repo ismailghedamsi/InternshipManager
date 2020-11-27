@@ -35,12 +35,12 @@ export default function NotificationButton() {
     function notificationList() {
         if (notifications.length > 0) {
             return notifications.map((notif, i) =>
-                    <MenuItem dense key={i}>
-                        <IconButton edge={"start"} onClick={() => {
-                            markAsRead(i)
-                        }}><Delete color={"secondary"}/></IconButton>
-                        {notif.message}
-                    </MenuItem>
+                <MenuItem dense key={i}>
+                    <IconButton edge={"start"} onClick={() => {
+                        markAsRead(i)
+                    }}><Delete color={"secondary"}/></IconButton>
+                    {notif.message}
+                </MenuItem>
             )
         } else {
             return <MenuItem onClick={() => setNotifOpen(false)}>Aucune nouvelle notification</MenuItem>
@@ -59,15 +59,15 @@ export default function NotificationButton() {
             </Badge>
         </Button>
         <Menu
-                anchorEl={notifAnchor.current}
-                getContentAnchorEl={null}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left"
-                }}
-                keepMounted
-                open={notifOpen}
-                onClose={() => setNotifOpen(false)}
+            anchorEl={notifAnchor.current}
+            getContentAnchorEl={null}
+            anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+            }}
+            keepMounted
+            open={notifOpen}
+            onClose={() => setNotifOpen(false)}
         >
             {notificationList()}
         </Menu>

@@ -91,24 +91,24 @@ export function useNotificationChannel(userId) {
         })
 
         client.connect()
-                .subscribe({
-                    onComplete: socket => {
-                        socket.requestChannel(flow)
-                                .subscribe({
-                                    onNext: ({data}) => {
-                                        if (!notifications.find(data))
-                                            setNotifications(prev => {
-                                                return [...prev, data]
-                                            })
-                                    },
-                                    onSubscribe: sub => {
-                                        sub.request(0x7fffffff)
-                                    },
-                                    onError: console.error
-                                })
-                    },
-                    onError: console.error
-                });
+            .subscribe({
+                onComplete: socket => {
+                    socket.requestChannel(flow)
+                        .subscribe({
+                            onNext: ({data}) => {
+                                if (!notifications.find(data))
+                                    setNotifications(prev => {
+                                        return [...prev, data]
+                                    })
+                            },
+                            onSubscribe: sub => {
+                                sub.request(0x7fffffff)
+                            },
+                            onError: console.error
+                        })
+                },
+                onError: console.error
+            });
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return [notifications, acknowledge]

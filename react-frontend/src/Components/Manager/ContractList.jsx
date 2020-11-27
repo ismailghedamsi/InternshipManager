@@ -2,9 +2,9 @@ import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
+import {useApi} from "../../Services/Hooks";
 import ApprovalButtons from "../Utils/ApprovalButtons";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import {useApi} from "../Utils/Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function ContractList({count}) {
@@ -120,7 +120,7 @@ export default function ContractList({count}) {
                             onApprove={() => sendDecision(i, true)}
                             onDeny={() => deleteContract(i)}
                             approveLabel={"Approuver le contrat"}
-                            denyLabel={"Refuser le contrat"}
+                            denyLabel={"Supprimer le contrat"}
                         />
                         }
                         {contracts[i].signatureState === "WAITING_FOR_ADMIN_SIGNATURE" &&

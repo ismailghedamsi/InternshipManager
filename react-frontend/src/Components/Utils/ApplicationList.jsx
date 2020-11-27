@@ -4,8 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
+import {useApi} from "../../Services/Hooks";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
-import {useApi} from "./Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function ApplicationList() {
@@ -93,10 +93,8 @@ export default function ApplicationList() {
             documents={(offer.applications ? offer.applications : []).map((o) => o.resume.file)}
             title={<span>Application<br/>{offer.title}</span>}>
             {(i, setCurrent) => <div key={i}>
-                <button
-                    type={"button"}
-                    className={[classes.linkButton, currentIndex === i ? classes.fileButton : ""].join(" ")}
-                    autoFocus={i === 0}
+                <Button
+                    className={[currentIndex === i ? classes.fileButton : ""].join(" ")}
                     onClick={() => {
                         setCurrent(i)
                         setCurrentIndex(i)
@@ -105,7 +103,7 @@ export default function ApplicationList() {
                     <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
                         {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
                     </Typography>
-                </button>
+                </Button>
                 {currentIndex === i && <div>
                     <Typography color={"textPrimary"} variant={"body1"}>
                         {offer.applications[i].student.phoneNumber} {offer.applications[i].student.email}

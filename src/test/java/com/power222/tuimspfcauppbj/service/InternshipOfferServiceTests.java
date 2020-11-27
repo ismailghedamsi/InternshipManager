@@ -16,16 +16,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("MagicNumber")
 @ExtendWith(MockitoExtension.class)
 class InternshipOfferServiceTests {
     @Mock
@@ -37,12 +35,15 @@ class InternshipOfferServiceTests {
     @Mock
     private AuthenticationService authenticationService;
 
+    @Mock
+    @SuppressWarnings("unused") //Required dependency of InternshipOfferService
+    private NotificationService notificationService;
+
     @InjectMocks
     private InternshipOfferService service;
+
     private InternshipOffer expectedOffer;
     private InternshipOffer expectedOffer2;
-    private List<InternshipOffer> expectedOffers;
-    private List<InternshipOffer> expectedOffersOfEmployer;
     private Employer expectedEmployer;
     private Student expectedStudent;
 
@@ -89,13 +90,6 @@ class InternshipOfferServiceTests {
                 .reviewState(ReviewState.PENDING)
                 .build();
 
-        expectedOffers = new ArrayList<>();
-        expectedOffers.add(expectedOffer);
-        expectedOffers.add(expectedOffer2);
-
-        expectedOffersOfEmployer = new ArrayList<>();
-        expectedOffersOfEmployer.add(expectedOffer);
-
         expectedEmployer = Employer.builder()
                 .email("employeur@gmail.com")
                 .offers(new ArrayList<>())
@@ -118,7 +112,7 @@ class InternshipOfferServiceTests {
         when(authenticationService.getCurrentUser()).thenReturn(expectedEmployer);
         when(offerRepository.saveAndFlush(expectedOffer)).thenReturn(expectedOffer);
         expectedOffer.setEmployer(null);
-        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer);
+        Optional<InternshipOffer> createdOffer = service.createInternshipOffer(expectedOffer);
         assertThat(createdOffer).contains(expectedOffer);
     }
 
@@ -126,14 +120,14 @@ class InternshipOfferServiceTests {
     void tryToUploadOfferForNonexistentUser() {
         when(authenticationService.getCurrentUser()).thenReturn(null);
 
-        Optional<InternshipOffer> createdOffer = service.uploadInternshipOffer(expectedOffer);
+        Optional<InternshipOffer> createdOffer = service.createInternshipOffer(expectedOffer);
 
         assertThat(createdOffer).isEmpty();
     }
 
     @Test
     void getAllInternshipOffersReturnsListOffer() {
-        when(offerRepository.findAll()).thenReturn(expectedOffers);
+        when(offerRepository.findAll()).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
         List<InternshipOffer> createdOffers = service.getAllInternshipOffers();
 
@@ -143,7 +137,8 @@ class InternshipOfferServiceTests {
 
     @Test
     void getAllInternshipOffersByStudentID() {
-        when(offerRepository.findAllByAllowedStudentsId(expectedStudent.getId())).thenReturn(expectedOffers);
+        when(offerRepository.findAllByAllowedStudentsId(expectedStudent.getId()))
+                .thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
         List<InternshipOffer> createdOffers = service.getOfferByAllowedStudentId(expectedStudent.getId());
 
@@ -153,7 +148,7 @@ class InternshipOfferServiceTests {
 
     @Test
     void getAllInternshipOffersWithPendingApproval() {
-        when(offerRepository.findAllByReviewStatePending()).thenReturn(expectedOffers);
+        when(offerRepository.findAllByReviewStatePending()).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
         List<InternshipOffer> createdOffers = service.getInternshipOffersWithPendingApproval();
 
@@ -163,7 +158,7 @@ class InternshipOfferServiceTests {
 
     @Test
     void getAllApprovedInternshipOffers() {
-        when(offerRepository.findAllByReviewStateApproved()).thenReturn(expectedOffers);
+        when(offerRepository.findAllByReviewStateApproved()).thenReturn(Arrays.asList(expectedOffer, expectedOffer2));
 
         List<InternshipOffer> createdOffers = service.getApprovedInternshipOffers();
 
@@ -197,10 +192,13 @@ class InternshipOfferServiceTests {
 
     @Test
     void getInternshipOffersOfEmployer() {
-        when(offerRepository.findByEmployerEmail("a@gmail.com")).thenReturn(expectedOffersOfEmployer);
-        List<InternshipOffer> offers = service.getInternshipOffersOfEmployer("a@gmail.com");
-        assertThat(expectedOffersOfEmployer.size()).isEqualTo(offers.size());
-        assertThat(offers.get(0)).isEqualTo(expectedOffersOfEmployer.get(0));
+        when(offerRepository.findByEmployerEmail(expectedEmployer.getEmail()))
+                .thenReturn(Collections.singletonList(expectedOffer));
+
+        List<InternshipOffer> actual = service.getInternshipOffersOfEmployer(expectedEmployer.getEmail());
+
+        assertThat(actual).hasSize(1);
+        assertThat(actual).contains(expectedOffer);
     }
 
     @Test

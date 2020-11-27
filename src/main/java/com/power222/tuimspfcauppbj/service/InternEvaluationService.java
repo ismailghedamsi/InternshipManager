@@ -12,16 +12,16 @@ import java.util.Optional;
 public class InternEvaluationService {
 
     private final InternEvaluationRepository InterEvaluationRepo;
-    private final MailSendingService mailSvc;
+    private final NotificationService notifSvc;
 
-    public InternEvaluationService(InternEvaluationRepository interEvaliationRepo, final MailSendingService mailSvc) {
+    public InternEvaluationService(InternEvaluationRepository interEvaliationRepo, final NotificationService notifSvc) {
         this.InterEvaluationRepo = interEvaliationRepo;
-        this.mailSvc = mailSvc;
+        this.notifSvc = notifSvc;
     }
 
     public InternEvaluation createAndSaveNewInternEvaluation(InternEvaluation internEvaluation) {
         var save = InterEvaluationRepo.saveAndFlush(internEvaluation);
-        mailSvc.notifyAboutCreation(save);
+        notifSvc.notifyInternEvaluationCreation(save);
         return save;
     }
 
