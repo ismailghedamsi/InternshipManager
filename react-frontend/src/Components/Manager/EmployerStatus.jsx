@@ -59,7 +59,7 @@ function EmployerApplicationDetails({offers}) {
         return contractsWaitingCount + " contrats en attente, " + contractFinalizedCount + " contrats finalisés"
     }
 
-    return offers.find(offer => offer.applications).length > 0 ? <>
+    return offers.find(offer => offer.applications).applications.length > 0 ? <>
         <Typography>
             {interviewStatus()}
         </Typography>
@@ -230,11 +230,12 @@ export default function EmployerStatus() {
                         }}
                     >
                         <Typography variant={"body1"} display={"block"}>
-                            {employers[i].companyName}
+                            {employers[i].companyName + " - " + employers[i].contactName}
                         </Typography>
                     </Button>
                     {currentEmployerIndex === i &&
                     <div>
+                        <EmployerStatusDetails offers={currentEmployerOffers}/>
                         <Button
                             variant={currentSubtab === 0 ? "contained" : "outlined"}
                             color={"primary"}
@@ -264,10 +265,10 @@ export default function EmployerStatus() {
             ) : "Aucun employeurs"}
         </Grid>
         <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
-            {
-                currentSubtab === offersTabIndex ?
-                    currentEmployerOffers && currentEmployerOffers.map((o, k) => {
+            {employers.length !== 0 && <div>
+                {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
+
+                {currentSubtab === offersTabIndex && (currentEmployerOffers.length > 0 ? currentEmployerOffers.map((o, k) => {
                         return <div key={k}>
                             <Typography variant={"h5"}>
                                 {o.title}
@@ -291,18 +292,16 @@ export default function EmployerStatus() {
                             <Divider className={classes.dividers}/>
                         </div>
                     })
-                    : "L'employeur n'a aucune offre"
-            }
-            {
-                currentSubtab === interviewsTabIndex ?
-                    currentSubtab === interviewsTabIndex && currentEmployerInterviews && currentEmployerInterviews.map((interview, index) => {
-                        return <div key={index}>
-                            <InterviewStatus classes={classes} interview={interview}/>
-                            <hr/>
-                        </div>
-                    })
-                    : "L'employeur n'a programmé aucune entrevue"
-            }
+                    : "L'employeur n'a aucune offre")}
+                {
+                    currentSubtab === interviewsTabIndex && (currentEmployerInterviews.length > 0 ? currentEmployerInterviews.map((interview, index) => {
+                            return <div key={index}>
+                                <InterviewStatus classes={classes} interview={interview}/>
+                                <hr/>
+                            </div>
+                        })
+                        : "L'employeur n'a programmé aucune entrevue")
+                }</div>}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
             <DialogContent className={classes.viewbox}>

@@ -307,25 +307,28 @@ export default function StudentStatus() {
             ) : "Aucun étudiant"}
         </Grid>
         <Grid item xs={7} align={"center"} style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
-                <ResumeStatus key={index}
-                              classes={classes}
-                              resume={resume}
-                              onClick={() => {
-                                  setCurrentDoc(resume.file)
-                                  openPdf()
-                              }}/>
-            ) : "L'étudiant n'a téléversé aucun CV")}
-            {currentSubtab === 1 && (isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
-                <OfferStatus key={index}
-                             classes={classes}
-                             offer={offer}
-                             currentStudent={students[currentIndex]}
-                             onClick={() => {
-                                 setCurrentDoc(offer.file)
-                                 openPdf()
-                             }}/>
-            ) : " L'étudiant n'a accès à aucune offre de stage")}
+            {students.length !== 0 &&
+            <div>
+                {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
+                    <ResumeStatus key={index}
+                                  classes={classes}
+                                  resume={resume}
+                                  onClick={() => {
+                                      setCurrentDoc(resume.file)
+                                      openPdf()
+                                  }}/>
+                ) : "L'étudiant n'a téléversé aucun CV")}
+                {currentSubtab === 1 && (isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+                    <OfferStatus key={index}
+                                 classes={classes}
+                                 offer={offer}
+                                 currentStudent={students[currentIndex]}
+                                 onClick={() => {
+                                     setCurrentDoc(offer.file)
+                                     openPdf()
+                                 }}/>
+                ) : " L'étudiant n'a accès à aucune offre de stage")}
+            </div>}
         </Grid>
         <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
             <DialogContent className={classes.viewbox} ref={pdfContainer}>
