@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
     @SuppressWarnings("SpringDataMethodInconsistencyInspection")
-    Page<Student> findAllByResumesIsEmpty(Pageable pageable);
+    Page<Student> findAllBySemestersAndResumesIsEmpty(String semester, Pageable pageable);
 
-    Page<Student> findAllByResumes_ReviewState(ReviewState reviewState, Pageable pageable);
+    Page<Student> findAllBySemestersAndResumes_ReviewState(String semster, ReviewState reviewState, Pageable pageable);
 
     Page<Student> findAllByApplications_ContractIsNull(Pageable pageable);
 
@@ -20,7 +20,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Page<Student> findAllBySemesters(String semester, Pageable pageable);
 
-    default Page<Student> findAllByResumesReviewStatePending(Pageable pageable) {
-        return findAllByResumes_ReviewState(ReviewState.PENDING, pageable);
+    default Page<Student> findAllBySemestersAndResumesReviewStatePending(String semester, Pageable pageable) {
+        return findAllBySemestersAndResumes_ReviewState(semester, ReviewState.PENDING, pageable);
     }
 }

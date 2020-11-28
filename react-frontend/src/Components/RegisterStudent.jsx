@@ -54,7 +54,7 @@ export default function RegisterStudent(props) {
                     <Field
                         component={TextField}
                         name="firstName"
-                        id="firstName"
+                        id="firstNameStudent"
                         variant="outlined"
                         label="Prénom"
                         required
@@ -66,7 +66,7 @@ export default function RegisterStudent(props) {
                     <Field
                         component={TextField}
                         name="lastName"
-                        id="lastName"
+                        id="lastNameStudent"
                         variant="outlined"
                         label="Nom de famille"
                         required
@@ -77,7 +77,7 @@ export default function RegisterStudent(props) {
                     <Field
                         component={TextField}
                         name="address"
-                        id="address"
+                        id="addressStudent"
                         variant="outlined"
                         label="Addresse"
                         required
@@ -88,7 +88,7 @@ export default function RegisterStudent(props) {
                     <Field
                         component={TextField}
                         name="studentId"
-                        id="studentId"
+                        id="studentIdStudent"
                         variant="outlined"
                         label="Numéro d'étudiant"
                         required
@@ -99,7 +99,7 @@ export default function RegisterStudent(props) {
                     <Field
                         component={TextField}
                         name="phoneNumber"
-                        id="phoneNumber"
+                        id="phoneNumberStudent"
                         variant="outlined"
                         label="Numéro de téléphone"
                         required
@@ -122,7 +122,7 @@ export default function RegisterStudent(props) {
                     <Field
                         component={TextField}
                         name="password"
-                        id="password"
+                        id="passwordStudent"
                         variant="outlined"
                         label="Mot de passe"
                         type={"password"}
@@ -134,7 +134,7 @@ export default function RegisterStudent(props) {
                     <Field
                         component={TextField}
                         name="passwordConfirm"
-                        id="passwordConfirm"
+                        id="passwordConfirmStudent"
                         variant="outlined"
                         label="Confirmez"
                         type={"password"}

@@ -1,9 +1,8 @@
-import {Button, Dialog, DialogContent, Divider, Grid, Typography} from "@material-ui/core";
-import DialogActions from "@material-ui/core/DialogActions";
+import {Button, Divider, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PDF/PdfDocument";
+import PdfModal from "../Utils/PdfModal"
 import useStyles from "../Utils/Style/useStyles";
 import * as PropTypes from "prop-types";
 
@@ -131,7 +130,7 @@ export default function EmployerStatus() {
     const [currentSubtab, setCurrentSubtab] = useState(0)
 
     useEffect(() => {
-        api.get("/employers").then(resp => {
+        api.get("employers").then(resp => {
             setEmployers(resp ? resp.data : [])
         })
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -269,7 +268,7 @@ export default function EmployerStatus() {
                 {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
 
                 {currentSubtab === offersTabIndex && (currentEmployerOffers.length > 0 ? currentEmployerOffers.map((o, k) => {
-                        return <div key={k}>
+                         <div key={k}>
                             <Typography variant={"h5"}>
                                 {o.title}
                             </Typography>
@@ -295,7 +294,7 @@ export default function EmployerStatus() {
                     : "L'employeur n'a aucune offre")}
                 {
                     currentSubtab === interviewsTabIndex && (currentEmployerInterviews.length > 0 ? currentEmployerInterviews.map((interview, index) => {
-                            return <div key={index}>
+                            <div key={index}>
                                 <InterviewStatus classes={classes} interview={interview}/>
                                 <hr/>
                             </div>
@@ -303,15 +302,9 @@ export default function EmployerStatus() {
                         : "L'employeur n'a programmé aucune entrevue")
                 }</div>}
         </Grid>
-        <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-            <DialogContent className={classes.viewbox}>
-                <PdfDocument document={currentDoc}/>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={closePdf} color="primary">
-                    Fermer
-                </Button>
-            </DialogActions>
-        </Dialog>
+        <PdfModal open={isPdfOpen}
+                  onClose={closePdf}
+                  document={currentDoc}
+        />
     </Grid>
 }
