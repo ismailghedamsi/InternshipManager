@@ -1,4 +1,5 @@
 import {Divider, Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {Field, Form, Formik} from "formik";
 import {Checkbox} from "formik-material-ui";
@@ -6,7 +7,6 @@ import React, {useEffect, useState} from "react";
 import {useApi} from "../../Services/Hooks";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
-import Button from "@material-ui/core/Button";
 
 export default function OfferAssignements() {
     const classes = useStyles()
@@ -70,24 +70,22 @@ export default function OfferAssignements() {
                     students.map((student, j) =>
                         <div key={j}>
                             <Formik
-                                initialValues={{
-                                    offerId: offers[i].id,
-                                    studentId: student.id,
-                                    allowed: false
-                                }}
-                                onSubmit={values => {
-                                    sendDicision(values, i)
-                                }}>
+                                    initialValues={{
+                                        offerId: offers[i].id,
+                                        studentId: student.id,
+                                        allowed: false
+                                    }}
+                                    onSubmit={values => sendDicision(values, i)}>
                                 {({submitForm, isSubmitting}) =>
-                                    <Form style={{display: "inline", marginLeft: 16}}>
-                                        <Field name={"offerId"} type={"hidden"}/>
-                                        <Field name={"studentId"} type={"hidden"}/>
-                                        <Field id={"allowed"} name={"allowed"} component={Checkbox}
-                                               type="checkbox" onChange={submitForm} disabled={isSubmitting}
-                                               checked={isStudentAllowedInOffer(offers[i], student)}/>
-                                        <label
-                                            htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
-                                        {isSubmitting && <CircularProgress size={18}/>}
+                                        <Form style={{display: "inline", marginLeft: 16}}>
+                                            <Field name={"offerId"} type={"hidden"}/>
+                                            <Field name={"studentId"} type={"hidden"}/>
+                                            <Field id={"allowed"} name={"allowed"} component={Checkbox}
+                                                   type="checkbox" onChange={submitForm} disabled={isSubmitting}
+                                                   checked={isStudentAllowedInOffer(offers[i], student)}/>
+                                            <label
+                                                    htmlFor={"allowed"}>{student.firstName} {student.lastName}</label>
+                                            {isSubmitting && <CircularProgress size={18}/>}
                                     </Form>}
                             </Formik>
                         </div>
