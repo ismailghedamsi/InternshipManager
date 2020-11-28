@@ -83,9 +83,9 @@ export default function ApplicationList() {
     function showInterviewConvocationButtonCondition(i) {
         return AuthenticationService.getCurrentUserRole() === "employer"
                 && offer.applications[i].interview === null
-                && offer.applications[i].state === "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW"
-                || offer.applications[i].state === "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION"
-                || offer.applications[i].state === "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION"
+                && (offer.applications[i].state === "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW"
+                        || offer.applications[i].state === "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION"
+                        || offer.applications[i].state === "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION")
     }
 
     return <div style={{height: "100%"}}>
