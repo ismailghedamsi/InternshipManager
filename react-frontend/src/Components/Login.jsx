@@ -26,7 +26,6 @@ export default function Login() {
     const history = useHistory()
     const classes = useStyles()
     const location = useLocation()
-    console.log(location.state)
     const initialValues = {
         email: location.state ? location.state.email : "",
         password: ""
