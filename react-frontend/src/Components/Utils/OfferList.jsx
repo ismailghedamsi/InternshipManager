@@ -1,3 +1,4 @@
+import {Divider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
@@ -7,7 +8,6 @@ import {useApi} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
-import {Divider} from "@material-ui/core";
 
 export default function OfferList({count}) {
     const classes = useStyles()
@@ -19,12 +19,12 @@ export default function OfferList({count}) {
     useEffect(() => {
         if (AuthenticationService.getCurrentUserRole() === "employer") {
             api.get("/offers/employer/" + AuthenticationService.getCurrentUser().email)
-                .then(r => setOffers(r ? r.data : []))
+                    .then(r => setOffers(r ? r.data : []))
         } else if (AuthenticationService.getCurrentUserRole() === "admin") {
             api.get("/offers")
-                .then(r => {
-                    setOffers(r ? r.data : [])
-                })
+                    .then(r => {
+                        setOffers(r ? r.data : [])
+                    })
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -36,14 +36,14 @@ export default function OfferList({count}) {
     function deleteOffer(index) {
         const nextState = [...offers]
         return api.delete("/offers/" + nextState[index].id)
-            .then(() => {
-                nextState.splice(index, 1)
+                .then(() => {
+                    nextState.splice(index, 1)
 
-                if (currentIndex >= nextState.length)
-                    setCurrentIndex(0)
+                    if (currentIndex >= nextState.length)
+                        setCurrentIndex(0)
 
-                setOffers(nextState)
-            })
+                    setOffers(nextState)
+                })
     }
 
     function getOfferState(offer) {
@@ -75,45 +75,45 @@ export default function OfferList({count}) {
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage"}>
             {(i, setCurrent) =>
-                <div key={i}>
-                    <Button
-                        className={[i === currentIndex ? classes.fileButton : null].join(" ")}
-                        onClick={() => {
-                            setCurrentIndex(i)
-                            setCurrent(i)
-                        }}
-                    >
-                        <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                            &ensp;{offers[i].title}&ensp;
-                        </Typography>
-                        <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                            {offers[i].employer.companyName}-{offers[i].employer.contactName}&ensp;
-                        </Typography>
-                    </Button>
-                    <Typography
-                        variant={"body2"}>
-                        État : {getOfferState(offers[i])}
-                    </Typography>
-                    {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                    {offers[i].applications.length !== 0 && <>
+                    <div key={i}>
                         <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            onClick={redirection(i)}
+                                className={[i === currentIndex ? classes.fileButton : null].join(" ")}
+                                onClick={() => {
+                                    setCurrentIndex(i)
+                                    setCurrent(i)
+                                }}
                         >
-                            Voir les applications
+                            <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                                &ensp;{offers[i].title}&ensp;
+                            </Typography>
+                            <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
+                                {offers[i].employer.companyName}-{offers[i].employer.contactName}&ensp;
+                            </Typography>
                         </Button>
-                        &ensp;
-                    </>}
-                    {showDeleteButtonCondition(i) &&
-                    <Button
-                        variant={"contained"}
-                        color={"secondary"}
-                        onClick={() => deleteOffer(i)}>
-                        <i className="fa fa-trash"/>&ensp;Supprimer
-                    </Button>}
-                    <Divider className={classes.dividers}/>
-                </div>}
+                        <Typography
+                                variant={"body2"}>
+                            État : {getOfferState(offers[i])}
+                        </Typography>
+                        {currentIndex === i && <OfferDetails offer={offers[i]}/>}
+                        {offers[i].applications.length !== 0 && <>
+                            <Button
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    onClick={() => redirection(i)}
+                            >
+                                Voir les applications
+                            </Button>
+                            &ensp;
+                        </>}
+                        {showDeleteButtonCondition(i) &&
+                        <Button
+                                variant={"contained"}
+                                color={"secondary"}
+                                onClick={() => deleteOffer(i)}>
+                            <i className="fa fa-trash"/>&ensp;Supprimer
+                        </Button>}
+                        <Divider className={classes.dividers}/>
+                    </div>}
         </PdfSelectionViewer>
     </div>
 }
