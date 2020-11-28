@@ -50,76 +50,76 @@ export default function RouteSelector() {
         <Container maxWidth={"xl"} className={classes.container}>
             <Switch>
                 <Route
-                    exact={true}
-                    path={"/dashboard"}
-                    component={Dashboard}
+                        exact={true}
+                        path={"/dashboard"}
+                        component={Dashboard}
                 />
                 {/* Admin */}
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/assignement/offer"
-                    component={OfferAssignements}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/assignement/offer"
+                        component={OfferAssignements}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/status"
-                    component={StudentStatus}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/status"
+                        component={StudentStatus}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/OfferList"
-                    component={OfferList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/OfferList"
+                        component={OfferList}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/applicationsAdmin"
-                    component={ApplicationList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/applicationsAdmin"
+                        component={ApplicationList}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/employersStatus"
-                    component={Employerstatus}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/employersStatus"
+                        component={Employerstatus}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path={"/dashboard/setSemester"}
-                    component={SemesterSelector}
-                    role={"admin"}
+                        exact={true}
+                        path={"/dashboard/setSemester"}
+                        component={SemesterSelector}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/reports"
-                    component={Reports}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/reports"
+                        component={Reports}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/contractForm"
-                    component={ContractForm}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/contractForm"
+                        component={ContractForm}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signFormAdmin"
-                    component={SignForm}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/signFormAdmin"
+                        component={SignForm}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/businessEvaluation"
-                    component={BusinessEvaluationForm}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/businessEvaluation"
+                        component={BusinessEvaluationForm}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/businessEvaluationList"
-                    component={BusinessEvaluationList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/businessEvaluationList"
+                        component={BusinessEvaluationList}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
                         exact={true}
@@ -128,47 +128,47 @@ export default function RouteSelector() {
                         role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/managers"
-                    component={Managers}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/managers"
+                        component={Managers}
+                        role={"admin"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/contractList"
-                    component={ContractList}
-                    role={"admin"}
+                        exact={true}
+                        path="/dashboard/contractList"
+                        component={ContractList}
+                        role={"admin"}
                 />
                 {/* Employeur */}
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/createstage"
-                    component={OfferCreation}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/createstage"
+                        component={OfferCreation}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/applications"
-                    component={ApplicationList}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/applications"
+                        component={ApplicationList}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/interviewConvocation"
-                    component={InterviewConvocation}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/interviewConvocation"
+                        component={InterviewConvocation}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/listInterview"
-                    component={Interviewlist}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/listInterview"
+                        component={Interviewlist}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/rescheduleInterview"
-                    component={Rescheduleinterview}
-                    role={"employer"}
+                        exact={true}
+                        path="/dashboard/rescheduleInterview"
+                        component={Rescheduleinterview}
+                        role={"employer"}
                 />
                 <RoleProtectedRoute
                         exact={true}
