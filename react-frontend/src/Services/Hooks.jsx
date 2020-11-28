@@ -96,7 +96,7 @@ export function useNotificationChannel(userId) {
                     socket.requestChannel(flow)
                         .subscribe({
                             onNext: ({data}) => {
-                                if (!notifications.find(data))
+                                if (!notifications.find(item => item === data))
                                     setNotifications(prev => {
                                         return [...prev, data]
                                     })

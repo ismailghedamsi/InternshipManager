@@ -86,7 +86,7 @@ export default function RegisterEmployer(props) {
                     <Field
                         component={TextField}
                         name="phoneNumber"
-                        id="phoneNumber"
+                        id="phoneNumberEmployer"
                         variant="outlined"
                         label="Numéro de téléphone"
                         required
@@ -109,7 +109,7 @@ export default function RegisterEmployer(props) {
                     <Field
                         component={TextField}
                         name="password"
-                        id="password"
+                        id="passwordEmployer"
                         variant="outlined"
                         label="Mot de passe"
                         type={"password"}
@@ -121,7 +121,7 @@ export default function RegisterEmployer(props) {
                     <Field
                         component={TextField}
                         name="passwordConfirm"
-                        id="passwordConfirm"
+                        id="passwordConfirmEmployer"
                         variant="outlined"
                         label="Confirmez"
                         type={"password"}

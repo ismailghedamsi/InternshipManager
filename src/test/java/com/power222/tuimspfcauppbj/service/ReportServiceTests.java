@@ -54,7 +54,7 @@ public class ReportServiceTests {
 
     @Test
     void studentsWithoutResumeTest() {
-        when(studentRepo.findAllByResumesIsEmpty(pageRequest)).thenReturn(page);
+        when(studentRepo.findAllBySemestersAndResumesIsEmpty(anyString(), eq(pageRequest))).thenReturn(page);
 
         var actual = svc.studentsWithoutResume(PAGE, PAGE_SIZE);
 
@@ -63,7 +63,8 @@ public class ReportServiceTests {
 
     @Test
     void studentsPendingResumesTest() {
-        when(studentRepo.findAllByResumesReviewStatePending(pageRequest)).thenReturn(page);
+        SemesterContext.setCurrent("fakeSemester");
+        when(studentRepo.findAllBySemestersAndResumesReviewStatePending(anyString(), eq(pageRequest))).thenReturn(page);
 
         var actual = svc.studentsPendingResumes(PAGE, PAGE_SIZE);
 
