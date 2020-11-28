@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi} from "../../Services/Hooks";
+import ApprovalButtons from "./ApprovalButtons";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
 
@@ -21,6 +22,14 @@ export default function ApplicationList() {
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function studentApplicationState(i) {
+        function hirementDecision(copy) {
+            api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
+                    .then(r => {
+                        if (r) copy.applications[i].state = r.data.state
+                        setOffer(copy)
+                    })
+        }
+
         switch (offer.applications[i].state) {
             case "STUDENT_HIRED_BY_EMPLOYER":
                 if (AuthenticationService.getCurrentUserRole() === "admin")
@@ -29,27 +38,22 @@ export default function ApplicationList() {
             case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
             case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
             case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
-                return <Typography>
-                    <Button
-                            variant="contained"
-                            color="primary"
-                            style={{backgroundColor: "green"}}
-                            size={"large"}
-                            onClick={() => {
-                                const copy = {...offer}
-                                copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
-                                        "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-                                api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
-                                        .then(r => {
-                                            if (r) copy.applications[i].state = r.data.state
-                                            setOffer(copy)
-                                        })
-                            }}
-                            inputProps={{"aria-label": "state"}}
-                    >
-                        Embaucher étudiant
-                    </Button>
-                </Typography>
+                return <ApprovalButtons
+                        onApprove={() => {
+                            const copy = {...offer}
+                            copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
+                                    "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
+                            hirementDecision(copy);
+                        }}
+                        onDeny={() => {
+                            const copy = {...offer}
+                            copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
+                            hirementDecision(copy)
+                        }
+                        }
+                        approveLabel={"Embaucher l'étudiant"}
+                        denyLabel={"Refuser l'application"}
+                />
             case "APPLICATION_REJECTED_BY_EMPLOYER":
             case "STUDENT_REJECTED_BY_EMPLOYER":
                 return applicationDecisionStatus("L'employeur a refusé la demande", "red")
