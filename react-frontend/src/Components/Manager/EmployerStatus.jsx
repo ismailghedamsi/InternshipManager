@@ -1,9 +1,8 @@
-import {Button, Dialog, DialogContent, Divider, Grid, Typography} from "@material-ui/core";
-import DialogActions from "@material-ui/core/DialogActions";
+import {Button, Divider, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfDocument from "../Utils/PDF/PdfDocument";
+import PdfModal from "../Utils/PdfModal"
 import useStyles from "../Utils/Style/useStyles";
 
 export default function StudentStatus() {
@@ -29,7 +28,7 @@ export default function StudentStatus() {
 
     useEffect(() => {
         if (employers[currentEmployerIndex])
-            api.get("/offers/employer/" + employers[currentEmployerIndex].username)
+            api.get("/offers/employer/" + employers[currentEmployerIndex].email)
                 .then(r => {
                     setCurrentEmployerOffers(r.data)
                 })
@@ -157,8 +156,8 @@ export default function StudentStatus() {
             {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
             {
                 currentSubtab === offersTabIndex ?
-                    currentEmployerOffers && currentEmployerOffers.map((o, k) => {
-                        return <div key={k}>
+                    currentEmployerOffers && currentEmployerOffers.map((o, k) =>
+                        <div key={k}>
                             <Typography variant={"h5"}>
                                 {o.title}
                             </Typography>
@@ -180,29 +179,23 @@ export default function StudentStatus() {
                             </Button>
                             <Divider className={classes.dividers}/>
                         </div>
-                    })
+                    )
                     : "L'employeur n'a aucune offre"
             }
             {
                 currentSubtab === interviewsTabIndex ?
-                    currentSubtab === interviewsTabIndex && currentEmployerInterviews && currentEmployerInterviews.map((interview, index) => {
-                        return <div key={index}>
+                    currentSubtab === interviewsTabIndex && currentEmployerInterviews && currentEmployerInterviews.map((interview, index) =>
+                        <div key={index}>
                             <InterviewStatus classes={classes} interview={interview}/>
                             <hr/>
                         </div>
-                    })
+                    )
                     : "L'employeur n'a programmé aucune entrevue"
             }
         </Grid>
-        <Dialog open={isPdfOpen} onClose={closePdf} maxWidth={"xl"}>
-            <DialogContent className={classes.viewbox}>
-                <PdfDocument document={currentDoc}/>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={closePdf} color="primary">
-                    Fermer
-                </Button>
-            </DialogActions>
-        </Dialog>
+        <PdfModal open={isPdfOpen}
+                  onClose={closePdf}
+                  document={currentDoc}
+        />
     </Grid>
 }
