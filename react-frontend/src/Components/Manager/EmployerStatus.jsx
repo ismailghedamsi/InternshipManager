@@ -114,13 +114,44 @@ EmployerStatusDetails.propTypes = {
     offers: PropTypes.array.isRequired
 }
 
+function InterviewStatus(props) {
+    const parseDate = useDateParser()
+    const parseTimeFromDate = useTimeParserFromDate()
+
+    function getInterviewState(interview) {
+        if (interview.reviewState === "PENDING")
+            return <span style={{color: "blue"}}>En attente</span>
+        else if (interview.reviewState === "DENIED")
+            return <span style={{color: "red"}}>Rejeté<span
+                style={{color: "black"}}> : {interview.reasonForRejection} </span></span>
+        else
+            return <span style={{color: "green"}}>Approuvé</span>
+    }
+
+    return <div>
+        <Typography>
+            Entrevue pour
+            l'étudiant {props.interview.studentApplication ? props.interview.studentApplication.student.firstName + " " + props.interview.studentApplication.student.lastName : ""}
+        </Typography>
+        <Typography>
+            Date : {props.interview ? parseDate(props.interview.date) : ""}
+        </Typography>
+        <Typography>
+            Heure : {props.interview ? parseTimeFromDate(props.interview.date) : ""}
+        </Typography>
+        <Typography>Titre de l'offre :
+            {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
+        <Typography>
+            État : {getInterviewState(props.interview)}
+        </Typography>
+    </div>
+}
+
 export default function EmployerStatus() {
     const offersTabIndex = 0
     const interviewsTabIndex = 1
     const classes = useStyles()
     const api = useApi()
-    const parseDate = useDateParser()
-    const parseTimeFromDate = useTimeParserFromDate()
     const [employers, setEmployers] = useState([])
     const [currentEmployerOffers, setCurrentEmployerOffers] = useState([])
     const [currentEmployerInterviews, setCurrentEmployerInterviews] = useState([])
@@ -178,39 +209,10 @@ export default function EmployerStatus() {
             return <span style={{color: "green"}}>Approuvé</span>
     }
 
-    function InterviewStatus(props) {
-        function getInterviewState(interview) {
-            if (interview.reviewState === "PENDING")
-                return <span style={{color: "blue"}}>En attente</span>
-            else if (interview.reviewState === "DENIED")
-                return <span style={{color: "red"}}>Rejeté<span
-                    style={{color: "black"}}> : {interview.reasonForRejection} </span></span>
-            else
-                return <span style={{color: "green"}}>Approuvé</span>
-        }
-
-        return <div>
-            <Typography>
-                Entrevue pour
-                l'étudiant {props.interview.studentApplication ? props.interview.studentApplication.student.firstName + " " + props.interview.studentApplication.student.lastName : ""}
-            </Typography>
-            <Typography>
-                Date : {props.interview ? parseDate(props.interview.date) : ""}
-            </Typography>
-            <Typography>
-                Heure : {props.interview ? parseTimeFromDate(props.interview.date) : ""}
-            </Typography>
-            <Typography>Titre de l'offre :
-                {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
-            <Typography>
-                État : {getInterviewState(props.interview)}
-            </Typography>
-        </div>
-    }
-
     return <Grid
         container
         spacing={2}
+        wrap={"nowrap"}
         className={classes.main}
         style={{padding: "15px 0 0 15px"}}
     >
@@ -261,14 +263,13 @@ export default function EmployerStatus() {
                     </div>}
                     <Divider className={classes.dividers}/>
                 </div>
-            ) : "Aucun employeurs"}
+            ) : <Typography variant={"h5"}>Aucun employeurs</Typography>}
         </Grid>
+        <Divider orientation={"vertical"} flexItem/>
         <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
-            {employers.length !== 0 && <div>
-                {currentSubtab === offersTabIndex ? <h1>Détails des offres</h1> : <h1>Détails des entrevues</h1>}
-
-                {currentSubtab === offersTabIndex && (currentEmployerOffers.length > 0 ? currentEmployerOffers.map((o, k) => {
-                         <div key={k}>
+            {employers.length !== 0 && <>
+                {currentSubtab === offersTabIndex && (currentEmployerOffers.length > 0 ? currentEmployerOffers.map((o, k) =>
+                        <div key={k}>
                             <Typography variant={"h5"}>
                                 {o.title}
                             </Typography>
@@ -290,17 +291,17 @@ export default function EmployerStatus() {
                             </Button>
                             <Divider className={classes.dividers}/>
                         </div>
-                    })
-                    : "L'employeur n'a aucune offre")}
-                {
-                    currentSubtab === interviewsTabIndex && (currentEmployerInterviews.length > 0 ? currentEmployerInterviews.map((interview, index) => {
-                            <div key={index}>
-                                <InterviewStatus classes={classes} interview={interview}/>
-                                <hr/>
-                            </div>
-                        })
-                        : "L'employeur n'a programmé aucune entrevue")
-                }</div>}
+                    )
+                    : <Typography variant={"h5"}>L'employeur n'a aucune offre</Typography>)}
+                {currentSubtab === interviewsTabIndex && (currentEmployerInterviews.length > 0 ? currentEmployerInterviews.map((interview, index) =>
+                        <>
+                            <InterviewStatus key={index} classes={classes} interview={interview}/>
+                            <Divider className={classes.dividers}/>
+                        </>
+                    )
+                    : <Typography variant={"h5"}>L'employeur n'a programmé aucune entrevue</Typography>)
+                }
+            </>}
         </Grid>
         <PdfModal open={isPdfOpen}
                   onClose={closePdf}

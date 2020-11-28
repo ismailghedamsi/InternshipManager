@@ -256,6 +256,7 @@ export default function StudentStatus() {
     return <Grid
         container
         spacing={2}
+        wrap={"nowrap"}
         className={classes.main}
         style={{padding: "15px 0 0 15px"}}
     >
@@ -300,8 +301,9 @@ export default function StudentStatus() {
                     </div>}
                     <Divider className={classes.dividers}/>
                 </div>
-            ) : "Aucun étudiant"}
+            ) : <Typography variant={"h5"}>Aucun étudiant</Typography>}
         </Grid>
+        <Divider orientation={"vertical"} flexItem/>
         <Grid item xs={7} align={"center"} style={{overflow: "auto", height: "100%"}}>
             {students.length !== 0 &&
             <div>
@@ -313,7 +315,7 @@ export default function StudentStatus() {
                                       setCurrentDoc(resume.file)
                                       openPdf()
                                   }}/>
-                ) : "L'étudiant n'a téléversé aucun CV")}
+                ) : <Typography variant={"h5"}>L'étudiant n'a téléversé aucun CV</Typography>)}
                 {currentSubtab === 1 && (isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
                     <OfferStatus key={index}
                                  classes={classes}
@@ -323,7 +325,7 @@ export default function StudentStatus() {
                                      setCurrentDoc(offer.file)
                                      openPdf()
                                  }}/>
-                ) : " L'étudiant n'a accès à aucune offre de stage")}
+                ) : <Typography variant={"h5"}>L'étudiant n'a accès à aucune offre de stage</Typography>)}
             </div>}
         </Grid>
         <PdfModal open={isPdfOpen}
