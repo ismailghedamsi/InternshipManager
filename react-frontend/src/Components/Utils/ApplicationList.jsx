@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../../Services/Hooks";
+import {useEmployerOfferManagement} from "../../Services/EmployerHooks";
 import ApprovalButtons from "./ApprovalButtons";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
@@ -12,23 +12,15 @@ export default function ApplicationList() {
     const classes = useStyles()
     const location = useLocation()
     const history = useHistory()
-    const api = useApi()
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
+    const manageApplication = useEmployerOfferManagement()
 
     useEffect(() => {
-        api.get("/offers/" + location.state.offerId)
-            .then(r => setOffer(r.data))
+        manageApplication.retrieveOffer("/offers/" + location.state.offerId, r => setOffer(r ? r.data : []))
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function applicationActions(i) {
-        function hirementDecision(copy) {
-            api.put(`applications/state/${offer.applications[i].id}`, offer.applications[i])
-                    .then(r => {
-                        if (r) copy.applications[i].state = r.data.state
-                        setOffer(copy)
-                    })
-        }
 
         switch (offer.applications[i].state) {
             case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
@@ -39,12 +31,12 @@ export default function ApplicationList() {
                             const copy = {...offer}
                             copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
                                     "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-                            hirementDecision(copy);
+                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }}
                         onDeny={() => {
                             const copy = {...offer}
                             copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
-                            hirementDecision(copy)
+                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }
                         }
                         approveLabel={"Embaucher l'étudiant"}
@@ -65,18 +57,37 @@ export default function ApplicationList() {
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
             case "JOB_OFFER_DENIED_BY_STUDENT":
-                return applicationDecisionStatus("L'étudiant a refusé l'offre de stage", "red")
+                return applicationDecisionStatus(`L'étudiant a refusé l'offre de stage : ${offer.applications[i].reasonForRejection}`, "red")
             case "JOB_OFFER_ACCEPTED_BY_STUDENT":
                 return applicationDecisionStatus("L'étudiant a accepté l'offre de stage", "green")
-
             default:
                 return ""
         }
     }
 
     function applicationDecisionStatus(statusMessage, messageColor) {
-        return <Typography variant={"body1"} style={{color: messageColor}}>
-            {statusMessage}
+        return <Typography variant={"body1"}>
+            Status application : <span style={{color: messageColor}}>{statusMessage}</span>
+        </Typography>
+    }
+
+    function interviewDecisionMessage(i) {
+        if (offer.applications[i].interview)
+            switch (offer.applications[i].interview.studentAcceptanceState) {
+                case "INTERVIEW_WAITING_FOR_STUDENT_DECISION":
+                    return interviewDecisionStatus("En attente de la décision de l'étudiant", "blue")
+                case "INTERVIEW_ACCEPTED_BY_STUDENT":
+                    return interviewDecisionStatus("L'étudiant a accepté l'entrevue", "green")
+                case "INTERVIEW_REJECTED_BY_STUDENT":
+                    return interviewDecisionStatus(`L'étudiant a refusé l'entrevue : ${offer.applications[i].interview.reasonForRejectionByStudent} `, "red")
+                default:
+                    return ""
+            }
+    }
+
+    function interviewDecisionStatus(statusMessage, messageColor) {
+        return <Typography variant={"body1"}>
+            Status entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
         </Typography>
     }
 
@@ -113,6 +124,7 @@ export default function ApplicationList() {
                     </Typography>
                     {applicationActions(i)}
                     {applicationDecisionMessage(i)}
+                    {interviewDecisionMessage(i)}
                     {showInterviewConvocationButtonCondition(i) &&
                     <Button
                             variant={"contained"}

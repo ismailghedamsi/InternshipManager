@@ -12,3 +12,22 @@ export function useStudentEvaluation() {
 
     return {evaluate}
 }
+
+export function useEmployerOfferManagement() {
+    const api = useApi()
+
+    function decideHirement(endPoint, updatedApplication, setOfferCallback) {
+        api.put(endPoint, updatedApplication)
+                .then(r => {
+                    if (r) updatedApplication.state = r.data.state
+                    setOfferCallback()
+                })
+    }
+
+    function retrieveOffer(endPoint, setOfferCallback) {
+        api.get(endPoint)
+                .then(r => setOfferCallback(r))
+    }
+
+    return {decideHirement, retrieveOffer}
+}
