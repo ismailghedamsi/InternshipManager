@@ -267,7 +267,6 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
 
                     validationSchema={yup.object()
                         .shape({
-                            username: yup.string().trim().required(requiredFieldMsg),
                             name: yup.string().trim().required(requiredFieldMsg),
                             email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
                             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
@@ -277,7 +276,6 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                     validateOnChange={false}
                     enableReinitialize={true}
                     initialValues={{
-                        username: '',
                         name: '',
                         email: '',
                         password: '',
