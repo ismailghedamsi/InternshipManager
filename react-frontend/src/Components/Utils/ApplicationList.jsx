@@ -37,10 +37,7 @@ export default function ApplicationList() {
                             manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }}
                         onDeny={() => {
-                            const copy = {...offer}
                             openReasonModal()
-                            //copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
-                            //manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }
                         }
                         approveLabel={"Embaucher l'étudiant"}
