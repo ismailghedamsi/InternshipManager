@@ -20,6 +20,7 @@ export default function InterviewConvocation() {
     const history = useHistory()
     const [applicationInterview, setApplicationInterview] = useState({})
 
+
     useEffect(() => {
         setApplicationInterview(location.state)
     }, [location.state])

@@ -12,6 +12,10 @@ import {useHistory, useLocation} from "react-router-dom";
 import {SemesterContext} from "../../../App";
 import AuthenticationService from "../../../Services/AuthenticationService";
 import NotificationButton from "./NotificationButton"
+import {useModal} from "../../../Services/Hooks";
+import ResumeUploadModal from "../../Student/Upload/ResumeUploadModal";
+import SemesterSelectorModal from "../../Manager/SemesterSelectorModal";
+import OfferCreationModal from "../../Employer/OfferCreationModal";
 
 const Links = {
     admin: [
@@ -81,7 +85,6 @@ const Links = {
         },
         {
             title: "Téléverser un CV",
-            url: "/dashboard/upload"
         }
     ],
     employer: [
@@ -94,7 +97,6 @@ const Links = {
         },
         {
             title: "Créer une offre",
-            url: "/dashboard/createstage"
         },
         {
             title: "Entrevues",
@@ -134,6 +136,9 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false)
     const [current, setCurrent] = useState(0)
     const {semester, setSemester} = useContext(SemesterContext)
+    const [isUploadResumeModalOpen, openUploadResumeModal, closeUploadResumeModal] = useModal()
+    const [isSemesterSelectorModalOpen, openSemesterSelectorModal, closeSemesterSelectorModal] = useModal()
+    const [isOfferCreationModalOpen, openOfferCreationModal, closeOfferCreationModal] = useModal()
 
     function getLinks() {
         if (AuthenticationService.getCurrentUserRole() === "student")
@@ -163,7 +168,8 @@ export default function Navbar() {
             {AuthenticationService.getCurrentUserRole() === "admin" &&
             <>
                 <Button className={classes.linkButton}
-                        onClick={() => history.push("/dashboard/setSemester")}
+                    // onClick={() => history.push("/dashboard/setSemester")}
+                        onClick={() => openSemesterSelectorModal()}
                 >
                     <i className="fa fa-calendar"/>&ensp;{semester}
                 </Button>
@@ -174,7 +180,7 @@ export default function Navbar() {
                     onClick={() => {
                         AuthenticationService.logout()
                         axios.get("http://localhost:8080/api/semesters/present")
-                                .then(r => setSemester(r ? r.data : ""))
+                            .then(r => setSemester(r ? r.data : ""))
                         history.push("/")
                     }}
             >
@@ -185,17 +191,34 @@ export default function Navbar() {
             <List style={{width: 250}} onClick={() => setMenuOpen(false)}>
                 <ListSubheader>Menu</ListSubheader>
                 {getLinks().map((item, index) =>
-                        <ListItem button
-                                  key={index}
-                                  onClick={() => {
-                                      setCurrent(index)
+                    <ListItem button
+                              key={index}
+                              onClick={() => {
+                                  setCurrent(index)
+                                  if (item.title === "Téléverser un CV")
+                                      openUploadResumeModal()
+                                  else if (item.title === "Créer une offre")
+                                      openOfferCreationModal()
+                                  else
                                       history.push(item.url)
-                                  }}
-                        >
-                            <ListItemText primary={item.title}/>
-                        </ListItem>
+                              }}
+                    >
+                        <ListItemText primary={item.title}/>
+                    </ListItem>
                 )}
             </List>
         </Drawer>
+        <ResumeUploadModal isOpen={isUploadResumeModalOpen}
+                           hide={closeUploadResumeModal}
+                           title={"Télécharger un nouveau CV"}
+        />
+        <SemesterSelectorModal isOpen={isSemesterSelectorModalOpen}
+                               hide={closeSemesterSelectorModal}
+                               title={"Choisir une année scolaire"}
+        />
+        <OfferCreationModal isOpen={isOfferCreationModalOpen}
+                            hide={closeOfferCreationModal}
+                            title={"Nouvelle offre de stage"}
+        />
     </AppBar>
 }

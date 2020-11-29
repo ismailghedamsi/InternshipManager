@@ -4,9 +4,10 @@ import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../../Services/Hooks";
+import {useApi, useModal} from "../../Services/Hooks";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
+import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 
 export default function ApplicationList() {
     const classes = useStyles()
@@ -15,6 +16,8 @@ export default function ApplicationList() {
     const api = useApi()
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [application, setApplication] = useState({})
+    const [isInterviewConvocationModalOpen, openInterviewConvocationModal, closeInterviewConvocationModal] = useModal()
 
     useEffect(() => {
         api.get("/offers/" + location.state.offerId)
@@ -111,13 +114,16 @@ export default function ApplicationList() {
                     <Typography color={"textPrimary"} variant={"body1"}>
                         {offer.applications[i].student.address}
                     </Typography>
+                    {console.log(offer.applications[i])}
                     {studentApplicationState(i)}
                     {showButtonCondition(i) &&
                     <Button
                         variant={"contained"}
                         color={"primary"}
                         onClick={() => {
-                            history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
+                            // history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
+                            setApplication(offer.applications[i])
+                            openInterviewConvocationModal()
                         }}
                     >
                         Convoquer l'étudiant pour un entrevue
@@ -127,5 +133,10 @@ export default function ApplicationList() {
                 <hr/>
             </div>}
         </PdfSelectionViewer>
+        <InterviewConvocationModal isOpen={isInterviewConvocationModalOpen}
+                                   hide={closeInterviewConvocationModal}
+                                   title={"Étudiant à rencontrer"}
+                                   application={application}
+        />
     </div>
 }
