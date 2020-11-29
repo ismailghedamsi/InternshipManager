@@ -4,7 +4,6 @@ import React from "react"
 import {Route, Switch} from "react-router-dom"
 import Dashboard from "./Dashboard"
 import StudentEvaluationForm from "./Employer/Evaluations/StudentEvaluationForm";
-import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList"
 import HiredStudentList from "./Employer/HiredStudentList";
 import InterviewConvocation from "./Employer/Interview/InterviewConvocation"
 import Interviewlist from "./Employer/Interview/InterviewList"
@@ -27,6 +26,7 @@ import Navbar from "./Utils/Navb-Foot/Navbar"
 import OfferList from "./Utils/OfferList"
 import {RoleProtectedRoute} from "./Utils/Routes"
 import SignForm from "./Utils/SignForm"
+import StudentEvaluationsList from "./Utils/StudentEvaluationsList"
 
 const useStyles = makeStyles(() => ({
     root: {
