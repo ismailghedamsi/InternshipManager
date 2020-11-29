@@ -4,7 +4,9 @@ import React, {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
 import {useEmployerOfferManagement} from "../../Services/EmployerHooks";
+import {useModal} from "../../Services/Hooks";
 import ApprovalButtons from "./ApprovalButtons";
+import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
 
@@ -15,6 +17,7 @@ export default function ApplicationList() {
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
     const manageApplication = useEmployerOfferManagement()
+    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
 
     useEffect(() => {
         manageApplication.retrieveOffer("/offers/" + location.state.offerId, r => setOffer(r ? r.data : []))
@@ -35,8 +38,9 @@ export default function ApplicationList() {
                         }}
                         onDeny={() => {
                             const copy = {...offer}
-                            copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
-                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
+                            openReasonModal()
+                            //copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
+                            //manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }
                         }
                         approveLabel={"Embaucher l'étudiant"}
@@ -138,7 +142,21 @@ export default function ApplicationList() {
                     }
                 </div>}
                 <hr/>
+                <TextboxModal
+                        isOpen={isReasonModalOpen}
+                        hide={closeReasonModal}
+                        title={"Justifiez le refus"}
+                        onSubmit={() => {
+                            const copy = {...offer}
+                            copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
+                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy)
+                                    , () => closeReasonModal())
+                        }
+
+                        }
+                />
             </div>}
         </PdfSelectionViewer>
+
     </div>
 }

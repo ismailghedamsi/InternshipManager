@@ -16,11 +16,13 @@ export function useStudentEvaluation() {
 export function useEmployerOfferManagement() {
     const api = useApi()
 
-    function decideHirement(endPoint, updatedApplication, setOfferCallback) {
+    function decideHirement(endPoint, updatedApplication, setOfferCallback, closeModalCallback) {
         api.put(endPoint, updatedApplication)
                 .then(r => {
                     if (r) updatedApplication.state = r.data.state
                     setOfferCallback()
+                    if (closeModalCallback)
+                        closeModalCallback()
                 })
     }
 
