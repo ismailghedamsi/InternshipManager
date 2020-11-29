@@ -91,7 +91,7 @@ function EmployerStatusDetails({offers}) {
                     approvedOffers++
                 else if (offer.reviewState === "PENDING")
                     pendingOffers++
-                else if (offer.reviewState === "DENIED")
+                else
                     rejectedOffers++
             }
 
@@ -162,7 +162,7 @@ function Offer(props) {
             variant={"contained"}
             color={"primary"}
             size={"small"}
-            onClick={props.onClick}>
+            onClick={props.seeOffer}>
             <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
         </Button>
         <Divider className={props.classes.dividers}/>
@@ -173,7 +173,7 @@ Offer.propTypes = {
     o: PropTypes.any,
     hiredStudentsNames: PropTypes.any,
     printOfferStatus: PropTypes.any,
-    onClick: PropTypes.func,
+    seeOffer: PropTypes.func,
     classes: PropTypes.any
 };
 
@@ -183,7 +183,7 @@ function EmployerInformation(props) {
             variant={"contained"}
             color={"primary"}
             style={{textTransform: "none", marginBottom: 10}}
-            onClick={props.onClick}
+            onClick={props.getEmployer}
         >
             <Typography variant={"body1"} display={"block"}>
                 {props.employers[props.i].companyName + " - " + props.employers[props.i].contactName}
@@ -196,7 +196,7 @@ function EmployerInformation(props) {
                 variant={props.currentSubtab === 0 ? "contained" : "outlined"}
                 color={"primary"}
                 style={{textTransform: "none"}}
-                onClick={props.onClick1}>
+                onClick={props.getOffers}>
                 <Typography variant={"body2"}>
                     Offres
                 </Typography>
@@ -206,8 +206,8 @@ function EmployerInformation(props) {
                 variant={props.currentSubtab === 1 ? "contained" : "outlined"}
                 color={"primary"}
                 style={{textTransform: "none"}}
-                onClick={props.onClick2
-                }>
+                onClick={props.getInterviews}
+            >
                 <Typography color={"textSecondary"} variant={"body2"}>
                     Entrevues
                 </Typography>
@@ -218,14 +218,14 @@ function EmployerInformation(props) {
 }
 
 EmployerInformation.propTypes = {
-    onClick: PropTypes.func,
+    getEmployer: PropTypes.func,
     employers: PropTypes.arrayOf(PropTypes.any),
     i: PropTypes.number,
     currentEmployerIndex: PropTypes.number,
     offers: PropTypes.arrayOf(PropTypes.any),
     currentSubtab: PropTypes.number,
-    onClick1: PropTypes.func,
-    onClick2: PropTypes.func,
+    getOffers: PropTypes.func,
+    getInterviews: PropTypes.func,
     classes: PropTypes.any
 };
 export default function EmployerStatus() {
@@ -303,7 +303,7 @@ export default function EmployerStatus() {
             </Typography>
             {employers.length !== 0 ? employers.map((item, i) =>
                 <EmployerInformation key={i}
-                                     onClick={() => {
+                                     getEmployer={() => {
                                          setCurrentEmployerIndex(i)
                                      }}
                                      employers={employers}
@@ -311,8 +311,8 @@ export default function EmployerStatus() {
                                      currentEmployerIndex={currentEmployerIndex}
                                      offers={currentEmployerOffers}
                                      currentSubtab={currentSubtab}
-                                     onClick1={() => setCurrentSubtab(0)}
-                                     onClick2={() => {
+                                     getOffers={() => setCurrentSubtab(0)}
+                                     getInterviews={() => {
                                          setCurrentSubtab(1)
                                          getCurrentEmployerInterviews(currentEmployerIndex)
                                      }}
@@ -325,7 +325,7 @@ export default function EmployerStatus() {
                 {currentSubtab === offersTabIndex && (currentEmployerOffers.length > 0 ? currentEmployerOffers.map((o, k) =>
                         <Offer key={k} o={o} hiredStudentsNames={hiredStudentsNames(o)}
                                printOfferStatus={printOfferStatus(o)}
-                               onClick={() => {
+                               seeOffer={() => {
                                    setCurrentDoc(o.file)
                                    openPdf()
                                }}
