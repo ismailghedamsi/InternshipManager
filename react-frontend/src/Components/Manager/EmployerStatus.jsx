@@ -324,10 +324,12 @@ export default function EmployerStatus() {
             {employers.length !== 0 && <>
                 {currentSubtab === offersTabIndex && (currentEmployerOffers.length > 0 ? currentEmployerOffers.map((o, k) =>
                         <Offer key={k} o={o} hiredStudentsNames={hiredStudentsNames(o)}
-                               printOfferStatus={printOfferStatus(o)} onClick={() => {
-                            setCurrentDoc(o.file)
-                            openPdf()
-                        }} classes={classes}/>
+                               printOfferStatus={printOfferStatus(o)}
+                               onClick={() => {
+                                   setCurrentDoc(o.file)
+                                   openPdf()
+                               }}
+                               classes={classes}/>
                     )
                     : <Typography variant={"h5"}>L'employeur n'a aucune offre</Typography>)}
                 {currentSubtab === interviewsTabIndex && (currentEmployerInterviews.length > 0 ? currentEmployerInterviews.map((interview, index) =>
