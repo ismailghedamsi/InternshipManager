@@ -57,7 +57,7 @@ export default function ApplicationList() {
                 return applicationDecisionStatus("Application acceptée", "green")
             case "APPLICATION_REJECTED_BY_EMPLOYER":
             case "STUDENT_REJECTED_BY_EMPLOYER":
-                return applicationDecisionStatus("L'employeur a refusé la demande", "red")
+                return applicationDecisionStatus(`L'employeur a refusé la demande : ${offer.applications[i].reasonForRejection}`, "red")
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
             case "JOB_OFFER_DENIED_BY_STUDENT":
@@ -146,9 +146,10 @@ export default function ApplicationList() {
                         isOpen={isReasonModalOpen}
                         hide={closeReasonModal}
                         title={"Justifiez le refus"}
-                        onSubmit={() => {
+                        onSubmit={async values => {
                             const copy = {...offer}
                             copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
+                            copy.applications[i].reasonForRejection = values.message
                             manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy)
                                     , () => closeReasonModal())
                         }
