@@ -121,7 +121,6 @@ export default function ApplicationList() {
                         variant={"contained"}
                         color={"primary"}
                         onClick={() => {
-                            // history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
                             setApplication(offer.applications[i])
                             openInterviewConvocationModal()
                         }}

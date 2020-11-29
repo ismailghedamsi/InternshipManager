@@ -123,16 +123,6 @@ export default function ContractList({count}) {
                             denyLabel={"Supprimer le contrat"}
                         />
                         }
-                        {contracts[i].signatureState === "WAITING_FOR_ADMIN_SIGNATURE" &&
-                        <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            onClick={() => {
-                                history.push("/dashboard/signFormAdmin", {...contracts[i]})
-                            }}>
-                            Signer le contrat
-                        </Button>
-                        }
                         {showContractState(i)}
                     </div>
                     {showEvaluationButtonCondition(i) &&

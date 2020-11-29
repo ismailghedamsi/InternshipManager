@@ -4,7 +4,7 @@ import React from "react"
 import {Route, Switch} from "react-router-dom"
 import Dashboard from "./Dashboard"
 import StudentEvaluationForm from "./Employer/Evaluations/StudentEvaluationForm";
-import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList"
+import StudentEvaluationsList from "./Utils/StudentEvaluationsList"
 import HiredStudentList from "./Employer/HiredStudentList";
 import Interviewlist from "./Employer/Interview/InterviewList"
 import {Rescheduleinterview} from "./Employer/Interview/RescheduleInterview"
@@ -22,7 +22,6 @@ import Footer from "./Utils/Navb-Foot/Footer"
 import Navbar from "./Utils/Navb-Foot/Navbar"
 import OfferList from "./Utils/OfferList"
 import {RoleProtectedRoute} from "./Utils/Routes"
-import SignForm from "./Utils/SignForm"
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -95,12 +94,6 @@ export default function RouteSelector() {
                 />
                 <RoleProtectedRoute
                     exact={true}
-                    path="/dashboard/signFormAdmin"
-                    component={SignForm}
-                    role={"admin"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
                     path="/dashboard/businessEvaluation"
                     component={BusinessEvaluationForm}
                     role={"admin"}
@@ -156,12 +149,6 @@ export default function RouteSelector() {
                 />
                 <RoleProtectedRoute
                     exact={true}
-                    path="/dashboard/signFormEmployer"
-                    component={SignForm}
-                    role={"employer"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
                     path="/dashboard/studentEvaluationList"
                     component={StudentEvaluationsList}
                     role={"employer"}
@@ -173,12 +160,6 @@ export default function RouteSelector() {
                     role={"employer"}
                 />
                 {/* Etudiant */}
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/signFormStudent"
-                    component={SignForm}
-                    role={"student"}
-                />
             </Switch>
         </Container>
         <Footer/>

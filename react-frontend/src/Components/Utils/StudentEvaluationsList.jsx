@@ -1,7 +1,7 @@
 import {Divider, Grid, Typography} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
-import {useApi} from "../../../Services/Hooks";
-import useStyles from "../../Utils/Style/useStyles";
+import {useApi} from "../../Services/Hooks";
+import useStyles from "./Style/useStyles";
 
 export default function StudentStatus() {
     const classes = useStyles()

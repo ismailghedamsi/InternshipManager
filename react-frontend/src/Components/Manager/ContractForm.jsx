@@ -60,11 +60,31 @@ export default function ContractForm() {
                 >
                     {({isSubmitting}) =>
                         <Form className={classes.form}>
-                            <Grid container spacing={2}>
-                                <Typography variant="h1" className={classes.formTitle} style={{display: "block"}}>
+                            <Grid container spacing={2} justify={"center"}>
+                                <Typography variant={"h4"} style={{display: "block"}}>
                                     Genérer un contrat
                                 </Typography>
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={6}>
+                                    <Typography>
+                                        Nom du compagnie :
+                                        &ensp;{location.state.offer.employer.companyName}
+                                    </Typography>
+                                    <Typography>
+                                        Nom du contact :
+                                        &ensp;{location.state.offer.employer.contactName}
+                                    </Typography>
+                                    <Typography>
+                                        Nom de l'offre :
+                                        &ensp;{location.state.offer.title}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography>
+                                        Étudiant :
+                                        &ensp;{location.state.student.firstName} {location.state.student.lastName}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
                                     <Field
                                         component={TextField}
                                         name="totalHoursPerWeek"
