@@ -48,7 +48,7 @@ function DataTableBody({rows, setCurrentManager, openEditModal}) {
 
     return rows.map(admin =>
         <TableRow key={admin.id}>
-            <TableCell>{admin.name}</TableCell>
+            <TableCell>{admin.name + (AuthenticationService.getCurrentUser().id === admin.id ? " (votre compte)" : "")}</TableCell>
             <TableCell>{admin.email}</TableCell>
             <TableCell>{admin.disabled ? "Inactif" : "Actif"}</TableCell>
             <TableCell>
@@ -144,8 +144,9 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
     }
 
     return isOpen && <Dialog open={isOpen} onClose={hide}>
-        <DialogTitle>{"Modifier gestionnaire de stage : " + manager.name}</DialogTitle>
+        <DialogTitle>{"Modifier le gestionnaire de stage : " + manager.name}</DialogTitle>
         <DialogContent>
+            {AuthenticationService.getCurrentUser().id === manager.id ? <><Typography style={{fontStyle: "italic"}}>Vous ne pouvez pas désactiver votre compte</Typography><br/></> : ""}
             <Formik onSubmit={toggleManagerDisabledState} initialValues={{}}>
                 {({isSubmitting}) =>
                     <Form>
@@ -154,7 +155,7 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
                                 variant="contained"
                                 color="primary"
                                 size="large"
-                                disabled={isSubmitting}
+                                disabled={AuthenticationService.getCurrentUser().id === manager.id || isSubmitting}
                         >
                             {manager.disabled ? "Activer" : "Désactiver"}
                             {isSubmitting && <CircularProgress size={18}/>}
@@ -296,24 +297,13 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <Field
                                     component={TextField}
                                     name="email"
                                     id="email"
                                     variant="outlined"
                                     label="Adresse courriel"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Field
-                                    component={TextField}
-                                    name="username"
-                                    id="username"
-                                    variant="outlined"
-                                    label="Nom d'utilisateur"
                                     required
                                     fullWidth
                                 />
