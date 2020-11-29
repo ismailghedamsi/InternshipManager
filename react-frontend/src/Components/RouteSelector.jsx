@@ -6,7 +6,6 @@ import Dashboard from "./Dashboard"
 import StudentEvaluationForm from "./Employer/Evaluations/StudentEvaluationForm";
 import StudentEvaluationsList from "./Employer/Evaluations/StudentEvaluationsList"
 import HiredStudentList from "./Employer/HiredStudentList";
-import InterviewConvocation from "./Employer/Interview/InterviewConvocation"
 import Interviewlist from "./Employer/Interview/InterviewList"
 import {Rescheduleinterview} from "./Employer/Interview/RescheduleInterview"
 import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm"
@@ -135,12 +134,6 @@ export default function RouteSelector() {
                     exact={true}
                     path="/dashboard/applications"
                     component={ApplicationList}
-                    role={"employer"}
-                />
-                <RoleProtectedRoute
-                    exact={true}
-                    path="/dashboard/interviewConvocation"
-                    component={InterviewConvocation}
                     role={"employer"}
                 />
                 <RoleProtectedRoute
