@@ -232,6 +232,53 @@ StudentStatusDetails.propTypes = {
     student: PropTypes.object.isRequired
 }
 
+function StudentInformation(props) {
+    return <div>
+        <Button
+            variant={"contained"}
+            color={"primary"}
+            style={{textTransform: "none", marginBottom: 10}}
+            onClick={props.onClick}>
+            <Typography variant={"body1"} display={"block"} align={"left"}>
+                {props.students[props.i].firstName} {props.students[props.i].lastName}
+            </Typography>
+        </Button>
+        {props.currentIndex === props.i && <div>
+            <StudentStatusDetails student={props.students[props.i]}/>
+            <Button
+                variant={props.currentSubtab === 0 ? "contained" : "outlined"}
+                color={"primary"}
+                style={{textTransform: "none"}}
+                onClick={props.onClick1}>
+                <Typography variant={"body2"}>
+                    CVs
+                </Typography>
+            </Button>
+            &ensp;
+            <Button
+                variant={props.currentSubtab === 1 ? "contained" : "outlined"}
+                color={"primary"}
+                style={{textTransform: "none"}}
+                onClick={props.onClick2}>
+                <Typography variant={"body2"}>
+                    Offres de stage
+                </Typography>
+            </Button>
+        </div>}
+        <Divider className={props.classes.dividers}/>
+    </div>;
+}
+
+StudentInformation.propTypes = {
+    onClick: PropTypes.func,
+    students: PropTypes.arrayOf(PropTypes.any),
+    i: PropTypes.number,
+    currentIndex: PropTypes.number,
+    currentSubtab: PropTypes.number,
+    onClick1: PropTypes.func,
+    onClick2: PropTypes.func,
+    classes: PropTypes.any
+};
 export default function StudentStatus() {
     const classes = useStyles()
     const api = useApi()
@@ -265,42 +312,14 @@ export default function StudentStatus() {
                 État des étudiants
             </Typography>
             {students.length !== 0 ? students.map((item, i) =>
-                <div key={i}>
-                    <Button
-                        variant={"contained"}
-                        color={"primary"}
-                        style={{textTransform: "none", marginBottom: 10}}
-                        onClick={() => {
-                            setCurrentIndex(i)
-                        }}>
-                        <Typography variant={"body1"} display={"block"} align={"left"}>
-                            {students[i].firstName} {students[i].lastName}
-                        </Typography>
-                    </Button>
-                    {currentIndex === i && <div>
-                        <StudentStatusDetails student={students[i]}/>
-                        <Button
-                            variant={currentSubtab === 0 ? "contained" : "outlined"}
-                            color={"primary"}
-                            style={{textTransform: "none"}}
-                            onClick={() => setCurrentSubtab(0)}>
-                            <Typography variant={"body2"}>
-                                CVs
-                            </Typography>
-                        </Button>
-                        &ensp;
-                        <Button
-                            variant={currentSubtab === 1 ? "contained" : "outlined"}
-                            color={"primary"}
-                            style={{textTransform: "none"}}
-                            onClick={() => setCurrentSubtab(1)}>
-                            <Typography variant={"body2"}>
-                                Offres de stage
-                            </Typography>
-                        </Button>
-                    </div>}
-                    <Divider className={classes.dividers}/>
-                </div>
+                <StudentInformation key={i}
+                                    onClick={() => {
+                                        setCurrentIndex(i)
+                                    }}
+                                    students={students} i={i}
+                                    currentIndex={currentIndex} currentSubtab={currentSubtab}
+                                    onClick1={() => setCurrentSubtab(0)} onClick2={() => setCurrentSubtab(1)}
+                                    classes={classes}/>
             ) : <Typography variant={"h5"}>Aucun étudiant</Typography>}
         </Grid>
         <Divider orientation={"vertical"} flexItem/>

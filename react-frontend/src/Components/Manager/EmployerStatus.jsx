@@ -147,6 +147,87 @@ function InterviewStatus(props) {
     </div>
 }
 
+function Offer(props) {
+    return <div>
+        <Typography variant={"h5"}>
+            {props.o.title}
+        </Typography>
+        <OfferDetails offer={props.o}/>
+        <Typography>
+            <span>Liste des étudiants sélectionnés</span>
+        </Typography>
+        {props.hiredStudentsNames}
+        {props.printOfferStatus}
+        <Button
+            variant={"contained"}
+            color={"primary"}
+            size={"small"}
+            onClick={props.onClick}>
+            <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
+        </Button>
+        <Divider className={props.classes.dividers}/>
+    </div>;
+}
+
+Offer.propTypes = {
+    o: PropTypes.any,
+    hiredStudentsNames: PropTypes.any,
+    printOfferStatus: PropTypes.any,
+    onClick: PropTypes.func,
+    classes: PropTypes.any
+};
+
+function EmployerInformation(props) {
+    return <div>
+        <Button
+            variant={"contained"}
+            color={"primary"}
+            style={{textTransform: "none", marginBottom: 10}}
+            onClick={props.onClick}
+        >
+            <Typography variant={"body1"} display={"block"}>
+                {props.employers[props.i].companyName + " - " + props.employers[props.i].contactName}
+            </Typography>
+        </Button>
+        {props.currentEmployerIndex === props.i &&
+        <div>
+            <EmployerStatusDetails offers={props.offers}/>
+            <Button
+                variant={props.currentSubtab === 0 ? "contained" : "outlined"}
+                color={"primary"}
+                style={{textTransform: "none"}}
+                onClick={props.onClick1}>
+                <Typography variant={"body2"}>
+                    Offres
+                </Typography>
+            </Button>
+            &ensp;
+            <Button
+                variant={props.currentSubtab === 1 ? "contained" : "outlined"}
+                color={"primary"}
+                style={{textTransform: "none"}}
+                onClick={props.onClick2
+                }>
+                <Typography color={"textSecondary"} variant={"body2"}>
+                    Entrevues
+                </Typography>
+            </Button>
+        </div>}
+        <Divider className={props.classes.dividers}/>
+    </div>;
+}
+
+EmployerInformation.propTypes = {
+    onClick: PropTypes.func,
+    employers: PropTypes.arrayOf(PropTypes.any),
+    i: PropTypes.number,
+    currentEmployerIndex: PropTypes.number,
+    offers: PropTypes.arrayOf(PropTypes.any),
+    currentSubtab: PropTypes.number,
+    onClick1: PropTypes.func,
+    onClick2: PropTypes.func,
+    classes: PropTypes.any
+};
 export default function EmployerStatus() {
     const offersTabIndex = 0
     const interviewsTabIndex = 1
@@ -221,76 +302,32 @@ export default function EmployerStatus() {
                 État des employeurs
             </Typography>
             {employers.length !== 0 ? employers.map((item, i) =>
-                <div key={i}>
-                    <Button
-                        variant={"contained"}
-                        color={"primary"}
-                        style={{textTransform: "none", marginBottom: 10}}
-                        onClick={() => {
-                            setCurrentEmployerIndex(i)
-                        }}
-                    >
-                        <Typography variant={"body1"} display={"block"}>
-                            {employers[i].companyName + " - " + employers[i].contactName}
-                        </Typography>
-                    </Button>
-                    {currentEmployerIndex === i &&
-                    <div>
-                        <EmployerStatusDetails offers={currentEmployerOffers}/>
-                        <Button
-                            variant={currentSubtab === 0 ? "contained" : "outlined"}
-                            color={"primary"}
-                            style={{textTransform: "none"}}
-                            onClick={() => setCurrentSubtab(0)}>
-                            <Typography variant={"body2"}>
-                                Offres
-                            </Typography>
-                        </Button>
-                        &ensp;
-                        <Button
-                            variant={currentSubtab === 1 ? "contained" : "outlined"}
-                            color={"primary"}
-                            style={{textTransform: "none"}}
-                            onClick={() => {
-                                setCurrentSubtab(1)
-                                getCurrentEmployerInterviews(currentEmployerIndex)
-                            }
-                            }>
-                            <Typography color={"textSecondary"} variant={"body2"}>
-                                Entrevues
-                            </Typography>
-                        </Button>
-                    </div>}
-                    <Divider className={classes.dividers}/>
-                </div>
+                <EmployerInformation key={i}
+                                     onClick={() => {
+                                         setCurrentEmployerIndex(i)
+                                     }}
+                                     employers={employers}
+                                     i={i}
+                                     currentEmployerIndex={currentEmployerIndex}
+                                     offers={currentEmployerOffers}
+                                     currentSubtab={currentSubtab}
+                                     onClick1={() => setCurrentSubtab(0)}
+                                     onClick2={() => {
+                                         setCurrentSubtab(1)
+                                         getCurrentEmployerInterviews(currentEmployerIndex)
+                                     }}
+                                     classes={classes}/>
             ) : <Typography variant={"h5"}>Aucun employeurs</Typography>}
         </Grid>
         <Divider orientation={"vertical"} flexItem/>
         <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>
             {employers.length !== 0 && <>
                 {currentSubtab === offersTabIndex && (currentEmployerOffers.length > 0 ? currentEmployerOffers.map((o, k) =>
-                        <div key={k}>
-                            <Typography variant={"h5"}>
-                                {o.title}
-                            </Typography>
-                            <OfferDetails offer={o}/>
-                            <Typography>
-                                <span>Liste des étudiants sélectionnés</span>
-                            </Typography>
-                            {hiredStudentsNames(o)}
-                            {printOfferStatus(o)}
-                            <Button
-                                variant={"contained"}
-                                color={"primary"}
-                                size={"small"}
-                                onClick={() => {
-                                    setCurrentDoc(o.file)
-                                    openPdf()
-                                }}>
-                                <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
-                            </Button>
-                            <Divider className={classes.dividers}/>
-                        </div>
+                        <Offer key={k} o={o} hiredStudentsNames={hiredStudentsNames(o)}
+                               printOfferStatus={printOfferStatus(o)} onClick={() => {
+                            setCurrentDoc(o.file)
+                            openPdf()
+                        }} classes={classes}/>
                     )
                     : <Typography variant={"h5"}>L'employeur n'a aucune offre</Typography>)}
                 {currentSubtab === interviewsTabIndex && (currentEmployerInterviews.length > 0 ? currentEmployerInterviews.map((interview, index) =>
