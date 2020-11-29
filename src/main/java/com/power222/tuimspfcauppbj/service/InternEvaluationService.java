@@ -21,7 +21,7 @@ public class InternEvaluationService {
 
     public InternEvaluation createAndSaveNewInternEvaluation(InternEvaluation internEvaluation) {
         var save = InterEvaluationRepo.saveAndFlush(internEvaluation);
-        notifSvc.notifyInternEvaluationCreation(save);
+        notifSvc.notifyInternEvaluationCreation(save.getId());
         return save;
     }
 
