@@ -62,7 +62,7 @@ export default function ContractForm() {
                         <Form className={classes.form}>
                             <Grid container spacing={2} justify={"center"}>
                                 <Typography variant={"h4"} style={{display: "block"}}>
-                                    Genérer un contrat
+                                    Générer un contrat
                                 </Typography>
                                 <Grid item xs={6}>
                                     <Typography>
