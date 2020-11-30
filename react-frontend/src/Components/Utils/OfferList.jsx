@@ -1,4 +1,3 @@
-import {Divider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
@@ -8,6 +7,7 @@ import {useApi} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
+import {Divider} from "@material-ui/core";
 
 export default function OfferList({count}) {
     const classes = useStyles()

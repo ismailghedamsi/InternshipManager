@@ -37,7 +37,7 @@ function ResumeStatus(props) {
                 variant={"contained"}
                 color={"primary"}
                 size={"small"}
-                onClick={props.onClick}>
+                onClick={props.seeCV}>
                 <i className="fa fa-file-text-o"/>&ensp;Afficher le CV
             </Button>
         </Typography>
@@ -47,7 +47,7 @@ function ResumeStatus(props) {
 
 ResumeStatus.propTypes = {
     classes: PropTypes.any,
-    onClick: PropTypes.func,
+    seeCV: PropTypes.func,
     resume: PropTypes.any
 }
 
@@ -100,7 +100,7 @@ function OfferStatus(props) {
             <Button variant={"contained"}
                     color={"primary"}
                     size={"small"}
-                    onClick={props.onClick}>
+                    onClick={props.seeOffer}>
                 <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
             </Button>
         </Typography>
@@ -110,7 +110,7 @@ function OfferStatus(props) {
 
 OfferStatus.propTypes = {
     classes: PropTypes.any,
-    onClick: PropTypes.func,
+    seeOffer: PropTypes.func,
     offer: PropTypes.any,
     currentStudent: PropTypes.any
 }
@@ -198,7 +198,7 @@ function StudentStatusDetails({student}) {
                     approvedResumes++
                 else if (resume.reviewState === "PENDING")
                     pendingResumes++
-                else if (resume.reviewState === "DENIED")
+                else
                     rejectedResumes++
             }
 
@@ -232,6 +232,53 @@ StudentStatusDetails.propTypes = {
     student: PropTypes.object.isRequired
 }
 
+function StudentInformation(props) {
+    return <div>
+        <Button
+            variant={"contained"}
+            color={"primary"}
+            style={{textTransform: "none", marginBottom: 10}}
+            onClick={props.getStudent}>
+            <Typography variant={"body1"} display={"block"} align={"left"}>
+                {props.students[props.i].firstName} {props.students[props.i].lastName}
+            </Typography>
+        </Button>
+        {props.currentIndex === props.i && <div>
+            <StudentStatusDetails student={props.students[props.i]}/>
+            <Button
+                variant={props.currentSubtab === 0 ? "contained" : "outlined"}
+                color={"primary"}
+                style={{textTransform: "none"}}
+                onClick={props.getCVS}>
+                <Typography variant={"body2"}>
+                    CVs
+                </Typography>
+            </Button>
+            &ensp;
+            <Button
+                variant={props.currentSubtab === 1 ? "contained" : "outlined"}
+                color={"primary"}
+                style={{textTransform: "none"}}
+                onClick={props.getOffers}>
+                <Typography variant={"body2"}>
+                    Offres de stage
+                </Typography>
+            </Button>
+        </div>}
+        <Divider className={props.classes.dividers}/>
+    </div>;
+}
+
+StudentInformation.propTypes = {
+    getStudent: PropTypes.func,
+    students: PropTypes.arrayOf(PropTypes.any),
+    i: PropTypes.number,
+    currentIndex: PropTypes.number,
+    currentSubtab: PropTypes.number,
+    getCVS: PropTypes.func,
+    getOffers: PropTypes.func,
+    classes: PropTypes.any
+};
 export default function StudentStatus() {
     const classes = useStyles()
     const api = useApi()
@@ -256,6 +303,7 @@ export default function StudentStatus() {
     return <Grid
         container
         spacing={2}
+        wrap={"nowrap"}
         className={classes.main}
         style={{padding: "15px 0 0 15px"}}
     >
@@ -264,64 +312,41 @@ export default function StudentStatus() {
                 État des étudiants
             </Typography>
             {students.length !== 0 ? students.map((item, i) =>
-                <div key={i}>
-                    <Button
-                        variant={"contained"}
-                        color={"primary"}
-                        style={{textTransform: "none", marginBottom: 10}}
-                        onClick={() => {
-                            setCurrentIndex(i)
-                        }}>
-                        <Typography variant={"body1"} display={"block"} align={"left"}>
-                            {students[i].firstName} {students[i].lastName}
-                        </Typography>
-                    </Button>
-                    {currentIndex === i && <div>
-                        <StudentStatusDetails student={students[i]}/>
-                        <Button
-                            variant={currentSubtab === 0 ? "contained" : "outlined"}
-                            color={"primary"}
-                            style={{textTransform: "none"}}
-                            onClick={() => setCurrentSubtab(0)}>
-                            <Typography variant={"body2"}>
-                                CVs
-                            </Typography>
-                        </Button>
-                        &ensp;
-                        <Button
-                            variant={currentSubtab === 1 ? "contained" : "outlined"}
-                            color={"primary"}
-                            style={{textTransform: "none"}}
-                            onClick={() => setCurrentSubtab(1)}>
-                            <Typography variant={"body2"}>
-                                Offres de stage
-                            </Typography>
-                        </Button>
-                    </div>}
-                    <Divider className={classes.dividers}/>
-                </div>
-            ) : "Aucun étudiant"}
+                <StudentInformation key={i}
+                                    getStudent={() => {
+                                        setCurrentIndex(i)
+                                    }}
+                                    students={students} i={i}
+                                    currentIndex={currentIndex} currentSubtab={currentSubtab}
+                                    getCVS={() => setCurrentSubtab(0)}
+                                    getOffers={() => setCurrentSubtab(1)}
+                                    classes={classes}/>
+            ) : <Typography variant={"h5"}>Aucun étudiant</Typography>}
         </Grid>
+        <Divider orientation={"vertical"} flexItem/>
         <Grid item xs={7} align={"center"} style={{overflow: "auto", height: "100%"}}>
-            {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
-                <ResumeStatus key={index}
-                              classes={classes}
-                              resume={resume}
-                              onClick={() => {
-                                  setCurrentDoc(resume.file)
-                                  openPdf()
-                              }}/>
-            ) : "L'étudiant n'a téléversé aucun CV")}
-            {currentSubtab === 1 && (isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
-                <OfferStatus key={index}
-                             classes={classes}
-                             offer={offer}
-                             currentStudent={students[currentIndex]}
-                             onClick={() => {
-                                 setCurrentDoc(offer.file)
-                                 openPdf()
-                             }}/>
-            ) : " L'étudiant n'a accès à aucune offre de stage")}
+            {students.length !== 0 &&
+            <div>
+                {currentSubtab === 0 && (isResumesNotUndefined(students, currentIndex) ? students[currentIndex].resumes.map((resume, index) =>
+                    <ResumeStatus key={index}
+                                  classes={classes}
+                                  resume={resume}
+                                  seeCV={() => {
+                                      setCurrentDoc(resume.file)
+                                      openPdf()
+                                  }}/>
+                ) : <Typography variant={"h5"}>L'étudiant n'a téléversé aucun CV</Typography>)}
+                {currentSubtab === 1 && (isOffersNotUndefined(students, currentIndex) ? students[currentIndex].allowedOffers.map((offer, index) =>
+                    <OfferStatus key={index}
+                                 classes={classes}
+                                 offer={offer}
+                                 currentStudent={students[currentIndex]}
+                                 seeOffer={() => {
+                                     setCurrentDoc(offer.file)
+                                     openPdf()
+                                 }}/>
+                ) : <Typography variant={"h5"}>L'étudiant n'a accès à aucune offre de stage</Typography>)}
+            </div>}
         </Grid>
         <PdfModal open={isPdfOpen}
                   onClose={closePdf}
