@@ -165,6 +165,7 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
         <Divider className={classes.dividers}/>
     </div>
 }
+
 OfferApplicationStatus.propTypes = {
     index: PropTypes.number.isRequired,
     offer: PropTypes.object.isRequired,
@@ -231,7 +232,6 @@ export default function OfferApplication({count, pendingCount}) {
                     closeReasonModal()
                 })
     }
-
 
     function generateMenuItems() {
         let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
