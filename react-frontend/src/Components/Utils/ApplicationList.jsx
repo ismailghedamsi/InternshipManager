@@ -134,7 +134,7 @@ export default function ApplicationList() {
                                 history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
                             }}
                     >
-                        Convoquer l'étudiant pour un entrevue
+                        Convoquer l’étudiant pour une entrevue
                     </Button>
                     }
                 </div>}
@@ -150,11 +150,9 @@ export default function ApplicationList() {
                             manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy)
                                     , () => closeReasonModal())
                         }
-
                         }
                 />
             </div>}
         </PdfSelectionViewer>
-
     </div>
 }
