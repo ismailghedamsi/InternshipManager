@@ -174,7 +174,7 @@ export default function OfferCreation() {
                                         required
                                         fullWidth
                                         type={"number"}
-                                        InputProps={{inputProps: {min: 12.5}}}
+                                        InputProps={{inputProps: {min: 12.5, step: 0.01}}}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>

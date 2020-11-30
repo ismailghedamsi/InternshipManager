@@ -87,7 +87,7 @@ export default function OfferList({count}) {
                             &ensp;{offers[i].title}&ensp;
                         </Typography>
                         <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                            {offers[i].employer.companyName}-{offers[i].employer.contactName}&ensp;
+                            {offers[i].employer.companyName} - {offers[i].employer.contactName}&ensp;
                         </Typography>
                     </Button>
                     <Typography
