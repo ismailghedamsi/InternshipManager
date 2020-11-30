@@ -50,12 +50,12 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
         if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT"))
             return <span style={{color: "green"}}> Vous avez accepté cette offre</span>
         else if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_DENIED_BY_STUDENT"))
-            return <span style={{color: "green"}}>Vous avez refusé cette offre </span>
+            return <span style={{color: "red"}}>Vous avez refusé cette offre </span>
 
         return ""
     }
 
-    function getStudentDecisionForInterview() {
+    function getStudentInterviewState() {
         const application = findStudentApplicationInOffer(offer);
         if (application && application.interview) {
             if (application.interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
@@ -76,10 +76,6 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                 return applicationDecisionStatus(`L'employeur a refusé la demande : ${application.reasonForRejection}`, "red")
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
-            case "JOB_OFFER_DENIED_BY_STUDENT":
-                return applicationDecisionStatus(`Vous avez refusé l'offre de stage : ${application.reasonForRejection}`, "red")
-            case "JOB_OFFER_ACCEPTED_BY_STUDENT":
-                return applicationDecisionStatus("Vous avez accepté l'offre de stage", "green")
             default:
                 return ""
         }
@@ -123,9 +119,10 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                 <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                     Date de l'entrevue : {getInterviewDate()}
                 </Typography>
-                <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                    Status entrevue : {getStudentDecisionForInterview()}
-                </Typography>
+                {findStudentApplicationInOffer(offer).interview.state === "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER" ?
+                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                            Status entrevue : {getStudentInterviewState()} : ""}
+                        </Typography> : ""}
                 {applicationDecisionMessage()}
             </>
             }
@@ -152,9 +149,6 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                 denyLabel={"Refusez l'offre"}
         />
         }
-        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-            {getStudentApplicationDecision(offer)}
-        </Typography>
         <Button
                 variant={"contained"}
                 color={"primary"}
