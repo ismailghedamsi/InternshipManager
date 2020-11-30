@@ -119,11 +119,11 @@ function InterviewStatus(props) {
     const parseTimeFromDate = useTimeParserFromDate()
 
     function getInterviewState(interview) {
-        if (interview.reviewState === "PENDING")
+        if (interview.studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION")
             return <span style={{color: "blue"}}>En attente</span>
-        else if (interview.reviewState === "DENIED")
+        else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
             return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {interview.reasonForRejection} </span></span>
+                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>
         else
             return <span style={{color: "green"}}>Approuvé</span>
     }
