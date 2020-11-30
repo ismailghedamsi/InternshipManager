@@ -102,7 +102,7 @@ export default function SignModal({isOpen, hide, title, contract}) {
                                     name="file"
                                     id="file"
                                     variant="outlined"
-                                    label="Une image de signature en PNG ou JPG"
+                                    label="Une image de signature de type PNG ou JPG"
                                     fullwidth
                                     required
                                 />
