@@ -79,7 +79,7 @@ export default function InterviewConvocationModal({isOpen, hide, title, applicat
                             disabled={isSubmitting}
                             onClick={submitForm}
                         >
-                            Changer d'année
+                            Convoquer l'étudiant
                         </Button>
                     </Form>}
                 </Formik>

@@ -66,7 +66,7 @@ export default function ContractForm() {
                                 </Typography>
                                 <Grid item xs={6}>
                                     <Typography>
-                                        Nom du compagnie :
+                                        Compagnie :
                                         &ensp;{location.state.offer.employer.companyName}
                                     </Typography>
                                     <Typography>
@@ -74,7 +74,7 @@ export default function ContractForm() {
                                         &ensp;{location.state.offer.employer.contactName}
                                     </Typography>
                                     <Typography>
-                                        Nom de l'offre :
+                                        Titre de l'offre :
                                         &ensp;{location.state.offer.title}
                                     </Typography>
                                 </Grid>
@@ -147,7 +147,7 @@ export default function ContractForm() {
                                 className={classes.submit}
                                 disabled={isSubmitting}
                             >
-                                Génerer
+                                Générer
                             </Button>
                         </Form>}
                 </Formik>

@@ -117,7 +117,7 @@ export default function OfferCreationModal({isOpen, hide, title}) {
                         if (values.file.type !== "application/pdf")
                             errors.file = "Le fichier doit être de type PDF"
                         if (values.file.length === 0)
-                            errors.file = "Aucun fichier selectionné ou le fichier est vide"
+                            errors.file = "Le fichier est absent ou vide"
                         return errors
                     }}
                     initialValues={initialValues}>

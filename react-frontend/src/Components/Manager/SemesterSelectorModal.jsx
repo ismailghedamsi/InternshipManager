@@ -52,7 +52,7 @@ export default function SemesterSelectorModal({isOpen, hide, title}) {
                         .shape({
                             semester: yup.number().notOneOf([-1], "Impossible de choisir une année invalide").required("Ce champ est requis")
                         })}
-                    initialValues={{semester: -1,}}>
+                    initialValues={{semester: -1}}>
                     {({submitForm, isSubmitting}) => <Form>
                         <Grid container
                               justify="center"

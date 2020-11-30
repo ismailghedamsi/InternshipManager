@@ -124,7 +124,7 @@ export default function ApplicationList() {
                             openInterviewConvocationModal()
                         }}
                     >
-                        Convoquer l'étudiant pour un entrevue
+                        Convoquer l'étudiant pour une entrevue
                     </Button>
                     }
                 </div>}
