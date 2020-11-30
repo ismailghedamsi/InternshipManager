@@ -99,7 +99,7 @@ export default function OfferList({count}) {
                         <Button
                             variant={"contained"}
                             color={"primary"}
-                            onClick={redirection(i)}
+                            onClick={() => redirection(i)}
                         >
                             Voir les applications
                         </Button>
