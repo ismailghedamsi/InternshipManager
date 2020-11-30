@@ -124,6 +124,7 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                             Status entrevue : {getStudentInterviewState()} : ""}
                         </Typography> : ""}
                 {applicationDecisionMessage()}
+                {getStudentApplicationDecision()}
             </>
             }
         </>}
