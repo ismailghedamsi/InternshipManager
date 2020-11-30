@@ -54,7 +54,9 @@ export default function ApplicationList() {
                 return applicationDecisionStatus("Application acceptée", "green")
             case "APPLICATION_REJECTED_BY_EMPLOYER":
             case "STUDENT_REJECTED_BY_EMPLOYER":
-                return applicationDecisionStatus(`L'employeur a refusé la demande : ${offer.applications[i].reasonForRejection}`, "red")
+                return AuthenticationService.getCurrentUserRole() === "admin" ?
+                        applicationDecisionStatus(`L'employeur a refusé la demande : ${offer.applications[i].reasonForRejection}`, "red")
+                        : applicationDecisionStatus(`Vous avez refusé la demande : ${offer.applications[i].reasonForRejection}`, "red")
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
             case "JOB_OFFER_DENIED_BY_STUDENT":
