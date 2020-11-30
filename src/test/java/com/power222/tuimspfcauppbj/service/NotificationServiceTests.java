@@ -1,6 +1,7 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.AdminRepository;
+import com.power222.tuimspfcauppbj.dao.InternEvaluationRepository;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,6 +31,9 @@ class NotificationServiceTests {
 
     @Mock
     private AdminRepository adminRepo;
+
+    @Mock
+    private InternEvaluationRepository evalRepo;
 
     @InjectMocks
     private NotificationService notifSvc;
@@ -165,7 +170,9 @@ class NotificationServiceTests {
 
     @Test
     void notifyInternEvaluationCreationTest() {
-        notifSvc.notifyInternEvaluationCreation(expectedEval);
+        when(evalRepo.findById(expectedEval.getId())).thenReturn(Optional.of(expectedEval));
+
+        notifSvc.notifyInternEvaluationCreation(expectedEval.getId());
 
         verify(mailSvc, times(1)).notifyAboutCreation(expectedEval);
         verify(rsocketNotifSvc, times(1)).notify(eq(expectedAdmin.getId()), anyString());

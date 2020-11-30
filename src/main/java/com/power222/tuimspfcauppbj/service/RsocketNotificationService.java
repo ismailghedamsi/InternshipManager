@@ -33,10 +33,10 @@ public class RsocketNotificationService {
             fluxSink.set(sink);
             initNotifQueue(userId, sink);
         })
-                .doOnError(e -> cleanup.run())
                 .doOnComplete(cleanup)
                 .doOnTerminate(cleanup)
-                .doOnCancel(cleanup);
+                .doOnCancel(cleanup)
+                .doOnError(e -> cleanup.run());
     }
 
     public void subscribeToAcks(Flux<UUID> acks) {
