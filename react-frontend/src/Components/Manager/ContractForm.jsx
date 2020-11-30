@@ -74,7 +74,7 @@ export default function ContractForm() {
                                         &ensp;{location.state.offer.employer.contactName}
                                     </Typography>
                                     <Typography>
-                                        Titre de l'offre :
+                                        Offre :
                                         &ensp;{location.state.offer.title}
                                     </Typography>
                                 </Grid>
