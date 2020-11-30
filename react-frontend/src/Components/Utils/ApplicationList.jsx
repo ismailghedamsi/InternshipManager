@@ -24,7 +24,6 @@ export default function ApplicationList() {
     }, [location.state.offerId]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function applicationActions(i) {
-
         switch (offer.applications[i].state) {
             case "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW":
             case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
