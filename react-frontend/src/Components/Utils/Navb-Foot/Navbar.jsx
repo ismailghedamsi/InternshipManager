@@ -168,7 +168,6 @@ export default function Navbar() {
             {AuthenticationService.getCurrentUserRole() === "admin" &&
             <>
                 <Button className={classes.linkButton}
-                    // onClick={() => history.push("/dashboard/setSemester")}
                         onClick={() => openSemesterSelectorModal()}
                 >
                     <i className="fa fa-calendar"/>&ensp;{semester}
