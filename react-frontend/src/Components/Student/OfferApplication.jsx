@@ -46,23 +46,49 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                 && hasStudentDeniedOffer(offer)
     }
 
-    function getStudentDecision(offer) {
+    function getStudentApplicationDecision(offer) {
         if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT"))
-            return " Vous avez accepté cette offre"
+            return <span style={{color: "green"}}> Vous avez accepté cette offre</span>
         else if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_DENIED_BY_STUDENT"))
-            return " Vous avez refusé cette offre"
+            return <span style={{color: "green"}}>Vous avez refusé cette offre </span>
 
         return ""
     }
 
     function getStudentDecisionForInterview() {
-        if (findStudentApplicationInOffer(offer) && findStudentApplicationInOffer(offer).interview) {
-            if (findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
+        const application = findStudentApplicationInOffer(offer);
+        if (application && application.interview) {
+            if (application.interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
                 return <span style={{color: "green"}}> Vous avez accepté l'entrevue</span>
-            else if (findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
-                return " Vous avez refusé l'entrevue"
+            else if (application.interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
+                return <span style={{color: "red"}}> Vous avez refusé l'entrevue</span>
         }
         return ""
+    }
+
+    function applicationDecisionMessage() {
+        const application = findStudentApplicationInOffer(offer);
+        switch (application.state) {
+            case "STUDENT_HIRED_BY_EMPLOYER":
+                return applicationDecisionStatus("Votre application a été acceptée", "green")
+            case "APPLICATION_REJECTED_BY_EMPLOYER":
+            case "STUDENT_REJECTED_BY_EMPLOYER":
+                return applicationDecisionStatus(`L'employeur a refusé la demande : ${application.reasonForRejection}`, "red")
+            case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
+                return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
+            case "JOB_OFFER_DENIED_BY_STUDENT":
+                return applicationDecisionStatus(`Vous avez refusé l'offre de stage : ${application.reasonForRejection}`, "red")
+            case "JOB_OFFER_ACCEPTED_BY_STUDENT":
+                return applicationDecisionStatus("Vous avez accepté l'offre de stage", "green")
+            default:
+                return ""
+        }
+    }
+
+    function applicationDecisionStatus(statusMessage, messageColor) {
+        return <Typography variant={"body1"}>
+            Status application : <span style={{color: messageColor}}>{statusMessage}</span>
+        </Typography>
     }
 
     function getInterviewDate() {
@@ -98,8 +124,9 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                     Date de l'entrevue : {getInterviewDate()}
                 </Typography>
                 <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                    {getStudentDecisionForInterview()}
+                    Status entrevue : {getStudentDecisionForInterview()}
                 </Typography>
+                {applicationDecisionMessage()}
             </>
             }
         </>}
@@ -126,7 +153,7 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
         />
         }
         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-            {getStudentDecision(offer)}
+            {getStudentApplicationDecision(offer)}
         </Typography>
         <Button
                 variant={"contained"}
@@ -143,7 +170,6 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
         <Divider className={classes.dividers}/>
     </div>
 }
-
 OfferApplicationStatus.propTypes = {
     index: PropTypes.number.isRequired,
     offer: PropTypes.object.isRequired,
@@ -156,7 +182,6 @@ OfferApplicationStatus.propTypes = {
     openResumeModal: PropTypes.func.isRequired,
     openReasonOfInterviewModal: PropTypes.func.isRequired
 }
-
 export default function OfferApplication({count, pendingCount}) {
     const api = useApi()
     const [offers, setOffers] = useState([])
@@ -165,11 +190,9 @@ export default function OfferApplication({count, pendingCount}) {
     const [isResumeModalOpen, openResumeModal, closeResumeModal] = useModal()
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
     const [isReasonOfInterviewModalOpen, openReasonOfInterviewModal, closeReasonOfInterviewModal] = useModal()
-
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
                 .then(result => setResumes(result ? result.data : []))
-
         api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
                 .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.details.limitDateToApply) >= new Date()) : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -184,8 +207,6 @@ export default function OfferApplication({count, pendingCount}) {
 
     function sendInterviewDecision(index, studentDecision, reason = "") {
         const nextState = {...offers[index]}
-        console.log("next state")
-        console.log(offers[index])
         const application = findStudentApplicationInOffer(nextState)
         application.interview.studentAcceptanceState = studentDecision
         application.interview.reasonForRejectionByStudent = reason
@@ -328,21 +349,7 @@ export default function OfferApplication({count, pendingCount}) {
                 isOpen={isReasonOfInterviewModalOpen}
                 hide={closeReasonOfInterviewModal}
                 title={"Justifiez le refus"}
-                onSubmit={async values => {
-                    console.log(currentIndex)
-                    await sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)
-                }
-                }
-
-        />
-        <TextboxModal
-                isOpen={isReasonModalOpen}
-                hide={closeReasonModal}
-                title={"Justifiez le refus"}
-                onSubmit={async values => {
-                    await sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)
-                }
-                }
+                onSubmit={async values => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
         />
     </div>
 }
