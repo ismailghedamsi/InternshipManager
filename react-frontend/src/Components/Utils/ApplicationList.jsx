@@ -114,7 +114,6 @@ export default function ApplicationList() {
                     <Typography color={"textPrimary"} variant={"body1"}>
                         {offer.applications[i].student.address}
                     </Typography>
-                    {console.log(offer.applications[i])}
                     {studentApplicationState(i)}
                     {showButtonCondition(i) &&
                     <Button
