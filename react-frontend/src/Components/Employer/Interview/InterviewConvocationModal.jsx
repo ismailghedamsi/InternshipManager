@@ -18,7 +18,6 @@ const requiredFieldMsg = "Ce champs est requis"
 export default function InterviewConvocationModal({isOpen, hide, title, application}) {
     const api = useApi()
     const history = useHistory()
-    console.log(application)
 
     function createInterview(values) {
         let dto = {...values}
