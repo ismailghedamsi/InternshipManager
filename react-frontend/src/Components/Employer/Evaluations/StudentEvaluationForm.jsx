@@ -796,14 +796,14 @@ export default function StudentEvaluationForm() {
             technicalFormationOpinion: yup.string().trim().required(requiredFieldMsg)
         }),
         signature: yup.object().shape({
-            name: yup.string().required().min(2, tooShortError).max(50, tooBigError)
+            name: yup.string().required(requiredFieldMsg).min(2, tooShortError).max(50, tooBigError)
         }),
         infos: yup.object().shape({
-            supervisorRole: yup.string().required().min(5).max(50),
-            phoneNumber: yup.string().required().min(10),
+            supervisorRole: yup.string().required(requiredFieldMsg).min(5, tooShortError).max(50, tooBigError),
+            phoneNumber: yup.string().required(requiredFieldMsg).min(10, tooShortError),
         })
     })
-    return <Card style={{flow: "auto", height: "auto"}}>
+    return <Card className={classes.list}>
         <CardContent>
             <FormikStepper
                 contract={location.state}
