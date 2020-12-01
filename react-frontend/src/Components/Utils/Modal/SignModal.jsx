@@ -1,28 +1,24 @@
 import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
 import {Field, Form, Formik} from "formik";
 import {SimpleFileUpload, TextField} from "formik-material-ui";
-import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import React from "react";
+import {useHistory} from "react-router-dom";
 import * as yup from "yup";
-import {useApi} from "../../Services/Hooks";
-import useStyles from "./Style/useStyles";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import {useApi} from "../../../Services/Hooks";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLongError = value => "Doit avoir moins que " + value.max + " caractères"
-export default function SignForm() {
-    const classes = useStyles()
-    const api = useApi()
-    const location = useLocation()
-    const history = useHistory()
-    const [contract, setContract] = useState({})
 
-    useEffect(() => {
-        setContract(location.state)
-    }, [location.state])
+export default function SignModal({isOpen, hide, title, contract}) {
+    const api = useApi()
+    const history = useHistory()
 
     function sendDecision(isApprouved, values) {
         let dto = {}
@@ -35,14 +31,14 @@ export default function SignForm() {
                 dto.nomSignataire = values.nomSignataire
                 dto.signatureTimestamp = new Date()
                 return api.put("/contractGeneration/sign", dto)
-                    .then(() => history.push("/dashboard"))
+                    .then(() => history.push("/"))
             })
         } else {
             dto.contractId = contract.id
             dto.isApproved = isApprouved
             dto.reasonForRejection = values.message
             return api.put("/contractGeneration/sign", dto)
-                .then(() => history.push("/dashboard"))
+                .then(() => history.push("/"))
         }
     }
 
@@ -57,18 +53,13 @@ export default function SignForm() {
         })
     }
 
-    return <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{minHeight: '100vh'}}
-    >
-        <Grid item xs={12} sm={7} lg={5}>
-            <Container component="main" maxWidth="sm" className={classes.container}>
+    return isOpen ? <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+        <DialogContent>
+            <DialogContentText id="alert-dialog-description" component={"div"}>
                 <Formik
                     onSubmit={async values => sendDecision(true, values)}
+
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
@@ -88,38 +79,34 @@ export default function SignForm() {
                         nomSignataire: "",
                         file: ""
                     }}>
-                    {({submitForm, isSubmitting}) =>
-                        <Form>
-                            <Grid container>
-                                <Typography variant="h1" className={classes.formTitle} style={{display: "block"}}>
-                                    Veuillez signer le contrat
-                                </Typography>
-                                <Grid item xs={12}>
-                                    <Field
-                                        component={TextField}
-                                        name="nomSignataire"
-                                        id="nomSignataire"
-                                        variant="outlined"
-                                        label="Nom du signataire"
-                                        required
-                                        fullWidth
-                                        autoFocus
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Field
-                                        component={SimpleFileUpload}
-                                        type={"file"}
-                                        name="file"
-                                        id="file"
-                                        variant="outlined"
-                                        label="Une image de signature en PNG ou JPG"
-                                        fullwidth
-                                        required
-                                    />
-                                </Grid>
+                    {({submitForm, isSubmitting}) => <Form>
+                        <Grid container
+                              justify="center"
+                              spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    component={TextField}
+                                    name="nomSignataire"
+                                    id="nomSignataire"
+                                    variant="outlined"
+                                    label="Nom du signataire"
+                                    required
+                                    fullWidth
+                                    autoFocus
+                                />
                             </Grid>
-                            <br/>
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    component={SimpleFileUpload}
+                                    type={"file"}
+                                    name="file"
+                                    id="file"
+                                    variant="outlined"
+                                    label="Une image de signature de type PNG ou JPG"
+                                    fullwidth
+                                    required
+                                />
+                            </Grid>
                             {isSubmitting && <LinearProgress/>}
                             <Button
                                 id="buttonSubmit"
@@ -133,9 +120,15 @@ export default function SignForm() {
                             >
                                 SIGNER
                             </Button>
-                        </Form>}
+                        </Grid>
+                    </Form>}
                 </Formik>
-            </Container>
-        </Grid>
-    </Grid>
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={hide} color={"primary"}>
+                Annuler
+            </Button>
+        </DialogActions>
+    </Dialog> : null
 }

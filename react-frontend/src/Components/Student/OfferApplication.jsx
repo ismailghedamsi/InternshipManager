@@ -1,4 +1,3 @@
-import {Divider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -20,6 +19,7 @@ import TextboxModal from "../Utils/Modal/TextboxModal";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
+import {Divider} from "@material-ui/core";
 
 function hasStudentAppliedOnOffer(offer) {
     return offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id) !== undefined && offer.applications.length !== 0

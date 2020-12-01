@@ -7,13 +7,16 @@ import {useApi, useModal} from "../../Services/Hooks";
 import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
+import SignModal from "./Modal/SignModal";
 
 export default function SignContract({count, waitingCount}) {
     const classes = useStyles()
     const api = useApi()
     const history = useHistory()
+    const [contract, setContract] = useState([])
     const [contracts, setContracts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [isSignModalOpen, openSignModal, closeSignModal] = useModal()
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
 
     useEffect(() => {
@@ -129,7 +132,8 @@ export default function SignContract({count, waitingCount}) {
                             variant={"contained"}
                             color={"primary"}
                             onClick={() => {
-                                history.push(directionLink(), {...contracts[i]})
+                                setContract(contracts[i])
+                                openSignModal()
                             }}>
                             Signer le contrat
                         </Button>
@@ -163,6 +167,11 @@ export default function SignContract({count, waitingCount}) {
                     <hr/>
                 </div>}
         </PdfSelectionViewer>
+        <SignModal isOpen={isSignModalOpen}
+                   hide={closeSignModal}
+                   title={"Veuillez signer le contrat"}
+                   contract={contract}
+        />
         <TextboxModal
             isOpen={isReasonModalOpen}
             hide={closeReasonModal}

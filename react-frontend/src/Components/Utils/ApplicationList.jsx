@@ -9,6 +9,7 @@ import ApprovalButtons from "./ApprovalButtons";
 import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
+import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 
 export default function ApplicationList() {
     const classes = useStyles()
@@ -18,6 +19,8 @@ export default function ApplicationList() {
     const [currentIndex, setCurrentIndex] = useState(0)
     const manageApplication = useEmployerOfferManagement()
     const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
+    const [application, setApplication] = useState({})
+    const [isInterviewConvocationModalOpen, openInterviewConvocationModal, closeInterviewConvocationModal] = useModal()
 
     useEffect(() => {
         manageApplication.retrieveOffer("/offers/" + location.state.offerId, r => setOffer(r ? r.data : []))
@@ -129,13 +132,14 @@ export default function ApplicationList() {
                     {interviewDecisionMessage(i)}
                     {showInterviewConvocationButtonCondition(i) &&
                     <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            onClick={() => {
-                                history.push("/dashboard/interviewConvocation", {...offer.applications[i]})
-                            }}
+                        variant={"contained"}
+                        color={"primary"}
+                        onClick={() => {
+                            setApplication(offer.applications[i])
+                            openInterviewConvocationModal()
+                        }}
                     >
-                        Convoquer l’étudiant pour une entrevue
+                        Convoquer l'étudiant pour une entrevue
                     </Button>
                     }
                 </div>}
@@ -155,5 +159,10 @@ export default function ApplicationList() {
                 />
             </div>}
         </PdfSelectionViewer>
+        <InterviewConvocationModal isOpen={isInterviewConvocationModalOpen}
+                                   hide={closeInterviewConvocationModal}
+                                   title={"Étudiant à rencontrer"}
+                                   application={application}
+        />
     </div>
 }
