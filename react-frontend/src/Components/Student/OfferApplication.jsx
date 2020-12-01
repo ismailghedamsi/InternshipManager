@@ -56,10 +56,11 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
     }
 
     function getStudentDecisionForInterview() {
-        if (findStudentApplicationInOffer(offer) && findStudentApplicationInOffer(offer).interview) {
-            if (findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
+        const application = findStudentApplicationInOffer(offer);
+        if (application && application.interview) {
+            if (application.interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
                 return <span style={{color: "green"}}>Vous avez accepté l'entrevue</span>
-            else if (findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
+            else if (application.interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
                 return <span style={{color: "red"}}>Vous avez refusé l'entrevue</span>
         }
         return ""
