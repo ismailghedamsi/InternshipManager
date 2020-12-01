@@ -1,6 +1,7 @@
-import {Divider, Grid, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
-import {useApi} from "../../Services/Hooks";
+import { Divider, Grid, Typography } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import React, { useEffect, useState } from "react";
+import { useApi } from "../../Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function StudentStatus() {
@@ -36,27 +37,26 @@ export default function StudentStatus() {
                 Évaluations des stagiaires
             </Typography>
             {evaluations.length > 0 ? evaluations.map((item, i) => <div key={i}>
-                <button
-                    type={"button"}
-                    className={classes.linkButton}
+                <Button
+                    variant={currentEvaluationIndex === i ? "contained" : "outlined"}
+                    color={"primary"}
+                    size={"large"}
                     onClick={() => deleteStudentEvaluation(i)}
                 >
                     <i className="fa fa-trash" style={{color: "red"}}/>
-                </button>
-                <button
-                    type={"button"}
-                    className={[
-                        classes.linkButton,
-                        i === currentEvaluationIndex ? classes.fileButton : null,
-                    ].join(" ")}
+                </Button>
+                <Button
+                    variant={currentEvaluationIndex === i ? "contained" : "outlined"}
+                    color={"primary"}
+                    size={"large"}
                     onClick={() => setCurrentEvaluationIndex(i)}
                 >
-                    <Typography color={"textPrimary"} variant={"body1"}>
+                    <Typography variant={"button"}>
                         {item.contract.studentApplication.student.firstName +
                         " " + item.contract.studentApplication.student.lastName} -&ensp;
                         {item.contract.studentApplication.offer.title}
                     </Typography>
-                </button>
+                </Button>
             </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid

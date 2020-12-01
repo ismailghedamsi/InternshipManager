@@ -46,7 +46,7 @@ export default function ResumeUploadModal({isOpen, hide, title}) {
                     enableReinitialize={true}
                     validationSchema={yup.object()
                         .shape({
-                            name: yup.string().trim().max(255).required("Ce champ est requis")
+                            name: yup.string().trim().required("Ce champ est requis")
                         })}
                     validate={values => {
                         const errors = {}
@@ -88,20 +88,21 @@ export default function ResumeUploadModal({isOpen, hide, title}) {
                                     </p>}
                                 </ErrorMessage>
                             </Grid>
-                            {isSubmitting && <LinearProgress/>}
-                            <Button
-                                id="buttonSubmit"
-                                type={"submit"}
-                                variant="contained"
-                                fullWidth
-                                size={"large"}
-                                color="primary"
-                                disabled={isSubmitting}
-                                onClick={submitForm}
-                            >
-                                Téléverser le CV
-                            </Button>
                         </Grid>
+                        <br/>
+                        {isSubmitting && <LinearProgress/>}
+                        <Button
+                            id="buttonSubmit"
+                            type={"submit"}
+                            variant="contained"
+                            fullWidth
+                            size={"large"}
+                            color="primary"
+                            disabled={isSubmitting}
+                            onClick={submitForm}
+                        >
+                            Téléverser le CV
+                        </Button>
                     </Form>}
                 </Formik>
             </DialogContentText>

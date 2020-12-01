@@ -4,7 +4,7 @@ import com.power222.tuimspfcauppbj.model.Interview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
@@ -14,5 +14,5 @@ public interface InterviewRepository extends JpaRepository<Interview, Long> {
 
     List<Interview> findAllByStudentApplication_Student_Id(long id);
 
-    List<Interview> findAllByDateTimeBefore(LocalDateTime dateTime);
+    List<Interview> findAllByDateTimeBefore(ZonedDateTime dateTime);
 }

@@ -119,7 +119,7 @@ export function Rescheduleinterview(props) {
                                     label="Date et heure de l'entrevue "
                                     required
                                     fullWidth
-                                    format="MM/dd/yyyy"
+                                    format="d MMM yyyy HH:mm"
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>

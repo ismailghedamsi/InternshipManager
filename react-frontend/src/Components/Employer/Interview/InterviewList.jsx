@@ -55,7 +55,12 @@ export default function Interviewlist() {
                     <TableBody>
                         {interviews && interviews.map((interview, key) =>
                             <TableRow key={key}>
-                                <TableCell>{interview.dateTime ? new Date(interview.dateTime).toLocaleDateString() : ""}</TableCell>
+                                <TableCell>{interview.dateTime ? new Date(interview.dateTime).toLocaleDateString("fr-CA", {
+                                    weekday: "long",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric"
+                                }) : ""}</TableCell>
                                 <TableCell>{interview.dateTime ? parseTimeFromDate(interview.dateTime) : ""}</TableCell>
                                 <TableCell>{interview.studentApplication ? interview.studentApplication.offer.title : ""}</TableCell>
                                 <TableCell>{interview.studentApplication ? interview.studentApplication.student.firstName + " " + interview.studentApplication.student.lastName : ""}</TableCell>

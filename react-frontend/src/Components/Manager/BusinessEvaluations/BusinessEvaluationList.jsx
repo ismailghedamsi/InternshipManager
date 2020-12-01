@@ -1,8 +1,9 @@
-import {Divider} from "@material-ui/core";
+import { Divider } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
-import {useApi} from "../../../Services/Hooks";
+import React, { useEffect, useState } from "react";
+import { useApi } from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function BusinessEvaluationList() {
@@ -37,25 +38,28 @@ export default function BusinessEvaluationList() {
             </Typography>
             {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={classes.linkButton}
-                        onClick={() => deleteBusinessEvaluation(i)}>
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"primary"}
+                        size={"large"}
+                        onClick={() => deleteBusinessEvaluation(i)}
+                    >
                         <i className="fa fa-trash" style={{color: "red"}}/>
-                    </button>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                    </Button>
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"primary"}
+                        size={"large"}
                         onClick={() => {
                             setCurrentIndex(i)
                         }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        <Typography variant={"button"} display={"block"}>
                             {item.contract.studentApplication.student.firstName +
                             " " + item.contract.studentApplication.student.lastName} -&ensp;
                             {item.contract.studentApplication.offer.employer.companyName}
 
                         </Typography>
-                    </button>
+                    </Button>
                     {currentIndex === i &&
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {item.contract.studentApplication.offer.title}

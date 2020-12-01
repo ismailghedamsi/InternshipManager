@@ -1,8 +1,9 @@
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
-import {useApi} from "../../Services/Hooks";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useApi } from "../../Services/Hooks";
 import ApprovalButtons from "../Utils/ApprovalButtons";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
@@ -13,6 +14,7 @@ export default function ContractList({count}) {
     const history = useHistory()
     const [contracts, setContracts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [disabledDelContractBtn, setDisabledDelContractBtn] = useState(false)
 
     useEffect(() => {
         api.get("/contract")
@@ -88,52 +90,57 @@ export default function ContractList({count}) {
             title={"Contrats en attente"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <div className={classes.buttonDiv}>
-                        {showDeleteContractButtonCondition(i) &&
-                        <button
-                            type={"button"}
-                            className={classes.linkButton}
-                            onClick={() => deleteContract(i)}>
-                            <i className="fa fa-trash" style={{color: "red"}}/>
-                        </button>
-                        }
-                    </div>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"primary"}
+                        size={"large"}
                         onClick={() => {
                             setCurrent(i)
                             setCurrentIndex(i)
                         }}
                     >
-                        <Typography color={"textPrimary"} variant={"body1"}>
+                        <Typography variant={"button"}>
                             {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
                             &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
                         </Typography>
-                        <Typography color={"textPrimary"} variant={"body2"}>
-                            Nom du gestionnaire de stage : {contracts[i].admin.name}
-                        </Typography>
-                    </button>
-                    <div className={classes.buttonDiv} style={{display: "block"}}>
-                        {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
-                        <ApprovalButtons
-                            onApprove={() => sendDecision(i, true)}
-                            onDeny={() => deleteContract(i)}
-                            approveLabel={"Approuver le contrat"}
-                            denyLabel={"Supprimer le contrat"}
-                        />
-                        }
-                        {showContractState(i)}
-                    </div>
+                    </Button>
+                    {contracts[i].signatureState === "PENDING_FOR_ADMIN_REVIEW" &&
+                    <ApprovalButtons
+                        onApprove={() => sendDecision(i, true)}
+                        onDeny={() => deleteContract(i)}
+                        approveLabel={"Approuver le contrat"}
+                        denyLabel={"Supprimer le contrat"}
+                    />
+                    }
+                    {showContractState(i)}
+                    {currentIndex === i && showDeleteContractButtonCondition(i) && <>
+                            &ensp;{disabledDelContractBtn && <CircularProgress size={18}/>}
+                            <Button
+                                variant={"contained"}
+                                color={"secondary"}
+                                size={"small"}
+                                disabled={disabledDelContractBtn}
+                                onClick={() => {
+                                    setDisabledDelContractBtn(true)
+                                    deleteContract(i)
+                                }}>
+                                <i className="fa fa-trash" style={{color: "white"}}/>&ensp;Supprimer
+                            </Button>
+                            <Typography variant={"body2"}>
+                                Nom du gestionnaire de stage : {contracts[i].admin.name}
+                            </Typography>
+                        </>
+                    }
                     {showEvaluationButtonCondition(i) &&
                     <Button
                         variant={"contained"}
                         color={"primary"}
+                        size="small"
                         onClick={() => {
                             history.push("/dashboard/businessEvaluation", {...contracts[i]})
                         }}
                     >
-                        Évaluer l'entreprise
+                        <i className="fa fa-drivers-license-o" style={{color: "white"}}/>&ensp;Évaluer l'entreprise
                     </Button>
                     }
                     <hr className={classes.hrStyle}/>

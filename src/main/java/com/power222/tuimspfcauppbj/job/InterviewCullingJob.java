@@ -6,7 +6,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Slf4j
 public class InterviewCullingJob implements Job {
@@ -21,7 +21,7 @@ public class InterviewCullingJob implements Job {
     @Override
     public void execute(JobExecutionContext context) {
         log.info("Culling passed interviews...");
-        var passedInterviews = interviewRepo.findAllByDateTimeBefore(LocalDateTime.now());
+        var passedInterviews = interviewRepo.findAllByDateTimeBefore(ZonedDateTime.now());
         log.info("Found " + passedInterviews.size() + " interviews to remove");
         interviewRepo.deleteAll(passedInterviews);
         interviewRepo.flush();

@@ -1,4 +1,5 @@
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import React, { useState } from "react";
 import useStyles from "./Style/useStyles";
@@ -14,33 +15,36 @@ export default function ApprovalButtons({onApprove, onDeny, approveLabel, denyLa
                 onClick={() => {
                     setDisabled(true)
                     setDisabledButton(0)
-                    // onApprove()
+                    onApprove().then(() => setDisabled(false))
                 }}
                 variant={"contained"}
                 color={"primary"}
                 fullWidth
                 disabled={disabled}
-                style={!disabled && {backgroundColor: "green"}}
+                style={disabled ? {} : {backgroundColor: "green"}}
             >
                 <i className="fa fa-check-square" style={{color: "white"}}/>&ensp;{approveLabel}
-                {disabled && disabledButton === 0 && <CircularProgress size={18}/>}
+                &ensp;{disabled && disabledButton === 0 && <CircularProgress size={18}/>}
             </Button>
         </Grid>
         <Grid item xs={6}>
             <Button
                 onClick={() => {
-                    setDisabled(true)
-                    setDisabledButton(1)
-                    // onDeny()
+                    const result = onDeny()
+                    if (result && typeof result.then === "function") {
+                        setDisabled(true)
+                        setDisabledButton(1)
+                        result.then(() => setDisabled(false))
+                    }
                 }}
                 variant={"contained"}
                 color={"primary"}
                 fullWidth
-                style={disabled ? {backgroundColor: "gray"} : {backgroundColor: "red"}}
+                style={disabled ? {} : {backgroundColor: "red"}}
                 disabled={disabled}
             >
                 <i className="fa fa-ban" style={{color: "white"}}/>&ensp;{denyLabel}
-                {disabled && disabledButton === 1 && <CircularProgress size={18}/>}
+                &ensp;{disabled && disabledButton === 1 && <CircularProgress size={18}/>}
             </Button>
         </Grid>
     </Grid>

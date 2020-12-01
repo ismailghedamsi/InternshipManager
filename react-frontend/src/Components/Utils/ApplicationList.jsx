@@ -34,7 +34,7 @@ export default function ApplicationList() {
             case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
             case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
                 return <Typography>
-                    Application acceptée:
+                    Application acceptée :
                     <Checkbox
                         value="state"
                         checked={offer.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER"}
@@ -71,7 +71,7 @@ export default function ApplicationList() {
                         onClick={() => {
                             history.push("/dashboard/contractForm", {...offer.applications[i]})
                         }}>
-                        Genérer le contrat
+                        Générer le contrat
                     </Button>
                     }
                 </Typography>

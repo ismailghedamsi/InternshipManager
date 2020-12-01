@@ -1,7 +1,8 @@
-import {Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import { Typography } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import React, { useEffect, useState } from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../../Services/Hooks";
+import { useApi } from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
@@ -22,18 +23,19 @@ export default function HiredStudentList() {
         <PdfSelectionViewer documents={contracts.map(c => c.file)} title={"Les étudiants embauchés"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"primary"}
+                        size={"large"}
                         autoFocus={i === 0}
                         onClick={() => {
                             setCurrentIndex(i)
                             setCurrent(i)
                         }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
+                        <Typography variant={"button"} display={"inline"}>
                             {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
                         </Typography>
-                    </button>
+                    </Button>
                     {currentIndex === i && <div>
                         <OfferDetails offer={contracts[i].studentApplication.offer}/>
                     </div>}
