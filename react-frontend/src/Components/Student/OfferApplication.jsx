@@ -48,9 +48,9 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
 
     function getStudentDecision(offer) {
         if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT"))
-            return " Vous avez accepté cette offre"
+            return <span style={{color: "green"}}>Vous avez accepté cette offre</span>
         else if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_DENIED_BY_STUDENT"))
-            return " Vous avez refusé cette offre"
+            return <span style={{color: "red"}}>Vous avez refusé cette offre</span>
 
         return ""
     }
@@ -58,9 +58,9 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
     function getStudentDecisionForInterview() {
         if (findStudentApplicationInOffer(offer) && findStudentApplicationInOffer(offer).interview) {
             if (findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
-                return <span style={{color: "green"}}> Vous avez accepté l'entrevue</span>
+                return <span style={{color: "green"}}>Vous avez accepté l'entrevue</span>
             else if (findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
-                return " Vous avez refusé l'entrevue"
+                return <span style={{color: "red"}}>Vous avez refusé l'entrevue</span>
         }
         return ""
     }
@@ -107,7 +107,7 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
         <ApprovalButtons
             onApprove={() => sendInterviewDecision(index, "INTERVIEW_ACCEPTED_BY_STUDENT")}
             onDeny={() => {
-                setCurrentIndex()
+                setCurrentIndex(index)
                 openReasonOfInterviewModal()
             }}
             approveLabel={"Acceptez l'entrevue"}

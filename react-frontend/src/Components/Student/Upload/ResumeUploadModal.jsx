@@ -1,19 +1,19 @@
 import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React from "react";
-import {useHistory} from "react-router-dom";
 import * as yup from "yup";
+import Grid from "@material-ui/core/Grid";
 import {useApi} from "../../../Services/Hooks";
-import useStyles from "../../Utils/Style/useStyles";
-import "./ResumeUpload.css";
+import {useHistory} from "react-router-dom";
 
-export default function ResumeUpload() {
-    const classes = useStyles()
+export default function ResumeUploadModal({isOpen, hide, title}) {
     const api = useApi()
     const history = useHistory()
 
@@ -28,50 +28,40 @@ export default function ResumeUpload() {
         })
     }
 
-    return <Grid
-        container
-        spacing={2}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{minHeight: "100%"}}
-    >
-        <Grid item xs={12} sm={7} lg={5}>
-            <Container component="main" maxWidth="sm" className={classes.container}>
+    return isOpen ? <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+        <DialogContent>
+            <DialogContentText id="alert-dialog-description" component={"div"}>
                 <Formik
                     onSubmit={async values => readFileAsync(values.file)
                         .then(file => {
                             let dto = {...values}
                             dto.file = file
                             return api.post("/resumes", dto)
-                                .then(() => history.push("/dashboard"))
+                                .then(() => history.push("/"))
                         })}
+
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
-                    validate={values => {
-                        const errors = {}
-                        if (values.file.type !== "application/pdf") {
-                            errors.file = "Le fichier doit être de type PDF"
-                        }
-                        return errors
-                    }}
                     validationSchema={yup.object()
                         .shape({
                             name: yup.string().trim().max(255).required("Ce champ est requis")
                         })}
+                    validate={values => {
+                        const errors = {}
+                        if (values.file.type !== "application/pdf")
+                            errors.file = "Le fichier doit être de type PDF"
+                        return errors
+                    }}
                     initialValues={{
                         name: "",
                         file: ""
-                    }}
-                >
+                    }}>
                     {({submitForm, isSubmitting}) => <Form>
                         <Grid container
                               justify="center"
                               spacing={2}>
-                            <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
-                                Télécharger un nouveau CV
-                            </Typography>
                             <Grid item xs={12} sm={6}>
                                 <Field
                                     component={TextField}
@@ -114,7 +104,12 @@ export default function ResumeUpload() {
                         </Grid>
                     </Form>}
                 </Formik>
-            </Container>
-        </Grid>
-    </Grid>
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={hide} color={"primary"}>
+                Annuler
+            </Button>
+        </DialogActions>
+    </Dialog> : null
 }

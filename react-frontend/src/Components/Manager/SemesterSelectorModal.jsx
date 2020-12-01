@@ -1,23 +1,24 @@
 import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@material-ui/core/MenuItem";
-import Typography from "@material-ui/core/Typography";
 import {Field, Form, Formik} from "formik";
 import {Select} from "formik-material-ui";
 import React, {useContext, useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
 import * as yup from "yup";
-import {SemesterContext} from "../../App";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 import {useApi} from "../../Services/Hooks";
-import useStyles from "../Utils/Style/useStyles";
+import {useHistory} from "react-router-dom";
+import {SemesterContext} from "../../App";
 
-export default function SemesterSelector() {
-    const classes = useStyles()
+export default function SemesterSelectorModal({isOpen, hide, title}) {
+    const api = useApi()
     const history = useHistory()
     const {setSemester} = useContext(SemesterContext)
-    const api = useApi()
     const [semesters, setSemesters] = useState([])
 
     useEffect(() => {
@@ -34,20 +35,14 @@ export default function SemesterSelector() {
             return <MenuItem value={-1} disabled>Aucune année</MenuItem>
     }
 
-    return <Grid
-        container
-        spacing={2}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{minHeight: '100vh'}}
-    >
-        <Grid item xs={12} sm={7} lg={5}>
-            <Container component="main" maxWidth="sm" className={classes.container}>
+    return isOpen ? <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+        <DialogContent>
+            <DialogContentText id="alert-dialog-description" component={"div"}>
                 <Formik
                     onSubmit={async values => {
                         setSemester(semesters[values.semester])
-                        history.push("/dashboard")
+                        history.push("/")
                     }}
 
                     validateOnBlur={false}
@@ -57,18 +52,11 @@ export default function SemesterSelector() {
                         .shape({
                             semester: yup.number().notOneOf([-1], "Impossible de choisir une année invalide").required("Ce champ est requis")
                         })}
-                    initialValues={{
-                        semester: -1,
-                    }}
-                >
+                    initialValues={{semester: -1}}>
                     {({submitForm, isSubmitting}) => <Form>
                         <Grid container
-                              alignItems="start"
                               justify="center"
                               spacing={2}>
-                            <Typography variant="h1" className={classes.formTitle} style={{fontSize: "2em"}}>
-                                Choisir une année scolaire
-                            </Typography>
                             <Grid item xs={12} sm={6}>
                                 <Field
                                     component={Select}
@@ -96,7 +84,12 @@ export default function SemesterSelector() {
                         </Grid>
                     </Form>}
                 </Formik>
-            </Container>
-        </Grid>
-    </Grid>
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={hide} color={"primary"}>
+                Annuler
+            </Button>
+        </DialogActions>
+    </Dialog> : null
 }
