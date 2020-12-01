@@ -38,13 +38,13 @@ export default function OfferAssignements() {
         return offer.allowedStudents.find(s => s.id === student.id) !== undefined && offer.allowedStudents.length !== 0
     }
 
-    function sendDicision(values, i) {
+    function sendDecision(values, i) {
         return api.put("/offers/" + values.offerId + "/addRemoveStudent/" + values.studentId, {})
-            .then(r => {
-                const nextState = [...offers]
-                nextState.splice(i, 1, r.data)
-                setOffers(nextState)
-            })
+                .then(r => {
+                    const nextState = [...offers]
+                    nextState.splice(i, 1, r.data)
+                    setOffers(nextState)
+                })
     }
 
     return <div style={{height: "100%"}}>
@@ -75,7 +75,7 @@ export default function OfferAssignements() {
                                         studentId: student.id,
                                         allowed: false
                                     }}
-                                    onSubmit={values => sendDicision(values, i)}>
+                                    onSubmit={values => sendDecision(values, i)}>
                                 {({submitForm, isSubmitting}) =>
                                         <Form style={{display: "inline", marginLeft: 16}}>
                                             <Field name={"offerId"} type={"hidden"}/>

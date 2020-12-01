@@ -111,8 +111,8 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                     setCurrentIndex(index)
                     openReasonOfInterviewModal()
                 }}
-                approveLabel={"Acceptez l'entrevue"}
-                denyLabel={"Refusez l'entrevue"}
+                approveLabel={"Accepter l'entrevue"}
+                denyLabel={"Refuser l'entrevue"}
         />
         }
         {hasEmployeurAcceptedStudentOnOffer(offer) &&
@@ -122,8 +122,8 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
                     setCurrentIndex(index)
                     openReasonModal()
                 }}
-                approveLabel={"Acceptez l'offre"}
-                denyLabel={"Refusez l'offre"}
+                approveLabel={"Accepter l'offre"}
+                denyLabel={"Refuser l'offre"}
         />
         }
         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>

@@ -90,7 +90,7 @@ export default function ApplicationList() {
 
     function interviewDecisionStatus(statusMessage, messageColor) {
         return <Typography variant={"body1"}>
-            Status entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
+            Statut d'entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
         </Typography>
     }
 
