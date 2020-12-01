@@ -7,7 +7,6 @@ import {useEmployerOfferManagement} from "../../Services/EmployerHooks";
 import {useModal} from "../../Services/Hooks";
 import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 import ApprovalButtons from "./ApprovalButtons";
-import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
 
@@ -17,7 +16,6 @@ export default function ApplicationList() {
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
     const manageApplication = useEmployerOfferManagement()
-    const [isReasonModalOpen, openReasonModal, closeReasonModal] = useModal()
     const [application, setApplication] = useState({})
     const [isInterviewConvocationModalOpen, openInterviewConvocationModal, closeInterviewConvocationModal] = useModal()
 
@@ -38,7 +36,9 @@ export default function ApplicationList() {
                             manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }}
                         onDeny={() => {
-                            openReasonModal()
+                            const copy = {...offer}
+                            copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
+                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }
                         }
                         approveLabel={"Embaucher l'étudiant"}
@@ -55,9 +55,8 @@ export default function ApplicationList() {
                 return applicationDecisionStatus("Application acceptée", "green")
             case "APPLICATION_REJECTED_BY_EMPLOYER":
             case "STUDENT_REJECTED_BY_EMPLOYER":
-                return AuthenticationService.getCurrentUserRole() === "admin" ?
-                        applicationDecisionStatus(`L'employeur a refusé la demande : ${offer.applications[i].reasonForRejection}`, "red")
-                        : applicationDecisionStatus(`Vous avez refusé la demande : ${offer.applications[i].reasonForRejection}`, "red")
+                return applicationDecisionStatus(AuthenticationService.getCurrentUserRole() === "admin" ?
+                        "L'employeur a refusé la demande" : "Vous avez refusé la demande", "red")
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
             case "JOB_OFFER_DENIED_BY_STUDENT":
@@ -143,19 +142,6 @@ export default function ApplicationList() {
                     }
                 </div>}
                 <hr/>
-                <TextboxModal
-                        isOpen={isReasonModalOpen}
-                        hide={closeReasonModal}
-                        title={"Justifiez le refus"}
-                        onSubmit={async values => {
-                            const copy = {...offer}
-                            copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
-                            copy.applications[i].reasonForRejection = values.message
-                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy)
-                                    , () => closeReasonModal())
-                        }
-                        }
-                />
             </div>}
         </PdfSelectionViewer>
         <InterviewConvocationModal isOpen={isInterviewConvocationModalOpen}
