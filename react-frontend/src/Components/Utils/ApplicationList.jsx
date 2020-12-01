@@ -1,20 +1,19 @@
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
 import {useEmployerOfferManagement} from "../../Services/EmployerHooks";
 import {useModal} from "../../Services/Hooks";
+import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 import ApprovalButtons from "./ApprovalButtons";
 import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
-import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 
 export default function ApplicationList() {
     const classes = useStyles()
     const location = useLocation()
-    const history = useHistory()
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
     const manageApplication = useEmployerOfferManagement()
