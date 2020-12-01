@@ -1,34 +1,38 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import { getActiveElement } from "formik";
 import React, { useState } from "react";
 import useStyles from "./Style/useStyles";
 
 export default function ApprovalButtons({onApprove, onDeny, approveLabel, denyLabel}) {
     const classes = useStyles()
-    const [disabled, setDisabled] = useState()
+    const [disabled, setDisabled] = useState(false)
+    const [disabledButton, setDisabledButton] = useState(-1)
 
     return <Grid container spacing={1} className={classes.buttonDiv}>
         <Grid item xs={6}>
             <Button
-                onClick={(e) => {
+                onClick={() => {
                     setDisabled(true)
-                    getActiveElement().children[0].children[0].className = "fa fa-cog fa-spin"
-                    console.log(getActiveElement().children[0].children)
+                    setDisabledButton(0)
                     // onApprove()
                 }}
                 variant={"contained"}
                 color={"primary"}
                 fullWidth
                 disabled={disabled}
-                style={disabled ? {backgroundColor: "gray"} : {backgroundColor: "green"}}
+                style={!disabled && {backgroundColor: "green"}}
             >
                 <i className="fa fa-check-square" style={{color: "white"}}/>&ensp;{approveLabel}
+                {disabled && disabledButton === 0 && <CircularProgress size={18}/>}
             </Button>
         </Grid>
         <Grid item xs={6}>
             <Button
-                onClick={onDeny}
+                onClick={() => {
+                    setDisabled(true)
+                    setDisabledButton(1)
+                    // onDeny()
+                }}
                 variant={"contained"}
                 color={"primary"}
                 fullWidth
@@ -36,6 +40,7 @@ export default function ApprovalButtons({onApprove, onDeny, approveLabel, denyLa
                 disabled={disabled}
             >
                 <i className="fa fa-ban" style={{color: "white"}}/>&ensp;{denyLabel}
+                {disabled && disabledButton === 1 && <CircularProgress size={18}/>}
             </Button>
         </Grid>
     </Grid>

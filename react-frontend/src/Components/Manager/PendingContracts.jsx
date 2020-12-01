@@ -4,10 +4,13 @@ import TableCell from "@material-ui/core/TableCell"
 import PropTypes from "prop-types"
 import React, {useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
-import {useApi} from "../../Services/Hooks"
+import {useApi, useModal} from "../../Services/Hooks"
+import SignModal from "../Utils/Modal/SignModal";
 
 function ContextButton({application}) {
     const history = useHistory()
+    const [contract, setContract] = useState([])
+    const [isSignModalOpen, openSignModal, closeSignModal] = useModal()
 
     if (!application.contract)
         return <Button
@@ -20,15 +23,25 @@ function ContextButton({application}) {
             <i className="fa fa-pencil-square-o"/>&ensp;Générer le contrat
         </Button>
     else
-        return <Button
-            onClick={() => history.push("/dashboard/signFormAdmin", {...application.contract})}
-            variant={"contained"}
-            color={"primary"}
-            style={{marginTop: 15}}
-            fullWidth
-        >
-            <i className="fa fa-pencil-square-o"/>&ensp;Signer le contrat
-        </Button>
+        return <>
+            <Button
+                onClick={() => {
+                    setContract(application.contract)
+                    openSignModal()
+                }}
+                variant={"contained"}
+                color={"primary"}
+                style={{marginTop: 15}}
+                fullWidth
+            >
+                <i className="fa fa-pencil-square-o"/>&ensp;Signer le contrat
+            </Button>
+            <SignModal isOpen={isSignModalOpen}
+                       hide={closeSignModal}
+                       title={"Veuillez signer le contrat"}
+                       contract={contract}
+            />
+        </>
 }
 
 function DataTableHeader() {
