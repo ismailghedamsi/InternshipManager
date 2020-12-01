@@ -80,11 +80,11 @@ export default function OfferList({count}) {
             {(i, setCurrent) =>
                     <div key={i}>
                         <Button
-                                className={[i === currentIndex ? classes.fileButton : null].join(" ")}
-                                onClick={() => {
-                                    setCurrentIndex(i)
-                                    setCurrent(i)
-                                }}
+                            className={[i === currentIndex ? classes.fileButton : null].join(" ")}
+                            onClick={() => {
+                                setCurrentIndex(i)
+                                setCurrent(i)
+                            }}
                         >
                             <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                                 &ensp;{offers[i].title}&ensp;
@@ -117,6 +117,7 @@ export default function OfferList({count}) {
                                 setButtonSubmitting(i)
                                 deleteOffer(i).then(() => {
                                     setIsSubmitting(false)
+                                    setButtonSubmitting(-1)
                                 })
                             }}
                             disabled={isSubmitting && buttonSubmitting === i}

@@ -1,14 +1,17 @@
+import { Button } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../../Services/Hooks";
+import { useApi } from "../../Services/Hooks";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import {Button} from "@material-ui/core";
 
 export default function ResumeList({count, deniedCount}) {
     const api = useApi()
     const [resumes, setResumes] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [buttonDeleting, setButtonDeleting] = useState(-1)
 
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
@@ -69,11 +72,19 @@ export default function ResumeList({count, deniedCount}) {
                         variant={"contained"}
                         color={"secondary"}
                         size={"small"}
-                        onClick={() => deleteResume(i)}
-                        disabled={resumes[i].applications.length !== 0}
+                        onClick={() => {
+                            setIsDeleting(true)
+                            setButtonDeleting(i)
+                            deleteResume(i).then(() => {
+                                setIsDeleting(false)
+                                setButtonDeleting(-1)
+                            })
+                        }}
+                        disabled={(isDeleting && buttonDeleting === i) || resumes[i].applications.length !== 0}
                         title={resumes[i].applications.length === 0 ? '' : 'Impossible de supprimer un CV déja utilisé pour appliquer sur une offre'}>
                         <i className="fa fa-trash"/>&ensp;Supprimer
                     </Button>}
+                    {isDeleting && buttonDeleting === i && <CircularProgress size={18}/>}
                 </Typography>
                 <hr/>
             </div>}
