@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class RsocketNotificationService {
 
-    public final Map<Long, List<FluxSink<Notification>>> sinks = new ConcurrentHashMap<>();
+    public final Map<Long, Set<FluxSink<Notification>>> sinks = new ConcurrentHashMap<>();
     private final NotificationRepository notifRepo;
 
     public RsocketNotificationService(NotificationRepository notifRepo) {
@@ -49,14 +48,26 @@ public class RsocketNotificationService {
 
         notifRepo.save(notif);
         if (sinks.containsKey(userId))
-            sinks.get(userId).forEach(sink -> sink.next(notif));
+            sinks.get(userId).forEach(sink -> {
+                if (sink != null)
+                    sink.next(notif);
+                else {
+                    log.error("Found a null sink, dumping map:");
+                    log.error(sinks.toString());
+                }
+            });
     }
 
     private void initNotifQueue(long userId, FluxSink<Notification> sink) {
         if (!sinks.containsKey(userId))
-            sinks.put(userId, new LinkedList<>());
+            sinks.put(userId, ConcurrentHashMap.newKeySet());
 
-        sinks.get(userId).add(sink);
-        notifRepo.findAllByUserId(userId).forEach(sink::next);
+        if (sink != null) {
+            sinks.get(userId).add(sink);
+            notifRepo.findAllByUserId(userId).forEach(sink::next);
+        } else {
+            log.error("Initiating queue from a null sink for " + userId + ", the hell is happening?");
+            log.error(sinks.toString());
+        }
     }
 }
