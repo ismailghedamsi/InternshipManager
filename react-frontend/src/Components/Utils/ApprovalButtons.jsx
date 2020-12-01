@@ -34,7 +34,7 @@ export default function ApprovalButtons({onApprove, onDeny, approveLabel, denyLa
                     if (result && typeof result.then === "function") {
                         setDisabled(true)
                         setDisabledButton(1)
-                        result.then(() => setDisabled(false))
+                        result.then(setDisabled(false))
                     }
                 }}
                 variant={"contained"}
