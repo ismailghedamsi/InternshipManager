@@ -16,8 +16,8 @@ export default function OfferList({count}) {
     const history = useHistory()
     const [currentIndex, setCurrentIndex] = useState(0)
     const [offers, setOffers] = useState([])
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [buttonSubmitting, setButtonSubmitting] = useState(-1)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [buttonDeleting, setButtonDeleting] = useState(-1)
 
     useEffect(() => {
         if (AuthenticationService.getCurrentUserRole() === "employer") {
@@ -113,18 +113,18 @@ export default function OfferList({count}) {
                             variant={"contained"}
                             color={"secondary"}
                             onClick={() => {
-                                setIsSubmitting(true)
-                                setButtonSubmitting(i)
+                                setIsDeleting(true)
+                                setButtonDeleting(i)
                                 deleteOffer(i).then(() => {
-                                    setIsSubmitting(false)
-                                    setButtonSubmitting(-1)
+                                    setIsDeleting(false)
+                                    setButtonDeleting(-1)
                                 })
                             }}
-                            disabled={isSubmitting && buttonSubmitting === i}
+                            disabled={isDeleting && buttonDeleting === i}
                         >
                             <i className="fa fa-trash"/>&ensp;Supprimer
                         </Button>}
-                        {isSubmitting && buttonSubmitting === i && <CircularProgress size={18}/>}
+                        {isDeleting && buttonDeleting === i && <CircularProgress size={18}/>}
                         <Divider className={classes.dividers}/>
                     </div>}
         </PdfSelectionViewer>
