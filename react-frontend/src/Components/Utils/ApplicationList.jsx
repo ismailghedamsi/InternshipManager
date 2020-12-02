@@ -33,12 +33,12 @@ export default function ApplicationList() {
                             const copy = {...offer}
                             copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
                                     "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
+                            return manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }}
                         onDeny={() => {
                             const copy = {...offer}
                             copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
-                            manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
+                            return manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
                         }
                         }
                         approveLabel={"Embaucher l'étudiant"}

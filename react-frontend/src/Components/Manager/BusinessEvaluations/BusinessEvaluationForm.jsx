@@ -5,6 +5,7 @@ import React, {useState} from "react";
 import {useLocation} from "react-router-dom";
 import * as yup from "yup";
 import {FormikStepper} from "../../Utils/FormikStepper";
+import useStyles from "../../Utils/Style/useStyles";
 
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min
 const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max
@@ -12,6 +13,7 @@ const requiredFieldMsg = "Ce champs est requis"
 const requiredRadioMsg = "Cliquez votre choix"
 const requiredSelectMsg = "Option séléctionné invalide"
 export default function BusinessEvalution() {
+    const classes = useStyles()
     const location = useLocation()
     const [variableShifts, setVariableShifts] = useState(true)
 
@@ -479,17 +481,17 @@ export default function BusinessEvalution() {
     }
 
 
-    return <Card style={{overflow: "auto", height: "auto"}}>
+    return <Card className={classes.list}>
         <CardContent>
             <FormikStepper
-                    contract={location.state}
-                    initialValues={{
-                        evaluationCriterias: {
-                            internshipCount: "",
-                            workAsAnnoncement: evaluationAnswers[0],
-                            easyIntigration: evaluationAnswers[0],
-                            sufficientTime: evaluationAnswers[0],
-                            hoursOfWeekFirstMonth: 1,
+                contract={location.state}
+                initialValues={{
+                    evaluationCriterias: {
+                        internshipCount: "",
+                        workAsAnnoncement: evaluationAnswers[0],
+                        easyIntigration: evaluationAnswers[0],
+                        sufficientTime: evaluationAnswers[0],
+                        hoursOfWeekFirstMonth: 1,
                             hoursOfWeekSecondMonth: 1,
                             hoursOfWeekThirdMonth: 1,
                             securityWorkPlace: evaluationAnswers[0],

@@ -39,7 +39,7 @@ export default function Interviewlist() {
 
     return <Grid
         container
-        spacing={2}
+        spacing={0}
         className={classes.main}>
         <Grid item xs={12} className={classes.list}>
             <TableContainer component={Paper}>

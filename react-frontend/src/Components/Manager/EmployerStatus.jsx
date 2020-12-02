@@ -292,7 +292,7 @@ export default function EmployerStatus() {
 
     return <Grid
         container
-        spacing={2}
+        spacing={0}
         wrap={"nowrap"}
         className={classes.main}
         style={{padding: "15px 0 0 15px"}}
