@@ -1,8 +1,8 @@
-import { Divider, Grid, Typography } from "@material-ui/core";
+import {Divider, Grid, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import React, { useEffect, useState } from "react";
-import { useApi } from "../../Services/Hooks";
+import React, {useEffect, useState} from "react";
+import {useApi} from "../../Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function StudentStatus() {
@@ -27,7 +27,7 @@ export default function StudentStatus() {
 
     return <Grid
         container
-        spacing={2}
+        spacing={0}
         className={classes.main}
         style={{padding: "15px 0 0 15px"}}
     >
