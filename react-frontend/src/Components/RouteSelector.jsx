@@ -1,13 +1,12 @@
-import {Container} from "@material-ui/core"
-import {makeStyles} from "@material-ui/core/styles"
+import { Container } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
-import {Route, Switch} from "react-router-dom"
+import { Route, Switch } from "react-router-dom"
 import Dashboard from "./Dashboard"
-import StudentEvaluationForm from "./Employer/Evaluations/StudentEvaluationForm";
-import StudentEvaluationsList from "./Utils/StudentEvaluationsList"
-import HiredStudentList from "./Employer/HiredStudentList";
+import StudentEvaluationForm from "./Employer/Evaluations/StudentEvaluationForm"
+import HiredStudentList from "./Employer/HiredStudentList"
 import Interviewlist from "./Employer/Interview/InterviewList"
-import {Rescheduleinterview} from "./Employer/Interview/RescheduleInterview"
+import { Rescheduleinterview } from "./Employer/Interview/RescheduleInterview"
 import BusinessEvaluationForm from "./Manager/BusinessEvaluations/BusinessEvaluationForm"
 import BusinessEvaluationList from "./Manager/BusinessEvaluations/BusinessEvaluationList"
 import ContractForm from "./Manager/ContractForm"
@@ -21,7 +20,8 @@ import ApplicationList from "./Utils/ApplicationList"
 import Footer from "./Utils/Navb-Foot/Footer"
 import Navbar from "./Utils/Navb-Foot/Navbar"
 import OfferList from "./Utils/OfferList"
-import {RoleProtectedRoute} from "./Utils/Routes"
+import { RoleProtectedRoute } from "./Utils/Routes"
+import StudentEvaluationsList from "./Utils/StudentEvaluationsList"
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -49,7 +49,7 @@ export default function RouteSelector() {
                     path={"/dashboard"}
                     component={Dashboard}
                 />
-                {/* Admin */}
+                {/* Gestionnaire de stage / Administrateur */}
                 <RoleProtectedRoute
                     exact={true}
                     path="/dashboard/assignement/offer"
@@ -159,7 +159,7 @@ export default function RouteSelector() {
                     component={HiredStudentList}
                     role={"employer"}
                 />
-                {/* Etudiant */}
+                {/* Étudiant */}
             </Switch>
         </Container>
         <Footer/>

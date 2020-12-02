@@ -1,11 +1,11 @@
-import {Divider, Typography} from "@material-ui/core";
+import { Divider, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import React, {useEffect, useState} from "react";
-import {useApi, useModal} from "../../Services/Hooks";
+import React, { useEffect, useState } from "react";
+import { useApi, useModal } from "../../Services/Hooks";
+import ApprovalButtons from "../Utils/ApprovalButtons";
 import TextboxModal from "../Utils/Modal/TextboxModal";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
-import ApprovalButtons from "../Utils/ApprovalButtons";
 
 export default function ResumeApprobation({count}) {
     const classes = useStyles()

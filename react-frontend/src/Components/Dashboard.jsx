@@ -1,7 +1,7 @@
-import {Divider, Grid, Typography} from "@material-ui/core";
+import { Divider, Grid, Typography } from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 import NotificationImportantOutlinedIcon from "@material-ui/icons/NotificationImportantOutlined";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import AuthenticationService from "../Services/AuthenticationService";
 import OfferApprobation from "./Manager/OfferApprobation";
 import PendingContracts from "./Manager/PendingContracts";
@@ -104,7 +104,7 @@ function StudentDashboard() {
                     {offerCount} offres sur lesquelles vous n'avez&nbsp;pas appliqué
                 </Typography>
                 <Typography variant={"body2"}>
-                    {offerPendingCount} offres en attente de réponse&nbsp;de&nbsp;votre part
+                    {offerPendingCount} offres en attente de votre&nbsp;réponse
                 </Typography>
             </TabButton>
             <Divider/>

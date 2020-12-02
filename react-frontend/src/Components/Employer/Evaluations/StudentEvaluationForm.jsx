@@ -1,10 +1,10 @@
-import {Card, CardContent, Grid, Typography} from "@material-ui/core";
-import {ErrorMessage, Field} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
+import { Card, CardContent, Grid, Typography } from "@material-ui/core";
+import { ErrorMessage, Field } from "formik";
+import { SimpleFileUpload, TextField } from "formik-material-ui";
 import React from "react";
-import {useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import * as yup from "yup";
-import {FormikStepper} from "../../Utils/FormikStepper";
+import { FormikStepper } from "../../Utils/FormikStepper";
 import useStyles from "../../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
@@ -12,7 +12,7 @@ const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " +
 const tooBigError = valueNumber => "Doit être plus petit que ou égal à " + valueNumber.max
 const requiredFieldMsg = "Ce champ est requis"
 const requiredRadioMsg = "Veuillez choisir une option"
-const invalidSelectOption = "Option séléctionnée invalide"
+const invalidSelectOption = "Option sélectionnée invalide"
 
 function GeneralInfoStep(props) {
     return <FormikStep
@@ -33,7 +33,7 @@ function GeneralInfoStep(props) {
                     name="infos.studentProgram"
                     id="studentProgram"
                     variant="outlined"
-                    label="Programme d’études :"
+                    label="Programme d’études : "
                     required
                     fullWidth
                     autoFocus
@@ -538,7 +538,7 @@ function DecisionStep(props) {
         >
             <Grid item xs={8}>
                 <label>
-                    L’entreprise aimerait accueillir cet éléve pour son prochain stage
+                    L’entreprise aimerait accueillir cet élève pour son prochain stage
                 </label>
             </Grid>
             <Grid item xs={4}>
@@ -615,7 +615,7 @@ function DecisionStep(props) {
                     name="signature.image"
                     id="file"
                     variant="outlined"
-                    label="Fichier signature JPG/PNG"
+                    label="Fichier de signature de type JPG ou PNG"
                     fullwidth
                     required
                 />

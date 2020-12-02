@@ -29,68 +29,68 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                     <Typography variant="h5">ÉVALUATION</Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Stage:
+                            Stage :
                         </span> {data.evaluationCriterias.internshipCount}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage:
+                            Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l’entente de stage :
                         </span> {data.evaluationCriterias.workAsAnnoncement}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Des mesures d’accueil facilitent l’intégration du nouveau stagiaire:
+                            Des mesures d’accueil facilitent l’intégration du nouveau stagiaire :
                         </span> {data.evaluationCriterias.easyIntigration}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Le temps réel consacré à l’encadrement du stagiaire est suffisant:
+                            Le temps réel consacré à l’encadrement du stagiaire est suffisant :
                         </span> {data.evaluationCriterias.sufficientTime}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            L’environnement de travail respecte les normes d’hygiène et de sécurité au travail:
+                            L’environnement de travail respecte les normes d’hygiène et de sécurité au travail :
                         </span> {data.evaluationCriterias.securityWorkPlace}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Le climat de travail est agréable:
+                            Le climat de travail est agréable :
                         </span> {data.evaluationCriterias.pleasantEnvironnement}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Le milieu de stage est accessible par transport en commun:
+                            Le milieu de stage est accessible par transport en commun :
                         </span> {data.evaluationCriterias.accessiblePlace}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Le salaire offert {data.evaluationCriterias.salary} est intéressant pour le stagiaire:
+                            Le salaire offert {data.evaluationCriterias.salary} est intéressant pour le stagiaire :
                         </span> {data.evaluationCriterias.goodSalary}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            La communication avec le superviseur de stage facilite le déroulement du stage:
+                            La communication avec le superviseur de stage facilite le déroulement du stage :
                         </span> {data.evaluationCriterias.supervisorFacilitatesIntern}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            L’équipement fourni est adéquat pour réaliser les tâches confiées:
+                            L’équipement fourni est adéquat pour réaliser les tâches confiées :
                         </span> {data.evaluationCriterias.adequateEquipement}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Le volume de travail est acceptable:
+                            Le volume de travail est acceptable :
                         </span> {data.evaluationCriterias.accetableWorkload}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Préciser le nombre d’heures/semaine: </span>
-                        Premier mois: {data.evaluationCriterias.hoursOfWeekFirstMonth}h.
-                        Deuxième mois: {data.evaluationCriterias.hoursOfWeekFirstMonth}h.
-                        Troisième mois: {data.evaluationCriterias.hoursOfWeekFirstMonth}h.
+                        <span className={classes.evaluationCriterias}>Préciser le nombre d’heures par semaine : </span>
+                        Premier mois : {data.evaluationCriterias.hoursOfWeekFirstMonth}h
+                        Deuxième mois : {data.evaluationCriterias.hoursOfWeekFirstMonth}h
+                        Troisième mois : {data.evaluationCriterias.hoursOfWeekFirstMonth}h
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Commentaires:
+                            Commentaires :
                         </span> {data.evaluationCriterias.comment}
                     </Typography>
                 </div>
@@ -100,22 +100,22 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Ce milieu est à privilégier pour le:
+                            Ce milieu est à privilégier pour le :
                         </span> {data.observations.preferedInternship}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Ce milieu est ouvert à accueillir:
+                            Ce milieu est ouvert à accueillir :
                         </span> {data.observations.numbersOfInterns}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Ce milieu désire accueillir le même stagiaire pour un prochain stage:
+                            Ce milieu désire accueillir le même stagiaire pour un prochain stage :
                         </span> {data.observations.welcomeSameIntern}
                     </Typography>
                     <Typography>
                         <span className={classes.evaluationCriterias}>
-                            Ce milieu offre des quarts de travail variables:
+                            Ce milieu offre des quarts de travail variables :
                         </span> {data.observations.variablesShifts}.
                         De {data.observations.startShiftsOne}h à {data.observations.endShiftsOne}h
                         De {data.observations.startShiftsTwo}h à {data.observations.endShiftsTwo}h
@@ -129,11 +129,11 @@ export default function BusinessEvaluationModal({isOpen, data, hide}) {
                     {data.signature.image &&
                     <img src={imageSrc} alt="signature" className={classes.signature}/>}
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Enseignant responsable:</span>
+                        <span className={classes.evaluationCriterias}>Enseignant responsable :</span>
                         &ensp;{data.signature.name}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Date:</span>
+                        <span className={classes.evaluationCriterias}>Date :</span>
                         &ensp;{parseDate(data.signature.date)}
                     </Typography>
                 </div>

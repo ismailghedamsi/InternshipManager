@@ -49,8 +49,8 @@ export default function Interviewlist() {
                             <TableCell>Date</TableCell>
                             <TableCell>Heure</TableCell>
                             <TableCell>Titre</TableCell>
-                            <TableCell>Etudiant</TableCell>
-                            <TableCell>Status</TableCell>
+                            <TableCell>Étudiant</TableCell>
+                            <TableCell>État</TableCell>
                             <TableCell>Reprogrammer</TableCell>
                             <TableCell>Supprimer</TableCell>
                         </TableRow>

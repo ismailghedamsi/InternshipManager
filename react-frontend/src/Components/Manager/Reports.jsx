@@ -1,4 +1,4 @@
-import {Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow} from "@material-ui/core";
+import { Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
@@ -9,8 +9,8 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
-import React, {useEffect, useMemo, useState} from "react";
-import {useApi, useDateParser} from "../../Services/Hooks";
+import React, { useEffect, useMemo, useState } from "react";
+import { useApi, useDateParser } from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const reports = [
@@ -52,7 +52,7 @@ function DataTableHeader({report}) {
             <TableCell>Prénom</TableCell>
             <TableCell>Nom</TableCell>
             <TableCell>Adresse courriel</TableCell>
-            <TableCell>Téléphone</TableCell>
+            <TableCell>Numéro de téléphone</TableCell>
         </TableRow>
     } else if (reportEndpoints[report].includes("offers")) {
         header = <TableRow>
@@ -63,8 +63,8 @@ function DataTableHeader({report}) {
             <TableCell>Salaire</TableCell>
             <TableCell>Horaire</TableCell>
             <TableCell>Places</TableCell>
-            <TableCell>Créer le</TableCell>
-            <TableCell>Ferme le</TableCell>
+            <TableCell>Créée le</TableCell>
+            <TableCell>Fermée le</TableCell>
             <TableCell>Début</TableCell>
             <TableCell>Fin</TableCell>
         </TableRow>

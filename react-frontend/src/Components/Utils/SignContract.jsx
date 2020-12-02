@@ -1,13 +1,13 @@
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../../Services/Hooks";
+import { useApi, useModal } from "../../Services/Hooks";
+import SignModal from "./Modal/SignModal";
 import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
-import SignModal from "./Modal/SignModal";
 
 export default function SignContract({count, waitingCount}) {
     const classes = useStyles()

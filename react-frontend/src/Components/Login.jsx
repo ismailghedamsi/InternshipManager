@@ -1,4 +1,4 @@
-import {Avatar} from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,19 +7,19 @@ import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
-import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
-import React, {useContext} from "react";
-import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import React, { useContext } from "react";
+import { Link as RouterLink, Redirect, useHistory, useLocation } from "react-router-dom";
 import * as yup from "yup";
-import {ModalContext} from "../App";
+import { ModalContext } from "../App";
 import fl from "../img/fl.png";
 import AuthenticationService from "../Services/AuthenticationService";
 import useStyles from "./Utils/Style/useStyles";
 
 const HTTP_UNAUTHORIZED = 401
 const HTTP_TOKEN_EXPIRED = 498
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 
 export default function Login() {
     const {open} = useContext(ModalContext)
@@ -34,7 +34,7 @@ export default function Login() {
     const handleHttpError = (error, setFieldError, email) => {
         if (error.response) {
             if (error.response.status === HTTP_UNAUTHORIZED) {
-                setFieldError("username", "Le nom d'utilisateur ou le  mot de passe est erroné")
+                setFieldError("username", "L'adresse courriel ou le mot de passe sont erronés")
                 setFieldError("password", "   ")
             } else if (error.response.status === HTTP_TOKEN_EXPIRED) {
                 history.push("/passwordChange", {email: email})
@@ -100,7 +100,7 @@ export default function Login() {
                                             name="email"
                                             id="email"
                                             variant="outlined"
-                                            label="Addresse courriel"
+                                            label="Adresse courriel"
                                             required
                                             fullWidth
                                         />
@@ -137,7 +137,7 @@ export default function Login() {
                 <Grid container justify="flex-end" className={classes.link}>
                     <Grid item>
                         <Link component={RouterLink} to={"/register"} variant="body2">
-                            Vous n'avez pas de compte? S'enregister
+                            Vous n'avez pas de compte? S'inscrire
                         </Link>
                     </Grid>
                 </Grid>

@@ -1,11 +1,11 @@
-import {Divider, Typography} from "@material-ui/core";
+import { Divider, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
-import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal} from "../../Services/Hooks";
+import React, { useEffect, useState } from "react";
+import { useApi, useDateParser, useModal } from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
-import PdfModal from "../Utils/PdfModal"
+import PdfModal from "../Utils/PdfModal";
 import useStyles from "../Utils/Style/useStyles";
 
 const applicationAcceptedStates = [
@@ -66,11 +66,11 @@ function OfferStatus(props) {
 
     function parseApplicationState(application) {
         if (application.state === "JOB_OFFER_ACCEPTED_BY_STUDENT")
-            return "Acceptée par l'étudiant"
+            return "acceptée par l'étudiant"
         else if (application.state === "JOB_OFFER_DENIED_BY_STUDENT")
-            return "Refusée par l'étudiant. Raison : " + application.reasonForRejection
+            return "refusée par l'étudiant. Raison : " + application.reasonForRejection
         else
-            return "En attente de réponse de l'étudiant"
+            return "en attente de réponse de l'étudiant"
     }
 
     return <div>
@@ -89,7 +89,7 @@ function OfferStatus(props) {
                 </span>
                     :
                     <span>
-                   Entrevue  Pas planifiée
+                   Entrevue pas prévue
                 </span>
             }
                 <br/>
@@ -121,7 +121,7 @@ function StudentApplicationDetails({student}) {
         const interviewCount = student.applications.filter(appli => appli.interview).length
 
         if (interviewCount > 0)
-            return interviewCount + " demandes d'entrevue"
+            return interviewCount + (interviewCount === 1 ? " demande" : "demandes") + " d'entrevue"
         else
             return "Aucune demande d'entrevue"
     }
@@ -158,7 +158,7 @@ function StudentApplicationDetails({student}) {
                         return "Contrat en attente de la signature du gestionnaire de stage"
                     case "SIGNED":
                     default:
-                        return "Contrat signé par tous les parties"
+                        return "Contrat signé par toutes les parties"
                 }
         return null
     }
@@ -203,7 +203,7 @@ function StudentStatusDetails({student}) {
             }
 
             return student.resumes.length + " CVs : " + approvedResumes + " approuvés, "
-                + pendingResumes + " en attente, " + rejectedResumes + " rejetés "
+                + pendingResumes + " en attente, " + rejectedResumes + " rejetés"
         }
     }
 

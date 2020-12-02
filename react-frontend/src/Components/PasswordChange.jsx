@@ -7,19 +7,19 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
-import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
-import React, {useContext} from "react";
-import {Link as RouterLink, Redirect, useHistory, useLocation} from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import React, { useContext } from "react";
+import { Link as RouterLink, Redirect, useHistory, useLocation } from "react-router-dom";
 import * as yup from "yup";
-import {ModalContext} from "../App";
+import { ModalContext } from "../App";
 import AuthenticationService from "../Services/AuthenticationService";
 import useStyles from "./Utils/Style/useStyles";
 
 const HTTP_UNAUTHORIZED = 401
 const HTTP_NOT_FOUND = 404
 const HTTP_CONFLICT = 409
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 
 export default function PasswordChange() {
@@ -37,11 +37,11 @@ export default function PasswordChange() {
     const handleHttpError = (error, setFieldError) => {
         if (error.response) {
             if (error.response.status === HTTP_UNAUTHORIZED)
-                setFieldError("oldPassword", "Le  mot de passe est erroné")
+                setFieldError("oldPassword", "Le mot de passe est erroné")
             else if (error.response.status === HTTP_CONFLICT)
-                setFieldError("newPassword", "L'ancien et le nouveau mot de passe ne doivent pas êtres identiques")
+                setFieldError("newPassword", "L'ancien et le nouveau mots de passe doivent être différents")
             else if (error.response.status === HTTP_NOT_FOUND)
-                setFieldError("username", "Le nom d'utilisateur n'est pas valide")
+                setFieldError("username", "L'adresse courriel n'est pas formatée correctement")
             else
                 open()
         } else
@@ -80,11 +80,11 @@ export default function PasswordChange() {
 
                         validationSchema={yup.object()
                             .shape({
-                                username: yup.string().email("L'email n'a pas un format valide").trim().required(requiredFieldMsg),
+                                username: yup.string().email("L'adresse courriel n'est pas formatée correctement").trim().required(requiredFieldMsg),
                                 oldPassword: yup.string().trim().required(requiredFieldMsg),
                                 newPassword: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
                                 newConfirm: yup.string()
-                                    .oneOf([yup.ref('newPassword'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
+                                    .oneOf([yup.ref('newPassword'), null], "Les mots de passe doivent être identiques").required(requiredFieldMsg)
                             })}
                         validateOnBlur={false}
                         validateOnChange={false}
@@ -135,7 +135,7 @@ export default function PasswordChange() {
                                         name="newConfirm"
                                         id="newConfirm"
                                         variant="outlined"
-                                        label="Confirmez"
+                                        label="Confirmation"
                                         type={"password"}
                                         required
                                         fullWidth
@@ -160,7 +160,7 @@ export default function PasswordChange() {
                     <Grid container justify="flex-end" className={classes.link}>
                         <Grid item>
                             <Link component={RouterLink} to={"/"} variant="body2">
-                                Retourner à la page de connexion
+                                Retour à la page de connexion
                             </Link>
                         </Grid>
                     </Grid>

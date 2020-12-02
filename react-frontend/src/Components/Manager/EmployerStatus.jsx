@@ -1,10 +1,10 @@
-import {Button, Divider, Grid, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
-import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
-import OfferDetails from "../Utils/OfferDetails";
-import PdfModal from "../Utils/PdfModal"
-import useStyles from "../Utils/Style/useStyles";
+import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { useApi, useDateParser, useModal, useTimeParserFromDate } from "../../Services/Hooks";
+import OfferDetails from "../Utils/OfferDetails";
+import PdfModal from "../Utils/PdfModal";
+import useStyles from "../Utils/Style/useStyles";
 
 function EmployerApplicationDetails({offers}) {
 
@@ -15,7 +15,7 @@ function EmployerApplicationDetails({offers}) {
             interviewCount += offer.applications.filter(appli => appli.interview).length
 
         if (interviewCount > 0)
-            return interviewCount + " demandes d'entrevue"
+            return interviewCount + (interviewCount === 1 ? " demande" : " demandes") + " d'entrevue"
         else
             return "Aucune demande d'entrevue"
     }
@@ -95,7 +95,7 @@ function EmployerStatusDetails({offers}) {
                     rejectedOffers++
             }
 
-            return offers.length + " offres: " + approvedOffers + " approuvées, "
+            return offers.length + " offres : " + approvedOffers + " approuvées, "
                 + pendingOffers + " en attente, " + rejectedOffers + " rejetées"
         }
     }
@@ -122,10 +122,10 @@ function InterviewStatus(props) {
         if (interview.studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION")
             return <span style={{color: "blue"}}>En attente</span>
         else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
-            return <span style={{color: "red"}}>Rejeté<span
+            return <span style={{color: "red"}}>Rejetée<span
                 style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>
+            return <span style={{color: "green"}}>Approuvée</span>
     }
 
     return <div>
@@ -139,7 +139,7 @@ function InterviewStatus(props) {
         <Typography>
             Heure : {props.interview ? parseTimeFromDate(props.interview.dateTime) : ""}
         </Typography>
-        <Typography>Titre de l'offre :
+        <Typography>Titre de l'offre : 
             {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
         <Typography>
             État : {getInterviewState(props.interview)}
@@ -277,17 +277,17 @@ export default function EmployerStatus() {
                 <Typography
                     style={{fontWeight: "bold"}}>{elem.student.firstName + " " + elem.student.lastName}</Typography>
             )
-            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été selectionné pour l'offre</Typography>
+            : <Typography style={{fontWeight: "bold"}}>Aucun étudiant n'a été sélectionné pour l'offre</Typography>
     }
 
     function printOfferStatus(offer) {
         if (offer.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>
         else if (offer.reviewState === "DENIED")
-            return <span style={{color: "red"}}>Rejeté<span
+            return <span style={{color: "red"}}>Rejetée<span
                 style={{color: "black"}}> : {offer.reasonForRejection} </span></span>
         else
-            return <span style={{color: "green"}}>Approuvé</span>
+            return <span style={{color: "green"}}>Approuvée</span>
     }
 
     return <Grid
@@ -317,7 +317,7 @@ export default function EmployerStatus() {
                                          getCurrentEmployerInterviews(currentEmployerIndex)
                                      }}
                                      classes={classes}/>
-            ) : <Typography variant={"h5"}>Aucun employeurs</Typography>}
+            ) : <Typography variant={"h5"}>Aucun employeur</Typography>}
         </Grid>
         <Divider orientation={"vertical"} flexItem/>
         <Grid item xs={7} align="center" style={{overflow: "auto", height: "100%"}}>

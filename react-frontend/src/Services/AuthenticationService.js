@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 const HTTP_CONFLICT = 409;
 
@@ -41,7 +41,7 @@ class AuthenticationService {
             .catch(error => {
                 if (error.response) {
                     if (error.response.status === HTTP_CONFLICT)
-                        setFieldError("email", "Cette addresse courriel est déja utilisée")
+                        setFieldError("email", "Cette adresse courriel est déjà utilisée")
                     else
                         setModalOpen()
                 } else {

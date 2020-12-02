@@ -1,19 +1,19 @@
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@material-ui/core/MenuItem";
-import {Field, Form, Formik} from "formik";
-import {Select} from "formik-material-ui";
-import React, {useContext, useEffect, useState} from "react";
+import { Field, Form, Formik } from "formik";
+import { Select } from "formik-material-ui";
+import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import * as yup from "yup";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import {useApi} from "../../Services/Hooks";
-import {useHistory} from "react-router-dom";
-import {SemesterContext} from "../../App";
+import { SemesterContext } from "../../App";
+import { useApi } from "../../Services/Hooks";
 
 export default function SemesterSelectorModal({isOpen, hide, title}) {
     const api = useApi()

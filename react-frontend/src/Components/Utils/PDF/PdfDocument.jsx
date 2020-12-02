@@ -1,6 +1,6 @@
 import * as PropTypes from "prop-types";
-import React, {useEffect, useState} from "react";
-import {Document, Page} from "react-pdf";
+import React, { useEffect, useState } from "react";
+import { Document, Page } from "react-pdf";
 import useStyles from "../Style/useStyles";
 
 export default function PdfDocument(props) {

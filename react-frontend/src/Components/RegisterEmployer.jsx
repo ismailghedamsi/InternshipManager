@@ -1,16 +1,16 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
-import React, {useContext} from "react";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import React, { useContext } from "react";
 import * as yup from "yup";
-import {ModalContext} from "../App";
+import { ModalContext } from "../App";
 import AuthenticationService from "../Services/AuthenticationService";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLongError = value => "Doit avoir au plus " + value.max + " caractères"
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 
 export default function RegisterEmployer(props) {
     const {open} = useContext(ModalContext)
@@ -54,7 +54,7 @@ export default function RegisterEmployer(props) {
                         name="companyName"
                         id="companyName"
                         variant="outlined"
-                        label="Nom de la compagnie"
+                        label="Nom de l'entreprise"
                         required
                         fullWidth
                         autoFocus
@@ -66,7 +66,7 @@ export default function RegisterEmployer(props) {
                         name="address"
                         id="address"
                         variant="outlined"
-                        label="Addresse de la compagnie"
+                        label="Adresse de l'entreprise"
                         required
                         fullWidth
                     />
@@ -99,7 +99,7 @@ export default function RegisterEmployer(props) {
                         name="email"
                         id="emailEmployer"
                         variant="outlined"
-                        label="Addresse courriel"
+                        label="Adresse courriel"
                         type={"email"}
                         required
                         fullWidth
@@ -123,7 +123,7 @@ export default function RegisterEmployer(props) {
                         name="passwordConfirm"
                         id="passwordConfirmEmployer"
                         variant="outlined"
-                        label="Confirmez"
+                        label="Confirmation"
                         type={"password"}
                         required
                         fullWidth
@@ -141,7 +141,7 @@ export default function RegisterEmployer(props) {
                 className={props.classes.submit}
                 disabled={isSubmitting}
             >
-                S'enregistrer
+                S'inscrire
             </Button>
         </Form>}
     </Formik>

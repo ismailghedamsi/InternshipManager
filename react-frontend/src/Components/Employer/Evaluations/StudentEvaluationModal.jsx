@@ -27,7 +27,7 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
         fullWidth={true}
         maxWidth={"md"}
     >
-        <DialogTitle id="alert-dialog-title">{"Sommaire evaluation"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Sommaire d'évaluation"}</DialogTitle>
         <DialogContent>
             {data && <div>
                 <div className={classes.evaluationSections}>
@@ -82,38 +82,38 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
                     Qualite de travail
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  a) respecter les mandats qui lui ont été confiés
+                  a) respecter les mandats qui lui ont été confiés : 
                 </span>
                         {data.quality.followsInstructions}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
                   b) porter attention aux détails dans la réalisation de ses
-                  tâches
+                  tâches : 
                 </span>
                         {data.quality.detailsAttention}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  c) vérifier son travail, s’assurer que rien n’a été oublié
+                  c) vérifier son travail, s’assurer que rien n’a été oublié : 
                 </span>
                         {data.quality.doubleChecks}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  d) rechercher des occasions de se perfectionner
+                  d) rechercher des occasions de se perfectionner : 
                 </span>
                         {data.quality.strivesForPerfection}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  e) faire une bonne analyse des problèmes rencontrés
+                  e) faire une bonne analyse des problèmes rencontrés : 
                 </span>
                         {data.quality.problemAnalysis}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  Commentaire :
+                  Commentaire : 
                 </span>
                         {data.quality.comment}
                     </Typography>
@@ -123,44 +123,44 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
                     <Typography>
 
                 <span className={classes.evaluationCriterias}>
-                  a) établir facilement des contacts avec les gens
+                  a) établir facilement des contacts avec les gens : 
                 </span>
                         {data.relationships.connectsEasily}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  b) contribuer activement au travail d’équipe
+                  b) contribuer activement au travail d’équipe : 
                 </span>
                         {data.relationships.teamworkContribution}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  c) s’adapter facilement à la culture de l’entreprise
+                  c) s’adapter facilement à la culture de l’entreprise : 
                 </span>
                         {data.relationships.culturalAdaptation}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  d) accepter les critiques constructives
+                  d) accepter les critiques constructives : 
                 </span>
                         {data.relationships.acceptsCriticism}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  e) être respectueux envers les gens
+                  e) être respectueux envers les gens : 
                 </span>
                         {data.relationships.respectsOthers}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
                   f) faire preuve d’écoute active en essayant decomprendre le
-                  point de vue de l’autre
+                  point de vue de l’autre : 
                 </span>
                         {data.relationships.activelyListens}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  Commentaire :
+                  Commentaire : 
                 </span>
                         {data.relationships.comment}
                     </Typography>
@@ -170,38 +170,38 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
                     <Typography> {data.skills.connectsEasily}</Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  a) démontrer de l’intérêt et de la motivation au travail
+                  a) démontrer de l’intérêt et de la motivation au travail : 
                 </span>
                         {data.skills.showsInterest}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  b) exprimer clairement ses idées
+                  b) exprimer clairement ses idées : 
                 </span>
                         {data.skills.expressesOwnIdeas}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  c) faire preuve d’initiative
+                  c) faire preuve d’initiative : 
                 </span>
                         {data.skills.showsInitiative}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  d) travailler de façon sécuritaire
+                  d) travailler de façon sécuritaire : 
                 </span>
                         {data.skills.worksSafely}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
                   e) démontrer un bon sens des responsabilités ne requérant
-                  qu’un minimum de supervision
+                  qu’un minimum de supervision : 
                 </span>
                         {data.skills.dependable}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  f) être ponctuel et assidu à son travail
+                  f) être ponctuel et assidu à son travail : 
                 </span>
                         {data.skills.punctual}
                     </Typography>
@@ -214,19 +214,19 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
                     APPRÉCIATION GLOBALE DU STAGIAIRE
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  Expectation :
+                  Expectation : 
                 </span>
                         {data.appreciation.expectations}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  PRÉCISEZ VOTRE APPRÉCIATION:
+                  PRÉCISEZ VOTRE APPRÉCIATION :
                 </span>
                         {data.appreciation.comment}
                     </Typography>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                  Cette évaluation a été discutée avec le stagiaire :
+                  Cette évaluation a été discutée avec le stagiaire : 
                 </span>
                         {data.appreciation.discussedWithIntern}
                     </Typography>
@@ -235,15 +235,15 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
                     <Typography>
                 <span className={classes.evaluationCriterias}>
                   Le nombre d’heures réel par semaine d’encadrement accordé au
-                  stagiaire
+                  stagiaire : 
                 </span>
-                        : {data.feedback.weeklySupervisionHours}
+                        {data.feedback.weeklySupervisionHours}
                     </Typography>
                 </div>
                 <div className={classes.evaluationSections}>
                     <Typography>
                 <span className={classes.evaluationCriterias}>
-                   L’entreprise aimerait accueillir cet élève pour son prochain stage
+                   L’entreprise aimerait accueillir cet élève pour son prochain stage : 
                 </span>
                         : {data.feedback.hireAgain}
                     </Typography>
@@ -259,11 +259,11 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
                     {data.signature.image &&
                     <img src={imageSrc} alt="signature" className={classes.signature}/>}
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Enseignant responsable:</span>
+                        <span className={classes.evaluationCriterias}>Enseignant responsable : </span>
                         &ensp;{data.signature.name}
                     </Typography>
                     <Typography>
-                        <span className={classes.evaluationCriterias}>Date:</span>
+                        <span className={classes.evaluationCriterias}>Date : </span>
                         &ensp;{parseDate(data.signature.date)}
                     </Typography>
                 </div>

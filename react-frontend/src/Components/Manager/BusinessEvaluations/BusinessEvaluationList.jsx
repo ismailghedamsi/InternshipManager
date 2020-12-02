@@ -91,23 +91,23 @@ export default function BusinessEvaluationList() {
                                 IDENTIFICATION DE L’ENTREPRISE
                             </Typography>
                             <Typography>
-                                <strong>Nom de l’entreprise: </strong>
+                                <strong>Nom de l’entreprise : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.companyName}
                             </Typography>
                             <Typography>
-                                <strong>Personne contact: </strong>
+                                <strong>Représentant de l'entreprise : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.contactName}
                             </Typography>
                             <Typography>
-                                <strong>Adresse: </strong>
+                                <strong>Adresse : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.address}
                             </Typography>
                             <Typography>
-                                <strong>email: </strong>
+                                <strong>Adresse courriel : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.email}
                             </Typography>
                             <Typography>
-                                <strong>Téléphone: </strong>
+                                <strong>Téléphone : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.phoneNumber}
                             </Typography>
                             <Divider className={classes.dividers}/>
@@ -115,15 +115,15 @@ export default function BusinessEvaluationList() {
                                 IDENTIFICATION DU STAGIAIRE
                             </Typography>
                             <Typography>
-                                <strong>Nom du stagiaire: </strong>
+                                <strong>Nom du stagiaire : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.student.firstName} {businessEvaluations[currentIndex].contract.studentApplication.student.lastName}
                             </Typography>
                             <Typography>
-                                <strong>Date du stage: </strong>
+                                <strong>Date du stage : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.details.internshipStartDate}
                             </Typography>
                             <Typography>
-                                <strong>Stage: </strong>
+                                <strong>Stage : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.internshipCount}
                             </Typography>
                             <Divider className={classes.dividers}/>
@@ -132,59 +132,59 @@ export default function BusinessEvaluationList() {
                             </Typography>
                             <Typography>
                                 <strong>Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans
-                                    l’entente de stage: </strong>
+                                    l’entente de stage : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.workAsAnnoncement}
                             </Typography>
                             <Typography>
-                                <strong>Des mesures d’accueil facilitent l’intégration du nouveau stagiaire: </strong>
+                                <strong>Des mesures d’accueil facilitent l’intégration du nouveau stagiaire : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.easyIntigration}
                             </Typography>
                             <Typography>
-                                <strong>Le temps réel consacré à l’encadrement du stagiaire est suffisant: </strong>
+                                <strong>Le temps réel consacré à l’encadrement du stagiaire est suffisant : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.sufficientTime}
                             </Typography>
                             <Typography>
                                 <strong>L’environnement de travail respecte les normes d’hygiène et de sécurité au
-                                    travail: </strong>
+                                    travail : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.securityWorkPlace}
                             </Typography>
                             <Typography>
-                                <strong>Le climat de travail est agréable: </strong>
+                                <strong>Le climat de travail est agréable : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.pleasantEnvironnement}
                             </Typography>
                             <Typography>
-                                <strong>Le milieu de stage est accessible par transport en commun: </strong>
+                                <strong>Le milieu de stage est accessible par transport en commun : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.accessiblePlace}
                             </Typography>
                             <Typography>
                                 <strong>Le salaire offert {businessEvaluations[currentIndex].evaluationCriterias.salary}
-                                    est intéressant pour le stagiaire: </strong>
+                                    est intéressant pour le stagiaire : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.goodSalary}
                             </Typography>
                             <Typography>
                                 <strong>La communication avec le superviseur de stage facilite le déroulement du
-                                    stage: </strong>
+                                    stage : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.supervisorFacilitatesIntern}
                             </Typography>
                             <Typography>
-                                <strong>L’équipement fourni est adéquat pour réaliser les tâches confiées: </strong>
+                                <strong>L’équipement fourni est adéquat pour réaliser les tâches confiées : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.adequateEquipement}
                             </Typography>
                             <Typography>
-                                <strong>Le volume de travail est acceptable: </strong>
+                                <strong>Le volume de travail est acceptable : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.accetableWorkload}
                             </Typography>
                             <Typography>
-                                <strong>Préciser le nombre d’heures/semaine: </strong>
-                                Premier mois:
+                                <strong>Préciser le nombre d’heures par semaine : </strong>
+                                Premier mois : 
                                 {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
-                                Deuxième mois:
+                                Deuxième mois : 
                                 {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
-                                Troisième mois:
+                                Troisième mois : 
                                 {businessEvaluations[currentIndex].evaluationCriterias.hoursOfWeekFirstMonth}h.
                             </Typography>
                             <Typography>
-                                <strong>Commentaires: </strong>
+                                <strong>Commentaires : </strong>
                                 {businessEvaluations[currentIndex].evaluationCriterias.comment}
                             </Typography>
                             <Divider className={classes.dividers}/>
@@ -192,19 +192,19 @@ export default function BusinessEvaluationList() {
                                 OBSERVATIONS GÉNÉRALES
                             </Typography>
                             <Typography>
-                                <strong>Ce milieu est à privilégier pour le: </strong>
+                                <strong>Ce milieu est à privilégier pour le : </strong>
                                 {businessEvaluations[currentIndex].observations.preferedInternship}
                             </Typography>
                             <Typography>
-                                <strong>Ce milieu est ouvert à accueillir: </strong>
+                                <strong>Ce milieu est ouvert à accueillir : </strong>
                                 {businessEvaluations[currentIndex].observations.numbersOfInterns}
                             </Typography>
                             <Typography>
-                                <strong>Ce milieu désire accueillir le même stagiaire pour un prochain stage: </strong>
+                                <strong>Ce milieu désire accueillir le même stagiaire pour un prochain stage : </strong>
                                 {businessEvaluations[currentIndex].observations.welcomeSameIntern}
                             </Typography>
                             <Typography>
-                                <strong>Ce milieu offre des quarts de travail variables: </strong>
+                                <strong>Ce milieu offre des quarts de travail variables : </strong>
                                 {businessEvaluations[currentIndex].observations.variablesShifts}.
                                 De {businessEvaluations[currentIndex].observations.startShiftsOne}h
                                 à {businessEvaluations[currentIndex].observations.endShiftsOne}h
@@ -223,11 +223,11 @@ export default function BusinessEvaluationList() {
                             />
                             <Divider className={classes.dividers}/>
                             <Typography>
-                                <strong>Enseignant responsable: </strong>
+                                <strong>Enseignant responsable : </strong>
                                 {businessEvaluations[currentIndex].signature.name}
                             </Typography>
                             <Typography>
-                                <strong>Date: </strong>
+                                <strong>Date : </strong>
                                 {businessEvaluations[currentIndex].signature.date}
                             </Typography>
                         </div>

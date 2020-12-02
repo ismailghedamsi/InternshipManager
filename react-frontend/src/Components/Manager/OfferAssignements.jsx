@@ -1,10 +1,10 @@
-import {Divider, Typography} from "@material-ui/core";
+import { Divider, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {Field, Form, Formik} from "formik";
-import {Checkbox} from "formik-material-ui";
-import React, {useEffect, useState} from "react";
-import {useApi} from "../../Services/Hooks";
+import { Field, Form, Formik } from "formik";
+import { Checkbox } from "formik-material-ui";
+import React, { useEffect, useState } from "react";
+import { useApi } from "../../Services/Hooks";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
 

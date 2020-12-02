@@ -1,10 +1,10 @@
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useEmployerOfferManagement} from "../../Services/EmployerHooks";
-import {useModal} from "../../Services/Hooks";
+import { useEmployerOfferManagement } from "../../Services/EmployerHooks";
+import { useModal } from "../../Services/Hooks";
 import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 import ApprovalButtons from "./ApprovalButtons";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
@@ -70,7 +70,7 @@ export default function ApplicationList() {
 
     function applicationDecisionStatus(statusMessage, messageColor) {
         return <Typography variant={"body1"}>
-            Status application : <span style={{color: messageColor}}>{statusMessage}</span>
+            État d'application : <span style={{color: messageColor}}>{statusMessage}</span>
         </Typography>
     }
 
@@ -90,7 +90,7 @@ export default function ApplicationList() {
 
     function interviewDecisionStatus(statusMessage, messageColor) {
         return <Typography variant={"body1"}>
-            Statut d'entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
+            État d'entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
         </Typography>
     }
 
