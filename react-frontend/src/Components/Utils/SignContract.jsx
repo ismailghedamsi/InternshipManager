@@ -139,6 +139,7 @@ export default function SignContract({count, waitingCount}) {
                         <Button
                             variant={"contained"}
                             style={{backgroundColor: "red", color: "white"}}
+                            size={"small"}
                             onClick={() => {
                                 setCurrentIndex(i)
                                 openReasonModal()

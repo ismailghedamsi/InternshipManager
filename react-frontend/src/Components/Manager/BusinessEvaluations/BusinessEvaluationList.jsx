@@ -1,5 +1,6 @@
 import { Divider } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import React, { useEffect, useState } from "react";
@@ -11,6 +12,8 @@ export default function BusinessEvaluationList() {
     const api = useApi()
     const [businessEvaluations, setBusinessEvaluations] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [evaluationDeleting, setEvaluationDeleting] = useState(-1)
 
     useEffect(() => {
         api.get("/businessEvaluation")
@@ -42,14 +45,6 @@ export default function BusinessEvaluationList() {
                         variant={currentIndex === i ? "contained" : "outlined"}
                         color={"primary"}
                         size={"large"}
-                        onClick={() => deleteBusinessEvaluation(i)}
-                    >
-                        <i className="fa fa-trash" style={{color: "red"}}/>
-                    </Button>
-                    <Button
-                        variant={currentIndex === i ? "contained" : "outlined"}
-                        color={"primary"}
-                        size={"large"}
                         onClick={() => {
                             setCurrentIndex(i)
                         }}>
@@ -60,6 +55,25 @@ export default function BusinessEvaluationList() {
 
                         </Typography>
                     </Button>
+                    &ensp;
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"secondary"}
+                        size={"small"}
+                        disabled={isDeleting}
+                        onClick={() => {
+                            setIsDeleting(true)
+                            setEvaluationDeleting(i)
+                            deleteBusinessEvaluation(i).then(() => {
+                                setIsDeleting(false)
+                                setEvaluationDeleting(-1)
+                            })
+                        }}
+                    >
+                        <i className="fa fa-trash" style={{color: "white"}}/>&ensp;
+                        Supprimer l'évaluation
+                    </Button>
+                    {isDeleting && evaluationDeleting === i && <CircularProgress size={18}/>}
                     {currentIndex === i &&
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {item.contract.studentApplication.offer.title}

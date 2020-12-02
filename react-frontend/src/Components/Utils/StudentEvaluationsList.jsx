@@ -1,5 +1,6 @@
 import { Divider, Grid, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import React, { useEffect, useState } from "react";
 import { useApi } from "../../Services/Hooks";
 import useStyles from "./Style/useStyles";
@@ -9,6 +10,8 @@ export default function StudentStatus() {
     const api = useApi()
     const [evaluations, setEvaluations] = useState([])
     const [currentEvaluationIndex, setCurrentEvaluationIndex] = useState(0)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [evaluationDeleting, setEvaluationDeleting] = useState(-1)
 
     useEffect(() => {
         api.get("/internEvaluation").then(r => setEvaluations(r ? r.data : []))
@@ -41,14 +44,6 @@ export default function StudentStatus() {
                     variant={currentEvaluationIndex === i ? "contained" : "outlined"}
                     color={"primary"}
                     size={"large"}
-                    onClick={() => deleteStudentEvaluation(i)}
-                >
-                    <i className="fa fa-trash" style={{color: "red"}}/>
-                </Button>
-                <Button
-                    variant={currentEvaluationIndex === i ? "contained" : "outlined"}
-                    color={"primary"}
-                    size={"large"}
                     onClick={() => setCurrentEvaluationIndex(i)}
                 >
                     <Typography variant={"button"}>
@@ -57,6 +52,25 @@ export default function StudentStatus() {
                         {item.contract.studentApplication.offer.title}
                     </Typography>
                 </Button>
+                &ensp;
+                <Button
+                    variant={currentEvaluationIndex === i ? "contained" : "outlined"}
+                    color={"secondary"}
+                    size={"small"}
+                    disabled={isDeleting}
+                    onClick={() => {
+                        setIsDeleting(true)
+                        setEvaluationDeleting(i)
+                        deleteStudentEvaluation(i).then(() => {
+                            setIsDeleting(false)
+                            setEvaluationDeleting(-1)
+                        })
+                    }}
+                >
+                    <i className="fa fa-trash" style={{color: "white"}}/>&ensp;
+                    Supprimer l'évaluation
+                </Button>
+                {isDeleting && evaluationDeleting === i && <CircularProgress size={18}/>}
             </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid

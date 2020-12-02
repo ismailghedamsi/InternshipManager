@@ -1,11 +1,12 @@
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import React, {useEffect, useState} from "react";
-import {useDateParser, useFileReader} from "../../../Services/Hooks";
+import React, { useEffect, useState } from "react";
+import { useDateParser, useFileReader } from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function StudentEvaluationModal({isOpen, data, hide}) {
@@ -13,6 +14,7 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
     const classes = useStyles()
     const parseDate = useDateParser()
     const imageDecoder = useFileReader()
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     useEffect(() => {
         if (data.signature.image)
@@ -271,6 +273,7 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
             <Button color="secondary"
                     variant="contained"
                     onClick={() => {
+                        setIsSubmitting(false)
                         hide()
                     }}
             >
@@ -278,13 +281,18 @@ export default function StudentEvaluationModal({isOpen, data, hide}) {
             </Button>
             <Button color="primary"
                     variant="contained"
+                    disabled={isSubmitting}
                     onClick={() => {
-                        hide()
-                        data.submitForm()
+                        setIsSubmitting(true)
+                        data.submitForm().then(() => {
+                            setIsSubmitting(false)
+                            hide()
+                        })
                     }}
             >
                 Envoyer l'évaluation
             </Button>
+            {isSubmitting && <CircularProgress size={18}/>}
         </DialogActions>
     </Dialog>
 }

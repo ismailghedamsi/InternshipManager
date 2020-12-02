@@ -21,7 +21,6 @@ export default function InterviewConvocationModal({isOpen, hide, title, applicat
 
     function createInterview(values) {
         let dto = {...values}
-        console.log(dto.dateTime)
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = application
