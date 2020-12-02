@@ -1,7 +1,7 @@
-import { Button, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import {Button, Typography} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
-import { useApi } from "../../Services/Hooks";
+import {useApi} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 
@@ -17,7 +17,7 @@ export default function HiredStudentList() {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return <div style={{height: "100%"}}>
-        <PdfSelectionViewer documents={contracts.map(c => c.file)} title={"Les étudiants embauchés"}>
+        <PdfSelectionViewer documents={contracts.map(c => c.file)} title={"Étudiants embauchés"}>
             {(i, setCurrent) =>
                 <div key={i}>
                     <Button

@@ -1,10 +1,10 @@
-import { Card, CardContent, Grid } from "@material-ui/core";
-import { ErrorMessage, Field } from "formik";
-import { SimpleFileUpload, TextField } from "formik-material-ui";
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import {Card, CardContent, Grid} from "@material-ui/core";
+import {ErrorMessage, Field} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
+import React, {useState} from "react";
+import {useLocation} from "react-router-dom";
 import * as yup from "yup";
-import { FormikStepper } from "../../Utils/FormikStepper";
+import {FormikStepper} from "../../Utils/FormikStepper";
 import useStyles from "../../Utils/Style/useStyles";
 
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min
@@ -466,14 +466,14 @@ export default function BusinessEvalution() {
                 </Grid>
                 <Grid item xs={12}>
                     <Field
-                            component={SimpleFileUpload}
-                            type={"file"}
-                            name="signature.image"
-                            id="file"
-                            variant="outlined"
-                            label="Fichier JPG/PNG"
-                            required
-                            fullWidth
+                        component={SimpleFileUpload}
+                        type={"file"}
+                        name="signature.image"
+                        id="file"
+                        variant="outlined"
+                        label="Fichier de signature de type JPG ou PNG"
+                        required
+                        fullWidth
                     />
                 </Grid>
             </Grid>

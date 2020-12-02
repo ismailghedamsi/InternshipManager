@@ -1,17 +1,17 @@
-import { Button, List, ListSubheader, Toolbar, Typography } from "@material-ui/core";
+import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { SemesterContext } from "../../../App";
+import React, {useContext, useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+import {SemesterContext} from "../../../App";
 import AuthenticationService from "../../../Services/AuthenticationService";
-import { useModal } from "../../../Services/Hooks";
+import {useModal} from "../../../Services/Hooks";
 import OfferCreationModal from "../../Employer/OfferCreationModal";
 import SemesterSelectorModal from "../../Manager/SemesterSelectorModal";
 import ResumeUploadModal from "../../Student/Upload/ResumeUploadModal";
@@ -149,6 +149,19 @@ export default function Navbar() {
             return Links.admin
     }
 
+    function getRole() {
+        switch (AuthenticationService.getCurrentUser().role) {
+            case "admin":
+                return "Gestionnaire"
+            case "student":
+                return "Étudiant"
+            case "employer":
+                return "Employeur"
+            default:
+                return undefined;
+        }
+    }
+
     useEffect(() => {
         const index = getLinks().findIndex(route => route.url === location.pathname)
         if (index !== -1)
@@ -157,12 +170,17 @@ export default function Navbar() {
 
     return <AppBar position="static">
         <Toolbar>
-            <Button edge="start" className={[classes.menuButton, classes.linkButton].join(' ')}
+            <Button edge="start" className={[classes.menuButton, classes.linkButton].join(" ")}
                     onClick={() => setMenuOpen(true)} color="inherit">
                 <MenuIcon/>
                 &ensp;
                 <Typography>{getLinks()[current].title}</Typography>
             </Button>
+            <div className={classes.spacer}/>
+            <Typography variant={"title"}>
+                <span
+                    style={{textTransform: "capitalize"}}>{getRole()}</span> &mdash; {AuthenticationService.getCurrentUser().email}
+            </Typography>
             <div className={classes.spacer}/>
             <NotificationButton/>
             {AuthenticationService.getCurrentUserRole() === "admin" &&
@@ -183,7 +201,7 @@ export default function Navbar() {
                         history.push("/")
                     }}
             >
-                <i className="fa fa-sign-out"/>&ensp;Déconnexion - {AuthenticationService.getCurrentUser().email}
+                <i className="fa fa-sign-out"/>&ensp;Déconnexion
             </Button>
         </Toolbar>
         <Drawer anchor="left" open={menuOpen} onClose={() => setMenuOpen(false)} style={{width: 250}}>
