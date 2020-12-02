@@ -75,6 +75,10 @@ export default function OfferList({count}) {
         return "";
     }
 
+    function offerHasUpcomingInterviews(offer) {
+        return offer.applications.find(application => application.interview)
+    }
+
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage"}>
             {(i, setCurrent) =>
@@ -120,11 +124,15 @@ export default function OfferList({count}) {
                                     setButtonDeleting(-1)
                                 })
                             }}
-                            disabled={isDeleting && buttonDeleting === i}
+                            disabled={(isDeleting && buttonDeleting === i) || offerHasUpcomingInterviews(offers[i])}
                         >
                             <i className="fa fa-trash"/>&ensp;Supprimer
                         </Button>}
                         {isDeleting && buttonDeleting === i && <CircularProgress size={18}/>}
+                        {offerHasUpcomingInterviews(offers[i]) &&
+                        <Typography color={"textPrimary"} variant={"body2"} display={"block"}>
+                            Au moins une entrevue est présente pour cette offre.
+                        </Typography>}
                         <Divider className={classes.dividers}/>
                     </div>}
         </PdfSelectionViewer>

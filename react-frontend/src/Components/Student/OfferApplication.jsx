@@ -33,6 +33,10 @@ function hasEmployeurAcceptedStudentOnOffer(offer) {
     return offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "STUDENT_HIRED_BY_EMPLOYER") !== undefined && offer.applications.length !== 0
 }
 
+function isApplicationDenied(offer) {
+    return offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && (a.state === "APPLICATION_REJECTED_BY_EMPLOYER" || a.state === "STUDENT_REJECTED_BY_EMPLOYER")) !== undefined && offer.applications.length !== 0
+}
+
 function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurrentIndex, sendInterviewDecision, sendDecision, openReasonModal, openResumeModal, openReasonOfInterviewModal}) {
     const classes = useStyles()
     const dateParser = useDateParser()
@@ -141,6 +145,10 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
             <i className="fa fa-share-square-o"/>&ensp;
             {hasStudentAppliedOnOffer(offer) ? "Application envoyée" : "Appliquer"}
         </Button>
+        {isApplicationDenied(offer) &&
+        <Typography style={{color: "red"}} variant={"body1"}>
+            L'employeur a rejeté votre application
+        </Typography>}
         <Divider className={classes.dividers}/>
     </div>
 }
