@@ -1,10 +1,10 @@
-import { Divider } from "@material-ui/core";
+import {Divider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import React, { useEffect, useState } from "react";
-import { useApi } from "../../../Services/Hooks";
+import React, {useEffect, useState} from "react";
+import {useApi} from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function BusinessEvaluationList() {
@@ -31,7 +31,7 @@ export default function BusinessEvaluationList() {
 
     return <Grid
         container
-        spacing={2}
+        spacing={0}
         className={classes.main}
         style={{padding: "15px 0 0 15px"}}
     >

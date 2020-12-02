@@ -1,7 +1,7 @@
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import useStyles from "./Style/useStyles";
 
 export default function ApprovalButtons({onApprove, onDeny, approveLabel, denyLabel}) {
@@ -23,8 +23,10 @@ export default function ApprovalButtons({onApprove, onDeny, approveLabel, denyLa
                 disabled={disabled}
                 style={disabled ? {} : {backgroundColor: "green"}}
             >
-                <i className="fa fa-check-square" style={{color: "white"}}/>&ensp;{approveLabel}
-                &ensp;{disabled && disabledButton === 0 && <CircularProgress size={18}/>}
+                <span style={{fontSize: "0.8em"}}>
+                    <i className="fa fa-check-square" style={{color: "white"}}/>&ensp;{approveLabel}
+                    &ensp;{disabled && disabledButton === 0 && <CircularProgress size={18}/>}
+                </span>
             </Button>
         </Grid>
         <Grid item xs={6}>
@@ -43,8 +45,10 @@ export default function ApprovalButtons({onApprove, onDeny, approveLabel, denyLa
                 style={disabled ? {} : {backgroundColor: "red"}}
                 disabled={disabled}
             >
+                <span style={{fontSize: "0.8em"}}>
                 <i className="fa fa-ban" style={{color: "white"}}/>&ensp;{denyLabel}
-                &ensp;{disabled && disabledButton === 1 && <CircularProgress size={18}/>}
+                    &ensp;{disabled && disabledButton === 1 && <CircularProgress size={18}/>}
+                </span>
             </Button>
         </Grid>
     </Grid>
