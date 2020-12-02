@@ -4,10 +4,8 @@ import AuthenticationService from "../../Services/AuthenticationService";
 import {useApi} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
-import useStyles from "../Utils/Style/useStyles";
 
 export default function HiredStudentList() {
-    const classes = useStyles()
     const api = useApi()
     const [contracts, setContracts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
