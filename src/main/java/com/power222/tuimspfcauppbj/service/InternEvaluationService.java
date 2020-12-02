@@ -11,31 +11,27 @@ import java.util.Optional;
 @Service
 public class InternEvaluationService {
 
-    private final InternEvaluationRepository InterEvaluationRepo;
-    private final NotificationService notifSvc;
+    private final InternEvaluationRepository interEvaluationRepo;
 
-    public InternEvaluationService(InternEvaluationRepository interEvaliationRepo, final NotificationService notifSvc) {
-        this.InterEvaluationRepo = interEvaliationRepo;
-        this.notifSvc = notifSvc;
+    public InternEvaluationService(InternEvaluationRepository interEvaliationRepo) {
+        this.interEvaluationRepo = interEvaliationRepo;
     }
 
     public InternEvaluation createAndSaveNewInternEvaluation(InternEvaluation internEvaluation) {
-        var save = InterEvaluationRepo.saveAndFlush(internEvaluation);
-        notifSvc.notifyInternEvaluationCreation(save.getId());
-        return save;
+        return interEvaluationRepo.saveAndFlush(internEvaluation);
     }
 
     public List<InternEvaluation> getAllInternEvaluation() {
-        return InterEvaluationRepo.findAll();
+        return interEvaluationRepo.findAll();
     }
 
 
     public Optional<InternEvaluation> getInternEvaluationById(long id) {
-        return InterEvaluationRepo.findById(id);
+        return interEvaluationRepo.findById(id);
     }
 
     @Transactional
     public void deleteInternEvaluationById(long id) {
-        InterEvaluationRepo.deleteById(id);
+        interEvaluationRepo.deleteById(id);
     }
 }
