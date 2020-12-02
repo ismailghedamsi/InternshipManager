@@ -1,7 +1,6 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.AdminRepository;
-import com.power222.tuimspfcauppbj.dao.InternEvaluationRepository;
 import com.power222.tuimspfcauppbj.model.Contract;
 import com.power222.tuimspfcauppbj.model.InternshipOffer;
 import com.power222.tuimspfcauppbj.model.Resume;
@@ -13,13 +12,11 @@ public class NotificationService {
     private final MailSendingService mailSvc;
     private final RsocketNotificationService notifSvc;
     private final AdminRepository adminRepo;
-    private final InternEvaluationRepository evalRepo;
 
-    public NotificationService(MailSendingService mailSvc, RsocketNotificationService notifSvc, AdminRepository adminRepo, InternEvaluationRepository evalRepo) {
+    public NotificationService(MailSendingService mailSvc, RsocketNotificationService notifSvc, AdminRepository adminRepo) {
         this.mailSvc = mailSvc;
         this.notifSvc = notifSvc;
         this.adminRepo = adminRepo;
-        this.evalRepo = evalRepo;
     }
 
     public void notifyContractCreation(Contract contract) {
@@ -42,21 +39,6 @@ public class NotificationService {
         mailSvc.notifyAboutDeletion(contract);
         notifSvc.notify(contract.getStudentApplication().getStudent().getId(), msg);
         notifSvc.notify(contract.getStudentApplication().getOffer().getEmployer().getId(), msg);
-    }
-
-    public void notifyInternEvaluationCreation(long evalId) {
-        final var tmp = "Vous avez reçu l'évaluation de %s %s pour son stage chez %s";
-        evalRepo.findById(evalId)
-                .ifPresent(eval -> {
-                    final var msg = String.format(tmp, eval.getContract().getStudentApplication().getStudent().getFirstName(),
-                            eval.getContract().getStudentApplication().getStudent().getLastName(),
-                            eval.getContract().getStudentApplication().getOffer().getEmployer().getCompanyName());
-
-                    mailSvc.notifyAboutCreation(eval);
-                    notifSvc.notify(eval.getContract().getAdmin().getId(), msg);
-                });
-
-
     }
 
     public void notifyResumeCreation(Resume resume) {
