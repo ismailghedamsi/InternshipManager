@@ -2,7 +2,7 @@ import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import * as PropTypes from "prop-types";
 import React from "react";
-import {useDateParser, useTimeFormatter} from "../../Services/Hooks";
+import { useDateParser, useTimeFormatter } from "../../Services/Hooks";
 
 export default function OfferDetails(props) {
     const parseDate = useDateParser()
@@ -15,11 +15,11 @@ export default function OfferDetails(props) {
         <Divider/>
         <Typography variant={"body1"}
                     display={"block"}>
-            {"Nombre de stagiaires :  " + props.offer.details.nbStudentToHire}
+            {"Nombre de stagiaires : " + props.offer.details.nbStudentToHire}
         </Typography>
         <Typography variant={"body1"}
                     display={"block"}>
-            {`Date limite d'application : ${parseDate(props.offer.details.limitDateToApply)} `}
+            {`Date limite d'application : ${parseDate(props.offer.details.limitDateToApply)}`}
         </Typography>
         <Typography variant={"body1"}
                     display={"block"}>
@@ -37,7 +37,7 @@ export default function OfferDetails(props) {
         <Typography variant={"body2"}
                     color={"textSecondary"}
                     display={"block"}>
-            {`Créée le ${parseDate(props.offer.details.creationDate)}`}
+            {`Créée le : ${parseDate(props.offer.details.creationDate)}`}
         </Typography>
     </div>
 }

@@ -52,7 +52,7 @@ function DataTableHeader({report}) {
             <TableCell>Prénom</TableCell>
             <TableCell>Nom</TableCell>
             <TableCell>Adresse courriel</TableCell>
-            <TableCell>Téléphone</TableCell>
+            <TableCell>Numéro de téléphone</TableCell>
         </TableRow>
     } else if (reportEndpoints[report].includes("offers")) {
         header = <TableRow>
@@ -63,7 +63,7 @@ function DataTableHeader({report}) {
             <TableCell>Salaire</TableCell>
             <TableCell>Horaire</TableCell>
             <TableCell>Places</TableCell>
-            <TableCell>Créer le</TableCell>
+            <TableCell>Créée le</TableCell>
             <TableCell>Ferme le</TableCell>
             <TableCell>Début</TableCell>
             <TableCell>Fin</TableCell>

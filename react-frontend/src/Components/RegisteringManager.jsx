@@ -6,7 +6,7 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import {Link as RouterLink, useHistory} from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import RegisterEmployer from "./RegisterEmployer";
 import RegisterStudent from "./RegisterStudent";
 import useStyles from "./Utils/Style/useStyles";
@@ -29,11 +29,11 @@ export default function RegisteringManager() {
             <Container component="main" maxWidth="sm" className={classes.container}>
                 <div className={classes.paper}>
                     <Typography variant="h1" className={classes.logo}>
-                        TUIMSPFCAUPPBJ
+                        LPLDGDSUPCEUPPPJ
                     </Typography>
                     <Typography variant="h2" className={classes.subtitle}>
-                        The Ultimate Internship Manager Software Platform For College And University Plus Powered By
-                        Java
+                        La Platforme Logiciel de Gestion de Stage Ultime Pour Collèges et Universités Plus
+                        Propulsé Par Java
                     </Typography>
                     <Typography component="h1" variant="h5">
                         S'enregistrer
@@ -57,7 +57,7 @@ export default function RegisteringManager() {
                 <Grid container justify="flex-end" className={classes.link}>
                     <Grid item>
                         <Link component={RouterLink} to={'/'} variant="body2">
-                            Vous avez déja un compte? Se connecter
+                            Vous avez déjà un compte? Se connecter
                         </Link>
                     </Grid>
                 </Grid>

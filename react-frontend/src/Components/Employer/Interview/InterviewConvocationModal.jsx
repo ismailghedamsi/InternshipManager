@@ -1,20 +1,20 @@
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import {DateTimePicker} from "formik-material-ui-pickers";
-import React from "react";
-import {useHistory} from "react-router-dom";
-import * as yup from "yup";
-import AuthenticationService from "../../../Services/AuthenticationService";
-import {useApi} from "../../../Services/Hooks";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { DateTimePicker } from "formik-material-ui-pickers";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import * as yup from "yup";
+import AuthenticationService from "../../../Services/AuthenticationService";
+import { useApi } from "../../../Services/Hooks";
 
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 export default function InterviewConvocationModal({isOpen, hide, title, application}) {
     const api = useApi()
     const history = useHistory()

@@ -59,7 +59,7 @@ export default function ContractList({count}) {
                 </Typography>
             case "REJECTED_BY_EMPLOYER" :
                 return <Typography variant={"body1"} style={{color: "red"}}>
-                    L'employeur a rejeté le contrat :
+                    L'employeur a rejeté le contrat : 
                     {nextState[index].reasonForRejection}
                 </Typography>
             case "WAITING_FOR_STUDENT_SIGNATURE" :

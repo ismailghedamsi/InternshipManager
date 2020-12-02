@@ -1,11 +1,11 @@
-import {Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core"
+import { Table, TableBody, TableContainer, TableHead, TableRow } from "@material-ui/core"
 import Button from "@material-ui/core/Button"
 import TableCell from "@material-ui/core/TableCell"
 import PropTypes from "prop-types"
-import React, {useEffect, useState} from "react"
-import {useHistory} from "react-router-dom"
-import {useApi, useModal} from "../../Services/Hooks"
-import SignModal from "../Utils/Modal/SignModal";
+import React, { useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
+import { useApi, useModal } from "../../Services/Hooks"
+import SignModal from "../Utils/Modal/SignModal"
 
 function ContextButton({application}) {
     const history = useHistory()

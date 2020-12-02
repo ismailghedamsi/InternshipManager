@@ -1,15 +1,15 @@
-import {makeStyles} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
-import {DateTimePicker} from "formik-material-ui-pickers";
-import React, {useEffect, useState} from "react"
-import {useHistory, useLocation} from "react-router-dom"
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import { DateTimePicker } from "formik-material-ui-pickers";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import * as yup from "yup";
-import {useApi} from "../../../Services/Hooks";
+import { useApi } from "../../../Services/Hooks";
 
 export function Rescheduleinterview(props) {
     const location = useLocation()
@@ -58,7 +58,7 @@ export function Rescheduleinterview(props) {
     }
 
     const validationSchema = yup.object().shape({
-        dateTime: yup.date().required().min(new Date(), "La date ne peut pas etre dans le passé")
+        dateTime: yup.date().required().min(new Date(), "La date ne peut pas être dans le passé")
     })
 
     return <Grid
@@ -116,7 +116,7 @@ export function Rescheduleinterview(props) {
                                     component={DateTimePicker}
                                     name="dateTime"
                                     variant="outlined"
-                                    label="Date et heure de l'entrevue "
+                                    label="Date et heure de l'entrevue"
                                     required
                                     fullWidth
                                     format="d MMM yyyy HH:mm"
@@ -128,7 +128,7 @@ export function Rescheduleinterview(props) {
                                     name="email"
                                     id="email"
                                     variant="outlined"
-                                    label="Addresse courriel"
+                                    label="Adresse courriel"
                                     type={"email"}
                                     disabled
                                     required

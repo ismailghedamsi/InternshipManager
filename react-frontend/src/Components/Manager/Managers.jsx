@@ -21,17 +21,17 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
-import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
 import PropTypes from "prop-types";
-import {default as React, useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
+import { default as React, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi, useModal} from "../../Services/Hooks";
+import { useApi, useModal } from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 
 function DataTableHeader() {
@@ -185,7 +185,7 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
                         oldPassword: yup.string().trim().required(requiredFieldMsg),
                         newPassword: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
                         newConfirm: yup.string()
-                            .oneOf([yup.ref('newPassword'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
+                            .oneOf([yup.ref('newPassword'), null], "Les mots de passe doivent être identiques").required(requiredFieldMsg)
                     })}
                 validateOnBlur={false}
                 validateOnChange={false}
@@ -228,7 +228,7 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
                                 name="newConfirm"
                                 id="newConfirm"
                                 variant="outlined"
-                                label="Confirmez"
+                                label="Confirmation"
                                 type={"password"}
                                 required
                                 fullWidth
@@ -264,7 +264,7 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
     const classes = useStyles()
 
     return isOpen && <Dialog open={isOpen} onClose={hide}>
-        <DialogTitle>{"Créer gestionnaire de stage"}</DialogTitle>
+        <DialogTitle>{"Créer un gestionnaire de stage"}</DialogTitle>
         <DialogContent>
             <DialogContentText>
                 <Formik
@@ -283,9 +283,9 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                     validationSchema={yup.object()
                         .shape({
                             name: yup.string().trim().required(requiredFieldMsg),
-                            email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
+                            email: yup.string().trim().email("L'adresse courriel n'est pas formatée correctement").required(requiredFieldMsg),
                             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
-                            confirm: yup.string().oneOf([yup.ref('password'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
+                            confirm: yup.string().oneOf([yup.ref('password'), null], "Les mots de passe doivent être identiques").required(requiredFieldMsg)
                         })}
                     validateOnBlur={false}
                     validateOnChange={false}
@@ -339,7 +339,7 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                                     name="confirm"
                                     id="confirm"
                                     variant="outlined"
-                                    label="Confirmez"
+                                    label="Confirmation"
                                     type={"password"}
                                     required
                                     fullWidth

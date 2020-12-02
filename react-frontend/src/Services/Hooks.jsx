@@ -1,10 +1,10 @@
 import axios from "axios";
-import {useContext, useEffect, useState} from "react";
-import {RSocketClient} from "rsocket-core"
-import {IdentitySerializer, JsonSerializer} from "rsocket-core/build"
-import Flowable from "rsocket-flowable/build/Flowable"
-import RSocketWebSocketClient from "rsocket-websocket-client"
-import {ModalContext, SemesterContext} from "../App";
+import { useContext, useEffect, useState } from "react";
+import { RSocketClient } from "rsocket-core";
+import { IdentitySerializer, JsonSerializer } from "rsocket-core/build";
+import Flowable from "rsocket-flowable/build/Flowable";
+import RSocketWebSocketClient from "rsocket-websocket-client";
+import { ModalContext, SemesterContext } from "../App";
 import AuthenticationService from "./AuthenticationService";
 
 export function useModal() {

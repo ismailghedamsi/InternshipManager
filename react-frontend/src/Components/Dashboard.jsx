@@ -82,6 +82,7 @@ function AdminDashboard() {
         </Grid>
     </>
 }
+
 function StudentDashboard() {
     const classes = useStyles()
     const [currentTab, setCurrentTab] = useState(0)
@@ -104,7 +105,7 @@ function StudentDashboard() {
                     {offerCount} offres sur lesquelles vous n'avez&nbsp;pas appliqué
                 </Typography>
                 <Typography variant={"body2"}>
-                    {offerPendingCount} offres en attente de réponse&nbsp;de&nbsp;votre part
+                    {offerPendingCount} offres en attente de&nbsp;votre réponse
                 </Typography>
             </TabButton>
             <Divider/>
@@ -153,6 +154,7 @@ function StudentDashboard() {
         </Grid>
     </>
 }
+
 function EmployerDashboard() {
     const classes = useStyles()
     const [currentTab, setCurrentTab] = useState(0)
@@ -195,6 +197,7 @@ function EmployerDashboard() {
         </Grid>
     </>
 }
+
 export default function Dashboard() {
     const classes = useStyles()
     return <Grid container wrap={"nowrap"} spacing={0} className={classes.main}>

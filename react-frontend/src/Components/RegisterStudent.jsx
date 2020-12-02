@@ -1,16 +1,16 @@
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
-import React, {useContext} from "react";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import React, { useContext } from "react";
 import * as yup from "yup";
-import {ModalContext} from "../App";
+import { ModalContext } from "../App";
 import AuthenticationService from "../Services/AuthenticationService";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLongError = value => "Doit avoir au plus " + value.max + " caractères"
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 
 export default function RegisterStudent(props) {
     const {open} = useContext(ModalContext)
@@ -21,10 +21,10 @@ export default function RegisterStudent(props) {
             lastName: yup.string().trim().min(2, tooShortError).max(30, tooLongError).required(requiredFieldMsg),
             studentId: yup.string().trim().min(7, tooShortError).max(7, tooLongError).required(requiredFieldMsg),
             phoneNumber: yup.string().trim().min(10, tooShortError).required(requiredFieldMsg),
-            email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
+            email: yup.string().trim().email("L'adresse courriel n'est pas formatée correctement").required(requiredFieldMsg),
             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
             passwordConfirm: yup.string()
-                .oneOf([yup.ref('password'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg),
+                .oneOf([yup.ref('password'), null], "Les mots de passe doivent être identiques").required(requiredFieldMsg),
         })
     const initialValues = {
         firstName: "",
@@ -79,7 +79,7 @@ export default function RegisterStudent(props) {
                         name="address"
                         id="addressStudent"
                         variant="outlined"
-                        label="Addresse"
+                        label="Adresse"
                         required
                         fullWidth
                     />
@@ -90,7 +90,7 @@ export default function RegisterStudent(props) {
                         name="studentId"
                         id="studentIdStudent"
                         variant="outlined"
-                        label="Numéro d'étudiant"
+                        label="Matricule d'étudiant"
                         required
                         fullWidth
                     />
@@ -112,7 +112,7 @@ export default function RegisterStudent(props) {
                         name="email"
                         id="emailStudent"
                         variant="outlined"
-                        label="Addresse courriel"
+                        label="Adresse courriel"
                         type={"email"}
                         required
                         fullWidth
@@ -136,7 +136,7 @@ export default function RegisterStudent(props) {
                         name="passwordConfirm"
                         id="passwordConfirmStudent"
                         variant="outlined"
-                        label="Confirmez"
+                        label="Confirmation"
                         type={"password"}
                         required
                         fullWidth
@@ -154,7 +154,7 @@ export default function RegisterStudent(props) {
                 className={props.classes.submit}
                 disabled={isSubmitting}
             >
-                S'enregistrer
+                S'inscrire
             </Button>
         </Form>}
     </Formik>

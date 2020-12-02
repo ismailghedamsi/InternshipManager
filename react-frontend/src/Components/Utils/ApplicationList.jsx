@@ -70,7 +70,7 @@ export default function ApplicationList() {
 
     function applicationDecisionStatus(statusMessage, messageColor) {
         return <Typography variant={"body1"}>
-            Status application : <span style={{color: messageColor}}>{statusMessage}</span>
+            État de l'application : <span style={{color: messageColor}}>{statusMessage}</span>
         </Typography>
     }
 
@@ -90,7 +90,7 @@ export default function ApplicationList() {
 
     function interviewDecisionStatus(statusMessage, messageColor) {
         return <Typography variant={"body1"}>
-            Statut d'entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
+            État de l'entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
         </Typography>
     }
 

@@ -1,17 +1,17 @@
-import {Card, CardContent, Grid} from "@material-ui/core";
-import {ErrorMessage, Field} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import React, {useState} from "react";
-import {useLocation} from "react-router-dom";
+import { Card, CardContent, Grid } from "@material-ui/core";
+import { ErrorMessage, Field } from "formik";
+import { SimpleFileUpload, TextField } from "formik-material-ui";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import * as yup from "yup";
-import {FormikStepper} from "../../Utils/FormikStepper";
+import { FormikStepper } from "../../Utils/FormikStepper";
 import useStyles from "../../Utils/Style/useStyles";
 
 const tooLittleError = valueNumber => "Doit être plus grand que ou égal à " + valueNumber.min
 const tooBigError = valueNumber => "Doit être plus petit que " + valueNumber.max
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 const requiredRadioMsg = "Cliquez votre choix"
-const requiredSelectMsg = "Option séléctionné invalide"
+const requiredSelectMsg = "Option séléctionnée invalide"
 export default function BusinessEvalution() {
     const classes = useStyles()
     const location = useLocation()

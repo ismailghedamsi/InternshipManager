@@ -1,14 +1,14 @@
-import {Button} from "@material-ui/core";
-import Badge from "@material-ui/core/Badge"
+import { Button } from "@material-ui/core";
+import Badge from "@material-ui/core/Badge";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import {makeStyles} from "@material-ui/core/styles";
-import {Delete} from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
+import { Delete } from "@material-ui/icons";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import React, {useRef, useState} from "react";
-import AuthenticationService from "../../../Services/AuthenticationService"
-import {useNotificationChannel} from "../../../Services/Hooks";
+import React, { useRef, useState } from "react";
+import AuthenticationService from "../../../Services/AuthenticationService";
+import { useNotificationChannel } from "../../../Services/Hooks";
 
 const useStyles = makeStyles(theme => ({
     linkButton: {

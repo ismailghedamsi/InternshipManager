@@ -1,5 +1,5 @@
-import {Button, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
+import { Button, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
 import { useApi } from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";

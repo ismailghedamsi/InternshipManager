@@ -3,17 +3,17 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
-import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
-import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import * as yup from "yup";
-import {useApi} from "../../Services/Hooks";
+import { useApi } from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLargeError = value => "Doit être au plus " + value.max
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 export default function ContractForm() {
     const classes = useStyles()
     const api = useApi()
@@ -69,15 +69,15 @@ export default function ContractForm() {
                                     {applicationContract.student && applicationContract.offer &&
                                         <>
                                             <Typography>
-                                                Étudiant :
+                                                Étudiant : 
                                                 &ensp;{applicationContract.student.firstName} {applicationContract.student.lastName}
                                             </Typography>
                                             <Typography>
-                                                Offre :
+                                                Offre : 
                                                 &ensp;{applicationContract.offer.title}
                                             </Typography>
                                             <Typography>
-                                                Compagnie :
+                                                Compagnie : 
                                                 &ensp;{applicationContract.offer.employer.companyName}
                                             </Typography>
                                         </>

@@ -3,7 +3,7 @@ import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
 import DialogContent from "@material-ui/core/DialogContent"
 import * as PropTypes from "prop-types"
-import React, {useRef} from "react"
+import React, { useRef } from "react"
 import PdfDocument from "./PDF/PdfDocument"
 import useStyles from "./Style/useStyles"
 

@@ -53,9 +53,9 @@ export default function OfferList({count}) {
         if (offer.reviewState === "PENDING")
             return <span style={{color: "blue"}}>En attente</span>
         else if (offer.reviewState === "DENIED")
-            return <span style={{color: "red"}}>Rejeté
+            return <span style={{color: "red"}}>Rejeté : 
                 <span style={{color: "black"}}>
-                    : {offer.reasonForRejection}
+                    {offer.reasonForRejection}
                 </span>
         </span>
         else

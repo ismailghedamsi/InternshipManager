@@ -4,14 +4,14 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import {ErrorMessage, Field, Form, Formik} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import React from "react";
-import * as yup from "yup";
 import Grid from "@material-ui/core/Grid";
-import {useApi} from "../../../Services/Hooks";
-import {useHistory} from "react-router-dom";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { SimpleFileUpload, TextField } from "formik-material-ui";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import * as yup from "yup";
+import { useApi } from "../../../Services/Hooks";
 
 export default function ResumeUploadModal({isOpen, hide, title}) {
     const api = useApi()

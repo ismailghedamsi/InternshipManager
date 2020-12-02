@@ -1,17 +1,17 @@
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import {Field, Form, Formik} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import React from "react";
-import {useHistory} from "react-router-dom";
-import * as yup from "yup";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import {useApi} from "../../../Services/Hooks";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { Field, Form, Formik } from "formik";
+import { SimpleFileUpload, TextField } from "formik-material-ui";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import * as yup from "yup";
+import { useApi } from "../../../Services/Hooks";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLongError = value => "Doit avoir moins de " + value.max + " caractères"
@@ -72,7 +72,7 @@ export default function SignModal({isOpen, hide, title, contract}) {
                     }}
                     validationSchema={yup.object()
                         .shape({
-                            nomSignataire: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champs est requis")
+                            nomSignataire: yup.string().trim().min(2, tooShortError).max(255, tooLongError).required("Ce champ est requis")
                         })
                     }
                     initialValues={{

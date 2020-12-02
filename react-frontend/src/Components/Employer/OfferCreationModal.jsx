@@ -1,23 +1,23 @@
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import {Field, Form, Formik} from "formik";
-import {SimpleFileUpload, TextField} from "formik-material-ui";
-import {DatePicker, TimePicker} from "formik-material-ui-pickers";
-import React from "react";
-import * as yup from "yup";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { Field, Form, Formik } from "formik";
+import { SimpleFileUpload, TextField } from "formik-material-ui";
+import { DatePicker, TimePicker } from "formik-material-ui-pickers";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import {useApi} from "../../Services/Hooks";
-import {useHistory} from "react-router-dom";
+import { useApi } from "../../Services/Hooks";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLittleError = valueNumber => "Doit être un nombre plus grand que ou égal à " + valueNumber.min
-const requiredFieldMsg = "Ce champs est requis"
+const requiredFieldMsg = "Ce champ est requis"
 
 export default function OfferCreationModal({isOpen, hide, title}) {
     const api = useApi()
@@ -58,7 +58,7 @@ export default function OfferCreationModal({isOpen, hide, title}) {
                 "La date de fin doit être dans le futur")),
         internshipStartDate: yup.date().required().min(
             yup.ref("limitDateToApply"),
-            "La date de début de stage ne peut pas être avant la date limite pour appliquer "),
+            "La date de début de stage ne peut pas être avant la date limite pour appliquer"),
         internshipEndDate: yup.date().required().min(
             yup.ref("internshipStartDate"),
             "La date de fin de stage ne peut pas être avant la date de début")
