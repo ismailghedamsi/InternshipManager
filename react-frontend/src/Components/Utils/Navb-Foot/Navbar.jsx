@@ -1,17 +1,17 @@
-import { Button, List, ListSubheader, Toolbar, Typography } from "@material-ui/core";
+import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { SemesterContext } from "../../../App";
+import React, {useContext, useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+import {SemesterContext} from "../../../App";
 import AuthenticationService from "../../../Services/AuthenticationService";
-import { useModal } from "../../../Services/Hooks";
+import {useModal} from "../../../Services/Hooks";
 import OfferCreationModal from "../../Employer/OfferCreationModal";
 import SemesterSelectorModal from "../../Manager/SemesterSelectorModal";
 import ResumeUploadModal from "../../Student/Upload/ResumeUploadModal";
@@ -99,10 +99,6 @@ const Links = {
             title: "Créer une offre",
         },
         {
-            title: "Entrevues",
-            url: "/dashboard/listInterview"
-        },
-        {
             title: "Évaluations des stagiaires",
             url: "/dashboard/studentEvaluationList"
         },
@@ -168,7 +164,7 @@ export default function Navbar() {
             setCurrent(index)
     }, [location])
 
-    return <AppBar position="static" style={{maxHeight: "7vh", lineHeight: "7vh"}}>
+    return <AppBar position="static">
         <Toolbar style={{minHeight: "7vh", maxHeight: "7vh", lineHeight: "7vh"}}>
             <Button edge="start" className={[classes.menuButton, classes.linkButton].join(" ")}
                     onClick={() => setMenuOpen(true)} color="inherit">
@@ -177,7 +173,7 @@ export default function Navbar() {
                 <Typography>{getLinks()[current].title}</Typography>
             </Button>
             <div className={classes.spacer}/>
-            <Typography variant={"title"}>
+            <Typography>
                 <span
                     style={{textTransform: "capitalize"}}>{getRole()}</span> &mdash; {AuthenticationService.getCurrentUser().email}
             </Typography>

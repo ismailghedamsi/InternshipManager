@@ -1,9 +1,9 @@
-import { Typography } from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import { useApi, useModal } from "../../Services/Hooks";
+import {useApi, useModal} from "../../Services/Hooks";
 import SignModal from "./Modal/SignModal";
 import TextboxModal from "./Modal/TextboxModal";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
@@ -126,19 +126,19 @@ export default function SignContract({count, waitingCount}) {
                     <div className={classes.buttonDiv}>
                         <Button
                             variant={"contained"}
-                            color={"primary"}
+                            style={{backgroundColor: "green", color: "white"}}
                             size={"small"}
                             onClick={() => {
                                 setContract(contracts[i])
                                 openSignModal()
                             }}>
-                            <i className="fa fa-pencil-square-o" style={{color: "white"}}/>&ensp;Signer le contrat
+                            <i className="fa fa-pencil-square-o"/>&ensp;Signer le contrat
                         </Button>
                         &ensp;
                         {AuthenticationService.getCurrentUserRole() !== "student" &&
                         <Button
                             variant={"contained"}
-                            style={{backgroundColor: "red", color: "white"}}
+                            color={"secondary"}
                             size={"small"}
                             onClick={() => {
                                 setCurrentIndex(i)

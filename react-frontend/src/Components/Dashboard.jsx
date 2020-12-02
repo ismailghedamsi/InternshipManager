@@ -3,6 +3,7 @@ import Badge from "@material-ui/core/Badge";
 import NotificationImportantOutlinedIcon from "@material-ui/icons/NotificationImportantOutlined";
 import React, {useState} from "react";
 import AuthenticationService from "../Services/AuthenticationService";
+import Interviewlist from "./Employer/Interview/InterviewList"
 import OfferApprobation from "./Manager/OfferApprobation";
 import PendingContracts from "./Manager/PendingContracts";
 import ResumeApprobation from "./Manager/ResumeApprobation";
@@ -161,16 +162,34 @@ function EmployerDashboard() {
     const [offerCount, setOfferCount] = useState(0)
     const [contractCount, setContractCount] = useState(0)
     const [contractWaitingCount, setContractWaitingCount] = useState(0)
+    const [interviewCount, setInterviewCount] = useState(0)
+    const [interviewWaitingCount, setInterviewWaitingCount] = useState(0)
+
     return <>
         <Grid item xs={2} className={classes.list} style={{padding: 0, backgroundColor: "#DDD"}}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
                 Mes offres de stage
                 <Typography variant={"body2"}>
-                    {offerCount} documents
+                    {offerCount} document{offerCount !== 1 && "s"}
                 </Typography>
             </TabButton>
             <Divider/>
             <TabButton value={currentTab} index={1} onClick={setCurrentTab}>
+                {interviewWaitingCount !== 0 &&
+                <Badge badgeContent={interviewWaitingCount} color="primary"
+                       anchorOrigin={{vertical: "top", horizontal: "left"}}>
+                    <NotificationImportantOutlinedIcon/>
+                </Badge>}
+                Mes entrevues
+                <Typography variant={"body2"}>
+                    {interviewCount} évènement{interviewCount !== 1 && "s"}
+                </Typography>
+                <Typography variant={"body2"}>
+                    {interviewWaitingCount} évènement{interviewWaitingCount !== 1 && "s"} nécessitant votre attention
+                </Typography>
+            </TabButton>
+            <Divider/>
+            <TabButton value={currentTab} index={2} onClick={setCurrentTab}>
                 {contractWaitingCount !== 0 &&
                 <Badge badgeContent={contractWaitingCount} color="primary"
                        anchorOrigin={{vertical: "top", horizontal: "left"}}>
@@ -178,10 +197,10 @@ function EmployerDashboard() {
                 </Badge>}
                 Mes contrats
                 <Typography variant={"body2"}>
-                    {contractCount} documents
+                    {contractCount} document{contractCount !== 1 && "s"}
                 </Typography>
                 <Typography variant={"body2"}>
-                    {contractWaitingCount} documents nécessitant votre attention
+                    {contractWaitingCount} document{contractCount !== 1 && "s"} nécessitant votre attention
                 </Typography>
             </TabButton>
             <Divider/>
@@ -192,6 +211,9 @@ function EmployerDashboard() {
                 <OfferList count={setOfferCount}/>
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
+                <Interviewlist count={setInterviewCount} waitingCount={setInterviewWaitingCount}/>
+            </TabPanel>
+            <TabPanel value={currentTab} index={2}>
                 <SignContract count={setContractCount} waitingCount={setContractWaitingCount}/>
             </TabPanel>
         </Grid>

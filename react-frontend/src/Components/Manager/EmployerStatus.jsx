@@ -1,7 +1,7 @@
-import { Button, Divider, Grid, Typography } from "@material-ui/core";
+import {Button, Divider, Grid, Typography} from "@material-ui/core";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { useApi, useDateParser, useModal, useTimeParserFromDate } from "../../Services/Hooks";
+import React, {useEffect, useState} from "react";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfModal from "../Utils/PdfModal";
 import useStyles from "../Utils/Style/useStyles";
@@ -139,7 +139,7 @@ function InterviewStatus(props) {
         <Typography>
             Heure : {props.interview ? parseTimeFromDate(props.interview.dateTime) : ""}
         </Typography>
-        <Typography>Titre de l'offre : 
+        <Typography>Titre de l'offre :
             {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
         <Typography>
             État : {getInterviewState(props.interview)}
@@ -148,16 +148,18 @@ function InterviewStatus(props) {
 }
 
 function Offer(props) {
-    return <div>
-        <Typography variant={"h5"}>
-            {props.o.title}
-        </Typography>
-        <OfferDetails offer={props.o}/>
-        <Typography>
-            <span>Liste des étudiants sélectionnés</span>
-        </Typography>
-        {props.hiredStudentsNames}
-        {props.printOfferStatus}
+    return <>
+        <div>
+            <Typography variant={"h5"}>
+                {props.o.title}
+            </Typography>
+            <OfferDetails offer={props.o}/>
+            <Typography>
+                Liste des étudiants sélectionnés
+            </Typography>
+            {props.hiredStudentsNames}
+            {props.printOfferStatus}
+        </div>
         <Button
             variant={"contained"}
             color={"primary"}
@@ -166,7 +168,7 @@ function Offer(props) {
             <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
         </Button>
         <Divider className={props.classes.dividers}/>
-    </div>;
+    </>
 }
 
 Offer.propTypes = {

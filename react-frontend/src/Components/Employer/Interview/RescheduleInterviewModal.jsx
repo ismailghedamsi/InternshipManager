@@ -1,58 +1,59 @@
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog"
+import DialogActions from "@material-ui/core/DialogActions"
+import DialogContent from "@material-ui/core/DialogContent"
+import DialogContentText from "@material-ui/core/DialogContentText"
+import DialogTitle from "@material-ui/core/DialogTitle"
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui"
+import {TextField} from "formik-material-ui";
 import {DateTimePicker} from "formik-material-ui-pickers";
 import React from "react";
-import {useHistory} from "react-router-dom";
 import * as yup from "yup";
-import AuthenticationService from "../../../Services/AuthenticationService";
 import {useApi} from "../../../Services/Hooks";
+import useStyles from "../../Utils/Style/useStyles"
 
-const requiredFieldMsg = "Ce champ est requis"
-export default function InterviewConvocationModal({isOpen, hide, application}) {
+export function RescheduleInterviewModal({isOpen, hide, interview, setInterview}) {
     const api = useApi()
-    const history = useHistory()
+    const classes = useStyles()
 
-    function createInterview(values) {
-        let dto = {...values}
-        dto.employer = AuthenticationService.getCurrentUser()
-        dto.reviewState = "PENDING"
-        dto.studentApplication = application
-        return api.post("/interviews", dto).then(() => history.push("/dashboard/listInterview"))
+    function updateInterview(values) {
+        const nextState = {...interview}
+        nextState.dateTime = values.dateTime
+        nextState.studentAcceptanceState = "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
+        api.put("/interviews/" + nextState.id, nextState)
+            .then(r => {
+                setInterview(r.data)
+                hide()
+            })
     }
 
-    return isOpen && <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
+    const validationSchema = yup.object().shape({
+        dateTime: yup.date().required().min(new Date(), "La date ne peut pas être dans le passé")
+    })
+
+    return <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
         <DialogTitle id="alert-dialog-title">
-            Étudiant à rencontrer
+            Reprogrammer une entrevue
         </DialogTitle>
         <DialogContent>
             <DialogContentText id="alert-dialog-description" component={"div"}>
                 <Formik
-                    onSubmit={createInterview}
+                    onSubmit={updateInterview}
                     validateOnBlur={false}
                     validateOnChange={false}
                     enableReinitialize={true}
-                    validationSchema={yup.object()
-                        .shape({
-                            dateTime: yup.date().required(requiredFieldMsg).min(new Date(), "La date ne peut pas être dans le passé")
-                        })}
-                    initialValues={{
-                        dateTime: new Date(),
-                        studentName: application.student.firstName + " " + application.student.lastName,
-                        offerName: application.offer.title
-                    }}>
-                    {({submitForm, isSubmitting}) => <Form>
-                        <Grid container
-                              justify="center"
-                              spacing={2}
-                        >
+                    validationSchema={validationSchema}
+                    initialValues={isOpen ? {
+                        studentName: interview.studentApplication.student.firstName +
+                            " " + interview.studentApplication.student.lastName,
+                        offerName: interview.studentApplication.offer.title,
+                        dateTime: interview.dateTime
+                    } : {}}
+                >
+                    {({isSubmitting}) => <Form className={classes.form}>
+                        <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <Field
                                     component={TextField}
@@ -91,16 +92,15 @@ export default function InterviewConvocationModal({isOpen, hide, application}) {
                         <br/>
                         {isSubmitting && <LinearProgress/>}
                         <Button
-                            id="buttonSubmit"
                             type={"submit"}
-                            variant="contained"
                             fullWidth
-                            size={"large"}
+                            variant="contained"
                             color="primary"
+                            size={"large"}
+                            className={classes.submit}
                             disabled={isSubmitting}
-                            onClick={submitForm}
                         >
-                            Convoquer l'étudiant
+                            Reprogrammer l'entrevue
                         </Button>
                     </Form>}
                 </Formik>

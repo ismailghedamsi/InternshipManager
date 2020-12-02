@@ -1,11 +1,11 @@
-import { Divider } from "@material-ui/core";
+import {Divider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
-import { useApi } from "../../Services/Hooks";
+import {useApi} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 import useStyles from "./Style/useStyles";
@@ -22,12 +22,12 @@ export default function OfferList({count}) {
     useEffect(() => {
         if (AuthenticationService.getCurrentUserRole() === "employer") {
             api.get("/offers/employer/" + AuthenticationService.getCurrentUser().email)
-                    .then(r => setOffers(r ? r.data : []))
+                .then(r => setOffers(r ? r.data : []))
         } else if (AuthenticationService.getCurrentUserRole() === "admin") {
             api.get("/offers")
-                    .then(r => {
-                        setOffers(r ? r.data : [])
-                    })
+                .then(r => {
+                    setOffers(r ? r.data : [])
+                })
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -38,7 +38,7 @@ export default function OfferList({count}) {
 
     function deleteOffer(index) {
         const nextState = [...offers]
-        
+
         return api.delete("/offers/" + nextState[index].id).then(() => {
             nextState.splice(index, 1)
 
@@ -76,65 +76,72 @@ export default function OfferList({count}) {
     }
 
     function offerHasUpcomingInterviews(offer) {
-        return offer.applications.find(application => application.interview)
+        return Boolean(offer.applications.find(application => application.interview))
     }
 
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage"}>
             {(i, setCurrent) =>
-                    <div key={i}>
-                        <Button
-                            className={[i === currentIndex ? classes.fileButton : null].join(" ")}
-                            onClick={() => {
-                                setCurrentIndex(i)
-                                setCurrent(i)
-                            }}
-                        >
-                            <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
-                                &ensp;{offers[i].title}&ensp;
-                            </Typography>
-                            <Typography color={"textSecondary"} variant={"body2"} display={"inline"}>
-                                {offers[i].employer.companyName}-{offers[i].employer.contactName}&ensp;
-                            </Typography>
-                        </Button>
-                        <Typography
-                                variant={"body2"}>
-                            État : {getOfferState(offers[i])}
+                <div key={i}>
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"primary"}
+                        size={"large"}
+                        fullWidth
+                        onClick={() => {
+                            setCurrentIndex(i)
+                            setCurrent(i)
+                        }}
+                    >
+                        <Typography variant={"button"} display={"inline"}>
+                            &ensp;{offers[i].title}&ensp;
                         </Typography>
-                        {currentIndex === i && <OfferDetails offer={offers[i]}/>}
-                        {offers[i].applications.length !== 0 && <>
-                            <Button
-                                    variant={"contained"}
-                                    color={"primary"}
-                                    onClick={() => redirection(i)}
-                            >
-                                Voir les applications
-                            </Button>
-                            &ensp;
+                    </Button>
+                    <Typography variant={"body2"} style={{marginTop: 10}}>
+                        {AuthenticationService.getCurrentUserRole() !== "employer" && offers[i].employer.companyName}
+                        {AuthenticationService.getCurrentUserRole() === "admin" && <>
+                            &mdash; {offers[i].employer.contactName}&ensp;
                         </>}
-                        {showDeleteButtonCondition(i) &&
+                    </Typography>
+                    <Typography variant={"body2"}>
+                        État : {getOfferState(offers[i])}
+                    </Typography>
+                    {currentIndex === i && <OfferDetails offer={offers[i]}/>}
+                    {offerHasUpcomingInterviews(offers[i]) &&
+                    <Typography variant={"body2"} display={"block"}>
+                        Des entrevues sont prévues pour cette offre
+                    </Typography>}
+                    {offers[i].applications.length !== 0 && <>
                         <Button
                             variant={"contained"}
-                            color={"secondary"}
-                            onClick={() => {
-                                setIsDeleting(true)
-                                setButtonDeleting(i)
-                                deleteOffer(i).then(() => {
-                                    setIsDeleting(false)
-                                    setButtonDeleting(-1)
-                                })
-                            }}
-                            disabled={(isDeleting && buttonDeleting === i) || offerHasUpcomingInterviews(offers[i])}
+                            color={"primary"}
+                            size={"small"}
+                            onClick={() => redirection(i)}
                         >
-                            <i className="fa fa-trash"/>&ensp;Supprimer
-                        </Button>}
+                            Voir les applications
+                        </Button>
+                        &ensp;
+                    </>}
+                    {showDeleteButtonCondition(i) &&
+                    <Button
+                        variant={"contained"}
+                        color={"secondary"}
+                        size={"small"}
+                        onClick={() => {
+                            setIsDeleting(true)
+                            setButtonDeleting(i)
+                            deleteOffer(i).then(() => {
+                                setIsDeleting(false)
+                                setButtonDeleting(-1)
+                            })
+                        }}
+                        disabled={(isDeleting && buttonDeleting === i) || offerHasUpcomingInterviews(offers[i])}
+                    >
+                        <i className="fa fa-trash"/>&ensp;Supprimer&ensp;
                         {isDeleting && buttonDeleting === i && <CircularProgress size={18}/>}
-                        {offerHasUpcomingInterviews(offers[i]) &&
-                        <Typography color={"textPrimary"} variant={"body2"} display={"block"}>
-                            Au moins une entrevue est présente pour cette offre.
-                        </Typography>}
-                        <Divider className={classes.dividers}/>
-                    </div>}
+                    </Button>}
+                    <Divider className={classes.dividers}/>
+                </div>}
         </PdfSelectionViewer>
     </div>
 }

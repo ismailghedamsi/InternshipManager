@@ -1,9 +1,9 @@
-import { Divider, Typography } from "@material-ui/core";
+import {Divider, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { useApi, useDateParser, useModal } from "../../Services/Hooks";
+import React, {useEffect, useState} from "react";
+import {useApi, useDateParser, useModal} from "../../Services/Hooks";
 import OfferDetails from "../Utils/OfferDetails";
 import PdfModal from "../Utils/PdfModal";
 import useStyles from "../Utils/Style/useStyles";
@@ -73,15 +73,16 @@ function OfferStatus(props) {
             return "en attente de réponse de l'étudiant"
     }
 
-    return <div>
-        <Typography variant={"h5"}>
-            {props.offer.title}
-        </Typography>
-        <OfferDetails offer={props.offer}/>
-        <Typography
-            variant={"body2"}>
-            A appliqué : {application ? "Oui" : "Non"} &emsp;
-            {application && <span>
+    return <>
+        <div>
+            <Typography variant={"h5"}>
+                {props.offer.title}
+            </Typography>
+            <OfferDetails offer={props.offer}/>
+            <Typography
+                variant={"body2"}>
+                A appliqué : {application ? "Oui" : "Non"} &emsp;
+                {application && <span>
             {
                 application.interview ?
                     <span>
@@ -92,20 +93,21 @@ function OfferStatus(props) {
                    Entrevue pas prévue
                 </span>
             }
-                <br/>
-                &emsp;A été sélectionné : {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
-                &emsp;Offre : {parseApplicationState(application)}
+                    <br/>
+                    &emsp;A été sélectionné : {applicationAcceptedStates.indexOf(application.state) > -1 ? "Oui" : "Non"}
+                    &emsp;Offre : {parseApplicationState(application)}
                 </span>
-            }&emsp;
-            <Button variant={"contained"}
-                    color={"primary"}
-                    size={"small"}
-                    onClick={props.seeOffer}>
-                <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
-            </Button>
-        </Typography>
+                }
+            </Typography>
+        </div>
+        <Button variant={"contained"}
+                color={"primary"}
+                size={"small"}
+                onClick={props.seeOffer}>
+            <i className="fa fa-file-text-o"/>&ensp;Afficher l'offre
+        </Button>
         <Divider/>
-    </div>
+    </>
 }
 
 OfferStatus.propTypes = {

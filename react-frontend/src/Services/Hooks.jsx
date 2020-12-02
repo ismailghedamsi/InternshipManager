@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { RSocketClient } from "rsocket-core";
-import { IdentitySerializer, JsonSerializer } from "rsocket-core/build";
+import {useContext, useEffect, useState} from "react";
+import {RSocketClient} from "rsocket-core";
+import {IdentitySerializer, JsonSerializer} from "rsocket-core/build";
 import Flowable from "rsocket-flowable/build/Flowable";
 import RSocketWebSocketClient from "rsocket-websocket-client";
-import { ModalContext, SemesterContext } from "../App";
+import {ModalContext, SemesterContext} from "../App";
 import AuthenticationService from "./AuthenticationService";
 
 export function useModal() {
@@ -124,7 +124,7 @@ export function useDateParser() {
 
 export function useTimeParserFromDate() {
     return date => {
-        return new Date(date).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})
+        return new Date(date).toLocaleTimeString("fr-CA", {hour12: false, hour: "numeric", minute: "2-digit"})
     }
 }
 

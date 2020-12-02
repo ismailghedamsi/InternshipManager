@@ -2,7 +2,7 @@ import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import * as PropTypes from "prop-types";
 import React from "react";
-import { useDateParser, useTimeFormatter } from "../../Services/Hooks";
+import {useDateParser, useTimeFormatter} from "../../Services/Hooks";
 
 export default function OfferDetails(props) {
     const parseDate = useDateParser()
@@ -12,7 +12,7 @@ export default function OfferDetails(props) {
         <Typography variant={"body1"}>
             {"Description : " + props.offer.details.description}
         </Typography>
-        <Divider/>
+        <Divider style={{maxWidth: "30%"}}/>
         <Typography variant={"body1"}
                     display={"block"}>
             {"Nombre de stagiaires : " + props.offer.details.nbStudentToHire}
@@ -33,7 +33,7 @@ export default function OfferDetails(props) {
                     display={"block"}>
             {"Taux horaire : $ " + props.offer.details.salary}
         </Typography>
-        <Divider/>
+        <Divider style={{maxWidth: "30%"}}/>
         <Typography variant={"body2"}
                     color={"textSecondary"}
                     display={"block"}>

@@ -8,10 +8,8 @@ import {useModal} from "../../Services/Hooks";
 import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 import ApprovalButtons from "./ApprovalButtons";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
-import useStyles from "./Style/useStyles";
 
 export default function ApplicationList() {
-    const classes = useStyles()
     const location = useLocation()
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -29,20 +27,19 @@ export default function ApplicationList() {
             case "STUDENT_INVITED_FOR_INTERVIEW_BY_EMPLOYER":
             case "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION":
                 return <ApprovalButtons
-                        onApprove={() => {
-                            const copy = {...offer}
-                            copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
-                                    "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
-                            return manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
-                        }}
-                        onDeny={() => {
-                            const copy = {...offer}
-                            copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
-                            return manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
-                        }
-                        }
-                        approveLabel={"Embaucher l'étudiant"}
-                        denyLabel={"Refuser l'application"}
+                    onApprove={() => {
+                        const copy = {...offer}
+                        copy.applications[i].state = copy.applications[i].state === "STUDENT_HIRED_BY_EMPLOYER" ?
+                            "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION" : "STUDENT_HIRED_BY_EMPLOYER"
+                        return manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
+                    }}
+                    onDeny={() => {
+                        const copy = {...offer}
+                        copy.applications[i].state = "STUDENT_REJECTED_BY_EMPLOYER"
+                        return manageApplication.decideHirement(`applications/state/${offer.applications[i].id}`, offer.applications[i], () => setOffer(copy))
+                    }}
+                    approveLabel={"Embaucher l'étudiant"}
+                    denyLabel={"Refuser l'application"}
                 />
             default:
                 return ""
@@ -56,7 +53,7 @@ export default function ApplicationList() {
             case "APPLICATION_REJECTED_BY_EMPLOYER":
             case "STUDENT_REJECTED_BY_EMPLOYER":
                 return applicationDecisionStatus(AuthenticationService.getCurrentUserRole() === "admin" ?
-                        "L'employeur a refusé la demande" : "Vous avez refusé la demande", "red")
+                    "L'employeur a refusé la demande" : "Vous avez refusé la demande", "red")
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
                 return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
             case "JOB_OFFER_DENIED_BY_STUDENT":
@@ -96,38 +93,41 @@ export default function ApplicationList() {
 
     function showInterviewConvocationButtonCondition(i) {
         return AuthenticationService.getCurrentUserRole() === "employer"
-                && offer.applications[i].interview === null
-                && (offer.applications[i].state === "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW"
-                        || offer.applications[i].state === "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION"
-                        || offer.applications[i].state === "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION")
+            && offer.applications[i].interview === null
+            && (offer.applications[i].state === "APPLICATION_PENDING_FOR_EMPLOYER_INITIAL_REVIEW"
+                || offer.applications[i].state === "WAITING_FOR_EMPLOYER_HIRING_FINAL_DECISION"
+                || offer.applications[i].state === "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION")
     }
 
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer
-                documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
-                title={<span>Application<br/>{offer.title}</span>}>
+            documents={(offer.applications ? offer.applications : []).map(o => o.resume.file)}
+            title={<>Applications pour {offer.title}</>}>
             {(i, setCurrent) => <div key={i}>
                 <Button
-                        className={[currentIndex === i ? classes.fileButton : ""].join(" ")}
-                        onClick={() => {
-                            setCurrent(i)
-                            setCurrentIndex(i)
-                        }}
+                    variant={currentIndex === i ? "contained" : "outlined"}
+                    color={"primary"}
+                    size={"large"}
+                    fullWidth
+                    onClick={() => {
+                        setCurrent(i)
+                        setCurrentIndex(i)
+                    }}
                 >
-                    <Typography color={"textPrimary"} variant={"h5"} style={{display: "block"}}>
+                    <Typography variant={"button"}>
                         {offer.applications[i].student.firstName} {offer.applications[i].student.lastName}
                     </Typography>
                 </Button>
-                {currentIndex === i && <div>
+                {currentIndex === i && <div style={{marginTop: 10}}>
                     <Typography color={"textPrimary"} variant={"body1"}>
                         {offer.applications[i].student.phoneNumber} {offer.applications[i].student.email}
                     </Typography>
                     <Typography color={"textPrimary"} variant={"body1"}>
                         {offer.applications[i].student.address}
                     </Typography>
-                    {applicationActions(i)}
                     {applicationDecisionMessage(i)}
                     {interviewDecisionMessage(i)}
+                    {applicationActions(i)}
                     {showInterviewConvocationButtonCondition(i) &&
                     <Button
                         variant={"contained"}
@@ -146,7 +146,6 @@ export default function ApplicationList() {
         </PdfSelectionViewer>
         <InterviewConvocationModal isOpen={isInterviewConvocationModalOpen}
                                    hide={closeInterviewConvocationModal}
-                                   title={"Étudiant à rencontrer"}
                                    application={application}
         />
     </div>
