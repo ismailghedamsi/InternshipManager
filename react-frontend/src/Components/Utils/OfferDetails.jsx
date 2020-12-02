@@ -9,8 +9,7 @@ export default function OfferDetails(props) {
     const parseTime = useTimeFormatter()
 
     return <div>
-        <Typography variant={"body1"}
-                    display={"block"}>
+        <Typography variant={"body1"}>
             {"Description : " + props.offer.details.description}
         </Typography>
         <Divider/>

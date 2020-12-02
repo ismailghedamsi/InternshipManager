@@ -96,11 +96,6 @@ export default function SignContract({count, waitingCount}) {
         else return false
     }
 
-    function directionLink() {
-        return AuthenticationService.getCurrentUserRole() === "employer" ?
-            "/dashboard/signFormEmployer" : "/dashboard/signFormStudent"
-    }
-
     function showEvaluationButtonCondition(i) {
         return contracts[i].signatureState === "SIGNED"
             && AuthenticationService.getCurrentUserRole() === "employer"
@@ -113,40 +108,43 @@ export default function SignContract({count, waitingCount}) {
             title={"Contrats"}>
             {(i, setCurrent) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(" ")}
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"primary"}
+                        size={"large"}
                         onClick={() => {
                             setCurrent(i)
                             setCurrentIndex(i)
                         }}
                     >
-                        <Typography color={"textPrimary"} variant={"body1"}>
+                        <Typography variant={"button"}>
                             {contracts[i].studentApplication.student.firstName} {contracts[i].studentApplication.student.lastName}
                             &ensp;&mdash;&ensp;{contracts[i].studentApplication.offer.employer.companyName}
                         </Typography>
-                    </button>
+                    </Button>
                     {currentIndex === i && ownerCondition(i) &&
-                    <div className={classes.buttonDiv} style={{display: "block"}}>
+                    <div className={classes.buttonDiv}>
                         <Button
                             variant={"contained"}
                             color={"primary"}
+                            size={"small"}
                             onClick={() => {
                                 setContract(contracts[i])
                                 openSignModal()
                             }}>
-                            Signer le contrat
+                            <i className="fa fa-pencil-square-o" style={{color: "white"}}/>&ensp;Signer le contrat
                         </Button>
                         &ensp;
                         {AuthenticationService.getCurrentUserRole() !== "student" &&
                         <Button
                             variant={"contained"}
                             style={{backgroundColor: "red", color: "white"}}
+                            size={"small"}
                             onClick={() => {
                                 setCurrentIndex(i)
                                 openReasonModal()
                             }}>
-                            Refuser le contrat
+                            <i className="fa fa-times" style={{color: "white"}}/>&ensp;Refuser le contrat
                         </Button>
                         }
                     </div>}

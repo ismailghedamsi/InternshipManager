@@ -1,8 +1,10 @@
-import {Divider} from "@material-ui/core";
+import { Divider } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
-import {useApi} from "../../../Services/Hooks";
+import React, { useEffect, useState } from "react";
+import { useApi } from "../../../Services/Hooks";
 import useStyles from "../../Utils/Style/useStyles";
 
 export default function BusinessEvaluationList() {
@@ -10,6 +12,8 @@ export default function BusinessEvaluationList() {
     const api = useApi()
     const [businessEvaluations, setBusinessEvaluations] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [evaluationDeleting, setEvaluationDeleting] = useState(-1)
 
     useEffect(() => {
         api.get("/businessEvaluation")
@@ -27,33 +31,49 @@ export default function BusinessEvaluationList() {
 
     return <Grid
         container
-        spacing={0}
-        className={classes.main}>
+        spacing={2}
+        className={classes.main}
+        style={{padding: "15px 0 0 15px"}}
+    >
         <Grid item xs={5} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>
                 Évaluations des milieux de stage
             </Typography>
             {businessEvaluations.length > 0 ? businessEvaluations.map((item, i) =>
                 <div key={i}>
-                    <button
-                        type={"button"}
-                        className={classes.linkButton}
-                        onClick={() => deleteBusinessEvaluation(i)}>
-                        <i className="fa fa-trash" style={{color: "red"}}/>
-                    </button>
-                    <button
-                        type={"button"}
-                        className={[classes.linkButton, i === currentIndex ? classes.fileButton : null].join(' ')}
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"primary"}
+                        size={"large"}
                         onClick={() => {
                             setCurrentIndex(i)
                         }}>
-                        <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
+                        <Typography variant={"button"} display={"block"}>
                             {item.contract.studentApplication.student.firstName +
                             " " + item.contract.studentApplication.student.lastName} -&ensp;
                             {item.contract.studentApplication.offer.employer.companyName}
 
                         </Typography>
-                    </button>
+                    </Button>
+                    &ensp;
+                    <Button
+                        variant={currentIndex === i ? "contained" : "outlined"}
+                        color={"secondary"}
+                        size={"small"}
+                        disabled={isDeleting}
+                        onClick={() => {
+                            setIsDeleting(true)
+                            setEvaluationDeleting(i)
+                            deleteBusinessEvaluation(i).then(() => {
+                                setIsDeleting(false)
+                                setEvaluationDeleting(-1)
+                            })
+                        }}
+                    >
+                        <i className="fa fa-trash" style={{color: "white"}}/>&ensp;
+                        Supprimer l'évaluation
+                    </Button>
+                    {isDeleting && evaluationDeleting === i && <CircularProgress size={18}/>}
                     {currentIndex === i &&
                     <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
                         {item.contract.studentApplication.offer.title}

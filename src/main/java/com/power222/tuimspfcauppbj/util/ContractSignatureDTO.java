@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Lob;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Builder
@@ -16,5 +16,5 @@ public class ContractSignatureDTO {
     @Lob
     private String imageSignature;
     private String nomSignataire;
-    private LocalDateTime signatureTimestamp;
+    private ZonedDateTime signatureTimestamp;
 }

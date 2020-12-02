@@ -1,6 +1,8 @@
-import {Divider, Grid, Typography} from "@material-ui/core";
-import React, {useEffect, useState} from "react";
-import {useApi} from "../../Services/Hooks";
+import { Divider, Grid, Typography } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import React, { useEffect, useState } from "react";
+import { useApi } from "../../Services/Hooks";
 import useStyles from "./Style/useStyles";
 
 export default function StudentStatus() {
@@ -8,6 +10,8 @@ export default function StudentStatus() {
     const api = useApi()
     const [evaluations, setEvaluations] = useState([])
     const [currentEvaluationIndex, setCurrentEvaluationIndex] = useState(0)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [evaluationDeleting, setEvaluationDeleting] = useState(-1)
 
     useEffect(() => {
         api.get("/internEvaluation").then(r => setEvaluations(r ? r.data : []))
@@ -21,7 +25,12 @@ export default function StudentStatus() {
         })
     }
 
-    return <Grid container spacing={0} className={classes.main}>
+    return <Grid
+        container
+        spacing={2}
+        className={classes.main}
+        style={{padding: "15px 0 0 15px"}}
+    >
         <Grid item xs={5} className={classes.list}>
             <Typography
                 variant={"h4"}
@@ -31,27 +40,37 @@ export default function StudentStatus() {
                 Évaluations des stagiaires
             </Typography>
             {evaluations.length > 0 ? evaluations.map((item, i) => <div key={i}>
-                <button
-                    type={"button"}
-                    className={classes.linkButton}
-                    onClick={() => deleteStudentEvaluation(i)}
-                >
-                    <i className="fa fa-trash" style={{color: "red"}}/>
-                </button>
-                <button
-                    type={"button"}
-                    className={[
-                        classes.linkButton,
-                        i === currentEvaluationIndex ? classes.fileButton : null,
-                    ].join(" ")}
+                <Button
+                    variant={currentEvaluationIndex === i ? "contained" : "outlined"}
+                    color={"primary"}
+                    size={"large"}
                     onClick={() => setCurrentEvaluationIndex(i)}
                 >
-                    <Typography color={"textPrimary"} variant={"body1"}>
+                    <Typography variant={"button"}>
                         {item.contract.studentApplication.student.firstName +
                         " " + item.contract.studentApplication.student.lastName} -&ensp;
                         {item.contract.studentApplication.offer.title}
                     </Typography>
-                </button>
+                </Button>
+                &ensp;
+                <Button
+                    variant={currentEvaluationIndex === i ? "contained" : "outlined"}
+                    color={"secondary"}
+                    size={"small"}
+                    disabled={isDeleting}
+                    onClick={() => {
+                        setIsDeleting(true)
+                        setEvaluationDeleting(i)
+                        deleteStudentEvaluation(i).then(() => {
+                            setIsDeleting(false)
+                            setEvaluationDeleting(-1)
+                        })
+                    }}
+                >
+                    <i className="fa fa-trash" style={{color: "white"}}/>&ensp;
+                    Supprimer l'évaluation
+                </Button>
+                {isDeleting && evaluationDeleting === i && <CircularProgress size={18}/>}
             </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid

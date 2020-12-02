@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +46,7 @@ class InterviewControllerTests {
     void setUp() {
         expectedInterview = Interview.builder()
                 .id(1L)
-                .dateTime(LocalDateTime.now())
+                .dateTime(ZonedDateTime.now())
                 .build();
     }
 
@@ -143,6 +143,7 @@ class InterviewControllerTests {
 
     @Test
     void updateInterviewTest() throws Exception {
+        expectedInterview.setDateTime(null);
         when(svc.updateInterview(expectedInterview.getId(), expectedInterview)).thenReturn(Optional.of(expectedInterview));
 
         MvcResult result = mvc.perform(put("/api/interviews/" + expectedInterview.getId())
@@ -150,13 +151,13 @@ class InterviewControllerTests {
                 .content(objectMapper.writeValueAsString(expectedInterview)))
                 .andReturn();
 
-
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateInterview(expectedInterview.getId(), expectedInterview);
     }
 
     @Test
     void errorOnUpdateTest() throws Exception {
+        expectedInterview.setDateTime(null);
         when(svc.updateInterview(expectedInterview.getId(), expectedInterview)).thenReturn(Optional.empty());
 
         MvcResult result = mvc.perform(put("/api/interviews/" + expectedInterview.getId())

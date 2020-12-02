@@ -21,7 +21,6 @@ export default function InterviewConvocationModal({isOpen, hide, title, applicat
 
     function createInterview(values) {
         let dto = {...values}
-        dto.dateTime = values.dateTime
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = application
@@ -37,7 +36,7 @@ export default function InterviewConvocationModal({isOpen, hide, title, applicat
         <DialogContent>
             <DialogContentText id="alert-dialog-description" component={"div"}>
                 <Formik
-                    onSubmit={async values => createInterview(values)}
+                    onSubmit={createInterview}
 
                     validateOnBlur={false}
                     validateOnChange={false}
@@ -59,7 +58,7 @@ export default function InterviewConvocationModal({isOpen, hide, title, applicat
                                     label="Date et heure de l'entrevue"
                                     required
                                     fullWidth
-                                    format="MM/dd/yyyy hh:mm"
+                                    format="d MMM yyyy HH:mm"
                                 />
                             </Grid>
                             <ErrorMessage name={"file"}>

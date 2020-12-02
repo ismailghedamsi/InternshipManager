@@ -12,16 +12,17 @@ import {useApi} from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
+const tooLargeError = value => "Doit être au plus " + value.max
 const requiredFieldMsg = "Ce champs est requis"
 export default function ContractForm() {
     const classes = useStyles()
     const api = useApi()
     const location = useLocation()
     const history = useHistory()
-    const [applicationContract, setapplicationContract] = useState({})
+    const [applicationContract, setApplicationContract] = useState({})
 
     useEffect(() => {
-        setapplicationContract(location.state)
+        setApplicationContract(location.state)
     }, [location.state])
 
     return <Grid
@@ -30,7 +31,7 @@ export default function ContractForm() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{minHeight: '100vh'}}
+        style={{minHeight: "100%"}}
     >
         <Grid item xs={12} sm={7} lg={5}>
             <Container component="main" maxWidth="sm" className={classes.container}>
@@ -49,7 +50,7 @@ export default function ContractForm() {
                             engagementCollege: yup.string().trim().min(20, tooShortError).required(requiredFieldMsg),
                             engagementCompany: yup.string().trim().min(20, tooShortError).required(requiredFieldMsg),
                             engagementStudent: yup.string().trim().min(20, tooShortError).required(requiredFieldMsg),
-                            totalHoursPerWeek: yup.number().min(1).max(40).required(requiredFieldMsg)
+                            totalHoursPerWeek: yup.number().min(1).max(40, tooLargeError).required(requiredFieldMsg)
                         })}
                     initialValues={{
                         engagementCollege: "",
@@ -61,28 +62,26 @@ export default function ContractForm() {
                     {({isSubmitting}) =>
                         <Form className={classes.form}>
                             <Grid container spacing={2} justify={"center"}>
-                                <Typography variant={"h4"} style={{display: "block"}}>
+                                <Typography variant={"h4"} display={"block"} style={{marginTop: 10}}>
                                     Générer un contrat
                                 </Typography>
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        Compagnie :
-                                        &ensp;{location.state.offer.employer.companyName}
-                                    </Typography>
-                                    <Typography>
-                                        Nom du contact :
-                                        &ensp;{location.state.offer.employer.contactName}
-                                    </Typography>
-                                    <Typography>
-                                        Offre :
-                                        &ensp;{location.state.offer.title}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography>
-                                        Étudiant :
-                                        &ensp;{location.state.student.firstName} {location.state.student.lastName}
-                                    </Typography>
+                                <Grid item xs={12}>
+                                    {applicationContract.student && applicationContract.offer &&
+                                        <>
+                                            <Typography>
+                                                Étudiant :
+                                                &ensp;{applicationContract.student.firstName} {applicationContract.student.lastName}
+                                            </Typography>
+                                            <Typography>
+                                                Offre :
+                                                &ensp;{applicationContract.offer.title}
+                                            </Typography>
+                                            <Typography>
+                                                Compagnie :
+                                                &ensp;{applicationContract.offer.employer.companyName}
+                                            </Typography>
+                                        </>
+                                    }
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Field

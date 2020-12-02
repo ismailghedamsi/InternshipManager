@@ -48,11 +48,11 @@ function DataTableBody({rows, setCurrentManager, openEditModal}) {
 
     return rows.map(admin =>
         <TableRow key={admin.id}>
-            <TableCell>{admin.name}</TableCell>
+            <TableCell>{admin.name + (AuthenticationService.getCurrentUser().id === admin.id ? " (votre compte)" : "")}</TableCell>
             <TableCell>{admin.email}</TableCell>
             <TableCell>{admin.disabled ? "Inactif" : "Actif"}</TableCell>
             <TableCell>
-                <Button type={"button"} className={classes.linkButton} onClick={() => {
+                <Button className={classes.linkButton} onClick={() => {
                     setCurrentManager(admin)
                     openEditModal()
                 }}>
@@ -132,9 +132,9 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
     const history = useHistory()
 
     function toggleManagerDisabledState() {
+        hide()
         return api.put("admins/toggle/" + manager.id, {})
             .then(() => {
-                hide()
                 return api.get("admins")
                     .then(response => {
                         setRows(response.data.content)
@@ -144,8 +144,9 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
     }
 
     return isOpen && <Dialog open={isOpen} onClose={hide}>
-        <DialogTitle>{"Modifier gestionnaire de stage : " + manager.name}</DialogTitle>
+        <DialogTitle>{"Modifier le gestionnaire de stage : " + manager.name}</DialogTitle>
         <DialogContent>
+            {AuthenticationService.getCurrentUser().id === manager.id ? <><Typography style={{fontStyle: "italic"}}>Vous ne pouvez pas désactiver votre compte</Typography><br/></> : ""}
             <Formik onSubmit={toggleManagerDisabledState} initialValues={{}}>
                 {({isSubmitting}) =>
                     <Form>
@@ -154,7 +155,7 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
                                 variant="contained"
                                 color="primary"
                                 size="large"
-                                disabled={isSubmitting}
+                                disabled={AuthenticationService.getCurrentUser().id === manager.id || isSubmitting}
                         >
                             {manager.disabled ? "Activer" : "Désactiver"}
                             {isSubmitting && <CircularProgress size={18}/>}
@@ -165,20 +166,23 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
             <br/>
             Changer le mot de passe :
             <Formik
-                onSubmit={async values =>
-                    api.put("admins/password", values)
-                        .then(() => {
+                onSubmit={async values => {
+                        const dto = {...values}
+                        dto.username = manager.email
+                        delete dto.newConfirm
+                        api.put("admins/password", dto).then(() => {
                             hide()
                             if (manager.id === AuthenticationService.getCurrentUser().id) {
                                 AuthenticationService.logout()
                                 history.push("/")
                             }
                         })
+                    }
                 }
 
                 validationSchema={yup.object()
                     .shape({
-                        username: yup.string().trim().required(requiredFieldMsg),
+                        oldPassword: yup.string().trim().required(requiredFieldMsg),
                         newPassword: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
                         newConfirm: yup.string()
                             .oneOf([yup.ref('newPassword'), null], "Les mots de passes doivent êtres identiques").required(requiredFieldMsg)
@@ -187,13 +191,25 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
                 validateOnChange={false}
                 enableReinitialize={true}
                 initialValues={{
-                    username: manager.username,
+                    oldPassword: '',
                     newPassword: '',
                     newConfirm: ''
                 }}
             >
                 {({isSubmitting}) => <Form className={classes.form}>
                     <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <Field
+                                component={TextField}
+                                name="oldPassword"
+                                id="oldPassword"
+                                variant="outlined"
+                                label="Ancien mot de passe"
+                                type={"password"}
+                                required
+                                fullWidth
+                            />
+                        </Grid>
                         <Grid item xs={6}>
                             <Field
                                 component={TextField}
@@ -266,7 +282,6 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
 
                     validationSchema={yup.object()
                         .shape({
-                            username: yup.string().trim().required(requiredFieldMsg),
                             name: yup.string().trim().required(requiredFieldMsg),
                             email: yup.string().trim().email("L'email n'a pas un format valide").required(requiredFieldMsg),
                             password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
@@ -276,7 +291,6 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                     validateOnChange={false}
                     enableReinitialize={true}
                     initialValues={{
-                        username: '',
                         name: '',
                         email: '',
                         password: '',
@@ -296,24 +310,13 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <Field
                                     component={TextField}
                                     name="email"
                                     id="email"
                                     variant="outlined"
                                     label="Adresse courriel"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Field
-                                    component={TextField}
-                                    name="username"
-                                    id="username"
-                                    variant="outlined"
-                                    label="Nom d'utilisateur"
                                     required
                                     fullWidth
                                 />

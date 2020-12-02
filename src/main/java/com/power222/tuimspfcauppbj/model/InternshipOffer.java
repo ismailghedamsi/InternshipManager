@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true, exclude = "applications")
-@ToString(exclude = "file")
 public class InternshipOffer extends SemesterDiscriminatedEntity {
 
     @Id

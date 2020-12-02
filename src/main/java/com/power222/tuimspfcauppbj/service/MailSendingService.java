@@ -84,8 +84,8 @@ public class MailSendingService {
             if (emailType == EmailContentsType.NOTIFY_AND_ATTACH_SIGNED_CONTRACT) {
                 final InputStreamSource inSrc = () -> new ByteArrayInputStream(Base64.getMimeDecoder().decode(contract.getFile().split(",")[1]));
                 helper.addAttachment("Contrat " + contract.getStudentApplication().getOffer().getTitle() + " - "
-                                             + contract.getStudentApplication().getStudent().getLastName() + " "
-                                             + contract.getStudentApplication().getStudent().getFirstName(), inSrc);
+                                             + contract.getStudentApplication().getStudent().getFirstName() + " "
+                                             + contract.getStudentApplication().getStudent().getLastName(), inSrc);
             }
         } catch (MessagingException e) {
             log.error("Impossible d'envoyer l'email: {}", e.getMessage());
@@ -96,8 +96,8 @@ public class MailSendingService {
     public String getAppropriateEmailSubject(final Contract contract, final EmailContentsType emailType) {
         String subjectSuffix = (emailType == EmailContentsType.NOTIFY_ABOUT_EVALUATION_CREATED) ? "" :
                 (" - Offre \"" + contract.getStudentApplication().getOffer().getTitle() + "\"" + " - "
-                        + contract.getStudentApplication().getStudent().getLastName() + " "
-                        + contract.getStudentApplication().getStudent().getFirstName());
+                        + contract.getStudentApplication().getStudent().getFirstName() + " "
+                        + contract.getStudentApplication().getStudent().getLastName());
         switch (emailType) {
             case NOTIFY_ABOUT_NEW_CONTRACT:
                 return "NOUVEAU CONTRAT" + subjectSuffix;
@@ -121,28 +121,28 @@ public class MailSendingService {
         switch (emailType) {
             case NOTIFY_ABOUT_NEW_CONTRACT:
                 return "Un contrat a été généré pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName() + "."
+                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getFirstName() + " " + contract.getStudentApplication().getStudent().getLastName() + "."
                         + "<br/>Veuillez consulter le contract sur notre application.";
             case NOTIFY_ABOUT_CONTRACT_DELETION:
                 return "Le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName() + " "
+                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getFirstName() + " " + contract.getStudentApplication().getStudent().getLastName() + " "
                         + "a été supprimé par l'administrateur.";
             case NOTIFY_ABOUT_NEW_SIGNATURE:
                 if (contract.getSignatureState() == ContractSignatureState.WAITING_FOR_EMPLOYER_SIGNATURE)
                     return "Le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                            + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName() + " "
+                            + "avec l'étudiant " + contract.getStudentApplication().getStudent().getFirstName() + " " + contract.getStudentApplication().getStudent().getLastName() + " "
                             + "a été approuvé par l'administrateur.";
                 return "Une signature a été apposée sur le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName() + "."
+                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getFirstName() + " " + contract.getStudentApplication().getStudent().getLastName() + "."
                         + "<br/>Veuillez consulter le contract sur notre application.";
             case NOTIFY_ABOUT_CONTRACT_REJECTION:
                 return "Le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName()
+                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getFirstName() + " " + contract.getStudentApplication().getStudent().getLastName()
                         + "a été rejeté par l'employeur pour la raison suivante :"
                         + "<br/>    " + contract.getReasonForRejection();
             case NOTIFY_AND_ATTACH_SIGNED_CONTRACT:
                 return "Le contrat pour l'offre de stage \"" + contract.getStudentApplication().getOffer().getTitle() + "\" "
-                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getLastName() + " " + contract.getStudentApplication().getStudent().getFirstName()
+                        + "avec l'étudiant " + contract.getStudentApplication().getStudent().getFirstName() + " " + contract.getStudentApplication().getStudent().getLastName()
                         + "a été signé par tous les partis et est prêt."
                         + "<br/>Vous le trouverez ci-joint.";
             case NOTIFY_ABOUT_EVALUATION_CREATED:

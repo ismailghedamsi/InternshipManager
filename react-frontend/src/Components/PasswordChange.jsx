@@ -28,7 +28,7 @@ export default function PasswordChange() {
     const location = useLocation()
     const classes = useStyles()
     const initialValues = {
-        username: location.state ? location.state.username : "",
+        username: location.state ? location.state.email : "",
         oldPassword: "",
         newPassword: "",
         newConfirm: ""
@@ -80,7 +80,7 @@ export default function PasswordChange() {
 
                         validationSchema={yup.object()
                             .shape({
-                                username: yup.string().trim().required(requiredFieldMsg),
+                                username: yup.string().email("L'email n'a pas un format valide").trim().required(requiredFieldMsg),
                                 oldPassword: yup.string().trim().required(requiredFieldMsg),
                                 newPassword: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
                                 newConfirm: yup.string()
@@ -99,7 +99,7 @@ export default function PasswordChange() {
                                         name="username"
                                         id="username"
                                         variant="outlined"
-                                        label="Nom d'utilisateur"
+                                        label="Adresse courriel"
                                         required
                                         fullWidth
                                         disabled

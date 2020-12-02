@@ -94,21 +94,6 @@ function StudentDashboard() {
     return <>
         <Grid item xs={2} className={classes.list} style={{padding: 0, backgroundColor: "#DDD"}}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
-                {deniedCvCount !== 0 &&
-                <Badge badgeContent={deniedCvCount} color="primary"
-                       anchorOrigin={{vertical: "top", horizontal: "left"}}>
-                    <NotificationImportantOutlinedIcon/>
-                </Badge>}
-                Mes CVs
-                <Typography variant={"body2"}>
-                    {cvCount} documents
-                </Typography>
-                <Typography variant={"body2"}>
-                    {deniedCvCount} documents nécessitant votre attention
-                </Typography>
-            </TabButton>
-            <Divider/>
-            <TabButton value={currentTab} index={1} onClick={setCurrentTab}>
                 {offerCount + offerPendingCount !== 0 &&
                 <Badge badgeContent={offerCount + offerPendingCount} color="primary"
                        anchorOrigin={{vertical: "top", horizontal: "left"}}>
@@ -120,6 +105,21 @@ function StudentDashboard() {
                 </Typography>
                 <Typography variant={"body2"}>
                     {offerPendingCount} offres en attente de réponse&nbsp;de&nbsp;votre part
+                </Typography>
+            </TabButton>
+            <Divider/>
+            <TabButton value={currentTab} index={1} onClick={setCurrentTab}>
+                {deniedCvCount !== 0 &&
+                <Badge badgeContent={deniedCvCount} color="primary"
+                       anchorOrigin={{vertical: "top", horizontal: "left"}}>
+                    <NotificationImportantOutlinedIcon/>
+                </Badge>}
+                Mes CVs
+                <Typography variant={"body2"}>
+                    {cvCount} documents
+                </Typography>
+                <Typography variant={"body2"}>
+                    {deniedCvCount} documents nécessitant votre attention
                 </Typography>
             </TabButton>
             <Divider/>
@@ -142,10 +142,10 @@ function StudentDashboard() {
         <Divider orientation={"vertical"} flexItem/>
         <Grid item xs={10}>
             <TabPanel value={currentTab} index={0}>
-                <ResumeList count={setCvCount} deniedCount={setDeniedCvCount}/>
+                <OfferApplication count={setOfferCount} pendingCount={setOfferPendingCount}/>
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
-                <OfferApplication count={setOfferCount} pendingCount={setOfferPendingCount}/>
+                <ResumeList count={setCvCount} deniedCount={setDeniedCvCount}/>
             </TabPanel>
             <TabPanel value={currentTab} index={2}>
                 <SignContract count={setContractCount} waitingCount={setContractWaitingCount}/>

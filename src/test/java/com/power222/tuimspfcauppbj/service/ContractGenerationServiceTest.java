@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;
@@ -103,7 +103,7 @@ public class ContractGenerationServiceTest {
                 .contractId(1L)
                 .isApproved(true)
                 .nomSignataire("Andrei Belkin")
-                .signatureTimestamp(LocalDateTime.now())
+                .signatureTimestamp(ZonedDateTime.now())
                 .imageSignature("data:application/pdf;base64," + new String(Base64.getEncoder()
                         .encode(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                 .build();
@@ -112,7 +112,7 @@ public class ContractGenerationServiceTest {
                 .contractId(1L)
                 .isApproved(false)
                 .nomSignataire("Andrei Belkin")
-                .signatureTimestamp(LocalDateTime.now())
+                .signatureTimestamp(ZonedDateTime.now())
                 .imageSignature("data:application/pdf;base64," + new String(Base64.getEncoder()
                         .encode(new FileInputStream(new File("bootstrapFiles/sign.png")).readAllBytes())))
                 .build();

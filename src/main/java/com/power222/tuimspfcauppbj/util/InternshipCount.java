@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public enum InternshipCount {
     @JsonProperty("Premier stage")
     INTERNSHIP_ONE,
-    @JsonProperty("Deuxieme stage")
+    @JsonProperty("Deuxième stage")
     INTERNSHIP_TWO
 }

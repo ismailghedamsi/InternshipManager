@@ -134,10 +134,10 @@ function InterviewStatus(props) {
             l'étudiant {props.interview.studentApplication ? props.interview.studentApplication.student.firstName + " " + props.interview.studentApplication.student.lastName : ""}
         </Typography>
         <Typography>
-            Date : {props.interview ? parseDate(props.interview.date) : ""}
+            Date : {props.interview ? parseDate(props.interview.dateTime) : ""}
         </Typography>
         <Typography>
-            Heure : {props.interview ? parseTimeFromDate(props.interview.date) : ""}
+            Heure : {props.interview ? parseTimeFromDate(props.interview.dateTime) : ""}
         </Typography>
         <Typography>Titre de l'offre :
             {props.interview.studentApplication ? props.interview.studentApplication.offer.title : ""}</Typography>
@@ -208,7 +208,7 @@ function EmployerInformation(props) {
                 style={{textTransform: "none"}}
                 onClick={props.getInterviews}
             >
-                <Typography color={"textSecondary"} variant={"body2"}>
+                <Typography variant={"body2"}>
                     Entrevues
                 </Typography>
             </Button>

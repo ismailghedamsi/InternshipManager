@@ -14,7 +14,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import {useApi} from "../../../Services/Hooks";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
-const tooLongError = value => "Doit avoir moins que " + value.max + " caractères"
+const tooLongError = value => "Doit avoir moins de " + value.max + " caractères"
 
 export default function SignModal({isOpen, hide, title, contract}) {
     const api = useApi()
@@ -107,20 +107,21 @@ export default function SignModal({isOpen, hide, title, contract}) {
                                     required
                                 />
                             </Grid>
-                            {isSubmitting && <LinearProgress/>}
-                            <Button
-                                id="buttonSubmit"
-                                type={"submit"}
-                                variant="contained"
-                                fullWidth
-                                size={"large"}
-                                color="primary"
-                                disabled={isSubmitting}
-                                onClick={submitForm}
-                            >
-                                SIGNER
-                            </Button>
                         </Grid>
+                        <br/>
+                        {isSubmitting && <LinearProgress/>}
+                        <Button
+                            id="buttonSubmit"
+                            type={"submit"}
+                            variant="contained"
+                            fullWidth
+                            size={"large"}
+                            color="primary"
+                            disabled={isSubmitting}
+                            onClick={submitForm}
+                        >
+                            SIGNER
+                        </Button>
                     </Form>}
                 </Formik>
             </DialogContentText>
