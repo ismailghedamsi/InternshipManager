@@ -1,7 +1,6 @@
 package com.power222.tuimspfcauppbj.service;
 
 import com.power222.tuimspfcauppbj.dao.AdminRepository;
-import com.power222.tuimspfcauppbj.dao.InternEvaluationRepository;
 import com.power222.tuimspfcauppbj.model.*;
 import com.power222.tuimspfcauppbj.util.ContractSignatureState;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,14 +11,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("ClassWithTooManyFields")
 @ExtendWith(MockitoExtension.class)
 class NotificationServiceTests {
 
@@ -32,9 +29,6 @@ class NotificationServiceTests {
     @Mock
     private AdminRepository adminRepo;
 
-    @Mock
-    private InternEvaluationRepository evalRepo;
-
     @InjectMocks
     private NotificationService notifSvc;
 
@@ -44,7 +38,6 @@ class NotificationServiceTests {
     private Employer expectedEmployer;
     private InternshipOffer expectedOffer;
     private Contract expectedContract;
-    private InternEvaluation expectedEval;
 
     @BeforeEach
     void setUp() {
@@ -75,11 +68,6 @@ class NotificationServiceTests {
                 .id(rnd.nextLong())
                 .admin(expectedAdmin)
                 .studentApplication(expectedAppli)
-                .build();
-
-        expectedEval = InternEvaluation.builder()
-                .id(rnd.nextLong())
-                .contract(expectedContract)
                 .build();
     }
 
@@ -166,16 +154,6 @@ class NotificationServiceTests {
         verify(mailSvc, times(1)).notifyAboutDeletion(expectedContract);
         verify(rsocketNotifSvc, times(1)).notify(eq(expectedStudent.getId()), anyString());
         verify(rsocketNotifSvc, times(1)).notify(eq(expectedEmployer.getId()), anyString());
-    }
-
-    @Test
-    void notifyInternEvaluationCreationTest() {
-        when(evalRepo.findById(expectedEval.getId())).thenReturn(Optional.of(expectedEval));
-
-        notifSvc.notifyInternEvaluationCreation(expectedEval.getId());
-
-        verify(mailSvc, times(1)).notifyAboutCreation(expectedEval);
-        verify(rsocketNotifSvc, times(1)).notify(eq(expectedAdmin.getId()), anyString());
     }
 
     @Test
