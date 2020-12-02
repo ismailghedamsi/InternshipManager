@@ -143,6 +143,7 @@ class InterviewControllerTests {
 
     @Test
     void updateInterviewTest() throws Exception {
+        expectedInterview.setDateTime(null);
         when(svc.updateInterview(expectedInterview.getId(), expectedInterview)).thenReturn(Optional.of(expectedInterview));
 
         MvcResult result = mvc.perform(put("/api/interviews/" + expectedInterview.getId())
@@ -150,13 +151,13 @@ class InterviewControllerTests {
                 .content(objectMapper.writeValueAsString(expectedInterview)))
                 .andReturn();
 
-
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
         verify(svc, times(1)).updateInterview(expectedInterview.getId(), expectedInterview);
     }
 
     @Test
     void errorOnUpdateTest() throws Exception {
+        expectedInterview.setDateTime(null);
         when(svc.updateInterview(expectedInterview.getId(), expectedInterview)).thenReturn(Optional.empty());
 
         MvcResult result = mvc.perform(put("/api/interviews/" + expectedInterview.getId())

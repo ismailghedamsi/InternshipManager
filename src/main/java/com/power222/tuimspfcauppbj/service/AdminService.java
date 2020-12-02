@@ -46,7 +46,6 @@ public class AdminService {
     }
 
     public Optional<Admin> updateUserPassword(PasswordDTO dto) {
-        System.out.println(dto);
         return repo.findByEmail(dto.getUsername())
                 .map(a -> {
                     a.setPassword(encoder.encode(dto.getNewPassword()));
