@@ -27,7 +27,7 @@ export default function BusinessEvaluationList() {
 
     return <Grid
         container
-        spacing={2}
+        spacing={0}
         className={classes.main}>
         <Grid item xs={5} className={classes.list}>
             <Typography variant={"h4"} gutterBottom={true} className={classes.title}>

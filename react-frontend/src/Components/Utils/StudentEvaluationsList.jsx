@@ -21,7 +21,7 @@ export default function StudentStatus() {
         })
     }
 
-    return <Grid container spacing={2} className={classes.main}>
+    return <Grid container spacing={0} className={classes.main}>
         <Grid item xs={5} className={classes.list}>
             <Typography
                 variant={"h4"}
