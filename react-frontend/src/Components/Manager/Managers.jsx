@@ -12,7 +12,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -21,14 +20,14 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
-import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
+import {Field, Form, Formik} from "formik";
+import {TextField} from "formik-material-ui";
 import PropTypes from "prop-types";
-import { default as React, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import {default as React, useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import { useApi, useModal } from "../../Services/Hooks";
+import {useApi, useModal} from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const requiredFieldMsg = "Ce champ est requis"
@@ -266,7 +265,6 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
     return isOpen && <Dialog open={isOpen} onClose={hide}>
         <DialogTitle>{"Créer un gestionnaire de stage"}</DialogTitle>
         <DialogContent>
-            <DialogContentText>
                 <Formik
                     onSubmit={async values =>
                         api.post("admins", values)
@@ -361,7 +359,6 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
                         </Button>
                     </Form>}
                 </Formik>
-            </DialogContentText>
         </DialogContent>
         <DialogActions>
             <Button onClick={hide} color="primary">

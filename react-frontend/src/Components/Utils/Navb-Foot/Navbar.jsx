@@ -219,6 +219,11 @@ export default function Navbar() {
                         <ListItemText primary={item.title}/>
                     </ListItem>
                 )}
+                <Divider/>
+                <ListItem button
+                          onClick={() => history.push("/passwordChange", {email: AuthenticationService.getCurrentUser().email})}>
+                    <ListItemText primary={"Changer votre mot de passe"}/>
+                </ListItem>
             </List>
         </Drawer>
         <ResumeUploadModal isOpen={isUploadResumeModalOpen}
