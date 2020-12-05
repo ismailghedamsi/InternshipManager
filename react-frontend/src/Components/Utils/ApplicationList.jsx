@@ -4,13 +4,15 @@ import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import AuthenticationService from "../../Services/AuthenticationService";
 import {useEmployerOfferManagement} from "../../Services/EmployerHooks";
-import {useModal} from "../../Services/Hooks";
+import {useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
 import InterviewConvocationModal from "../Employer/Interview/InterviewConvocationModal";
 import ApprovalButtons from "./ApprovalButtons";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 
 export default function ApplicationList() {
     const location = useLocation()
+    const dateParser = useDateParser()
+    const timeParser = useTimeParserFromDate()
     const [offer, setOffer] = useState({})
     const [currentIndex, setCurrentIndex] = useState(0)
     const manageApplication = useEmployerOfferManagement()
@@ -75,20 +77,25 @@ export default function ApplicationList() {
         if (offer.applications[i].interview)
             switch (offer.applications[i].interview.studentAcceptanceState) {
                 case "INTERVIEW_WAITING_FOR_STUDENT_DECISION":
-                    return interviewDecisionStatus("En attente de la décision de l'étudiant", "blue")
+                    return interviewDecisionStatus("En attente de la décision de l'étudiant", "blue", offer.applications[i].interview.dateTime)
                 case "INTERVIEW_ACCEPTED_BY_STUDENT":
-                    return interviewDecisionStatus("L'étudiant a accepté l'entrevue", "green")
+                    return interviewDecisionStatus("L'étudiant a accepté l'entrevue", "green", offer.applications[i].interview.dateTime)
                 case "INTERVIEW_REJECTED_BY_STUDENT":
-                    return interviewDecisionStatus(`L'étudiant a refusé l'entrevue : ${offer.applications[i].interview.reasonForRejectionByStudent} `, "red")
+                    return interviewDecisionStatus(`L'étudiant a refusé l'entrevue : ${offer.applications[i].interview.reasonForRejectionByStudent} `, "red", offer.applications[i].interview.dateTime)
                 default:
                     return ""
             }
     }
 
-    function interviewDecisionStatus(statusMessage, messageColor) {
-        return <Typography variant={"body1"}>
-            État de l'entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
-        </Typography>
+    function interviewDecisionStatus(statusMessage, messageColor, dateTime) {
+        return <>
+            <Typography variant={"body1"}>
+                Entrevue prévue pour : {dateParser(dateTime)} à {timeParser(dateTime)}
+            </Typography>
+            <Typography variant={"body1"}>
+                État de l'entrevue : <span style={{color: messageColor}}>{statusMessage}</span>
+            </Typography>
+        </>
     }
 
     function showInterviewConvocationButtonCondition(i) {
@@ -127,19 +134,20 @@ export default function ApplicationList() {
                     </Typography>
                     {applicationDecisionMessage(i)}
                     {interviewDecisionMessage(i)}
-                    {applicationActions(i)}
                     {showInterviewConvocationButtonCondition(i) &&
                     <Button
-                        variant={"contained"}
-                        color={"primary"}
-                        onClick={() => {
-                            setApplication(offer.applications[i])
-                            openInterviewConvocationModal()
-                        }}
+                    variant={"contained"}
+                    color={"primary"}
+                    size={"small"}
+                    onClick={() => {
+                        setApplication(offer.applications[i])
+                        openInterviewConvocationModal()
+                    }}
                     >
                         Convoquer l'étudiant pour une entrevue
                     </Button>
                     }
+                    {applicationActions(i)}
                 </div>}
                 <hr/>
             </div>}

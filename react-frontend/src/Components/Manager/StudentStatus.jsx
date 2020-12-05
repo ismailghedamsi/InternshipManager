@@ -141,7 +141,7 @@ function StudentApplicationDetails({student}) {
                 + acceptedApplication.offer.employer.companyName
 
         let pendingApplications = student.applications.filter(isApplicationPending).length
-        return pendingApplications + " en attente de décision"
+        return pendingApplications + (pendingApplications === 1 ? " application" : " applications") + " en attente de décision"
     }
 
     function contractStatus() {
@@ -204,8 +204,10 @@ function StudentStatusDetails({student}) {
                     rejectedResumes++
             }
 
-            return student.resumes.length + " CVs : " + approvedResumes + " approuvés, "
-                + pendingResumes + " en attente, " + rejectedResumes + " rejetés"
+            return student.resumes.length + (student.resumes.length === 1 ? " CV : " : " CVs : ")
+                + approvedResumes + (approvedResumes === 1 ? " approuvé, " : " approuvés, ")
+                + pendingResumes + " en attente, "
+                + rejectedResumes + (rejectedResumes === 1 ? " rejeté" : " rejetés")
         }
     }
 
@@ -213,8 +215,9 @@ function StudentStatusDetails({student}) {
         if (student.allowedOffers.length === 0)
             return "N'a accès à aucune offre"
         else
-            return "A accès à " + student.allowedOffers.length + " offres, a déposé "
-                + student.applications.length + " applications"
+            return "A accès à " + student.allowedOffers.length
+                + (student.allowedOffers.length === 1 ? " offre" : " offres")
+                + ", a déposé " + student.applications.length + (student.applications.length === 1 ? " application" : " applications")
     }
 
     return <>
