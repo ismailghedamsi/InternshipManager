@@ -31,7 +31,7 @@ function EmployerApplicationDetails({offers}) {
         for (const offer of offers)
             applisWaitingForEmployerCount += offer.applications.filter(appli => isApplicationWaitingForEmployer(appli)).length
 
-        return applisWaitingForEmployerCount + " applications en attente de l'employeur"
+        return applisWaitingForEmployerCount + (applisWaitingForEmployerCount === 1 ? " application" : " applications") + " en attente de l'employeur"
     }
 
     function contractsStatus() {
@@ -55,15 +55,16 @@ function EmployerApplicationDetails({offers}) {
                             break;
                     }
 
-        return contractsWaitingCount + " contrats en attente, " + contractFinalizedCount + " contrats finalisés"
+        return contractsWaitingCount + (contractsWaitingCount === 1 ? " contrat" : " contrats") + " en attente, "
+            + contractFinalizedCount + (contractFinalizedCount === 1 ?" contrat finalisé" :" contrats finalisés")
     }
 
     return offers.find(offer => offer.applications).applications.length > 0 ? <>
         <Typography>
-            {interviewStatus()}
+            {applicationsStatus()}
         </Typography>
         <Typography>
-            {applicationsStatus()}
+            {interviewStatus()}
         </Typography>
         <Typography>
             {contractsStatus()}
@@ -95,8 +96,10 @@ function EmployerStatusDetails({offers}) {
                     rejectedOffers++
             }
 
-            return offers.length + " offres : " + approvedOffers + " approuvées, "
-                + pendingOffers + " en attente, " + rejectedOffers + " rejetées"
+            return offers.length + (offers.length === 1 ? " offre : " : " offres : ")
+                + approvedOffers + (approvedOffers === 1 ? " approuvée, " : " approuvées, ")
+                + pendingOffers + " en attente, "
+                + rejectedOffers + (rejectedOffers === 1 ? " rejetée" : " rejetées")
         }
     }
 
