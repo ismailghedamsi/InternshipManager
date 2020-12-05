@@ -6,12 +6,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { Field, Form, Formik } from "formik";
-import { SimpleFileUpload, TextField } from "formik-material-ui";
+import {Field, Form, Formik} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import * as yup from "yup";
-import { useApi } from "../../../Services/Hooks";
+import {useApi} from "../../../Services/Hooks";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
 const tooLongError = value => "Doit avoir moins de " + value.max + " caractères"
@@ -29,7 +29,6 @@ export default function SignModal({isOpen, hide, title, contract}) {
                 dto.imageSignature = file
                 dto.reasonForRejection = ""
                 dto.nomSignataire = values.nomSignataire
-                dto.signatureTimestamp = new Date()
                 return api.put("/contractGeneration/sign", dto)
                     .then(() => history.push("/"))
             })

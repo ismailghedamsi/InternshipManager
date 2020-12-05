@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
@@ -171,7 +172,7 @@ public class ContractGenerationService {
             contentStream.beginText();
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
             contentStream.newLineAtOffset(330, initialYPosition);
-            contentStream.showText(signatureDto.getSignatureTimestamp().format(DTF_WITH_TIME));
+            contentStream.showText(ZonedDateTime.now().format(DTF_WITH_TIME));
             contentStream.newLineAtOffset(-270, -40);
             contentStream.showText(signatureDto.getNomSignataire());
             contentStream.endText();
