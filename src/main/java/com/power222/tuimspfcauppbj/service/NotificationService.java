@@ -20,7 +20,7 @@ public class NotificationService {
     }
 
     public void notifyContractCreation(Contract contract) {
-        final var msg = "Un nouveau contrat vous concernant vient d'être créer";
+        final var msg = "Un nouveau contrat vous concernant vient d'être créé";
 
         mailSvc.notifyAboutCreation(contract);
         notifSvc.notify(contract.getStudentApplication().getStudent().getId(), msg);
@@ -33,7 +33,7 @@ public class NotificationService {
     }
 
     public void notifyContractDeletion(Contract contract) {
-        final var tmp = "Votre contrat pour l'offre %s vient d'être supprimer par un gestionnaire de stage";
+        final var tmp = "Votre contrat pour l'offre %s vient d'être supprimé par un gestionnaire de stage";
         final var msg = String.format(tmp, contract.getStudentApplication().getOffer().getTitle());
 
         mailSvc.notifyAboutDeletion(contract);
@@ -42,7 +42,7 @@ public class NotificationService {
     }
 
     public void notifyResumeCreation(Resume resume) {
-        final var tmp = "%s %s vient de téléverser un nouveau CV: %s. Veuillez le réviser";
+        final var tmp = "%s %s vient de téléverser un nouveau CV : %s. Veuillez le réviser";
         final var msg = String.format(tmp, resume.getOwner().getFirstName(),
                 resume.getOwner().getLastName(), resume.getName());
 
@@ -57,21 +57,21 @@ public class NotificationService {
     }
 
     public void notifyOfferCreation(InternshipOffer offer) {
-        final var tmp = "%s vient de téléverser une nouvelle offre: %s. Veuillez la réviser";
+        final var tmp = "%s vient de téléverser une nouvelle offre : %s. Veuillez la réviser";
         final var msg = String.format(tmp, offer.getEmployer().getCompanyName(), offer.getTitle());
 
         adminRepo.findAll().forEach(admin -> notifSvc.notify(admin.getId(), msg));
     }
 
     public void notifyOfferUpdate(InternshipOffer offer) {
-        final var tmp = "Votre offre %s a été %s";
+        final var tmp = "Votre offre %s a été %se";
         final var msg = String.format(tmp, offer.getTitle(), offer.getReviewState().getValue());
 
         notifSvc.notify(offer.getEmployer().getId(), msg);
     }
 
     public void notifyOfferAssigned(InternshipOffer offer, long studentId) {
-        final var tmp = "Une nouvelle offre est disponible pour vous: %s";
+        final var tmp = "Une nouvelle offre est disponible pour vous : %s";
         final var msg = String.format(tmp, offer.getTitle());
 
         notifSvc.notify(studentId, msg);
@@ -91,7 +91,7 @@ public class NotificationService {
                 contract.getStudentApplication().getOffer().getEmployer().getContactName(),
                 contract.getStudentApplication().getOffer().getEmployer().getCompanyName());
 
-        final var signedTmp = "Le contrat de l'offre %s pour l'étudiant %s %s à été signé par tous les parties";
+        final var signedTmp = "Le contrat de l'offre %s pour l'étudiant %s %s à été signé par toutes les parties";
         final var signedMsg = String.format(signedTmp, contract.getStudentApplication().getOffer().getTitle(),
                 contract.getStudentApplication().getStudent().getFirstName(),
                 contract.getStudentApplication().getStudent().getLastName());
