@@ -147,6 +147,7 @@ export default function ApplicationList() {
         <InterviewConvocationModal isOpen={isInterviewConvocationModalOpen}
                                    hide={closeInterviewConvocationModal}
                                    application={application}
+                                   title={offer.title}
         />
     </div>
 }

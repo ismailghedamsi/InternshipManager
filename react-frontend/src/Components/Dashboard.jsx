@@ -2,6 +2,7 @@ import {Divider, Grid, Typography} from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 import NotificationImportantOutlinedIcon from "@material-ui/icons/NotificationImportantOutlined";
 import React, {useState} from "react";
+import {useLocation} from "react-router-dom";
 import AuthenticationService from "../Services/AuthenticationService";
 import Interviewlist from "./Employer/Interview/InterviewList"
 import OfferApprobation from "./Manager/OfferApprobation";
@@ -158,7 +159,8 @@ function StudentDashboard() {
 
 function EmployerDashboard() {
     const classes = useStyles()
-    const [currentTab, setCurrentTab] = useState(0)
+    const location = useLocation()
+    const [currentTab, setCurrentTab] = useState(location.state ? (location.state.tab ? location.state.tab : 0) : 0)
     const [offerCount, setOfferCount] = useState(0)
     const [contractCount, setContractCount] = useState(0)
     const [contractWaitingCount, setContractWaitingCount] = useState(0)

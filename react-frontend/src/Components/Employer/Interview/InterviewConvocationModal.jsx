@@ -16,7 +16,7 @@ import AuthenticationService from "../../../Services/AuthenticationService";
 import {useApi} from "../../../Services/Hooks";
 
 const requiredFieldMsg = "Ce champ est requis"
-export default function InterviewConvocationModal({isOpen, hide, application}) {
+export default function InterviewConvocationModal({isOpen, hide, application, title}) {
     const api = useApi()
     const history = useHistory()
 
@@ -25,7 +25,7 @@ export default function InterviewConvocationModal({isOpen, hide, application}) {
         dto.employer = AuthenticationService.getCurrentUser()
         dto.reviewState = "PENDING"
         dto.studentApplication = application
-        return api.post("/interviews", dto).then(() => history.push("/dashboard/listInterview"))
+        return api.post("/interviews", dto).then(() => history.push("/dashboard/", {tab: 1}))
     }
 
     return isOpen && <Dialog open={isOpen} onClose={hide} fullWidth maxWidth={"md"}>
@@ -46,7 +46,7 @@ export default function InterviewConvocationModal({isOpen, hide, application}) {
                     initialValues={{
                         dateTime: new Date(),
                         studentName: application.student.firstName + " " + application.student.lastName,
-                        offerName: application.offer.title
+                        offerName: title
                     }}>
                     {({submitForm, isSubmitting}) => <Form>
                         <Grid container
