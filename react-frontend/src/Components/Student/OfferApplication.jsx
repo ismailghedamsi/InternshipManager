@@ -1,4 +1,4 @@
-import { Divider } from "@material-ui/core";
+import {Divider} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,13 +8,13 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Select } from "formik-material-ui";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {Select} from "formik-material-ui";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import * as yup from "yup";
 import AuthenticationService from "../../Services/AuthenticationService";
-import { useApi, useDateParser, useModal, useTimeParserFromDate } from "../../Services/Hooks";
+import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
 import ApprovalButtons from "../Utils/ApprovalButtons";
 import TextboxModal from "../Utils/Modal/TextboxModal";
 import OfferDetails from "../Utils/OfferDetails";
@@ -37,17 +37,28 @@ function isApplicationDenied(offer) {
     return offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && (a.state === "APPLICATION_REJECTED_BY_EMPLOYER" || a.state === "STUDENT_REJECTED_BY_EMPLOYER")) !== undefined && offer.applications.length !== 0
 }
 
-function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurrentIndex, sendInterviewDecision, sendDecision, openReasonModal, openResumeModal, openReasonOfInterviewModal}) {
+function OfferApplicationStatus({
+                                    index,
+                                    offer,
+                                    currentIndex,
+                                    setCurrent,
+                                    setCurrentIndex,
+                                    sendInterviewDecision,
+                                    sendDecision,
+                                    openReasonModal,
+                                    openResumeModal,
+                                    openReasonOfInterviewModal
+                                }) {
     const classes = useStyles()
     const dateParser = useDateParser()
     const timeParser = useTimeParserFromDate()
 
     function showInterviewButtonCondition() {
         return index === currentIndex
-                && hasStudentAppliedOnOffer(offer)
-                && findStudentApplicationInOffer(offer).interview
-                && findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
-                && hasStudentDeniedOffer(offer)
+            && hasStudentAppliedOnOffer(offer)
+            && findStudentApplicationInOffer(offer).interview
+            && findStudentApplicationInOffer(offer).interview.studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION"
+            && hasStudentDeniedOffer(offer)
     }
 
     function getStudentDecision(offer) {
@@ -83,11 +94,14 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
 
     return <div>
         <Button
-                className={[index === currentIndex ? classes.fileButton : null].join(" ")}
-                onClick={() => {
-                    setCurrentIndex(index)
-                    setCurrent(index)
-                }}
+            variant={currentIndex === index ? "contained" : "outlined"}
+            color={"primary"}
+            size={"large"}
+            fullWidth
+            onClick={() => {
+                setCurrentIndex(index)
+                setCurrent(index)
+            }}
         >
             <Typography color={"textPrimary"} variant={"body1"} display={"inline"}>
                 {offer.title}&ensp;
@@ -110,37 +124,37 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
         </>}
         {showInterviewButtonCondition() &&
         <ApprovalButtons
-                onApprove={() => sendInterviewDecision(index, "INTERVIEW_ACCEPTED_BY_STUDENT")}
-                onDeny={() => {
-                    setCurrentIndex(index)
-                    openReasonOfInterviewModal()
-                }}
-                approveLabel={"Accepter l'entrevue"}
-                denyLabel={"Refuser l'entrevue"}
+            onApprove={() => sendInterviewDecision(index, "INTERVIEW_ACCEPTED_BY_STUDENT")}
+            onDeny={() => {
+                setCurrentIndex(index)
+                openReasonOfInterviewModal()
+            }}
+            approveLabel={"Accepter l'entrevue"}
+            denyLabel={"Refuser l'entrevue"}
         />
         }
         {hasEmployeurAcceptedStudentOnOffer(offer) &&
         <ApprovalButtons
-                onApprove={() => sendDecision(index, "JOB_OFFER_ACCEPTED_BY_STUDENT")}
-                onDeny={() => {
-                    setCurrentIndex(index)
-                    openReasonModal()
-                }}
-                approveLabel={"Accepter l'offre"}
-                denyLabel={"Refuser l'offre"}
+            onApprove={() => sendDecision(index, "JOB_OFFER_ACCEPTED_BY_STUDENT")}
+            onDeny={() => {
+                setCurrentIndex(index)
+                openReasonModal()
+            }}
+            approveLabel={"Accepter l'offre"}
+            denyLabel={"Refuser l'offre"}
         />
         }
         <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
             {getStudentDecision(offer)}
         </Typography>
         <Button
-                variant={"contained"}
-                color={"primary"}
-                disabled={hasStudentAppliedOnOffer(offer)}
-                onClick={() => {
-                    setCurrentIndex(index)
-                    openResumeModal()
-                }}
+            variant={"contained"}
+            color={"primary"}
+            disabled={hasStudentAppliedOnOffer(offer)}
+            onClick={() => {
+                setCurrentIndex(index)
+                openResumeModal()
+            }}
         >
             <i className="fa fa-share-square-o"/>&ensp;
             {hasStudentAppliedOnOffer(offer) ? "Application envoyée" : "Appliquer"}
@@ -152,6 +166,7 @@ function OfferApplicationStatus({index, offer, currentIndex, setCurrent, setCurr
         <Divider className={classes.dividers}/>
     </div>
 }
+
 OfferApplicationStatus.propTypes = {
     index: PropTypes.number.isRequired,
     offer: PropTypes.object.isRequired,
@@ -174,16 +189,16 @@ export default function OfferApplication({count, pendingCount}) {
     const [isReasonOfInterviewModalOpen, openReasonOfInterviewModal, closeReasonOfInterviewModal] = useModal()
     useEffect(() => {
         api.get("/resumes/student/" + AuthenticationService.getCurrentUser().id)
-                .then(result => setResumes(result ? result.data : []))
+            .then(result => setResumes(result ? result.data : []))
         api.get("/offers/student/" + AuthenticationService.getCurrentUser().id)
-                .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.details.limitDateToApply) >= new Date()) : []))
+            .then(result => setOffers(result ? result.data.filter(offer => new Date(offer.details.limitDateToApply) >= new Date()) : []))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         count(offers.filter(item => !hasStudentAppliedOnOffer(item, AuthenticationService.getCurrentUser())).length)
 
         pendingCount(
-                offers.filter(item => hasEmployeurAcceptedStudentOnOffer(item, AuthenticationService.getCurrentUser())).length
+            offers.filter(item => hasEmployeurAcceptedStudentOnOffer(item, AuthenticationService.getCurrentUser())).length
         )
     })
 
@@ -194,16 +209,16 @@ export default function OfferApplication({count, pendingCount}) {
         application.interview.reasonForRejectionByStudent = reason
         application.interview.studentApplication = {id: application.id}
         return api.put("/interviews/" + application.interview.id, application.interview)
-                .then(result => {
-                    if (result) {
-                        application.interview = result.data
-                        setOffers(offers => {
-                            offers.splice(index, 1)
-                            return [...offers, nextState]
-                        })
-                    }
-                    closeReasonOfInterviewModal()
-                })
+            .then(result => {
+                if (result) {
+                    application.interview = result.data
+                    setOffers(offers => {
+                        offers.splice(index, 1)
+                        return [...offers, nextState]
+                    })
+                }
+                closeReasonOfInterviewModal()
+            })
     }
 
     function sendDecision(index, studentDecision, reason = "") {
@@ -212,13 +227,12 @@ export default function OfferApplication({count, pendingCount}) {
         application.reasonForRejection = reason
         application.state = studentDecision
         return api.put("/applications/state/" + application.id, application)
-                .then(result => {
-                    nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data)
-                    setOffers(nextState)
-                    closeReasonModal()
-                })
+            .then(result => {
+                nextState[index].applications.splice(nextState[index].applications.indexOf(application), 1, result.data)
+                setOffers(nextState)
+                closeReasonModal()
+            })
     }
-
 
     function generateMenuItems() {
         let filteredResumes = resumes.filter(r => r.reviewState === "APPROVED")
@@ -226,9 +240,9 @@ export default function OfferApplication({count, pendingCount}) {
             return <MenuItem value={filteredResumes[0].id}>{filteredResumes[0].name}</MenuItem>
         else if (filteredResumes.length !== 0) {
             filteredResumes = filteredResumes.map((item, i) =>
-                    <MenuItem key={i} value={item.id}>{item.name}</MenuItem>)
+                <MenuItem key={i} value={item.id}>{item.name}</MenuItem>)
             filteredResumes.push(
-                    <MenuItem key={filteredResumes.length} value={-1} disabled>Veuillez choisir un CV</MenuItem>
+                <MenuItem key={filteredResumes.length} value={-1} disabled>Veuillez choisir un CV</MenuItem>
             )
             return filteredResumes
         } else
@@ -243,17 +257,17 @@ export default function OfferApplication({count, pendingCount}) {
     return <div style={{height: "100%"}}>
         <PdfSelectionViewer documents={offers.map(o => o.file)} title={"Offres de stage disponibles"}>
             {(i, setCurrent) =>
-                    <OfferApplicationStatus key={i}
-                                            index={i}
-                                            offer={offers[i]}
-                                            currentIndex={currentIndex}
-                                            setCurrentIndex={setCurrentIndex}
-                                            setCurrent={setCurrent}
-                                            sendDecision={sendDecision}
-                                            sendInterviewDecision={sendInterviewDecision}
-                                            openReasonModal={openReasonModal}
-                                            openResumeModal={openResumeModal}
-                                            openReasonOfInterviewModal={openReasonOfInterviewModal}/>
+                <OfferApplicationStatus key={i}
+                                        index={i}
+                                        offer={offers[i]}
+                                        currentIndex={currentIndex}
+                                        setCurrentIndex={setCurrentIndex}
+                                        setCurrent={setCurrent}
+                                        sendDecision={sendDecision}
+                                        sendInterviewDecision={sendInterviewDecision}
+                                        openReasonModal={openReasonModal}
+                                        openResumeModal={openResumeModal}
+                                        openReasonOfInterviewModal={openReasonOfInterviewModal}/>
             }
         </PdfSelectionViewer>
         <Dialog open={isResumeModalOpen} onClose={closeResumeModal} fullWidth maxWidth={"md"}>
@@ -261,56 +275,56 @@ export default function OfferApplication({count, pendingCount}) {
             <DialogContent>
                 <DialogContentText id="alert-dialog-description" component={"div"}>
                     <Formik
-                            onSubmit={async values => {
-                                return api.post("/applications/" + offers[currentIndex].id + "/" + values.resumeId, {})
-                                        .then(r => {
-                                            const nextState = [...offers]
-                                            nextState[currentIndex].applications.push(r.data)
-                                            setOffers(nextState)
-                                            closeResumeModal()
-                                        })
-                            }}
-                            validateOnBlur={false}
-                            validateOnChange={false}
-                            enableReinitialize={true}
-                            validationSchema={yup.object()
-                                    .shape({
-                                        resumeId: yup.number().notOneOf([-1], "Impossible d'appliquer sans un CV valide").required("Ce champ est requis")
-                                    })
-                            }
-                            initialValues={{resumeId: setFirstCV()}}>
+                        onSubmit={async values => {
+                            return api.post("/applications/" + offers[currentIndex].id + "/" + values.resumeId, {})
+                                .then(r => {
+                                    const nextState = [...offers]
+                                    nextState[currentIndex].applications.push(r.data)
+                                    setOffers(nextState)
+                                    closeResumeModal()
+                                })
+                        }}
+                        validateOnBlur={false}
+                        validateOnChange={false}
+                        enableReinitialize={true}
+                        validationSchema={yup.object()
+                            .shape({
+                                resumeId: yup.number().notOneOf([-1], "Impossible d'appliquer sans un CV valide").required("Ce champ est requis")
+                            })
+                        }
+                        initialValues={{resumeId: setFirstCV()}}>
                         {({isSubmitting}) =>
-                                <Form>
-                                    <Field
-                                            component={Select}
-                                            id="resumeId"
-                                            name="resumeId"
-                                            fullWidth
-                                            style={{marginBottom: "10px"}}
-                                    >
-                                        {generateMenuItems()}
-                                    </Field>
-                                    <ErrorMessage name="resumeId">
-                                        {msg => <span
-                                                style={{
-                                                    color: "red",
-                                                    lineHeight: 3,
-                                                    verticalAlign: "center"
-                                                }}>{msg}</span>}
-                                    </ErrorMessage>
-                                    {isSubmitting && <LinearProgress/>}
-                                    <Button
-                                            id="buttonSubmit"
-                                            type={"submit"}
-                                            variant="contained"
-                                            fullWidth
-                                            size={"large"}
-                                            color="primary"
-                                            disabled={isSubmitting}
-                                    >
-                                        Soumettre ma candidature
-                                    </Button>
-                                </Form>
+                            <Form>
+                                <Field
+                                    component={Select}
+                                    id="resumeId"
+                                    name="resumeId"
+                                    fullWidth
+                                    style={{marginBottom: "10px"}}
+                                >
+                                    {generateMenuItems()}
+                                </Field>
+                                <ErrorMessage name="resumeId">
+                                    {msg => <span
+                                        style={{
+                                            color: "red",
+                                            lineHeight: 3,
+                                            verticalAlign: "center"
+                                        }}>{msg}</span>}
+                                </ErrorMessage>
+                                {isSubmitting && <LinearProgress/>}
+                                <Button
+                                    id="buttonSubmit"
+                                    type={"submit"}
+                                    variant="contained"
+                                    fullWidth
+                                    size={"large"}
+                                    color="primary"
+                                    disabled={isSubmitting}
+                                >
+                                    Soumettre ma candidature
+                                </Button>
+                            </Form>
                         }
                     </Formik>
                 </DialogContentText>
@@ -322,16 +336,16 @@ export default function OfferApplication({count, pendingCount}) {
             </DialogActions>
         </Dialog>
         <TextboxModal
-                isOpen={isReasonModalOpen}
-                hide={closeReasonModal}
-                title={"Justifiez le refus"}
-                onSubmit={async values => sendDecision(currentIndex, "JOB_OFFER_DENIED_BY_STUDENT", values.message)}
+            isOpen={isReasonModalOpen}
+            hide={closeReasonModal}
+            title={"Justifiez le refus"}
+            onSubmit={async values => sendDecision(currentIndex, "JOB_OFFER_DENIED_BY_STUDENT", values.message)}
         />
         <TextboxModal
-                isOpen={isReasonOfInterviewModalOpen}
-                hide={closeReasonOfInterviewModal}
-                title={"Justifiez le refus"}
-                onSubmit={async values => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
+            isOpen={isReasonOfInterviewModalOpen}
+            hide={closeReasonOfInterviewModal}
+            title={"Justifiez le refus"}
+            onSubmit={async values => sendInterviewDecision(currentIndex, "INTERVIEW_REJECTED_BY_STUDENT", values.message)}
         />
     </div>
 }

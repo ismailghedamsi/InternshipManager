@@ -3,12 +3,12 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
-import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
-import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import {Field, Form, Formik} from "formik";
+import {TextField} from "formik-material-ui";
+import React, {useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
 import * as yup from "yup";
-import { useApi } from "../../Services/Hooks";
+import {useApi} from "../../Services/Hooks";
 import useStyles from "../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
@@ -89,7 +89,7 @@ export default function ContractForm() {
                                         name="totalHoursPerWeek"
                                         id="totalHoursPerWeek"
                                         variant="outlined"
-                                        label="Nombre d'heures par semaine"
+                                        label="Nombre d'heures travaillées par semaine"
                                         required
                                         fullWidth
                                         type={"number"}
