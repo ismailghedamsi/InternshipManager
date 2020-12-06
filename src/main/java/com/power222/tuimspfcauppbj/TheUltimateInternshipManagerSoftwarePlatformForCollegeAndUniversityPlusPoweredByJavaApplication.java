@@ -2,6 +2,8 @@ package com.power222.tuimspfcauppbj;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Admin;
+import com.power222.tuimspfcauppbj.model.Student;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Hooks;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @SpringBootApplication(exclude = {ReactiveSecurityAutoConfiguration.class, ReactiveUserDetailsServiceAutoConfiguration.class})
 @Slf4j
@@ -47,6 +50,18 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .passwordExpired(true)
                         .build());
 
+            for (int i = 0; i < 30; i++) {
+                userRepo.saveAndFlush(Student.builder()
+                        .firstName("Prénom" + i)
+                        .lastName("Nom" + i)
+                        .studentId(String.valueOf(i))
+                        .phoneNumber("1234567890")
+                        .address("1234 rue Boulette")
+                        .email("etudiant" + i + "@gmail.com")
+                        .password(passwordEncoder.encode("password"))
+                        .semesters(List.of(((i % 3) == 0) ? SemesterContext.getPresentSemester() : "a2019h2020"))
+                        .build());
+            }
         }
     }
 }
