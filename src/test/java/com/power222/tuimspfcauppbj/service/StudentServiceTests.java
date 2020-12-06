@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Student;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,10 +54,11 @@ public class StudentServiceTests {
 
     @Test
     void getAllStudentsTest() {
+        SemesterContext.setCurrent(SemesterContext.getPresentSemester());
         var s1 = Student.builder().id(1L).build();
         var s2 = Student.builder().id(2L).build();
         var s3 = Student.builder().id(3L).build();
-        when(studentRepo.findAllBySemesters(anyString())).thenReturn(Arrays.asList(s1, s2, s3));
+        when(studentRepo.findAllBySemesters(SemesterContext.getPresentSemester())).thenReturn(Arrays.asList(s1, s2, s3));
 
         var actual = svc.getAllStudents();
 
@@ -65,7 +67,8 @@ public class StudentServiceTests {
 
     @Test
     void getNoStudentsTest() {
-        when(studentRepo.findAllBySemesters(anyString())).thenReturn(Collections.emptyList());
+        SemesterContext.setCurrent(SemesterContext.getPresentSemester());
+        when(studentRepo.findAllBySemesters(SemesterContext.getPresentSemester())).thenReturn(Collections.emptyList());
 
         var actual = svc.getAllStudents();
 

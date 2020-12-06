@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,10 +52,11 @@ public class EmployerServiceTests {
 
     @Test
     void getAllEmployersTest() {
+        SemesterContext.setCurrent(SemesterContext.getPresentSemester());
         var s1 = Employer.builder().id(1L).build();
         var s2 = Employer.builder().id(2L).build();
         var s3 = Employer.builder().id(3L).build();
-        when(employerRepo.findAllBySemesters(anyString())).thenReturn(Arrays.asList(s1, s2, s3));
+        when(employerRepo.findAllBySemesters(SemesterContext.getPresentSemester())).thenReturn(Arrays.asList(s1, s2, s3));
 
         var actual = svc.getAllEmployers();
 
@@ -63,7 +65,8 @@ public class EmployerServiceTests {
 
     @Test
     void getNoEmployersTest() {
-        when(employerRepo.findAllBySemesters(anyString())).thenReturn(Collections.emptyList());
+        SemesterContext.setCurrent(SemesterContext.getPresentSemester());
+        when(employerRepo.findAllBySemesters(SemesterContext.getPresentSemester())).thenReturn(Collections.emptyList());
 
         var actual = svc.getAllEmployers();
 
