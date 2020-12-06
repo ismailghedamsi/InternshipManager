@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.EmployerRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Employer;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class EmployerService {
     }
 
     public List<Employer> getAllEmployers() {
-        return employerRepo.findAll();
+        return employerRepo.findAllBySemesters(SemesterContext.getCurrent());
     }
 
     public Optional<Employer> getEmployerById(long id) {

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
     @SuppressWarnings("SpringDataMethodInconsistencyInspection")
@@ -19,6 +21,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Page<Student> findAllByApplications_InterviewIsNotNull(Pageable pageable);
 
     Page<Student> findAllBySemesters(String semester, Pageable pageable);
+
+    List<Student> findAllBySemesters(String semester);
 
     default Page<Student> findAllBySemestersAndResumesReviewStatePending(String semester, Pageable pageable) {
         return findAllBySemestersAndResumes_ReviewState(semester, ReviewState.PENDING, pageable);

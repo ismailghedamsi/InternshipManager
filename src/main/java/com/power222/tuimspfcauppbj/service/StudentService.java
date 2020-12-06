@@ -3,6 +3,7 @@ package com.power222.tuimspfcauppbj.service;
 import com.power222.tuimspfcauppbj.dao.StudentRepository;
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Student;
+import com.power222.tuimspfcauppbj.util.SemesterContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class StudentService {
     }
 
     public List<Student> getAllStudents() {
-        return studentRepo.findAll();
+        return studentRepo.findAllBySemesters(SemesterContext.getCurrent());
     }
 
     public Optional<Student> getStudentById(long id) {
