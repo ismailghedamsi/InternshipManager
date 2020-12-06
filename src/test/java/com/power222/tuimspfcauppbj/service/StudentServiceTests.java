@@ -56,7 +56,7 @@ public class StudentServiceTests {
         var s1 = Student.builder().id(1L).build();
         var s2 = Student.builder().id(2L).build();
         var s3 = Student.builder().id(3L).build();
-        when(studentRepo.findAll()).thenReturn(Arrays.asList(s1, s2, s3));
+        when(studentRepo.findAllBySemesters(anyString())).thenReturn(Arrays.asList(s1, s2, s3));
 
         var actual = svc.getAllStudents();
 
@@ -65,7 +65,7 @@ public class StudentServiceTests {
 
     @Test
     void getNoStudentsTest() {
-        when(studentRepo.findAll()).thenReturn(Collections.emptyList());
+        when(studentRepo.findAllBySemesters(anyString())).thenReturn(Collections.emptyList());
 
         var actual = svc.getAllStudents();
 

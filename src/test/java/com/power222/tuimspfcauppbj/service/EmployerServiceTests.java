@@ -54,7 +54,7 @@ public class EmployerServiceTests {
         var s1 = Employer.builder().id(1L).build();
         var s2 = Employer.builder().id(2L).build();
         var s3 = Employer.builder().id(3L).build();
-        when(employerRepo.findAll()).thenReturn(Arrays.asList(s1, s2, s3));
+        when(employerRepo.findAllBySemesters(anyString())).thenReturn(Arrays.asList(s1, s2, s3));
 
         var actual = svc.getAllEmployers();
 
@@ -63,7 +63,7 @@ public class EmployerServiceTests {
 
     @Test
     void getNoEmployersTest() {
-        when(employerRepo.findAll()).thenReturn(Collections.emptyList());
+        when(employerRepo.findAllBySemesters(anyString())).thenReturn(Collections.emptyList());
 
         var actual = svc.getAllEmployers();
 
