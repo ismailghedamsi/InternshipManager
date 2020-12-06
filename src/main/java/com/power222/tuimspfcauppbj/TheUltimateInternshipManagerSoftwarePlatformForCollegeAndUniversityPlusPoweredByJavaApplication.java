@@ -41,9 +41,10 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
         public void run(String... args) {
             if (userRepo.count() == 0)
                 userRepo.saveAndFlush(Admin.builder()
-                        .email("projetemployeur@gmail.com")
+                        .email("root@localhost")
                         .password(passwordEncoder.encode("password"))
                         .name("Default Admin")
+                        .passwordExpired(true)
                         .build());
 
         }
