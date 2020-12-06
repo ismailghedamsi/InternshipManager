@@ -263,7 +263,7 @@ export default function BusinessEvalution() {
                             InputProps={{
                                 inputProps: {
                                     min: 1,
-                                    max: 40,
+                                    max: 100,
                                     step: "any"
                                 }
                             }}
@@ -282,7 +282,7 @@ export default function BusinessEvalution() {
                             InputProps={{
                                 inputProps: {
                                     min: 1,
-                                    max: 40,
+                                    max: 100,
                                     step: "any"
                                 }
                             }}
@@ -301,7 +301,7 @@ export default function BusinessEvalution() {
                             InputProps={{
                                 inputProps: {
                                     min: 1,
-                                    max: 40,
+                                    max: 100,
                                     step: "any"
                                 }
                             }}
