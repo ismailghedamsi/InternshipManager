@@ -1,7 +1,10 @@
 package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Filter;
 
@@ -23,4 +26,9 @@ public class Admin extends User {
     @JsonIgnoreProperties("admin")
     @Filter(name = "semesterFilter", condition = "semester = :semester")
     private List<Contract> contracts;
+
+    @Override
+    public String getFullName() {
+        return name;
+    }
 }

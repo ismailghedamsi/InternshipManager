@@ -28,4 +28,6 @@ public abstract class User {
 
     private boolean passwordExpired;
     private boolean disabled;
+
+    public abstract String getFullName();
 }

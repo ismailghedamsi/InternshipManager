@@ -83,7 +83,7 @@ export default function PasswordChange() {
                         axios.put("http://localhost:8080/api/auth/password", values)
                             .then(() => {
                                 AuthenticationService.logout()
-                                history.push("/")
+                                history.push("/", {email: values.username})
                             })
                             .catch(error => handleHttpError(error, setFieldError))
                     }

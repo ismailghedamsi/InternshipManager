@@ -2,7 +2,10 @@ package com.power222.tuimspfcauppbj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.power222.tuimspfcauppbj.util.SemesterAware;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Filter;
 
@@ -37,4 +40,9 @@ public class Employer extends User implements SemesterAware {
     @JsonIgnore
     @Filter(name = "semesterFilter", condition = "semester = :semester")
     private List<Interview> interviews;
+
+    @Override
+    public String getFullName() {
+        return contactName;
+    }
 }

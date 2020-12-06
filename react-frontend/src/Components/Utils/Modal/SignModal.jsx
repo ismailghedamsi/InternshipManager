@@ -11,6 +11,7 @@ import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React from "react";
 import {useHistory} from "react-router-dom";
 import * as yup from "yup";
+import AuthenticationService from "../../../Services/AuthenticationService"
 import {useApi} from "../../../Services/Hooks";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
@@ -75,7 +76,7 @@ export default function SignModal({isOpen, hide, title, contract}) {
                         })
                     }
                     initialValues={{
-                        nomSignataire: "",
+                        nomSignataire: AuthenticationService.getCurrentUser().name,
                         file: ""
                     }}>
                     {({submitForm, isSubmitting}) => <Form>
@@ -91,7 +92,7 @@ export default function SignModal({isOpen, hide, title, contract}) {
                                     label="Nom du signataire"
                                     required
                                     fullWidth
-                                    autoFocus
+                                    disabled
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
