@@ -71,6 +71,7 @@ export default function StudentStatus() {
                     Supprimer l'évaluation
                 </Button>
                 {isDeleting && evaluationDeleting === i && <CircularProgress size={18}/>}
+                <Divider className={classes.dividers}/>
             </div>) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
         <Grid
