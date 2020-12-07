@@ -15,11 +15,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import * as locales from "@material-ui/core/locale";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
-import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import {Field, Form, Formik} from "formik";
 import {TextField} from "formik-material-ui";
 import PropTypes from "prop-types";
@@ -86,7 +83,7 @@ function DataTable() {
             })
     }, [currentPage, rowsPerPage]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    return <ThemeProvider theme={createMuiTheme(locales['frFR'])}>
+    return <>
         <TableContainer>
             <Table>
                 <TableHead>
@@ -122,7 +119,7 @@ function DataTable() {
                      setItemCount={setItemCount}/>
         <CreateManager isOpen={isCreateModalOpen} hide={closeCreateModal} setRows={setRows}
                        setItemCount={setItemCount}/>
-    </ThemeProvider>
+    </>
 }
 
 function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
@@ -145,7 +142,8 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
     return isOpen && <Dialog open={isOpen} onClose={hide}>
         <DialogTitle>{"Modifier le gestionnaire de stage : " + manager.name}</DialogTitle>
         <DialogContent>
-            {AuthenticationService.getCurrentUser().id === manager.id ? <><Typography style={{fontStyle: "italic"}}>Vous ne pouvez pas désactiver votre compte</Typography><br/></> : ""}
+            {AuthenticationService.getCurrentUser().id === manager.id ? <><Typography style={{fontStyle: "italic"}}>Vous
+                ne pouvez pas désactiver votre compte</Typography><br/></> : ""}
             <Formik onSubmit={toggleManagerDisabledState} initialValues={{}}>
                 {({isSubmitting}) =>
                     <Form>
@@ -166,17 +164,17 @@ function EditManager({manager, isOpen, hide, setRows, setItemCount}) {
             Changer le mot de passe :
             <Formik
                 onSubmit={async values => {
-                        const dto = {...values}
-                        dto.username = manager.email
-                        delete dto.newConfirm
-                        api.put("admins/password", dto).then(() => {
-                            hide()
-                            if (manager.id === AuthenticationService.getCurrentUser().id) {
-                                AuthenticationService.logout()
-                                history.push("/")
-                            }
-                        })
-                    }
+                    const dto = {...values}
+                    dto.username = manager.email
+                    delete dto.newConfirm
+                    api.put("admins/password", dto).then(() => {
+                        hide()
+                        if (manager.id === AuthenticationService.getCurrentUser().id) {
+                            AuthenticationService.logout()
+                            history.push("/")
+                        }
+                    })
+                }
                 }
 
                 validationSchema={yup.object()
@@ -265,100 +263,100 @@ function CreateManager({isOpen, hide, setRows, setItemCount}) {
     return isOpen && <Dialog open={isOpen} onClose={hide}>
         <DialogTitle>{"Créer un gestionnaire de stage"}</DialogTitle>
         <DialogContent>
-                <Formik
-                    onSubmit={async values =>
-                        api.post("admins", values)
-                            .then(() => {
-                                hide()
-                                return api.get("admins")
-                                    .then(response => {
-                                        setRows(response.data.content)
-                                        setItemCount(response.data.totalElements)
-                                    })
-                            })
-                    }
+            <Formik
+                onSubmit={async values =>
+                    api.post("admins", values)
+                        .then(() => {
+                            hide()
+                            return api.get("admins")
+                                .then(response => {
+                                    setRows(response.data.content)
+                                    setItemCount(response.data.totalElements)
+                                })
+                        })
+                }
 
-                    validationSchema={yup.object()
-                        .shape({
-                            name: yup.string().trim().required(requiredFieldMsg),
-                            email: yup.string().trim().email("L'adresse courriel n'est pas formatée correctement").required(requiredFieldMsg),
-                            password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
-                            confirm: yup.string().oneOf([yup.ref('password'), null], "Les mots de passe doivent être identiques").required(requiredFieldMsg)
-                        })}
-                    validateOnBlur={false}
-                    validateOnChange={false}
-                    enableReinitialize={true}
-                    initialValues={{
-                        name: '',
-                        email: '',
-                        password: '',
-                        confirm: ''
-                    }}
-                >
-                    {({isSubmitting}) => <Form className={classes.form}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Field
-                                    component={TextField}
-                                    name="name"
-                                    id="name"
-                                    variant="outlined"
-                                    label="Nom complet"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Field
-                                    component={TextField}
-                                    name="email"
-                                    id="email"
-                                    variant="outlined"
-                                    label="Adresse courriel"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Field
-                                    component={TextField}
-                                    name="password"
-                                    id="password"
-                                    variant="outlined"
-                                    label="Nouveau mot de passe"
-                                    type={"password"}
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Field
-                                    component={TextField}
-                                    name="confirm"
-                                    id="confirm"
-                                    variant="outlined"
-                                    label="Confirmation"
-                                    type={"password"}
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
+                validationSchema={yup.object()
+                    .shape({
+                        name: yup.string().trim().required(requiredFieldMsg),
+                        email: yup.string().trim().email("L'adresse courriel n'est pas formatée correctement").required(requiredFieldMsg),
+                        password: yup.string().trim().min(8, tooShortError).required(requiredFieldMsg),
+                        confirm: yup.string().oneOf([yup.ref('password'), null], "Les mots de passe doivent être identiques").required(requiredFieldMsg)
+                    })}
+                validateOnBlur={false}
+                validateOnChange={false}
+                enableReinitialize={true}
+                initialValues={{
+                    name: '',
+                    email: '',
+                    password: '',
+                    confirm: ''
+                }}
+            >
+                {({isSubmitting}) => <Form className={classes.form}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Field
+                                component={TextField}
+                                name="name"
+                                id="name"
+                                variant="outlined"
+                                label="Nom complet"
+                                required
+                                fullWidth
+                            />
                         </Grid>
-                        <br/>
-                        {isSubmitting && <LinearProgress/>}
-                        <Button
-                            type={"submit"}
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            size={"large"}
-                            className={classes.submit}
-                            disabled={isSubmitting}
-                        >
-                            Enregistrer le gestionnaire de stage
-                        </Button>
-                    </Form>}
-                </Formik>
+                        <Grid item xs={12}>
+                            <Field
+                                component={TextField}
+                                name="email"
+                                id="email"
+                                variant="outlined"
+                                label="Adresse courriel"
+                                required
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Field
+                                component={TextField}
+                                name="password"
+                                id="password"
+                                variant="outlined"
+                                label="Nouveau mot de passe"
+                                type={"password"}
+                                required
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Field
+                                component={TextField}
+                                name="confirm"
+                                id="confirm"
+                                variant="outlined"
+                                label="Confirmation"
+                                type={"password"}
+                                required
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
+                    <br/>
+                    {isSubmitting && <LinearProgress/>}
+                    <Button
+                        type={"submit"}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        size={"large"}
+                        className={classes.submit}
+                        disabled={isSubmitting}
+                    >
+                        Enregistrer le gestionnaire de stage
+                    </Button>
+                </Form>}
+            </Formik>
         </DialogContent>
         <DialogActions>
             <Button onClick={hide} color="primary">
