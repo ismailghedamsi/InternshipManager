@@ -104,7 +104,7 @@ function DataTableBody({report, rows}) {
                 <TableCell>{offer.title}</TableCell>
                 <TableCell>{offer.details.description}</TableCell>
                 <TableCell>{offer.details.salary}</TableCell>
-                <TableCell>{offer.details.startTime}h00&mdash;{offer.details.endTime}</TableCell>
+                <TableCell>{offer.details.startTime}&mdash;{offer.details.endTime}</TableCell>
                 <TableCell>{offer.details.nbStudentToHire}</TableCell>
                 <TableCell>{offer.details.creationDate}</TableCell>
                 <TableCell>{parseDate(offer.details.limitDateToApply)}</TableCell>
