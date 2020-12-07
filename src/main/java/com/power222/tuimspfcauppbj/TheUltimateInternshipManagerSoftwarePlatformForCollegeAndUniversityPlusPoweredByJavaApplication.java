@@ -2,6 +2,7 @@ package com.power222.tuimspfcauppbj;
 
 import com.power222.tuimspfcauppbj.dao.UserRepository;
 import com.power222.tuimspfcauppbj.model.Admin;
+import com.power222.tuimspfcauppbj.model.Employer;
 import com.power222.tuimspfcauppbj.model.Student;
 import com.power222.tuimspfcauppbj.util.SemesterContext;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,10 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Hooks;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootApplication(exclude = {ReactiveSecurityAutoConfiguration.class, ReactiveUserDetailsServiceAutoConfiguration.class})
 @Slf4j
@@ -50,18 +54,47 @@ public class TheUltimateInternshipManagerSoftwarePlatformForCollegeAndUniversity
                         .passwordExpired(true)
                         .build());
 
-            for (int i = 0; i < 30; i++) {
+            List<String> firstNames = Arrays.asList("Andrei", "Ernesto", "Simon", "Song", "Ismail", "Fabory", "Mathieu", "François", "Félix");
+            List<String> lastNames = Arrays.asList("Belkin", "Mejia Mendez", "Longpré-Landry", "Xin Yu", "Ghedamsi", "Bangoura", "D'Onofrio", "Lacoursière", "St-Gelais");
+            List<String> companies = Arrays.asList("Desjardins", "Dacima", "Generix", "Banque Nationale", "IGA", "Ministère du Transport");
+            Random random = new Random();
+
+            for (int i = 0; i < 5; i++)
                 userRepo.saveAndFlush(Student.builder()
-                        .firstName("Prénom" + i)
-                        .lastName("Nom" + i)
-                        .studentId(String.valueOf(i))
-                        .phoneNumber("1234567890")
-                        .address("1234 rue Boulette")
-                        .email("etudiant" + i + "@gmail.com")
+                        .firstName(firstNames.get(random.nextInt(firstNames.size())))
+                        .lastName(lastNames.get(random.nextInt(lastNames.size())))
+                        .email("projetemployeur+etudiant" + i + "@gmail.com")
                         .password(passwordEncoder.encode("password"))
-                        .semesters(List.of(((i % 3) == 0) ? SemesterContext.getPresentSemester() : "a2019h2020"))
+                        .studentId(String.valueOf(i))
+                        .phoneNumber(getRandomPhoneNumber(random))
+                        .semesters(Collections.singletonList(((i % 2) == 0) ? SemesterContext.getPresentSemester() : "a2019h2020"))
                         .build());
-            }
+
+            for (int i = 0; i < 5; i++)
+                userRepo.saveAndFlush(Employer.builder()
+                        .contactName(firstNames.get(random.nextInt(firstNames.size())) + " " + lastNames.get(random.nextInt(lastNames.size())))
+                        .email("projetemployeur+employeur" + i + "@gmail.com")
+                        .password(passwordEncoder.encode("password"))
+                        .companyName(String.valueOf(companies.get(random.nextInt(companies.size()))))
+                        .phoneNumber(getRandomPhoneNumber(random))
+                        .semesters(Collections.singletonList(((i % 2) == 0) ? SemesterContext.getPresentSemester() : "a2019h2020"))
+                        .build());
+        }
+
+        private static String getRandomPhoneNumber(Random random) {
+            StringBuilder phoneNumber = new StringBuilder("");
+
+            phoneNumber.append((random.nextInt(2) == 0) ? "(514) " : "(438) ");
+
+            for (int i = 0; i < 3; i++)
+                phoneNumber.append(random.nextInt(10));
+
+            phoneNumber.append("-");
+
+            for (int i = 0; i < 4; i++)
+                phoneNumber.append(random.nextInt(10));
+
+            return phoneNumber.toString();
         }
     }
 }
