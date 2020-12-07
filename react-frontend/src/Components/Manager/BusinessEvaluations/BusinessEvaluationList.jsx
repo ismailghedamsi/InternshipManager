@@ -74,10 +74,6 @@ export default function BusinessEvaluationList() {
                         Supprimer l'évaluation
                     </Button>
                     {isDeleting && evaluationDeleting === i && <CircularProgress size={18}/>}
-                    {currentIndex === i &&
-                    <Typography color={"textPrimary"} variant={"body1"} display={"block"}>
-                        {item.contract.studentApplication.offer.title}
-                    </Typography>}
                 </div>
             ) : <Typography align="center">Aucun élément à afficher</Typography>}
         </Grid>
@@ -109,6 +105,11 @@ export default function BusinessEvaluationList() {
                             <Typography>
                                 <strong>Téléphone : </strong>
                                 {businessEvaluations[currentIndex].contract.studentApplication.offer.employer.phoneNumber}
+                            </Typography>
+                            <Divider className={classes.dividers}/>
+                            <Typography>
+                                <strong>Offre : </strong>
+                                {item.contract.studentApplication.offer.title}
                             </Typography>
                             <Divider className={classes.dividers}/>
                             <Typography variant="h5">
