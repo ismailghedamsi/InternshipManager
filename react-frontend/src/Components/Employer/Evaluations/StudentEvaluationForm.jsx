@@ -1,10 +1,10 @@
-import { Card, CardContent, Grid, Typography } from "@material-ui/core";
-import { ErrorMessage, Field } from "formik";
-import { SimpleFileUpload, TextField } from "formik-material-ui";
+import {Card, CardContent, Grid, Typography} from "@material-ui/core";
+import {ErrorMessage, Field} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React from "react";
-import { useLocation } from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import * as yup from "yup";
-import { FormikStepper } from "../../Utils/FormikStepper";
+import {FormikStepper} from "../../Utils/FormikStepper";
 import useStyles from "../../Utils/Style/useStyles";
 
 const tooShortError = value => "Doit avoir au moins " + value.min + " caractères"
@@ -129,8 +129,8 @@ function ProductivityStep(props) {
             <Grid item xs={12}>
                 <Field
                     component={TextField}
-                    style={{backgroundColor: "#F2F3F4"}}
                     rows={4}
+                    variant={"outlined"}
                     fullWidth
                     multiline
                     label="Commentaires"
@@ -222,7 +222,7 @@ function QualityStep(props) {
             <Grid item xs={12}>
                 <Field
                     component={TextField}
-                    style={{backgroundColor: "#F2F3F4"}}
+                    variant={"outlined"}
                     rows={4}
                     fullWidth
                     multiline
@@ -323,9 +323,7 @@ function RelationshipsStep(props) {
             <Grid item xs={12}>
                 <Field
                     component={TextField}
-                    style={{
-                        backgroundColor: "#F2F3F4",
-                    }}
+                    variant={"outlined"}
                     rows={4}
                     fullWidth
                     multiline
@@ -426,7 +424,7 @@ function SkillsStep(props) {
             <Grid item xs={12}>
                 <Field
                     component={TextField}
-                    style={{backgroundColor: "#F2F3F4"}}
+                    variant={"outlined"}
                     rows={4}
                     fullWidth
                     multiline
@@ -463,7 +461,7 @@ function AppreciationStep(props) {
             <Grid item xs={12}>
                 <Field
                     component={TextField}
-                    style={{backgroundColor: "#F2F3F4"}}
+                    variant={"outlined"}
                     rows={4}
                     fullWidth
                     multiline
@@ -565,7 +563,7 @@ function DecisionStep(props) {
             <Grid item xs={12}>
                 <Field
                     component={TextField}
-                    style={{backgroundColor: "#F2F3F4"}}
+                    variant={"outlined"}
                     rows={4}
                     fullWidth
                     multiline

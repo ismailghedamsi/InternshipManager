@@ -290,27 +290,27 @@ export default function BusinessEvalution() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Field
-                            component={TextField}
-                            name="evaluationCriterias.hoursOfWeekThirdMonth"
-                            id="hoursOfWeekThirdMonth"
-                            variant="outlined"
-                            label="Troisième mois"
-                            required
-                            fullWidth
-                            type={"number"}
-                            InputProps={{
-                                inputProps: {
-                                    min: 1,
-                                    max: 100,
-                                    step: "any"
-                                }
-                            }}
+                        component={TextField}
+                        name="evaluationCriterias.hoursOfWeekThirdMonth"
+                        id="hoursOfWeekThirdMonth"
+                        variant="outlined"
+                        label="Troisième mois"
+                        required
+                        fullWidth
+                        type={"number"}
+                        InputProps={{
+                            inputProps: {
+                                min: 1,
+                                max: 100,
+                                step: "any"
+                            }
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Field component={TextField} style={{
-                        backgroundColor: "#F2F3F4"
-                    }} rows={4} fullWidth multiline label="Commentaires" name="evaluationCriterias.comment">
+                    <Field component={TextField}
+                           variant={"outlined"}
+                           rows={4} fullWidth multiline label="Commentaires" name="evaluationCriterias.comment">
                     </Field>
                 </Grid>
             </Grid>
