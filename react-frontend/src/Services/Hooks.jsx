@@ -142,3 +142,14 @@ export function useFileReader() {
         })
     }
 }
+
+export function usePersistentState(name) {
+    const [current, setCurrent] = useState(JSON.parse(window.localStorage.getItem(name)))
+
+    function set(value) {
+        window.localStorage.setItem(name, JSON.stringify(value))
+        setCurrent(value)
+    }
+
+    return [current, set]
+}

@@ -15,7 +15,7 @@ import RegisteringManager from "./Components/RegisteringManager"
 import RouteSelector from "./Components/RouteSelector"
 import ErrorModal from "./Components/Utils/Modal/ErrorModal"
 import {BasicProtectedRoute} from "./Components/Utils/Routes"
-import {useModal} from "./Services/Hooks"
+import {useModal, usePersistentState} from "./Services/Hooks"
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
@@ -26,7 +26,7 @@ export const ThemeContext = React.createContext(null)
 function App() {
     const [isErrorModalOpen, openErrorModal, closeErrorModal] = useModal()
     const [semester, setSemester] = useState(undefined)
-    const [isDarkMode, setDarkMode] = useState(true)
+    const [isDarkMode, setDarkMode] = usePersistentState("darkMode")
     const themeOptions = {
         palette: {
             type: isDarkMode ? "dark" : "light",

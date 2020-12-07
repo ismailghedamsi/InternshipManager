@@ -46,7 +46,7 @@ function AdminDashboard() {
     const [contractCount, setContractCount] = useState(0)
 
     return <>
-        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList]}>
+        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList].join(" ")}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
                 {cvCount !== 0 &&
                 <Badge badgeContent={cvCount} color="secondary" anchorOrigin={{vertical: "top", horizontal: "left"}}>
@@ -107,7 +107,7 @@ function StudentDashboard() {
     const [contractCount, setContractCount] = useState(0)
     const [contractWaitingCount, setContractWaitingCount] = useState(0)
     return <>
-        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList]}>
+        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList].join(" ")}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
                 {offerCount + offerPendingCount !== 0 &&
                 <Badge badgeContent={offerCount + offerPendingCount} color="secondary"
@@ -181,7 +181,7 @@ function EmployerDashboard() {
     const [interviewWaitingCount, setInterviewWaitingCount] = useState(0)
 
     return <>
-        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList]}>
+        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList].join(" ")}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
                 Mes offres de stage
                 <Typography variant={"body2"}>

@@ -183,7 +183,7 @@ export default function Navbar() {
             <>
                 {isDarkMode ? <Brightness3 fontSize={"small"}/> : <WbSunny fontSize={"small"}/>}
                 <Switch
-                    checked={isDarkMode}
+                    checked={Boolean(isDarkMode)}
                     onChange={evt => setDarkMode(evt.target.checked)}
                     size={"small"}
                 />
