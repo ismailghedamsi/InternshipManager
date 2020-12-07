@@ -1,13 +1,14 @@
-import { Button } from "@material-ui/core";
+import {Button, useTheme} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import AuthenticationService from "../../Services/AuthenticationService";
-import { useApi } from "../../Services/Hooks";
+import {useApi} from "../../Services/Hooks";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 
 export default function ResumeList({count, deniedCount}) {
     const api = useApi()
+    const theme = useTheme()
     const [resumes, setResumes] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isDeleting, setIsDeleting] = useState(false)
@@ -38,12 +39,14 @@ export default function ResumeList({count, deniedCount}) {
 
     function getResumeState(resume) {
         if (resume.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>
+            return <span style={{color: theme.palette.info.main}}>En attente</span>
         else if (resume.reviewState === "DENIED")
-            return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>
+            return <>
+                <span style={{color: theme.palette.error.main}}>Rejeté : </span>
+                {resume.reasonForRejection}
+            </>
         else
-            return <span style={{color: "green"}}>Approuvé</span>
+            return <span style={{color: theme.palette.success.main}}>Approuvé</span>
     }
 
     return <div style={{height: "100%"}}>
@@ -81,7 +84,7 @@ export default function ResumeList({count, deniedCount}) {
                             })
                         }}
                         disabled={(isDeleting && buttonDeleting === i) || resumes[i].applications.length !== 0}
-                        title={resumes[i].applications.length === 0 ? '' : 'Impossible de supprimer un CV déja utilisé pour appliquer sur une offre'}>
+                        title={resumes[i].applications.length === 0 ? "" : "Impossible de supprimer un CV déja utilisé pour appliquer sur une offre"}>
                         <i className="fa fa-trash"/>&ensp;Supprimer
                     </Button>}
                     {isDeleting && buttonDeleting === i && <CircularProgress size={18}/>}

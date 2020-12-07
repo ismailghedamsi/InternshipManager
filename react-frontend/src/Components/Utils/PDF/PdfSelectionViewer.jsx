@@ -1,6 +1,6 @@
-import { Typography } from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import useStyles from "../Style/useStyles";
 import PdfDocument from "./PdfDocument";
 

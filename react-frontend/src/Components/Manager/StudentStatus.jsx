@@ -1,4 +1,4 @@
-import {Divider, Typography} from "@material-ui/core";
+import {Divider, Typography, useTheme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import * as PropTypes from "prop-types";
@@ -16,14 +16,18 @@ const applicationAcceptedStates = [
 ]
 
 function ResumeStatus(props) {
+    const theme = useTheme()
+
     function getResumeState(resume) {
         if (resume.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>
+            return <span style={{color: theme.palette.info.main}}>En attente</span>
         else if (resume.reviewState === "DENIED")
-            return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {resume.reasonForRejection} </span></span>
+            return <>
+                <span style={{color: theme.palette.error.main}}>Rejeté : </span>
+                {resume.reasonForRejection}
+            </>
         else
-            return <span style={{color: "green"}}>Approuvé</span>
+            return <span style={{color: theme.palette.success.main}}>Approuvé</span>
     }
 
     return <div>

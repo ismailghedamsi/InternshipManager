@@ -1,20 +1,21 @@
-import {Button, List, ListSubheader, Toolbar, Typography} from "@material-ui/core";
+import {Button, List, ListSubheader, Switch, Toolbar, Typography} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {makeStyles} from "@material-ui/core/styles";
+import {Brightness3, WbSunny} from "@material-ui/icons"
 import MenuIcon from "@material-ui/icons/Menu";
 import axios from "axios";
 import React, {useContext, useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
-import {SemesterContext} from "../../../App";
+import {SemesterContext, ThemeContext} from "../../../App";
 import AuthenticationService from "../../../Services/AuthenticationService";
 import {useModal} from "../../../Services/Hooks";
 import OfferCreationModal from "../../Employer/OfferCreationModal";
 import SemesterSelectorModal from "../../Manager/SemesterSelectorModal";
-import ResumeUploadModal from "../../Student/Upload/ResumeUploadModal";
+import ResumeUploadModal from "../../Student/ResumeUploadModal";
 import NotificationButton from "./NotificationButton";
 
 const Links = {
@@ -27,41 +28,41 @@ const Links = {
             title: <Divider/>
         },
         {
-            title: 'Assignation des offres',
-            url: '/dashboard/assignement/offer',
+            title: "Assignation des offres",
+            url: "/dashboard/assignement/offer"
         },
         {
             title: <Divider/>
         },
         {
-            title: 'Étudiants ',
-            url: "/dashboard/status",
+            title: "Étudiants ",
+            url: "/dashboard/status"
         },
         {
-            title: 'Employeurs',
-            url: "/dashboard/employersStatus",
+            title: "Employeurs",
+            url: "/dashboard/employersStatus"
         },
         {
-            title: 'Gestionnaires de stage',
+            title: "Gestionnaires de stage",
             url: "/dashboard/managers"
         },
         {
             title: <Divider/>
         },
         {
-            title: 'Offres',
-            url: '/dashboard/offerList',
+            title: "Offres",
+            url: "/dashboard/offerList"
         },
         {
-            title: 'Contrats',
-            url: '/dashboard/contractList',
+            title: "Contrats",
+            url: "/dashboard/contractList"
         },
         {
             title: <Divider/>
         },
         {
-            title: 'Rapports',
-            url: '/dashboard/reports',
+            title: "Rapports",
+            url: "/dashboard/reports"
         },
         {
             title: <Divider/>
@@ -84,7 +85,7 @@ const Links = {
             title: <Divider/>
         },
         {
-            title: "Téléverser un CV",
+            title: "Téléverser un CV"
         }
     ],
     employer: [
@@ -96,7 +97,7 @@ const Links = {
             title: <Divider/>
         },
         {
-            title: "Créer une offre",
+            title: "Créer une offre"
         },
         {
             title: "Évaluations des stagiaires",
@@ -132,6 +133,7 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false)
     const [current, setCurrent] = useState(0)
     const {semester, setSemester} = useContext(SemesterContext)
+    const {isDarkMode, setDarkMode} = useContext(ThemeContext)
     const [isUploadResumeModalOpen, openUploadResumeModal, closeUploadResumeModal] = useModal()
     const [isSemesterSelectorModalOpen, openSemesterSelectorModal, closeSemesterSelectorModal] = useModal()
     const [isOfferCreationModalOpen, openOfferCreationModal, closeOfferCreationModal] = useModal()
@@ -178,6 +180,15 @@ export default function Navbar() {
                     style={{textTransform: "capitalize"}}>{getRole()}</span> &mdash; {AuthenticationService.getCurrentUser().email}
             </Typography>
             <div className={classes.spacer}/>
+            <>
+                {isDarkMode ? <Brightness3 fontSize={"small"}/> : <WbSunny fontSize={"small"}/>}
+                <Switch
+                    checked={isDarkMode}
+                    onChange={evt => setDarkMode(evt.target.checked)}
+                    size={"small"}
+                />
+                &emsp;
+            </>
             <NotificationButton/>
             {AuthenticationService.getCurrentUserRole() === "admin" &&
             <>

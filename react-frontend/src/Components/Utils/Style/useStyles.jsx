@@ -1,9 +1,13 @@
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
+import {useContext} from "react"
+import {ThemeContext} from "../../../App"
 
 export default function useStyles() {
+    const {isDarkMode} = useContext(ThemeContext)
+
     return makeStyles(theme => ({
         main: {
-            backgroundColor: "#fff",
+            backgroundColor: theme.palette.background.default,
             alignItems: "stretch",
             height: "100%"
         },
@@ -15,7 +19,7 @@ export default function useStyles() {
         viewbox: {
             height: "inherit",
             overflow: "auto",
-            backgroundColor: "#888",
+            backgroundColor: isDarkMode ? theme.palette.background.paper : "#888"
         },
         page: {
             margin: theme.spacing(1, 0)
@@ -61,8 +65,8 @@ export default function useStyles() {
             margin: theme.spacing(1, 0, 2),
         },
         container: {
-            backgroundColor: "#fff",
-            borderRadius: theme.spacing(2),
+            backgroundColor: theme.palette.background.default,
+            borderRadius: theme.spacing(2)
         },
         appliedMark: {
             fontSize: "1.5rem",
@@ -134,17 +138,16 @@ export default function useStyles() {
         },
         dashboardTab: {
             padding: theme.spacing(5, 0, 5, 3),
-            backgroundColor: "#FFF",
+            backgroundColor: theme.palette.background.default,
             "&:hover": {
-                backgroundColor: "#EEF"
+                backgroundColor: isDarkMode ? theme.palette.background.paper : "#CCC"
             }
         },
         selectedDashboardTab: {
-            backgroundColor: "#DDF",
+            backgroundColor: isDarkMode ? theme.palette.primary.dark : theme.palette.primary.light,
             "&:hover": {
-                backgroundColor: "#EEF"
+                backgroundColor: isDarkMode ? theme.palette.primary.light : theme.palette.primary.dark
             }
         }
-
     }))()
 }

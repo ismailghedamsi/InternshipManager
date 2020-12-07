@@ -1,4 +1,4 @@
-import {Typography} from "@material-ui/core";
+import {Typography, useTheme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
@@ -11,6 +11,7 @@ import useStyles from "./Style/useStyles";
 
 export default function SignContract({count, waitingCount}) {
     const classes = useStyles()
+    const theme = useTheme()
     const api = useApi()
     const history = useHistory()
     const [contract, setContract] = useState([])
@@ -55,33 +56,33 @@ export default function SignContract({count, waitingCount}) {
     function contractState(contract) {
         switch (contract.signatureState) {
             case "REJECTED_BY_EMPLOYER":
-                return <Typography variant={"body1"} style={{color: "red"}}>
+                return <Typography variant={"body1"} style={{color: theme.palette.error.main}}>
                     Rejeté :
                     {contract.reasonForRejection}
                 </Typography>
             case "WAITING_FOR_EMPLOYER_SIGNATURE":
                 if (AuthenticationService.getCurrentUserRole() !== "employer") {
-                    return <Typography variant={"body1"} style={{color: "blue"}}>
+                    return <Typography variant={"body1"} style={{color: theme.palette.info.main}}>
                         En attente de la signature de l'employeur
                     </Typography>
                 }
                 break
             case "WAITING_FOR_STUDENT_SIGNATURE":
                 if (AuthenticationService.getCurrentUserRole() !== "student") {
-                    return <Typography variant={"body1"} style={{color: "blue"}}>
+                    return <Typography variant={"body1"} style={{color: theme.palette.info.main}}>
                         En attente de la signature de l'étudiant
                     </Typography>
                 }
                 break
             case "WAITING_FOR_ADMIN_SIGNATURE":
                 if (AuthenticationService.getCurrentUserRole() !== "admin") {
-                    return <Typography variant={"body1"} style={{color: "blue"}}>
+                    return <Typography variant={"body1"} style={{color: theme.palette.info.main}}>
                         En attente de la signature du gestionnaire de stage
                     </Typography>
                 }
                 break
             case "SIGNED":
-                return <Typography variant={"body1"} style={{color: "green"}}>
+                return <Typography variant={"body1"} style={{color: theme.palette.success.main}}>
                     Contrat signé
                 </Typography>
             default:
@@ -126,7 +127,7 @@ export default function SignContract({count, waitingCount}) {
                     <div className={classes.buttonDiv}>
                         <Button
                             variant={"contained"}
-                            style={{backgroundColor: "green", color: "white"}}
+                            style={{backgroundColor: theme.palette.success.main}}
                             size={"small"}
                             onClick={() => {
                                 setContract(contracts[i])
@@ -144,7 +145,7 @@ export default function SignContract({count, waitingCount}) {
                                 setCurrentIndex(i)
                                 openReasonModal()
                             }}>
-                            <i className="fa fa-times" style={{color: "white"}}/>&ensp;Refuser le contrat
+                            <i className="fa fa-times"/>&ensp;Refuser le contrat
                         </Button>
                         }
                     </div>}

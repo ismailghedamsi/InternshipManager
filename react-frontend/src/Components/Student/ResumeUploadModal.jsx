@@ -6,12 +6,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { SimpleFileUpload, TextField } from "formik-material-ui";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {SimpleFileUpload, TextField} from "formik-material-ui";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import * as yup from "yup";
-import { useApi } from "../../../Services/Hooks";
+import {useApi} from "../../Services/Hooks";
 
 export default function ResumeUploadModal({isOpen, hide, title}) {
     const api = useApi()

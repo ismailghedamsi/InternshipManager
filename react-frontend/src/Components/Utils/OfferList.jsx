@@ -1,4 +1,4 @@
-import {Divider} from "@material-ui/core";
+import {Divider, useTheme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
@@ -13,6 +13,7 @@ import useStyles from "./Style/useStyles";
 export default function OfferList({count}) {
     const classes = useStyles()
     const api = useApi()
+    const theme = useTheme()
     const history = useHistory()
     const [currentIndex, setCurrentIndex] = useState(0)
     const [offers, setOffers] = useState([])
@@ -51,15 +52,14 @@ export default function OfferList({count}) {
 
     function getOfferState(offer) {
         if (offer.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>
+            return <span style={{color: theme.palette.info.main}}>En attente</span>
         else if (offer.reviewState === "DENIED")
-            return <span style={{color: "red"}}>Rejeté : 
-                <span style={{color: "black"}}>
-                    {offer.reasonForRejection}
-                </span>
-        </span>
+            return <>
+                <span style={{color: theme.palette.error.main}}>Rejeté : </span>
+                {offer.reasonForRejection}
+            </>
         else
-            return <span style={{color: "green"}}>Approuvé</span>
+            return <span style={{color: theme.palette.success.main}}>Approuvé</span>
     }
 
     function showDeleteButtonCondition(i) {

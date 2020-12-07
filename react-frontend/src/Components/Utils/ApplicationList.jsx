@@ -1,3 +1,4 @@
+import {useTheme} from "@material-ui/core"
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import React, {useEffect, useState} from "react";
@@ -10,6 +11,7 @@ import ApprovalButtons from "./ApprovalButtons";
 import PdfSelectionViewer from "./PDF/PdfSelectionViewer";
 
 export default function ApplicationList() {
+    const theme = useTheme()
     const location = useLocation()
     const dateParser = useDateParser()
     const timeParser = useTimeParserFromDate()
@@ -51,17 +53,17 @@ export default function ApplicationList() {
     function applicationDecisionMessage(i) {
         switch (offer.applications[i].state) {
             case "STUDENT_HIRED_BY_EMPLOYER":
-                return applicationDecisionStatus("Application acceptée", "green")
+                return applicationDecisionStatus("Application acceptée", theme.palette.success.main)
             case "APPLICATION_REJECTED_BY_EMPLOYER":
             case "STUDENT_REJECTED_BY_EMPLOYER":
                 return applicationDecisionStatus(AuthenticationService.getCurrentUserRole() === "admin" ?
-                    "L'employeur a refusé la demande" : "Vous avez refusé la demande", "red")
+                    "L'employeur a refusé la demande" : "Vous avez refusé la demande", theme.palette.error.main)
             case "WAITING_FOR_STUDENT_HIRING_FINAL_DECISION":
-                return applicationDecisionStatus("En attente de la décision de l'étudiant", "blue")
+                return applicationDecisionStatus("En attente de la décision de l'étudiant", theme.palette.info.main)
             case "JOB_OFFER_DENIED_BY_STUDENT":
-                return applicationDecisionStatus(`L'étudiant a refusé l'offre de stage : ${offer.applications[i].reasonForRejection}`, "red")
+                return applicationDecisionStatus(`L'étudiant a refusé l'offre de stage : ${offer.applications[i].reasonForRejection}`, theme.palette.error.main)
             case "JOB_OFFER_ACCEPTED_BY_STUDENT":
-                return applicationDecisionStatus("L'étudiant a accepté l'offre de stage", "green")
+                return applicationDecisionStatus("L'étudiant a accepté l'offre de stage", theme.palette.success.main)
             default:
                 return ""
         }
@@ -77,11 +79,11 @@ export default function ApplicationList() {
         if (offer.applications[i].interview)
             switch (offer.applications[i].interview.studentAcceptanceState) {
                 case "INTERVIEW_WAITING_FOR_STUDENT_DECISION":
-                    return interviewDecisionStatus("En attente de la décision de l'étudiant", "blue", offer.applications[i].interview.dateTime)
+                    return interviewDecisionStatus("En attente de la décision de l'étudiant", theme.palette.info.main, offer.applications[i].interview.dateTime)
                 case "INTERVIEW_ACCEPTED_BY_STUDENT":
-                    return interviewDecisionStatus("L'étudiant a accepté l'entrevue", "green", offer.applications[i].interview.dateTime)
+                    return interviewDecisionStatus("L'étudiant a accepté l'entrevue", theme.palette.success.main, offer.applications[i].interview.dateTime)
                 case "INTERVIEW_REJECTED_BY_STUDENT":
-                    return interviewDecisionStatus(`L'étudiant a refusé l'entrevue : ${offer.applications[i].interview.reasonForRejectionByStudent} `, "red", offer.applications[i].interview.dateTime)
+                    return interviewDecisionStatus(`L'étudiant a refusé l'entrevue : ${offer.applications[i].interview.reasonForRejectionByStudent} `, theme.palette.error.main, offer.applications[i].interview.dateTime)
                 default:
                     return ""
             }
@@ -136,13 +138,13 @@ export default function ApplicationList() {
                     {interviewDecisionMessage(i)}
                     {showInterviewConvocationButtonCondition(i) &&
                     <Button
-                    variant={"contained"}
-                    color={"primary"}
-                    size={"small"}
-                    onClick={() => {
-                        setApplication(offer.applications[i])
-                        openInterviewConvocationModal()
-                    }}
+                        variant={"contained"}
+                        color={"primary"}
+                        size={"small"}
+                        onClick={() => {
+                            setApplication(offer.applications[i])
+                            openInterviewConvocationModal()
+                        }}
                     >
                         Convoquer l'étudiant pour une entrevue
                     </Button>

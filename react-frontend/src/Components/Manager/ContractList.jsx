@@ -1,15 +1,16 @@
-import { Typography } from "@material-ui/core";
+import {Typography, useTheme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { useApi } from "../../Services/Hooks";
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
+import {useApi} from "../../Services/Hooks";
 import ApprovalButtons from "../Utils/ApprovalButtons";
 import PdfSelectionViewer from "../Utils/PDF/PdfSelectionViewer";
 import useStyles from "../Utils/Style/useStyles";
 
 export default function ContractList({count}) {
     const classes = useStyles()
+    const theme = useTheme()
     const api = useApi()
     const history = useHistory()
     const [contracts, setContracts] = useState([])
@@ -54,21 +55,21 @@ export default function ContractList({count}) {
 
         switch (contractState) {
             case "WAITING_FOR_EMPLOYER_SIGNATURE" :
-                return <Typography variant={"body1"} style={{color: "blue"}}>
+                return <Typography variant={"body1"} style={{color: theme.palette.info.main}}>
                     En attente de la signature de l'employeur
                 </Typography>
             case "REJECTED_BY_EMPLOYER" :
-                return <Typography variant={"body1"} style={{color: "red"}}>
-                    L'employeur a rejeté le contrat : 
+                return <Typography variant={"body1"} style={{color: theme.palette.error.main}}>
+                    L'employeur a rejeté le contrat :
                     {nextState[index].reasonForRejection}
                 </Typography>
             case "WAITING_FOR_STUDENT_SIGNATURE" :
-                return <Typography variant={"body1"} style={{color: "blue"}}>
+                return <Typography variant={"body1"} style={{color: theme.palette.info.main}}>
                     En attente de la signature de l'étudiant
                     {nextState[index].reasonForRejection}
                 </Typography>
             case "SIGNED":
-                return <Typography variant={"body1"} style={{color: "green"}}>
+                return <Typography variant={"body1"} style={{color: theme.palette.success.main}}>
                     Contrat signé
                 </Typography>
             default:
@@ -115,20 +116,20 @@ export default function ContractList({count}) {
                     {showContractState(i)}
                     {currentIndex === i && showDeleteContractButtonCondition(i) && <>
                             &ensp;{disabledDelContractBtn && <CircularProgress size={18}/>}
-                            <Button
-                                variant={"contained"}
-                                color={"secondary"}
-                                size={"small"}
-                                disabled={disabledDelContractBtn}
-                                onClick={() => {
-                                    setDisabledDelContractBtn(true)
-                                    deleteContract(i)
-                                }}>
-                                <i className="fa fa-trash" style={{color: "white"}}/>&ensp;Supprimer
-                            </Button>
-                            <Typography variant={"body2"}>
-                                Nom du gestionnaire de stage : {contracts[i].admin.name}
-                            </Typography>
+                        <Button
+                            variant={"contained"}
+                            color={"secondary"}
+                            size={"small"}
+                            disabled={disabledDelContractBtn}
+                            onClick={() => {
+                                setDisabledDelContractBtn(true)
+                                deleteContract(i)
+                            }}>
+                            <i className="fa fa-trash"/>&ensp;Supprimer
+                        </Button>
+                        <Typography variant={"body2"}>
+                            Nom du gestionnaire de stage : {contracts[i].admin.name}
+                        </Typography>
                         </>
                     }
                     {showEvaluationButtonCondition(i) &&
@@ -140,7 +141,7 @@ export default function ContractList({count}) {
                             history.push("/dashboard/businessEvaluation", {...contracts[i]})
                         }}
                     >
-                        <i className="fa fa-drivers-license-o" style={{color: "white"}}/>&ensp;Évaluer l'entreprise
+                        <i className="fa fa-drivers-license-o"/>&ensp;Évaluer l'entreprise
                     </Button>
                     }
                     <hr className={classes.hrStyle}/>

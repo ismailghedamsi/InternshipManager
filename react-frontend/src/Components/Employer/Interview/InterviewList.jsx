@@ -1,4 +1,14 @@
-import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {
+    Button,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    useTheme
+} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import React, {useEffect, useState} from "react";
@@ -11,6 +21,7 @@ export default function Interviewlist({count, waitingCount}) {
     const [interviews, setInterviews] = useState([{}])
     const api = useApi()
     const classes = useStyles()
+    const theme = useTheme()
     const parseTimeFromDate = useTimeParserFromDate()
     const [isDeleting, setIsDeleting] = useState(false)
     const [buttonDeleting, setButtonDeleting] = useState(-1)
@@ -31,12 +42,14 @@ export default function Interviewlist({count, waitingCount}) {
 
     function isInterviewAccepted(interview) {
         if (interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT") {
-            return "L'étudiant a accepté l'entrevue"
+            return <span style={{color: theme.palette.success.main}}>L'étudiant a accepté l'entrevue</span>
         } else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT") {
-            return <span style={{color: "red"}}>Rejeté<span
-                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>
+            return <>
+                <span style={{color: theme.palette.error.main}}>Rejeté</span>
+                {interview.reasonForRejectionByStudent}
+            </>
         }
-        return "En attente de la réponse de l'étudiant"
+        return <span style={{color: theme.palette.info.main}}>En attente de la réponse de l'étudiant</span>
     }
 
     return <>

@@ -1,4 +1,4 @@
-import {Button, Divider, Grid, Typography} from "@material-ui/core";
+import {Button, Divider, Grid, Typography, useTheme} from "@material-ui/core";
 import * as PropTypes from "prop-types";
 import React, {useEffect, useState} from "react";
 import {useApi, useDateParser, useModal, useTimeParserFromDate} from "../../Services/Hooks";
@@ -56,7 +56,7 @@ function EmployerApplicationDetails({offers}) {
                     }
 
         return contractsWaitingCount + (contractsWaitingCount === 1 ? " contrat" : " contrats") + " en attente, "
-            + contractFinalizedCount + (contractFinalizedCount === 1 ?" contrat finalisé" :" contrats finalisés")
+            + contractFinalizedCount + (contractFinalizedCount === 1 ? " contrat finalisé" : " contrats finalisés")
     }
 
     return offers.find(offer => offer.applications).applications.length > 0 ? <>
@@ -118,17 +118,20 @@ EmployerStatusDetails.propTypes = {
 }
 
 function InterviewStatus(props) {
+    const theme = useTheme()
     const parseDate = useDateParser()
     const parseTimeFromDate = useTimeParserFromDate()
 
     function getInterviewState(interview) {
         if (interview.studentAcceptanceState === "INTERVIEW_WAITING_FOR_STUDENT_DECISION")
-            return <span style={{color: "blue"}}>En attente</span>
+            return <span style={{color: theme.palette.info.main}}>En attente</span>
         else if (interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
-            return <span style={{color: "red"}}>Rejetée<span
-                style={{color: "black"}}> : {interview.reasonForRejectionByStudent} </span></span>
+            return <>
+                <span style={{color: theme.palette.error.main}}>Rejetée</span>
+                {interview.reasonForRejectionByStudent}
+            </>
         else
-            return <span style={{color: "green"}}>Approuvée</span>
+            return <span style={{color: theme.palette.success}}>Approuvée</span>
     }
 
     return <div>
@@ -237,6 +240,7 @@ export default function EmployerStatus() {
     const offersTabIndex = 0
     const interviewsTabIndex = 1
     const classes = useStyles()
+    const theme = useTheme()
     const api = useApi()
     const [employers, setEmployers] = useState([])
     const [currentEmployerOffers, setCurrentEmployerOffers] = useState([])
@@ -287,12 +291,14 @@ export default function EmployerStatus() {
 
     function printOfferStatus(offer) {
         if (offer.reviewState === "PENDING")
-            return <span style={{color: "blue"}}>En attente</span>
+            return <span style={{color: theme.palette.info.main}}>En attente</span>
         else if (offer.reviewState === "DENIED")
-            return <span style={{color: "red"}}>Rejetée<span
-                style={{color: "black"}}> : {offer.reasonForRejection} </span></span>
+            return <>
+                <span style={{color: theme.palette.error.main}}>Rejetée : </span>
+                {offer.reasonForRejection}
+            </>
         else
-            return <span style={{color: "green"}}>Approuvée</span>
+            return <span style={{color: theme.palette.success.main}}>Approuvée</span>
     }
 
     return <Grid

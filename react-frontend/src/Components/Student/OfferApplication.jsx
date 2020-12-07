@@ -1,4 +1,4 @@
-import {Divider} from "@material-ui/core";
+import {Divider, useTheme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -50,6 +50,7 @@ function OfferApplicationStatus({
                                     openReasonOfInterviewModal
                                 }) {
     const classes = useStyles()
+    const theme = useTheme()
     const dateParser = useDateParser()
     const timeParser = useTimeParserFromDate()
 
@@ -63,9 +64,9 @@ function OfferApplicationStatus({
 
     function getStudentDecision(offer) {
         if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_ACCEPTED_BY_STUDENT"))
-            return <span style={{color: "green"}}>Vous avez accepté cette offre</span>
+            return <span style={{color: theme.palette.success.main}}>Vous avez accepté cette offre</span>
         else if (offer.applications.find(a => a.student.id === AuthenticationService.getCurrentUser().id && a.state === "JOB_OFFER_DENIED_BY_STUDENT"))
-            return <span style={{color: "red"}}>Vous avez refusé cette offre</span>
+            return <span style={{color: theme.palette.error.main}}>Vous avez refusé cette offre</span>
 
         return ""
     }
@@ -74,9 +75,9 @@ function OfferApplicationStatus({
         const application = findStudentApplicationInOffer(offer);
         if (application && application.interview) {
             if (application.interview.studentAcceptanceState === "INTERVIEW_ACCEPTED_BY_STUDENT")
-                return <span style={{color: "green"}}>Vous avez accepté l'entrevue</span>
+                return <span style={{color: theme.palette.success.main}}>Vous avez accepté l'entrevue</span>
             else if (application.interview.studentAcceptanceState === "INTERVIEW_REJECTED_BY_STUDENT")
-                return <span style={{color: "red"}}>Vous avez refusé l'entrevue</span>
+                return <span style={{color: theme.palette.error.main}}>Vous avez refusé l'entrevue</span>
         }
         return ""
     }
@@ -160,7 +161,7 @@ function OfferApplicationStatus({
             {hasStudentAppliedOnOffer(offer) ? "Application envoyée" : "Appliquer"}
         </Button>
         {isApplicationDenied(offer) &&
-        <Typography style={{color: "red"}} variant={"body1"}>
+        <Typography style={{color: theme.palette.error.main}} variant={"body1"}>
             L'employeur a rejeté votre application
         </Typography>}
         <Divider className={classes.dividers}/>
@@ -181,6 +182,7 @@ OfferApplicationStatus.propTypes = {
 }
 export default function OfferApplication({count, pendingCount}) {
     const api = useApi()
+    const theme = useTheme()
     const [offers, setOffers] = useState([])
     const [resumes, setResumes] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -307,7 +309,7 @@ export default function OfferApplication({count, pendingCount}) {
                                 <ErrorMessage name="resumeId">
                                     {msg => <span
                                         style={{
-                                            color: "red",
+                                            color: theme.palette.error.main,
                                             lineHeight: 3,
                                             verticalAlign: "center"
                                         }}>{msg}</span>}

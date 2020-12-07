@@ -1,5 +1,6 @@
 import {Divider, Grid, Typography} from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
+import {makeStyles} from "@material-ui/core/styles";
 import NotificationImportantOutlinedIcon from "@material-ui/icons/NotificationImportantOutlined";
 import React, {useState} from "react";
 import {useLocation} from "react-router-dom";
@@ -15,13 +16,22 @@ import SignContract from "./Utils/SignContract";
 import useStyles from "./Utils/Style/useStyles";
 import TabPanel from "./Utils/TabPanel";
 
+function useSpecificStyles() {
+    return makeStyles(theme => ({
+        dashboardList: {
+            backgroundColor: theme.palette.background.paper,
+            padding: 0
+        }
+    }))()
+}
+
 function TabButton({value, index, onClick, children}) {
     const classes = useStyles()
     const activeClasses = [classes.dashboardTab, index === value && classes.selectedDashboardTab].join(" ")
     return <Typography
-            variant={"h6"}
-            onClick={() => onClick(index)}
-            className={activeClasses}
+        variant={"h6"}
+        onClick={() => onClick(index)}
+        className={activeClasses}
     >
         {children}
     </Typography>
@@ -29,16 +39,17 @@ function TabButton({value, index, onClick, children}) {
 
 function AdminDashboard() {
     const classes = useStyles()
+    const specificClasses = useSpecificStyles()
     const [currentTab, setCurrentTab] = useState(0)
     const [cvCount, setCvCount] = useState(0)
     const [offerCount, setOfferCount] = useState(0)
     const [contractCount, setContractCount] = useState(0)
 
     return <>
-        <Grid item xs={2} className={classes.list} style={{padding: 0, backgroundColor: "#DDD"}}>
+        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList]}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
                 {cvCount !== 0 &&
-                <Badge badgeContent={cvCount} color="primary" anchorOrigin={{vertical: "top", horizontal: "left"}}>
+                <Badge badgeContent={cvCount} color="secondary" anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
                 CVs en attente
@@ -49,7 +60,7 @@ function AdminDashboard() {
             <Divider/>
             <TabButton value={currentTab} index={1} onClick={setCurrentTab}>
                 {offerCount !== 0 &&
-                <Badge badgeContent={offerCount} color="primary" anchorOrigin={{vertical: "top", horizontal: "left"}}>
+                <Badge badgeContent={offerCount} color="secondary" anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
                 Offres en attente
@@ -59,7 +70,7 @@ function AdminDashboard() {
             </TabButton>
             <Divider/>
             <TabButton value={currentTab} index={2} onClick={setCurrentTab}>
-                {contractCount !== 0 && <Badge badgeContent={contractCount} color="primary"
+                {contractCount !== 0 && <Badge badgeContent={contractCount} color="secondary"
                                                anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
@@ -87,6 +98,7 @@ function AdminDashboard() {
 
 function StudentDashboard() {
     const classes = useStyles()
+    const specificClasses = useSpecificStyles()
     const [currentTab, setCurrentTab] = useState(0)
     const [cvCount, setCvCount] = useState(0)
     const [deniedCvCount, setDeniedCvCount] = useState(0)
@@ -95,10 +107,10 @@ function StudentDashboard() {
     const [contractCount, setContractCount] = useState(0)
     const [contractWaitingCount, setContractWaitingCount] = useState(0)
     return <>
-        <Grid item xs={2} className={classes.list} style={{padding: 0, backgroundColor: "#DDD"}}>
+        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList]}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
                 {offerCount + offerPendingCount !== 0 &&
-                <Badge badgeContent={offerCount + offerPendingCount} color="primary"
+                <Badge badgeContent={offerCount + offerPendingCount} color="secondary"
                        anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
@@ -113,7 +125,7 @@ function StudentDashboard() {
             <Divider/>
             <TabButton value={currentTab} index={1} onClick={setCurrentTab}>
                 {deniedCvCount !== 0 &&
-                <Badge badgeContent={deniedCvCount} color="primary"
+                <Badge badgeContent={deniedCvCount} color="secondary"
                        anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
@@ -128,7 +140,7 @@ function StudentDashboard() {
             <Divider/>
             <TabButton value={currentTab} index={2} onClick={setCurrentTab}>
                 {contractWaitingCount !== 0 &&
-                <Badge badgeContent={contractWaitingCount} color="primary"
+                <Badge badgeContent={contractWaitingCount} color="secondary"
                        anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
@@ -159,6 +171,7 @@ function StudentDashboard() {
 
 function EmployerDashboard() {
     const classes = useStyles()
+    const specificClasses = useSpecificStyles()
     const location = useLocation()
     const [currentTab, setCurrentTab] = useState(location.state ? (location.state.tab ? location.state.tab : 0) : 0)
     const [offerCount, setOfferCount] = useState(0)
@@ -168,7 +181,7 @@ function EmployerDashboard() {
     const [interviewWaitingCount, setInterviewWaitingCount] = useState(0)
 
     return <>
-        <Grid item xs={2} className={classes.list} style={{padding: 0, backgroundColor: "#DDD"}}>
+        <Grid item xs={2} className={[classes.list, specificClasses.dashboardList]}>
             <TabButton value={currentTab} index={0} onClick={setCurrentTab}>
                 Mes offres de stage
                 <Typography variant={"body2"}>
@@ -178,7 +191,7 @@ function EmployerDashboard() {
             <Divider/>
             <TabButton value={currentTab} index={1} onClick={setCurrentTab}>
                 {interviewWaitingCount !== 0 &&
-                <Badge badgeContent={interviewWaitingCount} color="primary"
+                <Badge badgeContent={interviewWaitingCount} color="secondary"
                        anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
@@ -193,7 +206,7 @@ function EmployerDashboard() {
             <Divider/>
             <TabButton value={currentTab} index={2} onClick={setCurrentTab}>
                 {contractWaitingCount !== 0 &&
-                <Badge badgeContent={contractWaitingCount} color="primary"
+                <Badge badgeContent={contractWaitingCount} color="secondary"
                        anchorOrigin={{vertical: "top", horizontal: "left"}}>
                     <NotificationImportantOutlinedIcon/>
                 </Badge>}
